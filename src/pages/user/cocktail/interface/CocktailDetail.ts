@@ -1,4 +1,5 @@
 export interface CocktailDetail{
+  cocktailId: number;
   image?: string;
   cocktailName: string;
   cocktailNameKr: string;
@@ -45,6 +46,12 @@ export interface CocktailDetail{
     cocktailHashtag: string
   };
 
+  // 좋아요 수
+  likeCount: number;
+
+  // 공유 수
+  shareCount: number;
+
   comments: Array<{        // 댓글 및 답글
     id: number;
     username: string;
@@ -57,4 +64,8 @@ export interface CocktailDetail{
       createdDate: string;
     }>;
   }>;
+
+  // 등록 / 업데이트 일
+  createAt: string;
+  updatedAt: string;
 }

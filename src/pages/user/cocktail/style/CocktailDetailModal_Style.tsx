@@ -187,13 +187,18 @@ export const CategoryChip = styled(Chip)`
   }
 `;
 
-export const DifficultyChip = styled(Chip)<{ difficulty: 'easy' | 'medium' | 'hard' }>`
+export const DifficultyChip = styled(Chip)<{ difficulty: number }>`
   && {
-    background: ${({ difficulty }) => 
-      difficulty === 'easy' ? 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' :
-      difficulty === 'medium' ? 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)' :
-      'linear-gradient(135deg, #fa709a 0%, #fee140 100%)'
-    };
+    background: ${({ difficulty }) => {
+      switch(difficulty) {
+        case 1: return 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)'; // 매우 쉬움 - 파란색
+        case 2: return 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)'; // 쉬움 - 연두색
+        case 3: return 'linear-gradient(135deg, #feca57 0%, #ff9ff3 100%)'; // 보통 - 노란색
+        case 4: return 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)'; // 어려움 - 주황색
+        case 5: return 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)'; // 매우 어려움 - 빨간색
+        default: return 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)'; // 기본값
+      }
+    }};
     color: white;
     font-weight: 600;
     border-radius: 20px;

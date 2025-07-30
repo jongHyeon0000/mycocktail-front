@@ -112,7 +112,7 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
               <HeaderSection>
                 <CocktailImage>
                   {data.image ? (
-                    <img src={data.image} alt={data.englishName} />
+                    <img src={data.image} alt={data.cocktailName} />
                   ) : (
                     <PlaceholderIcon>
                       <LocalBarOutlined fontSize="inherit" />
@@ -121,8 +121,8 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                 </CocktailImage>
 
                 <TitleSection>
-                  <EnglishTitle>{data.englishName}</EnglishTitle>
-                  <KoreanTitle>{data.koreanName}</KoreanTitle>
+                  <EnglishTitle>{data.cocktailName}</EnglishTitle>
+                  <KoreanTitle>{data.cocktailNameKr}</KoreanTitle>
                 </TitleSection>
 
                 <InfoGrid>
@@ -133,7 +133,7 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                   
                   <InfoCard>
                     <InfoLabel>예상 도수</InfoLabel>
-                    <InfoValue>{data.alcoholContent}%</InfoValue>
+                    <InfoValue>{data.abs_percentage}%</InfoValue>
                   </InfoCard>
                   
                   <InfoCard>
@@ -148,15 +148,15 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                   <InfoCard>
                     <InfoLabel>출처</InfoLabel>
                     <VariantChip 
-                      label={data.isVariant ? "커뮤니티 레시피" : "공식"}
+                      label={data.isVariation ? "커뮤니티 레시피" : "공식"}
                       size="small"
-                      color={data.isVariant ? "default" : "success"}
+                      color={data.isVariation ? "default" : "success"}
                     />
                   </InfoCard>
                 </InfoGrid>
 
                 <ProfileDescription>
-                  {data.profileDescription}
+                  {data.profileNote}
                 </ProfileDescription>
               </HeaderSection>
 
@@ -169,7 +169,7 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                   transition={{ delay: 0.2 }}
                 >
                   <SectionTitle>역사</SectionTitle>
-                  <TextContent dangerouslySetInnerHTML={{ __html: data.history }} />
+                  <TextContent dangerouslySetInnerHTML={{ __html: data.historyNote || '' }} />
                 </motion.div>
 
                 {/* 재료 정보 섹션 - 드래그 스크롤 슬라이드 */}
@@ -196,15 +196,15 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                                 >
                                   <SlideItemImage>
                                     {item.image ? (
-                                      <img src={item.image} alt={item.englishName} />
+                                      <img src={item.image} alt={item.spiritName} />
                                     ) : (
                                       <SlideItemPlaceholder>
                                         <LocalBarRounded fontSize="inherit" />
                                       </SlideItemPlaceholder>
                                     )}
                                   </SlideItemImage>
-                                  <SlideItemEnglishName>{item.englishName}</SlideItemEnglishName>
-                                  <SlideItemKoreanName>{item.koreanName}</SlideItemKoreanName>
+                                  <SlideItemEnglishName>{item.spiritName}</SlideItemEnglishName>
+                                  <SlideItemKoreanName>{item.spiritNameKr}</SlideItemKoreanName>
                                 </SlideItem>
                               ))}
                             </SlideTrack>
@@ -229,15 +229,15 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                                 >
                                   <SlideItemImage>
                                     {item.image ? (
-                                      <img src={item.image} alt={item.englishName} />
+                                      <img src={item.image} alt={item.juiceName} />
                                     ) : (
                                       <SlideItemPlaceholder>
                                         <LocalBarRounded fontSize="inherit" />
                                       </SlideItemPlaceholder>
                                     )}
                                   </SlideItemImage>
-                                  <SlideItemEnglishName>{item.englishName}</SlideItemEnglishName>
-                                  <SlideItemKoreanName>{item.koreanName}</SlideItemKoreanName>
+                                  <SlideItemEnglishName>{item.juiceName}</SlideItemEnglishName>
+                                  <SlideItemKoreanName>{item.juiceNameKr}</SlideItemKoreanName>
                                 </SlideItem>
                               ))}
                             </SlideTrack>
@@ -262,15 +262,15 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                                 >
                                   <SlideItemImage>
                                     {item.image ? (
-                                      <img src={item.image} alt={item.englishName} />
+                                      <img src={item.image} alt={item.bitterName} />
                                     ) : (
                                       <SlideItemPlaceholder>
                                         <LocalBarRounded fontSize="inherit" />
                                       </SlideItemPlaceholder>
                                     )}
                                   </SlideItemImage>
-                                  <SlideItemEnglishName>{item.englishName}</SlideItemEnglishName>
-                                  <SlideItemKoreanName>{item.koreanName}</SlideItemKoreanName>
+                                  <SlideItemEnglishName>{item.bitterName}</SlideItemEnglishName>
+                                  <SlideItemKoreanName>{item.bitterNameKr}</SlideItemKoreanName>
                                 </SlideItem>
                               ))}
                             </SlideTrack>
@@ -295,15 +295,15 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                                 >
                                   <SlideItemImage>
                                     {item.image ? (
-                                      <img src={item.image} alt={item.englishName} />
+                                      <img src={item.image} alt={item.syrupName} />
                                     ) : (
                                       <SlideItemPlaceholder>
                                         <LocalBarRounded fontSize="inherit" />
                                       </SlideItemPlaceholder>
                                     )}
                                   </SlideItemImage>
-                                  <SlideItemEnglishName>{item.englishName}</SlideItemEnglishName>
-                                  <SlideItemKoreanName>{item.koreanName}</SlideItemKoreanName>
+                                  <SlideItemEnglishName>{item.syrupName}</SlideItemEnglishName>
+                                  <SlideItemKoreanName>{item.syrupNameKr}</SlideItemKoreanName>
                                 </SlideItem>
                               ))}
                             </SlideTrack>
@@ -328,15 +328,15 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                                 >
                                   <SlideItemImage>
                                     {item.image ? (
-                                      <img src={item.image} alt={item.englishName} />
+                                      <img src={item.image} alt={item.carbonatedName} />
                                     ) : (
                                       <SlideItemPlaceholder>
                                         <LocalBarRounded fontSize="inherit" />
                                       </SlideItemPlaceholder>
                                     )}
                                   </SlideItemImage>
-                                  <SlideItemEnglishName>{item.englishName}</SlideItemEnglishName>
-                                  <SlideItemKoreanName>{item.koreanName}</SlideItemKoreanName>
+                                  <SlideItemEnglishName>{item.carbonatedName}</SlideItemEnglishName>
+                                  <SlideItemKoreanName>{item.carbonatedNameKr}</SlideItemKoreanName>
                                 </SlideItem>
                               ))}
                             </SlideTrack>
@@ -361,15 +361,15 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                                 >
                                   <SlideItemImage>
                                     {item.image ? (
-                                      <img src={item.image} alt={item.englishName} />
+                                      <img src={item.image} alt={item.dairyName} />
                                     ) : (
                                       <SlideItemPlaceholder>
                                         <LocalBarRounded fontSize="inherit" />
                                       </SlideItemPlaceholder>
                                     )}
                                   </SlideItemImage>
-                                  <SlideItemEnglishName>{item.englishName}</SlideItemEnglishName>
-                                  <SlideItemKoreanName>{item.koreanName}</SlideItemKoreanName>
+                                  <SlideItemEnglishName>{item.dairyName}</SlideItemEnglishName>
+                                  <SlideItemKoreanName>{item.dairyNameKr}</SlideItemKoreanName>
                                 </SlideItem>
                               ))}
                             </SlideTrack>
@@ -394,15 +394,15 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                                 >
                                   <SlideItemImage>
                                     {item.image ? (
-                                      <img src={item.image} alt={item.englishName} />
+                                      <img src={item.image} alt={item.garnishName} />
                                     ) : (
                                       <SlideItemPlaceholder>
                                         <LocalBarRounded fontSize="inherit" />
                                       </SlideItemPlaceholder>
                                     )}
                                   </SlideItemImage>
-                                  <SlideItemEnglishName>{item.englishName}</SlideItemEnglishName>
-                                  <SlideItemKoreanName>{item.koreanName}</SlideItemKoreanName>
+                                  <SlideItemEnglishName>{item.garnishName}</SlideItemEnglishName>
+                                  <SlideItemKoreanName>{item.garnishNameKr}</SlideItemKoreanName>
                                 </SlideItem>
                               ))}
                             </SlideTrack>
@@ -427,15 +427,15 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                                 >
                                   <SlideItemImage>
                                     {item.image ? (
-                                      <img src={item.image} alt={item.englishName} />
+                                      <img src={item.image} alt={item.otherIngredientName} />
                                     ) : (
                                       <SlideItemPlaceholder>
                                         <LocalBarRounded fontSize="inherit" />
                                       </SlideItemPlaceholder>
                                     )}
                                   </SlideItemImage>
-                                  <SlideItemEnglishName>{item.englishName}</SlideItemEnglishName>
-                                  <SlideItemKoreanName>{item.koreanName}</SlideItemKoreanName>
+                                  <SlideItemEnglishName>{item.otherIngredientName}</SlideItemEnglishName>
+                                  <SlideItemKoreanName>{item.otherIngredientNameKr}</SlideItemKoreanName>
                                 </SlideItem>
                               ))}
                             </SlideTrack>
@@ -455,13 +455,13 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                   <SectionTitle>제조 기법</SectionTitle>
                   <TechniquesSection>
                     {/* 도구/기물 */}
-                    {data.techniques.tools.length > 0 && (
+                    {data.tools.length > 0 && (
                       <CategorySection className="technique">
                         <SlideCategoryTitle className="technique">도구/기물</SlideCategoryTitle>
                         <SlideContainer ref={toolsRef}>
                           <SlideWrapper>
                             <SlideTrack {...dragConfig(toolsRef)}>
-                              {data.techniques.tools.map((item) => (
+                              {data.tools.map((item) => (
                                 <SlideItem 
                                   key={item.id}
                                   as={motion.div}
@@ -470,15 +470,15 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                                 >
                                   <SlideItemImage>
                                     {item.image ? (
-                                      <img src={item.image} alt={item.englishName} />
+                                      <img src={item.image} alt={item.toolName} />
                                     ) : (
                                       <SlideItemPlaceholder>
                                         <LocalBarRounded fontSize="inherit" />
                                       </SlideItemPlaceholder>
                                     )}
                                   </SlideItemImage>
-                                  <SlideItemEnglishName>{item.englishName}</SlideItemEnglishName>
-                                  <SlideItemKoreanName>{item.koreanName}</SlideItemKoreanName>
+                                  <SlideItemEnglishName>{item.toolName}</SlideItemEnglishName>
+                                  <SlideItemKoreanName>{item.toolNameKr}</SlideItemKoreanName>
                                 </SlideItem>
                               ))}
                             </SlideTrack>
@@ -488,13 +488,13 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                     )}
 
                     {/* 사용 잔 */}
-                    {data.techniques.glassware.length > 0 && (
+                    {data.glassware.length > 0 && (
                       <CategorySection className="technique">
                         <SlideCategoryTitle className="technique">사용 잔</SlideCategoryTitle>
                         <SlideContainer ref={glasswareRef}>
                           <SlideWrapper>
                             <SlideTrack {...dragConfig(glasswareRef)}>
-                              {data.techniques.glassware.map((item) => (
+                              {data.glassware.map((item) => (
                                 <SlideItem 
                                   key={item.id}
                                   as={motion.div}
@@ -503,15 +503,15 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                                 >
                                   <SlideItemImage>
                                     {item.image ? (
-                                      <img src={item.image} alt={item.englishName} />
+                                      <img src={item.image} alt={item.glassName} />
                                     ) : (
                                       <SlideItemPlaceholder>
                                         <LocalBarRounded fontSize="inherit" />
                                       </SlideItemPlaceholder>
                                     )}
                                   </SlideItemImage>
-                                  <SlideItemEnglishName>{item.englishName}</SlideItemEnglishName>
-                                  <SlideItemKoreanName>{item.koreanName}</SlideItemKoreanName>
+                                  <SlideItemEnglishName>{item.glassName}</SlideItemEnglishName>
+                                  <SlideItemKoreanName>{item.glassNameKr}</SlideItemKoreanName>
                                 </SlideItem>
                               ))}
                             </SlideTrack>
@@ -521,13 +521,13 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                     )}
 
                     {/* 제조 기법 */}
-                    {data.techniques.methods.length > 0 && (
+                    {data.techniques.length > 0 && (
                       <CategorySection className="technique">
                         <SlideCategoryTitle className="technique">제조 기법</SlideCategoryTitle>
                         <SlideContainer ref={methodsRef}>
                           <SlideWrapper>
                             <SlideTrack {...dragConfig(methodsRef)}>
-                              {data.techniques.methods.map((item) => (
+                              {data.techniques.map((item) => (
                                 <SlideItem 
                                   key={item.id}
                                   as={motion.div}
@@ -536,30 +536,21 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                                 >
                                   <SlideItemImage>
                                     {item.image ? (
-                                      <img src={item.image} alt={item.englishName} />
+                                      <img src={item.image} alt={item.techniqueName} />
                                     ) : (
                                       <SlideItemPlaceholder>
                                         <LocalBarRounded fontSize="inherit" />
                                       </SlideItemPlaceholder>
                                     )}
                                   </SlideItemImage>
-                                  <SlideItemEnglishName>{item.englishName}</SlideItemEnglishName>
-                                  <SlideItemKoreanName>{item.koreanName}</SlideItemKoreanName>
+                                  <SlideItemEnglishName>{item.techniqueName}</SlideItemEnglishName>
+                                  <SlideItemKoreanName>{item.techniqueNameKr}</SlideItemKoreanName>
                                 </SlideItem>
                               ))}
                             </SlideTrack>
                           </SlideWrapper>
                         </SlideContainer>
                       </CategorySection>
-                    )}
-
-                    {/* 서빙 스타일 */}
-                    {data.techniques.servingStyle && (
-                      <div style={{ marginTop: '16px', textAlign: 'center' }}>
-                        <SlideCategoryTitle className="technique">
-                          서빙 스타일: {data.techniques.servingStyle}
-                        </SlideCategoryTitle>
-                      </div>
                     )}
                   </TechniquesSection>
                 </motion.div>
@@ -571,7 +562,7 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                     transition={{ delay: 0.3 }}
                 >
                   <SectionTitle>제조법</SectionTitle>
-                  <TextContent dangerouslySetInnerHTML={{ __html: data.recipe }} />
+                  <TextContent dangerouslySetInnerHTML={{ __html: data.note || '' }} />
                 </motion.div>
 
                 {/* 제조 팁 */}
@@ -581,11 +572,11 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                   transition={{ delay: 0.6 }}
                 >
                   <SectionTitle>제조 팁</SectionTitle>
-                  <TextContent dangerouslySetInnerHTML={{ __html: data.tips }} />
+                  <TextContent dangerouslySetInnerHTML={{ __html: data.tip_note || '' }} />
                 </motion.div>
 
                 {/* 개인적인 정보들 */}
-                {data.personalDescription && (
+                {data.personalNotes && (
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -593,12 +584,12 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                   >
                     <PersonalSection>
                       <PersonalTitle>개인적인 설명</PersonalTitle>
-                      <PersonalContent>{data.personalDescription}</PersonalContent>
+                      <PersonalContent>{data.personalNotes}</PersonalContent>
                     </PersonalSection>
                   </motion.div>
                 )}
 
-                {data.personalTips && (
+                {data.MakerTips && (
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -606,7 +597,7 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                   >
                     <PersonalSection>
                       <PersonalTitle>개인적인 팁</PersonalTitle>
-                      <PersonalContent>{data.personalTips}</PersonalContent>
+                      <PersonalContent>{data.MakerTips}</PersonalContent>
                     </PersonalSection>
                   </motion.div>
                 )}
@@ -625,7 +616,7 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                 )}
 
                 {/* 해시태그 섹션 */}
-                {data.hashtags.length > 0 && (
+                {data.hashtags && (
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -634,9 +625,7 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                     <HashtagSection>
                       <HashtagTitle>태그</HashtagTitle>
                       <HashtagContainer>
-                        {data.hashtags.map((tag, index) => (
-                          <HashtagChip key={index} label={`#${tag}`} size="small" />
-                        ))}
+                        <HashtagChip label={`#${data.hashtags.cocktailHashtag}`} size="small" />
                       </HashtagContainer>
                     </HashtagSection>
                   </motion.div>
@@ -654,8 +643,8 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                       {data.comments.map((comment) => (
                         <CommentItem key={comment.id}>
                           <CommentHeader>
-                            <CommentAuthor>{comment.author}</CommentAuthor>
-                            <CommentDate>{comment.date}</CommentDate>
+                            <CommentAuthor>{comment.username}</CommentAuthor>
+                            <CommentDate>{comment.createdDate}</CommentDate>
                           </CommentHeader>
                           <CommentContent>{comment.content}</CommentContent>
                           
@@ -664,8 +653,8 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                               {comment.replies.map((reply) => (
                                 <ReplyItem key={reply.id}>
                                   <CommentHeader>
-                                    <CommentAuthor>{reply.author}</CommentAuthor>
-                                    <CommentDate>{reply.date}</CommentDate>
+                                    <CommentAuthor>{reply.username}</CommentAuthor>
+                                    <CommentDate>{reply.createdDate}</CommentDate>
                                   </CommentHeader>
                                   <CommentContent>{reply.content}</CommentContent>
                                 </ReplyItem>
@@ -710,7 +699,7 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                 </ActionButtons>
 
                 <DateInfo>
-                  <DateText>등록일: {data.createdAt}</DateText>
+                  <DateText>등록일: {data.createAt}</DateText>
                   <DateText>최종 업데이트: {data.updatedAt}</DateText>
                 </DateInfo>
               </BottomSection>
