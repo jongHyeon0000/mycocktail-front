@@ -32,7 +32,7 @@ const CocktailListPage: React.FC = () => {
     koreanName: "모히토",
     category: "Refreshing",
     alcoholContent: 10,
-    difficulty: 'easy' as const,
+    difficulty: '1' as const,
     isVariant: false,
     profileDescription: "쿠바의 대표적인 칵테일로, 상쾌한 민트와 라임의 조화가 완벽한 여름 음료",
     

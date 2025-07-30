@@ -21,6 +21,7 @@ export const ModalContainer = styled(Paper)`
     position: relative;
     background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    margin: auto; /* 중앙 정렬을 위해 추가 */
     
     &:focus {
       outline: none;
@@ -464,33 +465,17 @@ export const SlideContainer = styled(Box)`
 
 export const SlideWrapper = styled(Box)`
   && {
-    overflow-x: auto;
-    overflow-y: hidden;
+    overflow: hidden; /* 스크롤바 완전 제거 */
     border-radius: 12px;
     padding: 8px 0;
     
-    /* 스크롤바 스타일링 (PC용) */
+    /* 모든 스크롤바 숨기기 */
     &::-webkit-scrollbar {
-      height: 6px;
-    }
-    
-    &::-webkit-scrollbar-track {
-      background: rgba(0, 0, 0, 0.1);
-      border-radius: 3px;
-    }
-    
-    &::-webkit-scrollbar-thumb {
-      background: rgba(0, 0, 0, 0.3);
-      border-radius: 3px;
-      
-      &:hover {
-        background: rgba(0, 0, 0, 0.4);
-      }
+      display: none;
     }
     
     /* Firefox */
-    scrollbar-width: thin;
-    scrollbar-color: rgba(0, 0, 0, 0.3) rgba(0, 0, 0, 0.1);
+    scrollbar-width: none;
     
     /* 모바일 터치 스크롤 개선 */
     -webkit-overflow-scrolling: touch;
@@ -547,6 +532,8 @@ export const SlideItemImage = styled(Box)`
       height: 100%;
       object-fit: cover;
       border-radius: 12px;
+      pointer-events: none; /* 이미지에서 드래그 방해 방지 */
+      user-select: none;
     }
     
     @media (max-width: 600px) {
@@ -601,7 +588,7 @@ export const SlideCategoryTitle = styled(Typography)`
     font-size: 1rem;
     font-weight: 700;
     color: #2e7d32;
-    margin-bottom: 16px;
+    margin-bottom: 8px; /* 기존 16px에서 8px로 축소 */
     padding: 8px 16px;
     background: rgba(255, 255, 255, 0.8);
     border-radius: 20px;
@@ -611,6 +598,32 @@ export const SlideCategoryTitle = styled(Typography)`
     &.technique {
       color: #1565c0;
       border-color: rgba(33, 150, 243, 0.3);
+    }
+  }
+`;
+
+// 카테고리 구분을 위한 새로운 컨테이너 스타일
+export const CategorySection = styled(Box)`
+  && {
+    margin-bottom: 32px; /* 카테고리 간 간격 */
+    position: relative;
+    
+    &:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      bottom: -16px;
+      left: 24px; /* 카테고리 제목 위치에 맞춰 시작 */
+      right: 10%;
+      height: 2px;
+      background: linear-gradient(90deg, rgba(76, 175, 80, 1) 0%, rgba(76, 175, 80, 0.8) 50%, rgba(76, 175, 80, 0.3) 100%);
+      border-radius: 1px;
+      box-shadow: 0 1px 3px rgba(76, 175, 80, 0.3);
+    }
+    
+    /* 기법 섹션용 구분선 */
+    &.technique:not(:last-child)::after {
+      background: linear-gradient(90deg, rgba(33, 150, 243, 1) 0%, rgba(33, 150, 243, 0.8) 50%, rgba(33, 150, 243, 0.3) 100%);
+      box-shadow: 0 1px 3px rgba(33, 150, 243, 0.3);
     }
   }
 `;
