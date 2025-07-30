@@ -114,44 +114,6 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
     console.log('공유 클릭');
   };
 
-  // 스크롤 슬라이드 렌더링 컴포넌트
-  const renderScrollSlideSection = (
-    title: string,
-    items: Array<{ id: number; image?: string; englishName: string; koreanName: string; }>,
-    isIngredient: boolean = true
-  ) => {
-    if (items.length === 0) return null;
-
-    return (
-      <div>
-        <SlideCategoryTitle className={isIngredient ? '' : 'technique'}>
-          {title}
-        </SlideCategoryTitle>
-        <SlideContainer>
-          <SlideWrapper>
-            <SlideTrack>
-              {items.map((item) => (
-                <SlideItem key={item.id}>
-                  <SlideItemImage>
-                    {item.image ? (
-                      <img src={item.image} alt={item.englishName} />
-                    ) : (
-                      <SlideItemPlaceholder>
-                        <LocalBarRounded fontSize="inherit" />
-                      </SlideItemPlaceholder>
-                    )}
-                  </SlideItemImage>
-                  <SlideItemEnglishName>{item.englishName}</SlideItemEnglishName>
-                  <SlideItemKoreanName>{item.koreanName}</SlideItemKoreanName>
-                </SlideItem>
-              ))}
-            </SlideTrack>
-          </SlideWrapper>
-        </SlideContainer>
-      </div>
-    );
-  };
-
   return (
     <AnimatePresence>
       {open && (
@@ -310,14 +272,229 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                 >
                   <SectionTitle>사용 재료</SectionTitle>
                   <IngredientsSection>
-                    {renderScrollSlideSection("기주", data.ingredients.spirits)}
-                    {renderScrollSlideSection("주스", data.ingredients.juices)}
-                    {renderScrollSlideSection("비터스", data.ingredients.bitters)}
-                    {renderScrollSlideSection("시럽", data.ingredients.syrups)}
-                    {renderScrollSlideSection("탄산/소다", data.ingredients.carbonated)}
-                    {renderScrollSlideSection("유제품/크림", data.ingredients.dairy)}
-                    {renderScrollSlideSection("가니쉬", data.ingredients.garnishes)}
-                    {renderScrollSlideSection("기타", data.ingredients.others)}
+                    {/* 기주 */}
+                    {data.ingredients.spirits.length > 0 && (
+                      <div>
+                        <SlideCategoryTitle>기주</SlideCategoryTitle>
+                        <SlideContainer>
+                          <SlideWrapper>
+                            <SlideTrack>
+                              {data.ingredients.spirits.map((item) => (
+                                <SlideItem key={item.id}>
+                                  <SlideItemImage>
+                                    {item.image ? (
+                                      <img src={item.image} alt={item.englishName} />
+                                    ) : (
+                                      <SlideItemPlaceholder>
+                                        <LocalBarRounded fontSize="inherit" />
+                                      </SlideItemPlaceholder>
+                                    )}
+                                  </SlideItemImage>
+                                  <SlideItemEnglishName>{item.englishName}</SlideItemEnglishName>
+                                  <SlideItemKoreanName>{item.koreanName}</SlideItemKoreanName>
+                                </SlideItem>
+                              ))}
+                            </SlideTrack>
+                          </SlideWrapper>
+                        </SlideContainer>
+                      </div>
+                    )}
+
+                    {/* 주스 */}
+                    {data.ingredients.juices.length > 0 && (
+                      <div>
+                        <SlideCategoryTitle>주스</SlideCategoryTitle>
+                        <SlideContainer>
+                          <SlideWrapper>
+                            <SlideTrack>
+                              {data.ingredients.juices.map((item) => (
+                                <SlideItem key={item.id}>
+                                  <SlideItemImage>
+                                    {item.image ? (
+                                      <img src={item.image} alt={item.englishName} />
+                                    ) : (
+                                      <SlideItemPlaceholder>
+                                        <LocalBarRounded fontSize="inherit" />
+                                      </SlideItemPlaceholder>
+                                    )}
+                                  </SlideItemImage>
+                                  <SlideItemEnglishName>{item.englishName}</SlideItemEnglishName>
+                                  <SlideItemKoreanName>{item.koreanName}</SlideItemKoreanName>
+                                </SlideItem>
+                              ))}
+                            </SlideTrack>
+                          </SlideWrapper>
+                        </SlideContainer>
+                      </div>
+                    )}
+
+                    {/* 비터스 */}
+                    {data.ingredients.bitters.length > 0 && (
+                      <div>
+                        <SlideCategoryTitle>비터스</SlideCategoryTitle>
+                        <SlideContainer>
+                          <SlideWrapper>
+                            <SlideTrack>
+                              {data.ingredients.bitters.map((item) => (
+                                <SlideItem key={item.id}>
+                                  <SlideItemImage>
+                                    {item.image ? (
+                                      <img src={item.image} alt={item.englishName} />
+                                    ) : (
+                                      <SlideItemPlaceholder>
+                                        <LocalBarRounded fontSize="inherit" />
+                                      </SlideItemPlaceholder>
+                                    )}
+                                  </SlideItemImage>
+                                  <SlideItemEnglishName>{item.englishName}</SlideItemEnglishName>
+                                  <SlideItemKoreanName>{item.koreanName}</SlideItemKoreanName>
+                                </SlideItem>
+                              ))}
+                            </SlideTrack>
+                          </SlideWrapper>
+                        </SlideContainer>
+                      </div>
+                    )}
+
+                    {/* 시럽 */}
+                    {data.ingredients.syrups.length > 0 && (
+                      <div>
+                        <SlideCategoryTitle>시럽</SlideCategoryTitle>
+                        <SlideContainer>
+                          <SlideWrapper>
+                            <SlideTrack>
+                              {data.ingredients.syrups.map((item) => (
+                                <SlideItem key={item.id}>
+                                  <SlideItemImage>
+                                    {item.image ? (
+                                      <img src={item.image} alt={item.englishName} />
+                                    ) : (
+                                      <SlideItemPlaceholder>
+                                        <LocalBarRounded fontSize="inherit" />
+                                      </SlideItemPlaceholder>
+                                    )}
+                                  </SlideItemImage>
+                                  <SlideItemEnglishName>{item.englishName}</SlideItemEnglishName>
+                                  <SlideItemKoreanName>{item.koreanName}</SlideItemKoreanName>
+                                </SlideItem>
+                              ))}
+                            </SlideTrack>
+                          </SlideWrapper>
+                        </SlideContainer>
+                      </div>
+                    )}
+
+                    {/* 탄산/소다 */}
+                    {data.ingredients.carbonated.length > 0 && (
+                      <div>
+                        <SlideCategoryTitle>탄산/소다</SlideCategoryTitle>
+                        <SlideContainer>
+                          <SlideWrapper>
+                            <SlideTrack>
+                              {data.ingredients.carbonated.map((item) => (
+                                <SlideItem key={item.id}>
+                                  <SlideItemImage>
+                                    {item.image ? (
+                                      <img src={item.image} alt={item.englishName} />
+                                    ) : (
+                                      <SlideItemPlaceholder>
+                                        <LocalBarRounded fontSize="inherit" />
+                                      </SlideItemPlaceholder>
+                                    )}
+                                  </SlideItemImage>
+                                  <SlideItemEnglishName>{item.englishName}</SlideItemEnglishName>
+                                  <SlideItemKoreanName>{item.koreanName}</SlideItemKoreanName>
+                                </SlideItem>
+                              ))}
+                            </SlideTrack>
+                          </SlideWrapper>
+                        </SlideContainer>
+                      </div>
+                    )}
+
+                    {/* 유제품/크림 */}
+                    {data.ingredients.dairy.length > 0 && (
+                      <div>
+                        <SlideCategoryTitle>유제품/크림</SlideCategoryTitle>
+                        <SlideContainer>
+                          <SlideWrapper>
+                            <SlideTrack>
+                              {data.ingredients.dairy.map((item) => (
+                                <SlideItem key={item.id}>
+                                  <SlideItemImage>
+                                    {item.image ? (
+                                      <img src={item.image} alt={item.englishName} />
+                                    ) : (
+                                      <SlideItemPlaceholder>
+                                        <LocalBarRounded fontSize="inherit" />
+                                      </SlideItemPlaceholder>
+                                    )}
+                                  </SlideItemImage>
+                                  <SlideItemEnglishName>{item.englishName}</SlideItemEnglishName>
+                                  <SlideItemKoreanName>{item.koreanName}</SlideItemKoreanName>
+                                </SlideItem>
+                              ))}
+                            </SlideTrack>
+                          </SlideWrapper>
+                        </SlideContainer>
+                      </div>
+                    )}
+
+                    {/* 가니쉬 */}
+                    {data.ingredients.garnishes.length > 0 && (
+                      <div>
+                        <SlideCategoryTitle>가니쉬</SlideCategoryTitle>
+                        <SlideContainer>
+                          <SlideWrapper>
+                            <SlideTrack>
+                              {data.ingredients.garnishes.map((item) => (
+                                <SlideItem key={item.id}>
+                                  <SlideItemImage>
+                                    {item.image ? (
+                                      <img src={item.image} alt={item.englishName} />
+                                    ) : (
+                                      <SlideItemPlaceholder>
+                                        <LocalBarRounded fontSize="inherit" />
+                                      </SlideItemPlaceholder>
+                                    )}
+                                  </SlideItemImage>
+                                  <SlideItemEnglishName>{item.englishName}</SlideItemEnglishName>
+                                  <SlideItemKoreanName>{item.koreanName}</SlideItemKoreanName>
+                                </SlideItem>
+                              ))}
+                            </SlideTrack>
+                          </SlideWrapper>
+                        </SlideContainer>
+                      </div>
+                    )}
+
+                    {/* 기타 */}
+                    {data.ingredients.others.length > 0 && (
+                      <div>
+                        <SlideCategoryTitle>기타</SlideCategoryTitle>
+                        <SlideContainer>
+                          <SlideWrapper>
+                            <SlideTrack>
+                              {data.ingredients.others.map((item) => (
+                                <SlideItem key={item.id}>
+                                  <SlideItemImage>
+                                    {item.image ? (
+                                      <img src={item.image} alt={item.englishName} />
+                                    ) : (
+                                      <SlideItemPlaceholder>
+                                        <LocalBarRounded fontSize="inherit" />
+                                      </SlideItemPlaceholder>
+                                    )}
+                                  </SlideItemImage>
+                                  <SlideItemEnglishName>{item.englishName}</SlideItemEnglishName>
+                                  <SlideItemKoreanName>{item.koreanName}</SlideItemKoreanName>
+                                </SlideItem>
+                              ))}
+                            </SlideTrack>
+                          </SlideWrapper>
+                        </SlideContainer>
+                      </div>
+                    )}
                   </IngredientsSection>
                 </motion.div>
 
@@ -329,9 +506,91 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                 >
                   <SectionTitle>제조 기법</SectionTitle>
                   <TechniquesSection>
-                    {renderScrollSlideSection("도구/기물", data.techniques.tools, false)}
-                    {renderScrollSlideSection("사용 잔", data.techniques.glassware, false)}
-                    {renderScrollSlideSection("제조 기법", data.techniques.methods, false)}
+                    {/* 도구/기물 */}
+                    {data.techniques.tools.length > 0 && (
+                      <div>
+                        <SlideCategoryTitle className="technique">도구/기물</SlideCategoryTitle>
+                        <SlideContainer>
+                          <SlideWrapper>
+                            <SlideTrack>
+                              {data.techniques.tools.map((item) => (
+                                <SlideItem key={item.id}>
+                                  <SlideItemImage>
+                                    {item.image ? (
+                                      <img src={item.image} alt={item.englishName} />
+                                    ) : (
+                                      <SlideItemPlaceholder>
+                                        <LocalBarRounded fontSize="inherit" />
+                                      </SlideItemPlaceholder>
+                                    )}
+                                  </SlideItemImage>
+                                  <SlideItemEnglishName>{item.englishName}</SlideItemEnglishName>
+                                  <SlideItemKoreanName>{item.koreanName}</SlideItemKoreanName>
+                                </SlideItem>
+                              ))}
+                            </SlideTrack>
+                          </SlideWrapper>
+                        </SlideContainer>
+                      </div>
+                    )}
+
+                    {/* 사용 잔 */}
+                    {data.techniques.glassware.length > 0 && (
+                      <div>
+                        <SlideCategoryTitle className="technique">사용 잔</SlideCategoryTitle>
+                        <SlideContainer>
+                          <SlideWrapper>
+                            <SlideTrack>
+                              {data.techniques.glassware.map((item) => (
+                                <SlideItem key={item.id}>
+                                  <SlideItemImage>
+                                    {item.image ? (
+                                      <img src={item.image} alt={item.englishName} />
+                                    ) : (
+                                      <SlideItemPlaceholder>
+                                        <LocalBarRounded fontSize="inherit" />
+                                      </SlideItemPlaceholder>
+                                    )}
+                                  </SlideItemImage>
+                                  <SlideItemEnglishName>{item.englishName}</SlideItemEnglishName>
+                                  <SlideItemKoreanName>{item.koreanName}</SlideItemKoreanName>
+                                </SlideItem>
+                              ))}
+                            </SlideTrack>
+                          </SlideWrapper>
+                        </SlideContainer>
+                      </div>
+                    )}
+
+                    {/* 제조 기법 */}
+                    {data.techniques.methods.length > 0 && (
+                      <div>
+                        <SlideCategoryTitle className="technique">제조 기법</SlideCategoryTitle>
+                        <SlideContainer>
+                          <SlideWrapper>
+                            <SlideTrack>
+                              {data.techniques.methods.map((item) => (
+                                <SlideItem key={item.id}>
+                                  <SlideItemImage>
+                                    {item.image ? (
+                                      <img src={item.image} alt={item.englishName} />
+                                    ) : (
+                                      <SlideItemPlaceholder>
+                                        <LocalBarRounded fontSize="inherit" />
+                                      </SlideItemPlaceholder>
+                                    )}
+                                  </SlideItemImage>
+                                  <SlideItemEnglishName>{item.englishName}</SlideItemEnglishName>
+                                  <SlideItemKoreanName>{item.koreanName}</SlideItemKoreanName>
+                                </SlideItem>
+                              ))}
+                            </SlideTrack>
+                          </SlideWrapper>
+                        </SlideContainer>
+                      </div>
+                    )}
+
+                    {/* 서빙 스타일 */}
                     {data.techniques.servingStyle && (
                       <div style={{ marginTop: '16px', textAlign: 'center' }}>
                         <SlideCategoryTitle className="technique">
