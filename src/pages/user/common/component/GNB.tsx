@@ -1,19 +1,26 @@
 import React, { useState } from "react";
 import { 
-  AppBar, 
-  Toolbar, 
-  Typography, 
+  Typography,
   Box,
   Paper,
   Avatar,
   IconButton,
   Divider,
-  Chip,
-  Button,
 } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import {GNB_MENU_TYPE, GNB_SUBMENU_TYPE} from "../menu/GnbMenuItem.tsx";
+import {
+  ActiveChip,
+  IntroText,
+  IntroTitle,
+  JoinDate,
+  MenuContainer, MyPageButton,
+  ProfileImage,
+  StyledAppBar,
+  StyledToolbar,
+  UserName
+} from "../style/GNB_Style.tsx";
 
 const GNB: React.FC = () => {
   const [isSubMenuOpen, setIsSubMenuOpen] = useState(false);
@@ -22,17 +29,9 @@ const GNB: React.FC = () => {
 
   return (
     <>
-      <AppBar 
-        position="fixed" 
-        elevation={0}
-        sx={{
-          backgroundColor: "rgba(255, 255, 255, 0.95)",
-          backdropFilter: "blur(10px)",
-          borderBottom: "1px solid rgba(0, 0, 0, 0.08)",
-        }}
-      >
-        <Toolbar sx={{ minHeight: { xs: 56, sm: 64 }, justifyContent: "space-between" }}>
-          <Box sx={{ display: "flex", gap: { xs: 2, sm: 3, md: 4 } }}>
+      <StyledAppBar position="fixed" elevation={0}>
+        <StyledToolbar>
+          <MenuContainer>
             {GNB_MENU_TYPE.map((item, index) => (
               <Box
                 key={index}
@@ -168,7 +167,7 @@ const GNB: React.FC = () => {
                 )}
               </Box>
             ))}
-          </Box>
+          </MenuContainer>
           
           {/* 프로필 버튼 */}
           <IconButton
@@ -187,8 +186,8 @@ const GNB: React.FC = () => {
               }}
             />
           </IconButton>
-        </Toolbar>
-      </AppBar>
+        </StyledToolbar>
+      </StyledAppBar>
 
       {/* 배경 오버레이 */}
       <AnimatePresence>
@@ -249,71 +248,42 @@ const GNB: React.FC = () => {
               <Box sx={{ p: 3, height: "100vh", display: "flex", flexDirection: "column", boxSizing: "border-box" }}>
                 {/* 프로필 이미지 */}
                 <Box sx={{ display: "flex", justifyContent: "center", mb: 3 }}>
-                  <Avatar
-                    src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&h=200&fit=crop"
-                    sx={{ 
-                      width: 80, 
-                      height: 80,
-                      border: "3px solid rgba(0, 0, 0, 0.08)",
-                    }}
-                  />
+                  <ProfileImage src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&h=200&fit=crop" />
                 </Box>
 
                 {/* 사용자명 */}
-                <Typography variant="h6" sx={{ textAlign: "center", mb: 1, fontWeight: 600 }}>
-                  김칵테일
-                </Typography>
+                <UserName variant="h6">
+                  이름 테스트
+                </UserName>
 
                 {/* 가입일 */}
-                <Typography variant="body2" sx={{ textAlign: "center", color: "#666", mb: 3 }}>
+                <JoinDate variant="body2">
                   2024년 1월부터 함께해요
-                </Typography>
+                </JoinDate>
 
                 <Divider sx={{ mb: 3 }} />
 
                 {/* 자기소개 */}
                 <Box sx={{ mb: 4 }}>
-                  <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 600 }}>
+                  <IntroTitle variant="subtitle2">
                     자기소개
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: "#666", lineHeight: 1.6 }}>
+                  </IntroTitle>
+                  <IntroText variant="body2">
                     칵테일을 사랑하는 홈텐더입니다. 🍸
                     주말마다 새로운 레시피에 도전하고 있어요!
-                  </Typography>
+                  </IntroText>
                 </Box>
 
                 {/* 하단 영역 - 마이페이지와 활성 상태 */}
                 <Box sx={{ mt: "auto" }}>
                   {/* 마이페이지 버튼 */}
-                  <Button
-                    variant="outlined"
-                    fullWidth
-                    sx={{
-                      py: 1.5,
-                      mb: 2,
-                      borderRadius: 2,
-                      borderColor: "#ddd",
-                      color: "#333",
-                      "&:hover": {
-                        borderColor: "#333",
-                        backgroundColor: "rgba(0, 0, 0, 0.02)",
-                      },
-                    }}
-                  >
+                  <MyPageButton variant="outlined" fullWidth>
                     마이페이지 &gt;
-                  </Button>
+                  </MyPageButton>
 
                   {/* 활성 상태 */}
                   <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-                    <Chip
-                      label="활성 중"
-                      size="small"
-                      sx={{
-                        backgroundColor: "#4caf50",
-                        color: "white",
-                        fontWeight: 500,
-                      }}
-                    />
+                    <ActiveChip label="활성 중" size="small" />
                   </Box>
                 </Box>
               </Box>

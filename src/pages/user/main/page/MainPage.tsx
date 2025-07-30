@@ -1,26 +1,18 @@
 import React from "react";
-import { Box, Container, TextField, InputAdornment, Typography, IconButton, Paper } from "@mui/material";
+import { Box, Container, InputAdornment, Typography, Paper } from "@mui/material";
 import { motion } from "framer-motion";
+import {
+  BottomNavigation,
+  ContentContainer,
+  MainContainer,
+  NavIconButton, NavLabel,
+  SearchTextField
+} from "../style/MainPage_Style.tsx";
 
 const MainPage: React.FC = () => {
   return (
-    <Box
-      sx={{
-        minHeight: "100vh",
-        backgroundColor: "#ffffff",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        position: "relative",
-      }}
-    >
-      <Container maxWidth="sm" sx={{ 
-        display: "flex", 
-        flexDirection: "column", 
-        alignItems: "center",
-        pt: { xs: 11, sm: 14, md: 16, lg: 18 },
-        flex: 1,
-      }}>
+    <MainContainer>
+      <ContentContainer maxWidth="sm">
         {/* 상단 이미지 영역 */}
         <Box
           component={motion.div}
@@ -68,25 +60,10 @@ const MainPage: React.FC = () => {
           transition={{ delay: 0.5, duration: 0.6 }}
           sx={{ width: "100%", maxWidth: 400 }}
         >
-          <TextField
+          <SearchTextField
             fullWidth
             placeholder="칵테일 이름으로 검색해 보세요"
             variant="outlined"
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                borderRadius: 8,
-                backgroundColor: "#f5f5f5",
-                "&:hover fieldset": {
-                  borderColor: "#ddd",
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "#888",
-                },
-              },
-              "& fieldset": {
-                borderColor: "#eee",
-              },
-            }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -96,89 +73,61 @@ const MainPage: React.FC = () => {
             }}
           />
         </Box>
-      </Container>
+      </ContentContainer>
 
       {/* 하단 네비게이션 */}
-      <Box sx={{ 
-        position: { xs: "relative", md: "absolute" },
-        bottom: { xs: 0, md: 40 },
-        left: 0,
-        right: 0,
-        mt: { xs: "auto", md: 0 },
-        pb: { xs: 4, md: 0 },
-      }}>
+      <BottomNavigation>
         <Container maxWidth="sm">
-        <Paper
-          component={motion.div}
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7, duration: 0.6 }}
-          elevation={0}
-          sx={{
-            p: 2,
-            backgroundColor: "#f8f8f8",
-            borderRadius: 4,
-          }}
-        >
-          <Box
+          <Paper
+            component={motion.div}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7, duration: 0.6 }}
+            elevation={0}
             sx={{
-              display: "flex",
-              justifyContent: "space-around",
-              alignItems: "center",
+              p: 2,
+              backgroundColor: "#f8f8f8",
+              borderRadius: 4,
             }}
           >
-            {[
-              { emoji: "🍸", label: "인기있는 칵테일" },
-              { emoji: "🎲", label: "랜덤추천 칵테일" },
-              { emoji: "🍹", label: "나만의 칵테일" },
-              { emoji: "🥃", label: "모든 칵테일" },
-            ].map((item, index) => (
-              <Box
-                key={index}
-                component={motion.div}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  cursor: "pointer",
-                }}
-              >
-                <IconButton
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-around",
+                alignItems: "center",
+              }}
+            >
+              {[
+                { emoji: "🍸", label: "인기있는 칵테일" },
+                { emoji: "🎲", label: "랜덤추천 칵테일" },
+                { emoji: "🍹", label: "나만의 칵테일" },
+                { emoji: "🥃", label: "모든 칵테일" },
+              ].map((item, index) => (
+                <Box
+                  key={index}
+                  component={motion.div}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
                   sx={{
-                    fontSize: "2rem",
-                    width: 60,
-                    height: 60,
-                    backgroundColor: "#fff",
-                    boxShadow: "0 2px 8px rgba(0, 0, 0, 0.08)",
-                    "&:hover": {
-                      backgroundColor: "#fff",
-                      boxShadow: "0 4px 16px rgba(0, 0, 0, 0.12)",
-                    },
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    cursor: "pointer",
                   }}
                 >
-                  {item.emoji}
-                </IconButton>
-                <Typography
-                  variant="caption"
-                  sx={{
-                    mt: 1,
-                    fontSize: "0.7rem",
-                    color: "#666",
-                    textAlign: "center",
-                    maxWidth: 70,
-                  }}
-                >
-                  {item.label}
-                </Typography>
-              </Box>
-            ))}
-          </Box>
-        </Paper>
+                  <NavIconButton>
+                    {item.emoji}
+                  </NavIconButton>
+                  <NavLabel variant="caption">
+                    {item.label}
+                  </NavLabel>
+                </Box>
+              ))}
+            </Box>
+          </Paper>
         </Container>
-      </Box>
-    </Box>
+      </BottomNavigation>
+    </MainContainer>
   );
 };
 
