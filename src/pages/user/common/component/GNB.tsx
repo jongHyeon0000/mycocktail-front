@@ -25,6 +25,7 @@ import {
 const GNB: React.FC = () => {
   const [isSubMenuOpen, setIsSubMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+
   const navigate = useNavigate();
 
   return (

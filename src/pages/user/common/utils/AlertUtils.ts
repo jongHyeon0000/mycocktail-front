@@ -1,6 +1,8 @@
 import Swal from 'sweetalert2';
 
-// 에러 알림
+/*
+* 에러 알림
+* */
 export const showErrorAlert = (message?: string, title?: string) => {
   return Swal.fire({
     icon: 'error',
@@ -20,7 +22,9 @@ export const showErrorAlert = (message?: string, title?: string) => {
   });
 };
 
-// 성공 알림 (추후 사용 가능)
+/*
+* 성공 알림 (추후 사용 가능)
+* */
 export const showSuccessAlert = (message?: string, title?: string) => {
   return Swal.fire({
     icon: 'success',
@@ -35,7 +39,9 @@ export const showSuccessAlert = (message?: string, title?: string) => {
   });
 };
 
-// 확인 알림 (추후 사용 가능)
+/*
+* 확인 알림 (추후 사용 가능)
+* */
 export const showConfirmAlert = (message?: string, title?: string) => {
   return Swal.fire({
     icon: 'warning',

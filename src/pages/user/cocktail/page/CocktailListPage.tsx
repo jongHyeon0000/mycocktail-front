@@ -27,6 +27,7 @@ import useReadCocktailList from "../service/useReadCocktailList.tsx";
 const CocktailListPage: React.FC = () => {
   type SortOrderType = "recent" | "popular" | "name";
 
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [sortOrder, setSortOrder] = useState<SortOrderType>("recent");
   const [modalOpen, setModalOpen] = useState<boolean>(false);
 
@@ -34,11 +35,18 @@ const CocktailListPage: React.FC = () => {
   const { cocktail, cocktailLoading, cocktailError, fetchReadCocktail } = useReadCocktail();
 
   /*
-  * 초기 데이터 로드(cocktail list)
+  * 초기 데이터 로드 (cocktail list)
+  * 정렬 순서 변경 시 로드 (sortOrder)
+  * 무한 스크롤 발생 시 로드 (currentPage)
   * */
   useEffect(() => {
-    fetchReadCocktailList();
-  }, []);
+    fetchReadCocktailList({
+      page: currentPage,
+      limit: 6,
+      order: "desc",
+      sort: sortOrder
+    });
+  }, [currentPage, sortOrder]);
 
   /*
   * Modal State 제어
@@ -55,15 +63,15 @@ const CocktailListPage: React.FC = () => {
   useEffect(() => {
     if (cocktailListError) {
       showErrorAlert(
-          cocktailListError,
-          '세부 칵테일 리스트 실패, 관리자에게 문의하세요.'
+          '세부 칵테일 리스트 로드 실패',
+          cocktailListError
       ).then();
     }
 
     if (cocktailError) {
       showErrorAlert(
-          cocktailError,
-          '세부 칵테일 로드 실패, 관리자에게 문의하세요.'
+          '세부 칵테일 로드 실패',
+          cocktailError
       ).then();
     }
   }, [cocktailListError, cocktailError]);
