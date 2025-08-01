@@ -1,4 +1,4 @@
-import React, {type SetStateAction, useEffect, useState, useCallback} from "react";
+import React, {type SetStateAction, useEffect, useState, useCallback, useRef} from "react";
 import { 
   Box, 
   Container, 
@@ -33,21 +33,13 @@ const CocktailListPage: React.FC = () => {
   const [sortOrder, setSortOrder] = useState<SortOrderType>("recent");
   const [modalOpen, setModalOpen] = useState<boolean>(false);
 
-  const { 
-    cocktailList, 
-    cocktailListLoading, 
-    cocktailListLoadingMore,
-    cocktailListError, 
-    cocktailListHasMore,
-    fetchReadCocktailList
-  } = useReadCocktailList();
+  const { cocktailList, cocktailListLoading, cocktailListLoadingMore, cocktailListError, cocktailListHasMore, fetchReadCocktailList } = useReadCocktailList();
   const { cocktail, cocktailLoading, cocktailError, fetchReadCocktail } = useReadCocktail();
 
   /*
   * 초기 데이터 로드 및 정렬 변경 시 로드
   * */
   useEffect(() => {
-    setCurrentPage(1);
     fetchReadCocktailList({
       page: 1,
       limit: 6,
@@ -60,26 +52,24 @@ const CocktailListPage: React.FC = () => {
   * 무한 스크롤 - 더 많은 데이터 로드
   * */
   const loadMoreData = useCallback(async () => {
-    if (cocktailListLoadingMore || !cocktailListHasMore || cocktailListLoading) return;
-    
-    const nextPage = currentPage + 1;
-    
-    await fetchReadCocktailList({
-      page: nextPage,
-      limit: 6,
-      order: "desc",
-      sort: sortOrder
-    }, true);
-    
-    setCurrentPage(nextPage);
+    if (cocktailListHasMore || !cocktailListLoading || !cocktailListLoadingMore) {
+      await fetchReadCocktailList({
+        page: currentPage + 1,
+        limit: 6,
+        order: "desc",
+        sort: sortOrder
+      }, true);
+
+      setCurrentPage(currentPage + 1);
+    }
   }, [currentPage, sortOrder, cocktailListLoadingMore, cocktailListHasMore, cocktailListLoading]);
 
   /*
   * 스크롤 이벤트 핸들러 - 하단 뷰포트 감지
   * */
   const handleScroll = useCallback(() => {
-    // 현재 스크롤 위치 + 뷰포트 높이가 전체 문서 높이에서 200px 이내에 도달하면 로드
-    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 200) {
+    // 현재 스크롤 위치 + 뷰포트 높이가 전체 문서 높이에서 100px 이내에 도달하면 로드
+    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 100) {
       loadMoreData();
     }
   }, [loadMoreData]);
@@ -89,6 +79,7 @@ const CocktailListPage: React.FC = () => {
   * */
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
+
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
