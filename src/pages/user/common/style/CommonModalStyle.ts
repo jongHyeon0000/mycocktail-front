@@ -1,4 +1,4 @@
-export const modalVariants = {
+export const COMMON_MODAL_STYLE = {
   hidden: {
     opacity: 0,
     scale: 0.8,

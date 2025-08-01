@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import {GNB_MENU_TYPE, GNB_SUBMENU_TYPE} from "../menu/GnbMenuItem.tsx";
+import {GNB_MENU_TYPE, GNB_SUBMENU_TYPE} from "../config/GnbMenuItem.tsx";
 import {
   ActiveChip,
   IntroText,
@@ -20,7 +20,7 @@ import {
   StyledAppBar,
   StyledToolbar,
   UserName
-} from "../style/GNB_Style.tsx";
+} from "./style/GNB_Style.tsx";
 
 const GNB: React.FC = () => {
   const [isSubMenuOpen, setIsSubMenuOpen] = useState(false);

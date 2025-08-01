@@ -62,10 +62,10 @@ import {
   ActionCount,
   DateInfo,
   DateText
-} from "../style/CocktailDetailModal_Style";
+} from "./style/CocktailDetailModal_Style";
 import type {CocktailDetailModalProps} from "../interface/CocktailDetailModalProps.ts";
-import {dragConfig} from "../../common/style/CommonDrag.ts";
-import {modalVariants} from "../../common/style/CommonModal.ts";
+import {COMMON_DRAG_STYLE} from "../../common/style/CommonDragStyle.ts";
+import {COMMON_MODAL_STYLE} from "../../common/style/CommonModalStyle.ts";
 
 const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
   open,
@@ -103,7 +103,7 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
         >
           <ModalContainer
             as={motion.div}
-            variants={modalVariants}
+            variants={COMMON_MODAL_STYLE}
             initial="hidden"
             animate="visible"
             exit="exit"
@@ -186,7 +186,7 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                         <SlideCategoryTitle>기주</SlideCategoryTitle>
                         <SlideContainer ref={spiritsRef}>
                           <SlideWrapper>
-                            <SlideTrack {...dragConfig(spiritsRef)}>
+                            <SlideTrack {...COMMON_DRAG_STYLE(spiritsRef)}>
                               {data.ingredients.spirits.map((item) => (
                                 <SlideItem 
                                   key={item.id}
@@ -219,7 +219,7 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                         <SlideCategoryTitle>주스</SlideCategoryTitle>
                         <SlideContainer ref={juicesRef}>
                           <SlideWrapper>
-                            <SlideTrack {...dragConfig(juicesRef)}>
+                            <SlideTrack {...COMMON_DRAG_STYLE(juicesRef)}>
                               {data.ingredients.juices.map((item) => (
                                 <SlideItem 
                                   key={item.id}
@@ -252,7 +252,7 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                         <SlideCategoryTitle>비터스</SlideCategoryTitle>
                         <SlideContainer ref={bittersRef}>
                           <SlideWrapper>
-                            <SlideTrack {...dragConfig(bittersRef)}>
+                            <SlideTrack {...COMMON_DRAG_STYLE(bittersRef)}>
                               {data.ingredients.bitters.map((item) => (
                                 <SlideItem 
                                   key={item.id}
@@ -285,7 +285,7 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                         <SlideCategoryTitle>시럽</SlideCategoryTitle>
                         <SlideContainer ref={syrupsRef}>
                           <SlideWrapper>
-                            <SlideTrack {...dragConfig(syrupsRef)}>
+                            <SlideTrack {...COMMON_DRAG_STYLE(syrupsRef)}>
                               {data.ingredients.syrups.map((item) => (
                                 <SlideItem 
                                   key={item.id}
@@ -318,7 +318,7 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                         <SlideCategoryTitle>탄산/소다</SlideCategoryTitle>
                         <SlideContainer ref={carbonatedRef}>
                           <SlideWrapper>
-                            <SlideTrack {...dragConfig(carbonatedRef)}>
+                            <SlideTrack {...COMMON_DRAG_STYLE(carbonatedRef)}>
                               {data.ingredients.carbonated.map((item) => (
                                 <SlideItem 
                                   key={item.id}
@@ -351,7 +351,7 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                         <SlideCategoryTitle>유제품/크림</SlideCategoryTitle>
                         <SlideContainer ref={dairyRef}>
                           <SlideWrapper>
-                            <SlideTrack {...dragConfig(dairyRef)}>
+                            <SlideTrack {...COMMON_DRAG_STYLE(dairyRef)}>
                               {data.ingredients.dairy.map((item) => (
                                 <SlideItem 
                                   key={item.id}
@@ -384,7 +384,7 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                         <SlideCategoryTitle>가니쉬</SlideCategoryTitle>
                         <SlideContainer ref={garnishesRef}>
                           <SlideWrapper>
-                            <SlideTrack {...dragConfig(garnishesRef)}>
+                            <SlideTrack {...COMMON_DRAG_STYLE(garnishesRef)}>
                               {data.ingredients.garnishes.map((item) => (
                                 <SlideItem 
                                   key={item.id}
@@ -417,7 +417,7 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                         <SlideCategoryTitle>기타</SlideCategoryTitle>
                         <SlideContainer ref={othersRef}>
                           <SlideWrapper>
-                            <SlideTrack {...dragConfig(othersRef)}>
+                            <SlideTrack {...COMMON_DRAG_STYLE(othersRef)}>
                               {data.ingredients.others.map((item) => (
                                 <SlideItem 
                                   key={item.id}
@@ -460,7 +460,7 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                         <SlideCategoryTitle className="technique">도구/기물</SlideCategoryTitle>
                         <SlideContainer ref={toolsRef}>
                           <SlideWrapper>
-                            <SlideTrack {...dragConfig(toolsRef)}>
+                            <SlideTrack {...COMMON_DRAG_STYLE(toolsRef)}>
                               {data.tools.map((item) => (
                                 <SlideItem 
                                   key={item.id}
@@ -493,7 +493,7 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                         <SlideCategoryTitle className="technique">사용 잔</SlideCategoryTitle>
                         <SlideContainer ref={glasswareRef}>
                           <SlideWrapper>
-                            <SlideTrack {...dragConfig(glasswareRef)}>
+                            <SlideTrack {...COMMON_DRAG_STYLE(glasswareRef)}>
                               {data.glassware.map((item) => (
                                 <SlideItem 
                                   key={item.id}
@@ -526,7 +526,7 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                         <SlideCategoryTitle className="technique">제조 기법</SlideCategoryTitle>
                         <SlideContainer ref={methodsRef}>
                           <SlideWrapper>
-                            <SlideTrack {...dragConfig(methodsRef)}>
+                            <SlideTrack {...COMMON_DRAG_STYLE(methodsRef)}>
                               {data.techniques.map((item) => (
                                 <SlideItem 
                                   key={item.id}

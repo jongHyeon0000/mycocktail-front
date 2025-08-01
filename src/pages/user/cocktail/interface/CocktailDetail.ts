@@ -8,6 +8,7 @@ export interface CocktailDetail{
   difficulty: number;
   isVariation: boolean;
   profileNote?: string;
+  isNew: boolean;
 
   // 상세 정보 (HTML 텍스트 에리어)
   historyNote?: string;

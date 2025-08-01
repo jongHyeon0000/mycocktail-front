@@ -2,17 +2,17 @@ import {useState} from "react";
 import type {CocktailDetail} from "../interface/CocktailDetail.ts";
 import {api} from "../../../../config/AxiosConfig.ts";
 
-const useReadCocktail = () => {
-  const [data, setData] = useState<CocktailDetail | undefined>(undefined);
+const useReadCocktailList = () => {
+  const [data, setData] = useState<CocktailDetail[] | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchReadCocktail = async (id: number) => {
+  const fetchReadCocktailList = async () => {
     setLoading(true);
     setError(null);
 
     try{
-      const response = await api.get<{data: CocktailDetail}>(`/api/cocktail/${id}`);
+      const response = await api.get<{data: CocktailDetail[]}>(`/api/cocktail`);
 
       if (response.status === 200) {
         setData(response.data.data);
@@ -29,11 +29,11 @@ const useReadCocktail = () => {
   }
 
   return {
-    cocktail: data,
-    cocktailLoading: loading,
-    cocktailError: error,
-    fetchReadCocktail
+    cocktailList: data,
+    cocktailListLoading: loading,
+    cocktailListError: error,
+    fetchReadCocktailList
   };
 }
 
-export default useReadCocktail;
+export default useReadCocktailList;
