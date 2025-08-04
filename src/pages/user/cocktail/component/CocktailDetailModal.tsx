@@ -63,9 +63,15 @@ import {
   DateInfo,
   DateText
 } from "./style/CocktailDetailModal_Style";
-import type {CocktailDetailModalProps} from "../interface/CocktailDetailModalProps.ts";
 import {COMMON_DRAG_STYLE} from "../../common/style/CommonDragStyle.ts";
 import {COMMON_MODAL_STYLE} from "../../common/style/CommonModalStyle.ts";
+import type {CocktailDetail} from "../interface/CocktailDetail.ts";
+
+interface CocktailDetailModalProps {
+  open: boolean;
+  onClose: () => void;
+  data: CocktailDetail
+}
 
 const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
   open,

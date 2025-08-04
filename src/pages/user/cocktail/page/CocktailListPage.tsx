@@ -1,21 +1,16 @@
-import React, {type SetStateAction, useEffect, useState, useCallback, useRef} from "react";
+import React, {type SetStateAction, useEffect, useState, useCallback} from "react";
 import { 
   Box, 
   Container, 
-  Card, 
-  CardMedia, 
   InputAdornment,
   MenuItem,
   FormControl,
   CircularProgress,
   Typography
 } from "@mui/material";
-import { motion } from "framer-motion";
 import {
-  BottomInfo,
-  CardContentArea, CocktailAlcohol, CocktailDescription,
-  CocktailList, CocktailTitle, ContentSection,
-  ControlsContainer, DateText, ImageSection, LikeText, NewChip,
+  CocktailList,
+  ControlsContainer,
   PageContainer,
   SearchField,
   SortSelect
@@ -25,13 +20,16 @@ import useReadCocktail from "../service/useReadCocktail.tsx";
 import LoadingOverlay from "../../common/component/LoadingOverlay";
 import { showErrorAlert } from "../../common/utils/AlertUtils";
 import useReadCocktailList from "../service/useReadCocktailList.tsx";
+import CocktailListComponent from "../component/CocktailListComponent.tsx";
 
 const CocktailListPage: React.FC = () => {
   type SortOrderType = "recent" | "popular" | "name";
 
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [sortOrder, setSortOrder] = useState<SortOrderType>("recent");
-  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const PAGE_SIZE: number = 6;
+
+  const [ currentPage, setCurrentPage ] = useState<number>(1);
+  const [ sortOrder, setSortOrder ] = useState<SortOrderType>("recent");
+  const [ modalOpen, setModalOpen ] = useState<boolean>(false);
 
   const { cocktailList, cocktailListLoading, cocktailListLoadingMore, cocktailListError, cocktailListHasMore, fetchReadCocktailList } = useReadCocktailList();
   const { cocktail, cocktailLoading, cocktailError, fetchReadCocktail } = useReadCocktail();
@@ -42,37 +40,30 @@ const CocktailListPage: React.FC = () => {
   useEffect(() => {
     fetchReadCocktailList({
       page: 1,
-      limit: 6,
+      limit: PAGE_SIZE,
       order: "desc",
       sort: sortOrder
     });
   }, [sortOrder]);
 
   /*
-  * 무한 스크롤 - 더 많은 데이터 로드
+  * 무한 스크롤 이벤트 핸들러 - 추가 데이터 로드
   * */
-  const loadMoreData = useCallback(async () => {
-    if (cocktailListHasMore || !cocktailListLoading || !cocktailListLoadingMore) {
-      await fetchReadCocktailList({
-        page: currentPage + 1,
-        limit: 6,
-        order: "desc",
-        sort: sortOrder
-      }, true);
-
-      setCurrentPage(currentPage + 1);
-    }
-  }, [currentPage, sortOrder, cocktailListLoadingMore, cocktailListHasMore, cocktailListLoading]);
-
-  /*
-  * 스크롤 이벤트 핸들러 - 하단 뷰포트 감지
-  * */
-  const handleScroll = useCallback(() => {
+  const handleScroll = useCallback(async () => {
     // 현재 스크롤 위치 + 뷰포트 높이가 전체 문서 높이에서 100px 이내에 도달하면 로드
     if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 100) {
-      loadMoreData();
+      if (cocktailListHasMore || !cocktailListLoading || !cocktailListLoadingMore) {
+        await fetchReadCocktailList({
+          page: currentPage + 1,
+          limit: PAGE_SIZE,
+          order: "desc",
+          sort: sortOrder
+        }, true);
+
+        setCurrentPage(currentPage + 1);
+      }
     }
-  }, [loadMoreData]);
+  }, [currentPage, sortOrder, cocktailListLoadingMore, cocktailListHasMore, cocktailListLoading]);
 
   /*
   * 스크롤 이벤트 리스너 등록/해제
@@ -158,74 +149,7 @@ const CocktailListPage: React.FC = () => {
         {/* 칵테일 리스트 */}
         <CocktailList>
           {cocktailList && cocktailList.map((cocktail, index) => (
-            <Card
-              key={`${cocktail.cocktailId}-${index}`}
-              component={motion.div}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: (index % 6) * 0.1, duration: 0.4 }}
-              whileHover={{ y: -4, transition: { duration: 0.2 } }}
-              onClick={() => fetchReadCocktail(cocktail.cocktailId)}
-              sx={{ 
-                position: "relative",
-                cursor: "pointer",
-                borderRadius: 2,
-                overflow: "hidden",
-                boxShadow: "0 2px 8px rgba(0, 0, 0, 0.08)",
-                backgroundColor: "#fff",
-                "&:hover": {
-                  boxShadow: "0 8px 24px rgba(0, 0, 0, 0.12)",
-                }
-              }}
-            >
-              {/* NEW 태그 */}
-              {cocktail.isNew && (
-                <NewChip label="NEW" size="small" />
-              )}
-
-              <CardContentArea>
-                {/* 이미지 섹션 */}
-                <ImageSection>
-                  <CardMedia
-                    component="img"
-                    height="200"
-                    image={cocktail.image}
-                    alt={cocktail.cocktailName}
-                    sx={{ 
-                      objectFit: "cover",
-                      width: "100%",
-                      height: "100%"
-                    }}
-                  />
-                </ImageSection>
-
-                {/* 콘텐츠 섹션 */}
-                <ContentSection>
-                  <Box>
-                    <CocktailTitle variant="h6">
-                      {cocktail.cocktailNameKr} ({cocktail.cocktailName})
-                    </CocktailTitle>
-                    
-                    <CocktailDescription variant="body2">
-                      {cocktail.profileNote}
-                    </CocktailDescription>
-                    
-                    <CocktailAlcohol variant="body2">
-                      abz {cocktail.abs_percentage}%
-                    </CocktailAlcohol>
-                  </Box>
-
-                  <BottomInfo>
-                    <DateText variant="caption">
-                      {cocktail.createAt}
-                    </DateText>
-                    <LikeText variant="caption">
-                      ❤️ {cocktail.likeCount}
-                    </LikeText>
-                  </BottomInfo>
-                </ContentSection>
-              </CardContentArea>
-            </Card>
+            <CocktailListComponent cocktail={cocktail} index={index} onClickEvent={() => fetchReadCocktail(cocktail.cocktailId)} />
           ))}
         </CocktailList>
 

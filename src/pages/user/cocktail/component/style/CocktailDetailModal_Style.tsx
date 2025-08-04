@@ -35,21 +35,6 @@ export const ModalContainer = styled(Paper)`
   }
 `;
 
-export const CloseButton = styled(IconButton)`
-  && {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    z-index: 10;
-    background-color: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(10px);
-    
-    &:hover {
-      background-color: rgba(255, 255, 255, 0.95);
-    }
-  }
-`;
-
 export const HeaderSection = styled(Box)`
   && {
     position: relative;
