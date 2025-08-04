@@ -13,10 +13,31 @@ export interface SpiritProductDetail {
   citrus: number;
   herbal: number;
 
+  /*
+  * 기주 카테고리 (상위 table)
+  * */
   spirit: {
     spiritId: string;
     spiritName: string;
     spiritNameKr: string;
+  }
+
+  /*
+  * 브랜드
+  * */
+  brand: {
+    brandId: number;
+    brandName: string;
+    brandNameKr: string;
+  }
+
+  /*
+  * 원산지 국가
+  * */
+  country: {
+    countryId: number;
+    countryName: string;
+    countryNameKr: string;
   }
 
   profileNote?: string;

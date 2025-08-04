@@ -1,7 +1,7 @@
 import { RecoilRoot } from "recoil";
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { APP_ROUTES } from "./config/AppRoutes.tsx";
+import { APP_ROUTES } from "./config/RoutesConfig.tsx";
 import { Box } from "@mui/material";
 import GNB from "./pages/user/common/component/GNB.tsx";
 

@@ -3,34 +3,26 @@ import {motion} from "framer-motion";
 import {
   BottomInfo,
   CardContentArea, 
-  SpiritAlcohol, 
-  SpiritDescription,
-  SpiritTitle,
+  ToolCategory, 
+  ToolDescription,
+  ToolTitle,
   ContentSection, 
-  DateText,
-  PriceText,
-  DiscontinuedText
-} from "./style/SpiritProductListComponent_Style.tsx";
+  DateText
+} from "./style/ToolListComponent_Style.tsx";
 import {Box, Card, CardMedia} from "@mui/material";
-import type {SpiritProductDetail} from "../interface/SpiritProductDetail.ts";
+import type {ToolDetail} from "../interface/ToolDetail.ts";
+import {getToolCategoryKorean} from "../common/ToolUtils.ts";
 
-interface SpiritListComponentProps {
-  spirit: SpiritProductDetail;
+interface ToolListComponentProps {
+  tool: ToolDetail;
   index: number;
   onClickEvent: () => void;
 }
 
-const SpiritProductListComponent: React.FC<SpiritListComponentProps> = ({ spirit, index, onClickEvent }) => {
-  /*
-  * 기주 가격 formatting 함수
-  * */
-  const formatPrice = (price: number): string => {
-    return price.toLocaleString('ko-KR') + '원';
-  };
-
+const ToolListComponent: React.FC<ToolListComponentProps> = ({ tool, index, onClickEvent }) => {
   return (
       <Card
-          key={`${spirit.spiritProductId}-${index}`}
+          key={`${tool.toolId}-${index}`}
           component={motion.div}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -60,8 +52,8 @@ const SpiritProductListComponent: React.FC<SpiritListComponentProps> = ({ spirit
             <CardMedia
                 component="img"
                 height="200"
-                image={spirit.image}
-                alt={spirit.spiritName}
+                image={tool.image}
+                alt={tool.toolName}
                 sx={{
                   objectFit: "cover",
                   width: "100%",
@@ -73,34 +65,23 @@ const SpiritProductListComponent: React.FC<SpiritListComponentProps> = ({ spirit
           {/* 콘텐츠 섹션 */}
           <ContentSection>
             <Box>
-              <SpiritTitle variant="h6">
-                {spirit.spiritNameKr} ({spirit.spiritName})
-              </SpiritTitle>
+              <ToolTitle variant="h6">
+                {tool.toolNameKr} ({tool.toolName})
+              </ToolTitle>
 
-              <SpiritDescription variant="body2">
-                {spirit.profileNote}
-              </SpiritDescription>
+              <ToolDescription variant="body2">
+                {tool.profileNotes}
+              </ToolDescription>
 
-              <SpiritAlcohol variant="body2">
-                abz {spirit.absPercentage}%
-              </SpiritAlcohol>
+              <ToolCategory variant="body2">
+                {getToolCategoryKorean(tool.toolCategory)}
+              </ToolCategory>
             </Box>
 
             <BottomInfo>
               <DateText variant="caption">
-                {spirit.createAt}
+                {tool.createAt}
               </DateText>
-              <Box sx={{ textAlign: 'right' }}>
-                <DiscontinuedText 
-                  variant="caption" 
-                  isDiscontinued={spirit.isDiscontinued}
-                >
-                  {spirit.isDiscontinued ? '단종' : '판매중'}
-                </DiscontinuedText>
-                <PriceText variant="caption">
-                  {formatPrice(spirit.price)}
-                </PriceText>
-              </Box>
             </BottomInfo>
           </ContentSection>
         </CardContentArea>
@@ -108,4 +89,4 @@ const SpiritProductListComponent: React.FC<SpiritListComponentProps> = ({ spirit
   );
 }
 
-export default SpiritProductListComponent;
+export default ToolListComponent;

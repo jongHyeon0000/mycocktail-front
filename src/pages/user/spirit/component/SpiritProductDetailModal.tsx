@@ -101,6 +101,16 @@ const SpiritProductDetailModal: React.FC<SpiritDetailModalProps> = ({
                   </InfoCard>
                   
                   <InfoCard>
+                    <InfoLabel>브랜드</InfoLabel>
+                    <InfoValue>{data.brand.brandName}</InfoValue>
+                  </InfoCard>
+                  
+                  <InfoCard>
+                    <InfoLabel>원산지(국가)</InfoLabel>
+                    <InfoValue>{data.country.countryNameKr}</InfoValue>
+                  </InfoCard>
+                  
+                  <InfoCard>
                     <InfoLabel>도수</InfoLabel>
                     <InfoValue>{data.absPercentage}%</InfoValue>
                   </InfoCard>
