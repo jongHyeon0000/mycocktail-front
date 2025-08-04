@@ -1,7 +1,15 @@
 import React from 'react';
 import { CircularProgress } from "@mui/material";
-import type {LoadingOverlayProps} from "./interface/LoadingOverlayProps.ts";
 import {LoadingBackdrop, LoadingIconContainer, LoadingMessage} from "./style/LoadingOverlay_Style.tsx";
+
+interface LoadingOverlayProps {
+  open: boolean;
+  size?: number;
+  thickness?: number;
+  color?: string;
+  backdropColor?: string;
+  message?: string;
+}
 
 const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
   open,

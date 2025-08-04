@@ -72,7 +72,7 @@ const CocktailListComponent: React.FC<CocktailListComponentProps> = ({ cocktail,
               </CocktailDescription>
 
               <CocktailAlcohol variant="body2">
-                abz {cocktail.abs_percentage}%
+                abz {cocktail.absPercentage}%
               </CocktailAlcohol>
             </Box>
 

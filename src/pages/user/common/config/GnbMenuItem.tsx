@@ -6,7 +6,7 @@ type GnbMenuType = {
 export const GNB_MENU_TYPE: readonly GnbMenuType[] = [
   { path: '/', name: '홈'},
   { path: '/cocktail', name: '레시피'},
-  { path: '/spirit-product', name: '기주'},
+  { path: '/spirit', name: '기주'},
   { path: '/ingredients', name: '재료'},
   { path: '/tool', name: '도구'},
   { path: '/technique', name: '기법'},

@@ -139,7 +139,7 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                   
                   <InfoCard>
                     <InfoLabel>예상 도수</InfoLabel>
-                    <InfoValue>{data.abs_percentage}%</InfoValue>
+                    <InfoValue>{data.absPercentage}%</InfoValue>
                   </InfoCard>
                   
                   <InfoCard>

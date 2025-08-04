@@ -63,7 +63,7 @@ const CocktailListPage: React.FC = () => {
         setCurrentPage(currentPage + 1);
       }
     }
-  }, [currentPage, sortOrder, cocktailListLoadingMore, cocktailListHasMore, cocktailListLoading]);
+  }, [currentPage, sortOrder, cocktailListHasMore, cocktailListLoading, cocktailListLoadingMore]);
 
   /*
   * 스크롤 이벤트 리스너 등록/해제

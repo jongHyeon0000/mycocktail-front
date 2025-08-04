@@ -4,7 +4,7 @@ export interface CocktailDetail{
   cocktailName: string;
   cocktailNameKr: string;
   category: string;
-  abs_percentage: number;
+  absPercentage: number;
   difficulty: number;
   isVariation: boolean;
   profileNote?: string;
