@@ -18,18 +18,28 @@ import {
 import CocktailDetailModal from "../component/CocktailDetailModal";
 import useReadCocktail from "../service/useReadCocktail.tsx";
 import LoadingOverlay from "../../common/component/LoadingOverlay";
+import SearchLoadingOverlay from "../component/SearchLoadingOverlay.tsx";
 import { showErrorAlert } from "../../common/utils/AlertUtils";
 import useReadCocktailList from "../service/useReadCocktailList.tsx";
 import CocktailListComponent from "../component/CocktailListComponent.tsx";
 
 const CocktailListPage: React.FC = () => {
+  /*
+  * 검색 카테고리 (최신순, 인기순, 이름순)
+  * */
   type SortOrderType = "recent" | "popular" | "name";
 
+  /*
+  * 한 번 스크롤 시 불러올 pagination size
+  * */
   const PAGE_SIZE: number = 6;
 
   const [ currentPage, setCurrentPage ] = useState<number>(1);
   const [ sortOrder, setSortOrder ] = useState<SortOrderType>("recent");
   const [ modalOpen, setModalOpen ] = useState<boolean>(false);
+  const [ searchKeyword, setSearchKeyword ] = useState<string>("");
+  const [ searchDebounceTimer, setSearchDebounceTimer ] = useState<number | null>(null);
+  const [ isSearching, setIsSearching ] = useState<boolean>(false);
 
   const { cocktailList, cocktailListLoading, cocktailListLoadingMore, cocktailListError, cocktailListHasMore, fetchReadCocktailList } = useReadCocktailList();
   const { cocktail, cocktailLoading, cocktailError, fetchReadCocktail } = useReadCocktail();
@@ -42,7 +52,59 @@ const CocktailListPage: React.FC = () => {
       page: 1,
       limit: PAGE_SIZE,
       order: "desc",
+      sort: sortOrder,
+      search: searchKeyword.trim() || undefined
+    });
+  }, [sortOrder]);
+
+  /*
+  * 검색어 입력 핸들러 (디바운스 적용)
+  * */
+  const handleSearchChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    const keyword = event.target.value;
+    setSearchKeyword(keyword);
+
+    // 이전 타이머 취소
+    if (searchDebounceTimer) {
+      clearTimeout(searchDebounceTimer);
+    }
+
+    // 검색 중 상태 활성화
+    setIsSearching(true);
+
+    // 새로운 타이머 설정 (250ms 후 검색 실행)
+    const newTimer = setTimeout(() => {
+      setCurrentPage(1);
+
+      fetchReadCocktailList({
+        page: 1,
+        limit: PAGE_SIZE,
+        order: "desc",
+        sort: sortOrder,
+        search: keyword.trim() || undefined
+      }).finally(() => {
+        setIsSearching(false);
+      });
+    }, 250);
+
+    setSearchDebounceTimer(newTimer);
+  }, [sortOrder, searchDebounceTimer]);
+
+  /*
+  * 검색어 초기화 핸들러
+  * */
+  const handleSearchClear = useCallback(() => {
+    setSearchKeyword("");
+    setCurrentPage(1);
+    setIsSearching(true);
+
+    fetchReadCocktailList({
+      page: 1,
+      limit: PAGE_SIZE,
+      order: "desc",
       sort: sortOrder
+    }).finally(() => {
+      setIsSearching(false);
     });
   }, [sortOrder]);
 
@@ -57,13 +119,14 @@ const CocktailListPage: React.FC = () => {
           page: currentPage + 1,
           limit: PAGE_SIZE,
           order: "desc",
-          sort: sortOrder
+          sort: sortOrder,
+          search: searchKeyword.trim() || undefined
         }, true);
 
         setCurrentPage(currentPage + 1);
       }
     }
-  }, [currentPage, sortOrder, cocktailListHasMore, cocktailListLoading, cocktailListLoadingMore]);
+  }, [currentPage, sortOrder, searchKeyword, cocktailListHasMore, cocktailListLoading, cocktailListLoadingMore]);
 
   /*
   * 스크롤 이벤트 리스너 등록/해제
@@ -73,8 +136,12 @@ const CocktailListPage: React.FC = () => {
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
+
+      if (searchDebounceTimer) {
+        clearTimeout(searchDebounceTimer);
+      }
     };
-  }, [handleScroll]);
+  }, [handleScroll, searchDebounceTimer]);
 
   /*
   * Modal State 제어
@@ -108,7 +175,7 @@ const CocktailListPage: React.FC = () => {
     <PageContainer>
       {/* 로딩 오버레이 - 초기 로딩시에만 */}
       <LoadingOverlay
-        open={cocktailListLoading}
+        open={cocktailListLoading && !isSearching}
         message="칵테일 리스트를 불러오는 중..."
       />
       <LoadingOverlay 
@@ -136,10 +203,26 @@ const CocktailListPage: React.FC = () => {
             placeholder="칵테일 검색..."
             variant="outlined"
             size="small"
+            value={searchKeyword}
+            onChange={handleSearchChange}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
                   <span style={{ fontSize: "18px" }}>🔍</span>
+                </InputAdornment>
+              ),
+              endAdornment: searchKeyword && (
+                <InputAdornment position="end">
+                  <span 
+                    style={{ 
+                      fontSize: "16px", 
+                      cursor: "pointer",
+                      padding: "4px"
+                    }}
+                    onClick={handleSearchClear}
+                  >
+                    ✕
+                  </span>
                 </InputAdornment>
               ),
             }}
@@ -148,9 +231,16 @@ const CocktailListPage: React.FC = () => {
 
         {/* 칵테일 리스트 */}
         <CocktailList>
-          {cocktailList && cocktailList.map((cocktail, index) => (
-            <CocktailListComponent cocktail={cocktail} index={index} onClickEvent={() => fetchReadCocktail(cocktail.cocktailId)} />
-          ))}
+          {isSearching ? (
+            <SearchLoadingOverlay
+              open={isSearching}
+              message="검색 중..."
+            />
+          ) : (
+            cocktailList && cocktailList.map((cocktail, index) => (
+              <CocktailListComponent cocktail={cocktail} index={index} onClickEvent={() => fetchReadCocktail(cocktail.cocktailId)} />
+            ))
+          )}
         </CocktailList>
 
         {/* 무한 스크롤 로딩 인디케이터 */}
@@ -164,7 +254,7 @@ const CocktailListPage: React.FC = () => {
         )}
 
         {/* 더 이상 불러올 데이터가 없을 때 */}
-        {cocktailList && cocktailList.length > 0 && !cocktailListHasMore && !cocktailListLoadingMore && (
+        {!isSearching && cocktailList && cocktailList.length > 0 && !cocktailListHasMore && !cocktailListLoadingMore && (
           <Box display="flex" justifyContent="center" alignItems="center" py={4}>
             <Typography variant="body2" color="text.secondary">
               모든 칵테일을 불러왔습니다 🍸

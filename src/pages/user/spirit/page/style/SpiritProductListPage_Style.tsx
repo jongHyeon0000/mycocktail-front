@@ -69,6 +69,7 @@ export const SearchField = styled(TextField)`
 
 export const SpiritList = styled(Box)`
   && {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 24px;

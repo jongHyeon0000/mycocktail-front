@@ -22,16 +22,26 @@ import useReadTool from "../service/useReadTool.tsx";
 import {showErrorAlert} from "../../common/utils/AlertUtils.ts";
 import LoadingOverlay from "../../common/component/LoadingOverlay.tsx";
 import type {TOOL_CATEGORY_MAP_KEY} from "../common/ToolUtils.ts";
+import SearchLoadingOverlay from "../../common/component/SearchLoadingOverlay.tsx";
 
 const ToolListPage: React.FC = () => {
+  /*
+  * 검색 카테고리 (최신순, 이름순)
+  * */
   type SortOrderType = "recent" | "name";
 
+  /*
+  * 한 번 스크롤 시 불러올 pagination size
+  * */
   const PAGE_SIZE: number = 6;
 
   const [ currentPage, setCurrentPage ] = useState<number>(1);
   const [ sortOrder, setSortOrder ] = useState<SortOrderType>("recent");
   const [ secondSortOrder, setSecondSortOrder ] = useState<TOOL_CATEGORY_MAP_KEY | "all">("all");
   const [ modalOpen, setModalOpen ] = useState<boolean>(false);
+  const [ searchKeyword, setSearchKeyword ] = useState<string>("");
+  const [ searchDebounceTimer, setSearchDebounceTimer ] = useState<number | null>(null);
+  const [ isSearching, setIsSearching ] = useState<boolean>(false);
 
   const { toolList, toolListLoading, toolListError, toolListHasMore, toolListLoadingMore, fetchReadToolList } = useReadToolList();
   const { tool, toolLoading, toolError, fetchReadTool } = useReadTool();
@@ -45,7 +55,61 @@ const ToolListPage: React.FC = () => {
       limit: PAGE_SIZE,
       order: "desc",
       sort: sortOrder,
+      categorySort: secondSortOrder,
+      search: searchKeyword.trim() || undefined
+    });
+  }, [sortOrder, secondSortOrder]);
+
+  /*
+  * 검색어 입력 핸들러 (디바운스 적용)
+  * */
+  const handleSearchChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    const keyword = event.target.value;
+    setSearchKeyword(keyword);
+    
+    // 이전 타이머 취소
+    if (searchDebounceTimer) {
+      clearTimeout(searchDebounceTimer);
+    }
+    
+    // 검색 중 상태 활성화
+    setIsSearching(true);
+    
+    // 새로운 타이머 설정 (250ms 후 검색 실행)
+    const newTimer = setTimeout(() => {
+      setCurrentPage(1);
+
+      fetchReadToolList({
+        page: 1,
+        limit: PAGE_SIZE,
+        order: "desc",
+        sort: sortOrder,
+        categorySort: secondSortOrder,
+        search: keyword.trim() || undefined
+      }).finally(() => {
+        setIsSearching(false);
+      });
+    }, 250);
+    
+    setSearchDebounceTimer(newTimer);
+  }, [sortOrder, secondSortOrder, searchDebounceTimer]);
+
+  /*
+  * 검색어 초기화 핸들러
+  * */
+  const handleSearchClear = useCallback(() => {
+    setSearchKeyword("");
+    setCurrentPage(1);
+    setIsSearching(true);
+
+    fetchReadToolList({
+      page: 1,
+      limit: PAGE_SIZE,
+      order: "desc",
+      sort: sortOrder,
       categorySort: secondSortOrder
+    }).finally(() => {
+      setIsSearching(false);
     });
   }, [sortOrder, secondSortOrder]);
 
@@ -60,24 +124,30 @@ const ToolListPage: React.FC = () => {
           page: currentPage + 1,
           limit: PAGE_SIZE,
           order: "desc",
-          sort: sortOrder
+          sort: sortOrder,
+          categorySort: secondSortOrder,
+          search: searchKeyword.trim() || undefined
         }, true);
 
         setCurrentPage(currentPage + 1);
       }
     }
-  }, [currentPage, sortOrder, toolListHasMore, toolListLoading, toolListLoadingMore]);
+  }, [currentPage, sortOrder, secondSortOrder, searchKeyword, toolListHasMore, toolListLoading, toolListLoadingMore]);
 
   /*
-  * 스크롤 이벤트 리스너 등록/해제
+  * 이벤트 리스너 등록 및 해제
   * */
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
+
+      if (searchDebounceTimer) {
+        clearTimeout(searchDebounceTimer);
+      }
     };
-  }, [handleScroll]);
+  }, [handleScroll, searchDebounceTimer]);
 
   /*
   * Modal State 제어
@@ -111,7 +181,7 @@ const ToolListPage: React.FC = () => {
     <PageContainer>
       {/* 로딩 오버레이 - 초기 로딩시에만 */}
       <LoadingOverlay
-          open={toolListLoading}
+          open={toolListLoading && !isSearching}
           message="도구 리스트를 불러오는 중..."
       />
       <LoadingOverlay
@@ -156,10 +226,26 @@ const ToolListPage: React.FC = () => {
             placeholder="도구 검색..."
             variant="outlined"
             size="small"
+            value={searchKeyword}
+            onChange={handleSearchChange}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
                   <span style={{ fontSize: "18px" }}>🔍</span>
+                </InputAdornment>
+              ),
+              endAdornment: searchKeyword && (
+                <InputAdornment position="end">
+                  <span 
+                    style={{ 
+                      fontSize: "16px", 
+                      cursor: "pointer",
+                      padding: "4px"
+                    }}
+                    onClick={handleSearchClear}
+                  >
+                    ✕
+                  </span>
                 </InputAdornment>
               ),
             }}
@@ -168,22 +254,31 @@ const ToolListPage: React.FC = () => {
 
         {/* 도구 리스트 */}
         <ToolList>
-          {toolList && toolList.map((tool, index) => (
-            <ToolListComponent
-              key={`${tool.toolId}-${index}`}
-              tool={tool} 
-              index={index} 
-              onClickEvent={() => fetchReadTool(tool.toolId)}
+          {isSearching ? (
+            <SearchLoadingOverlay
+              open={isSearching}
+              message="검색 중..."
             />
-          ))}
+          ) : (
+            toolList && toolList.map((tool, index) => (
+              <ToolListComponent
+                key={`${tool.toolId}-${index}`}
+                tool={tool}
+                index={index}
+                onClickEvent={() => fetchReadTool(tool.toolId)}
+              />
+            ))
+          )}
         </ToolList>
 
         {/* 리스트 끝 메시지 */}
-        <Box display="flex" justifyContent="center" alignItems="center" py={4}>
-          <Typography variant="body2" color="text.secondary">
-            모든 바 도구를 확인했습니다 🍸
-          </Typography>
-        </Box>
+        {!isSearching && (
+          <Box display="flex" justifyContent="center" alignItems="center" py={4}>
+            <Typography variant="body2" color="text.secondary">
+              모든 바 도구를 확인했습니다 🍸
+            </Typography>
+          </Box>
+        )}
       </Container>
 
       {/* 도구 상세 모달 */}

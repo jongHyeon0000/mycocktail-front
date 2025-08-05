@@ -77,6 +77,7 @@ export const SearchField = styled(TextField)`
 
 export const ToolList = styled(Box)`
   && {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 24px;

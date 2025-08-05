@@ -877,7 +877,9 @@ if(USE_MOCK) {
     if (search) {
       sortedData = sortedData.filter(tool => 
         tool.toolName.toLowerCase().includes(search.toLowerCase()) ||
-        tool.toolNameKr.includes(search)
+        tool.toolNameKr.includes(search) ||
+        tool.profileNote.toLowerCase().includes(search.toLowerCase()) ||
+        tool.notes.toLowerCase().includes(search.toLowerCase())
       );
     }
     
