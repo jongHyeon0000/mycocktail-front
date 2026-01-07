@@ -1,6 +1,7 @@
 import React from 'react';
-import { CircularProgress } from "@mui/material";
-import {LoadingBackdrop, LoadingIconContainer, LoadingMessage} from "./style/LoadingOverlay_Style.tsx";
+import {Backdrop, CircularProgress} from "@mui/material";
+import styled from "styled-components";
+import {motion} from "framer-motion";
 
 interface LoadingOverlayProps {
   open: boolean;
@@ -52,3 +53,24 @@ const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
 };
 
 export default LoadingOverlay;
+
+const LoadingBackdrop = styled(Backdrop)`
+  color: #fff;
+  z-index: 1400;
+  backdrop-filter: blur(4px);
+  flex-direction: column;
+  gap: 16px;
+`;
+
+const LoadingIconContainer = styled(motion.div)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const LoadingMessage = styled(motion.div)`
+  color: #fff;
+  font-size: 16px;
+  text-align: center;
+  font-weight: 500;
+`;

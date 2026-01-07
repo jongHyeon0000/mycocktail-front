@@ -2,7 +2,7 @@ import {motion} from "framer-motion";
 import React from "react";
 
 // 드래그 설정 공통 함수
-export const COMMON_DRAG_STYLE = (ref: React.RefObject<HTMLDivElement | null>) => ({
+export const commonDragStyle = (ref: React.RefObject<HTMLDivElement | null>) => ({
   as: motion.div,
   drag: "x" as const,
   dragConstraints: ref,

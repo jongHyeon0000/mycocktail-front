@@ -5,15 +5,8 @@ import {
   InputAdornment,
   MenuItem,
   FormControl,
-  Typography, CircularProgress
+  Typography, CircularProgress, Select, TextField
 } from "@mui/material";
-import {
-  SpiritList,
-  ControlsContainer,
-  PageContainer,
-  SearchField,
-  SortSelect
-} from "./style/SpiritProductListPage_Style.tsx";
 import SpiritProductListComponent from "../component/SpiritProductListComponent.tsx";
 import SpiritProductDetailModal from "../component/SpiritProductDetailModal.tsx";
 import useReadSpiritProductList from "../service/useReadSpiritProductList.tsx";
@@ -21,6 +14,7 @@ import useReadSpiritProduct from "../service/useReadSpiritProduct.tsx";
 import {showErrorAlert} from "../../common/utils/AlertUtils.ts";
 import LoadingOverlay from "../../common/component/LoadingOverlay.tsx";
 import SearchLoadingOverlay from "../../common/component/SearchLoadingOverlay.tsx";
+import styled from "styled-components";
 
 const SpiritProductListPage: React.FC = () => {
   /*
@@ -279,3 +273,77 @@ const SpiritProductListPage: React.FC = () => {
 };
 
 export default SpiritProductListPage;
+
+const PageContainer = styled(Box)`
+  && {
+    min-height: 100vh;
+    background-color: #f5f5f5;
+    padding-top: 96px;
+  }
+`;
+
+const ControlsContainer = styled(Box)`
+  && {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+    gap: 16px;
+    
+    @media (max-width: 600px) {
+      flex-wrap: wrap;
+    }
+  }
+`;
+
+const SortSelect = styled(Select)`
+  && {
+    background-color: #fff;
+    border-radius: 16px;
+    min-width: 150px;
+    
+    .MuiOutlinedInput-notchedOutline {
+      border-color: #eee;
+    }
+    
+    &:hover .MuiOutlinedInput-notchedOutline {
+      border-color: #ddd;
+    }
+  }
+`;
+
+const SearchField = styled(TextField)`
+  && {
+    width: 300px;
+    background-color: #fff;
+    
+    .MuiOutlinedInput-root {
+      border-radius: 16px;
+      
+      &:hover fieldset {
+        border-color: #ddd;
+      }
+      
+      &.Mui-focused fieldset {
+        border-color: #888;
+      }
+    }
+    
+    & fieldset {
+      border-color: #eee;
+    }
+    
+    @media (max-width: 600px) {
+      width: 100%;
+    }
+  }
+`;
+
+const SpiritList = styled(Box)`
+  && {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+`;

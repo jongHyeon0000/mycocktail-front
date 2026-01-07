@@ -1,15 +1,8 @@
 import React from "react";
 import type {CocktailDetail} from "../interface/CocktailDetail.ts";
 import {motion} from "framer-motion";
-import {
-  BottomInfo,
-  CardContentArea, CocktailAlcohol, CocktailDescription,
-  CocktailTitle,
-  ContentSection, DateText,
-  ImageSection, LikeText,
-  NewChip
-} from "./style/CocktailListComponent_Style.tsx";
-import {Box, Card, CardMedia} from "@mui/material";
+import {Box, Card, CardContent, CardMedia, Chip, Typography} from "@mui/material";
+import styled from "styled-components";
 
 interface CocktailListComponentProps {
   cocktail: CocktailDetail;
@@ -91,3 +84,109 @@ const CocktailListComponent: React.FC<CocktailListComponentProps> = ({ cocktail,
 }
 
 export default CocktailListComponent;
+
+const CardContentArea = styled(CardContent)`
+  && {
+    padding: 0;
+    display: flex;
+    height: 200px;
+    
+    &:last-child {
+      padding-bottom: 0;
+    }
+    
+    @media (max-width: 600px) {
+      height: 180px;
+    }
+  }
+`;
+
+const ImageSection = styled(Box)`
+  && {
+    flex: 0 0 200px;
+    
+    @media (max-width: 600px) {
+      flex: 0 0 120px;
+    }
+  }
+`;
+
+const ContentSection = styled(Box)`
+  && {
+    flex: 1;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    
+    @media (max-width: 600px) {
+      padding: 16px;
+    }
+  }
+`;
+
+const CocktailTitle = styled(Typography)`
+  && {
+    font-weight: 600;
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 8px;
+    
+    @media (max-width: 600px) {
+      font-size: 1.25rem;
+    }
+  }
+`;
+
+const CocktailDescription = styled(Typography)`
+  && {
+    color: #666;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+`;
+
+const CocktailAlcohol = styled(Typography)`
+  && {
+    color: #ff6b6b;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 12px;
+  }
+`;
+
+const BottomInfo = styled(Box)`
+  && {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+`;
+
+const DateText = styled(Typography)`
+  && {
+    color: #999;
+    font-size: 0.875rem;
+  }
+`;
+
+const LikeText = styled(Typography)`
+  && {
+    color: #ff4757;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+`;
+
+const NewChip = styled(Chip)`
+  && {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background-color: #ff4757;
+    color: white;
+    font-weight: 600;
+    font-size: 0.75rem;
+  }
+`;

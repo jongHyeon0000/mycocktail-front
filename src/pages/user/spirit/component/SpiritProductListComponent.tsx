@@ -1,18 +1,8 @@
 import React from "react";
 import {motion} from "framer-motion";
-import {
-  BottomInfo,
-  CardContentArea, 
-  SpiritAlcohol, 
-  SpiritDescription,
-  SpiritTitle,
-  ContentSection, 
-  DateText,
-  PriceText,
-  DiscontinuedText
-} from "./style/SpiritProductListComponent_Style.tsx";
-import {Box, Card, CardMedia} from "@mui/material";
+import {Box, Card, CardContent, CardMedia, Typography} from "@mui/material";
 import type {SpiritProductDetail} from "../interface/SpiritProductDetail.ts";
+import styled from "styled-components";
 
 interface SpiritListComponentProps {
   spirit: SpiritProductDetail;
@@ -109,3 +99,99 @@ const SpiritProductListComponent: React.FC<SpiritListComponentProps> = ({ spirit
 }
 
 export default SpiritProductListComponent;
+
+const CardContentArea = styled(CardContent)`
+  && {
+    padding: 0;
+    display: flex;
+    height: 200px;
+    
+    &:last-child {
+      padding-bottom: 0;
+    }
+    
+    @media (max-width: 600px) {
+      height: 180px;
+    }
+  }
+`;
+
+const ContentSection = styled(Box)`
+  && {
+    flex: 1;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    
+    @media (max-width: 600px) {
+      padding: 16px;
+    }
+  }
+`;
+
+const SpiritTitle = styled(Typography)`
+  && {
+    font-weight: 600;
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 8px;
+    
+    @media (max-width: 600px) {
+      font-size: 1.25rem;
+    }
+  }
+`;
+
+const SpiritDescription = styled(Typography)`
+  && {
+    color: #666;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+`;
+
+const SpiritAlcohol = styled(Typography)`
+  && {
+    color: #8B4513;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 12px;
+  }
+`;
+
+const BottomInfo = styled(Box)`
+  && {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+`;
+
+const DateText = styled(Typography)`
+  && {
+    color: #999;
+    font-size: 0.875rem;
+    align-self: flex-end;
+  }
+`;
+
+const DiscontinuedText = styled(Typography)<{ isDiscontinued: boolean }>`
+  && {
+    color: ${props => props.isDiscontinued ? '#ff4757' : '#2ed573'};
+    font-size: 0.875rem;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 2px;
+  }
+`;
+
+const PriceText = styled(Typography)`
+  && {
+    color: #333;
+    font-size: 0.875rem;
+    font-weight: 500;
+    display: block;
+  }
+`;
