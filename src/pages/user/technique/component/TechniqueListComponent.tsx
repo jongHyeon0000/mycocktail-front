@@ -1,21 +1,21 @@
 import React from "react";
 import {motion} from "framer-motion";
 import {Box, Card, CardContent, CardMedia, Typography} from "@mui/material";
-import type {ToolDetail} from "../interface/ToolDetail.ts";
-import {getToolCategoryKorean} from "../common/ToolUtils.ts";
 import styled from "styled-components";
+import type {TechniqueDetail} from "../interface/TechniqueDetail.ts";
+import {getTechniqueCategoryKorean} from "../common/TechniqueUtils.ts";
 import {stripHtmlTags} from "../../common/utils/CommonUtils.ts";
 
-interface ToolListComponentProps {
-  tool: ToolDetail;
+interface TechniqueListComponentProps {
+  technique: TechniqueDetail;
   index: number;
   onClickEvent: () => void;
 }
 
-const ToolListComponent: React.FC<ToolListComponentProps> = ({ tool, index, onClickEvent }) => {
+const TechniqueListComponent: React.FC<TechniqueListComponentProps> = ({ technique, index, onClickEvent }) => {
   return (
       <Card
-          key={`${tool.toolId}-${index}`}
+          key={`${technique.techniqueId}-${index}`}
           component={motion.div}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -45,8 +45,8 @@ const ToolListComponent: React.FC<ToolListComponentProps> = ({ tool, index, onCl
             <CardMedia
                 component="img"
                 height="200"
-                image={tool.image}
-                alt={tool.toolName}
+                image={technique.image}
+                alt={technique.techniqueNameKr}
                 sx={{
                   objectFit: "cover",
                   width: "100%",
@@ -58,22 +58,22 @@ const ToolListComponent: React.FC<ToolListComponentProps> = ({ tool, index, onCl
           {/* 콘텐츠 섹션 */}
           <ContentSection>
             <Box>
-              <ToolTitle variant="h6">
-                {tool.toolNameKr} ({tool.toolName})
-              </ToolTitle>
+              <TechniqueTitle variant="h6">
+                {technique.techniqueNameKr} ({technique.techniqueName})
+              </TechniqueTitle>
 
-              <ToolCategory variant="body2">
-                {getToolCategoryKorean(tool.toolCategory)}
-              </ToolCategory>
+              <TechniqueCategory variant="body2">
+                {getTechniqueCategoryKorean(technique.techniqueCategory)}
+              </TechniqueCategory>
 
-              <ToolDescription variant="body2">
-                {stripHtmlTags(tool.notes)}
-              </ToolDescription>
+              <TechniqueDescription variant="body2">
+                {stripHtmlTags(technique.notes)}
+              </TechniqueDescription>
             </Box>
 
             <BottomInfo>
               <DateText variant="caption">
-                {tool.createAt}
+                {technique.createdAt}
               </DateText>
             </BottomInfo>
           </ContentSection>
@@ -82,7 +82,7 @@ const ToolListComponent: React.FC<ToolListComponentProps> = ({ tool, index, onCl
   );
 }
 
-export default ToolListComponent;
+export default TechniqueListComponent;
 
 const CardContentArea = styled(CardContent)`
   && {
@@ -114,7 +114,7 @@ const ContentSection = styled(Box)`
   }
 `;
 
-const ToolTitle = styled(Typography)`
+const TechniqueTitle = styled(Typography)`
   && {
     font-weight: 600;
     font-size: 1.5rem;
@@ -127,7 +127,7 @@ const ToolTitle = styled(Typography)`
   }
 `;
 
-const ToolDescription = styled(Typography)`
+const TechniqueDescription = styled(Typography)`
   && {
     color: #666;
     font-size: 0.95rem;
@@ -136,7 +136,7 @@ const ToolDescription = styled(Typography)`
   }
 `;
 
-const ToolCategory = styled(Typography)`
+const TechniqueCategory = styled(Typography)`
   && {
     color: #2C3E50;
     font-weight: 600;

@@ -29,8 +29,8 @@ if(USE_MOCK) {
   * 칵테일 List
   * */
   mock.onGet('/api/cocktail').reply((config) => {
-    const { page = 1, limit = 6, sort = 'recent', search } = config.params || {};
-    
+    const {page = 1, limit = 6, sort = 'recent', search} = config.params || {};
+
     // 전체 Mock 데이터 (18개 → 6개만 사용)
     const fullData = [
       {
@@ -48,22 +48,62 @@ if(USE_MOCK) {
         note: "<p><strong>재료:</strong></p><ul><li>화이트 럼 60ml</li><li>신선한 민트 잎 10-12개</li><li>라임 1/2개</li><li>설탕 2티스푼</li><li>소다수</li><li>얼음</li></ul>",
         tip_note: "<p><strong>완벽한 모히토를 위한 팁:</strong></p><ul><li>민트 잎을 너무 세게 머들링하지 마세요</li></ul>",
         ingredients: {
-          spirits: [{ id: 1, image: "https://images.unsplash.com/photo-1572441711009-31e2e5f64ba5?w=100&h=100&fit=crop", spiritName: "White Rum", spiritNameKr: "화이트 럼" }],
-          juices: [{ id: 1, image: "https://images.unsplash.com/photo-1557401279-8e8de6c4659b?w=100&h=100&fit=crop", juiceName: "Lime Juice", juiceNameKr: "라임 주스" }],
+          spirits: [{
+            id: 1,
+            image: "https://images.unsplash.com/photo-1572441711009-31e2e5f64ba5?w=100&h=100&fit=crop",
+            spiritName: "White Rum",
+            spiritNameKr: "화이트 럼"
+          }],
+          juices: [{
+            id: 1,
+            image: "https://images.unsplash.com/photo-1557401279-8e8de6c4659b?w=100&h=100&fit=crop",
+            juiceName: "Lime Juice",
+            juiceNameKr: "라임 주스"
+          }],
           bitters: [],
-          syrups: [{ id: 1, image: "https://images.unsplash.com/photo-1572441755997-6a0e8b3c1d42?w=100&h=100&fit=crop", syrupName: "Simple Syrup", syrupNameKr: "심플 시럽" }],
-          carbonated: [{ id: 1, image: "https://images.unsplash.com/photo-1523362628745-0c100150b504?w=100&h=100&fit=crop", carbonatedName: "Soda Water", carbonatedNameKr: "소다수" }],
+          syrups: [{
+            id: 1,
+            image: "https://images.unsplash.com/photo-1572441755997-6a0e8b3c1d42?w=100&h=100&fit=crop",
+            syrupName: "Simple Syrup",
+            syrupNameKr: "심플 시럽"
+          }],
+          carbonated: [{
+            id: 1,
+            image: "https://images.unsplash.com/photo-1523362628745-0c100150b504?w=100&h=100&fit=crop",
+            carbonatedName: "Soda Water",
+            carbonatedNameKr: "소다수"
+          }],
           dairy: [],
-          garnishes: [{ id: 1, image: "https://images.unsplash.com/photo-1607103688605-8a06a4a4c4fc?w=100&h=100&fit=crop", garnishName: "Mint Leaves", garnishNameKr: "민트 잎" }],
-          others: [{ id: 1, image: "https://images.unsplash.com/photo-1571167025672-ca4cb3cd8af1?w=100&h=100&fit=crop", otherIngredientName: "Sugar", otherIngredientNameKr: "설탕" }]
+          garnishes: [{
+            id: 1,
+            image: "https://images.unsplash.com/photo-1607103688605-8a06a4a4c4fc?w=100&h=100&fit=crop",
+            garnishName: "Mint Leaves",
+            garnishNameKr: "민트 잎"
+          }],
+          others: [{
+            id: 1,
+            image: "https://images.unsplash.com/photo-1571167025672-ca4cb3cd8af1?w=100&h=100&fit=crop",
+            otherIngredientName: "Sugar",
+            otherIngredientNameKr: "설탕"
+          }]
         },
-        tools: [{ id: 1, image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=100&h=100&fit=crop", toolName: "Muddler", toolNameKr: "머들러" }],
-        glassware: [{ id: 1, image: "https://images.unsplash.com/photo-1544145945-f90425340c7e?w=100&h=100&fit=crop", glassName: "Highball Glass", glassNameKr: "하이볼 글라스" }],
-        techniques: [{ id: 1, techniqueName: "Muddling", techniqueNameKr: "머들링" }],
+        tools: [{
+          id: 1,
+          image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=100&h=100&fit=crop",
+          toolName: "Muddler",
+          toolNameKr: "머들러"
+        }],
+        glassware: [{
+          id: 1,
+          image: "https://images.unsplash.com/photo-1544145945-f90425340c7e?w=100&h=100&fit=crop",
+          glassName: "Highball Glass",
+          glassNameKr: "하이볼 글라스"
+        }],
+        techniques: [{id: 1, techniqueName: "Muddling", techniqueNameKr: "머들링"}],
         personalNotes: "처음 만들어본 칵테일이에요. 생각보다 간단해서 놀랐고, 민트향이 정말 상쾌했습니다!",
         MakerTips: "민트를 너무 세게 으깨면 정말 쓴맛이 나더라고요.",
         personalReview: "여름에 마시기 정말 좋은 칵테일이에요.",
-        hashtags: { cocktailHashtagId: 1, cocktailHashtag: "모히토,쿠바,민트,상쾌한,여름칵테일,럼베이스,클래식" },
+        hashtags: {cocktailHashtagId: 1, cocktailHashtag: "모히토,쿠바,민트,상쾌한,여름칵테일,럼베이스,클래식"},
         likeCount: 127,
         shareCount: 45,
         comments: [],
@@ -84,22 +124,26 @@ if(USE_MOCK) {
         note: "<p><strong>재료:</strong></p><ul><li>데킬라 60ml</li><li>라임 주스 30ml</li><li>트리플 섹 15ml</li><li>소금</li></ul>",
         tip_note: "<p><strong>완벽한 마가리타를 위한 팁:</strong></p><ul><li>글라스 림에 소금을 묻히는 것이 포인트입니다</li></ul>",
         ingredients: {
-          spirits: [{ id: 1, spiritName: "Tequila", spiritNameKr: "데킬라" }],
-          juices: [{ id: 1, juiceName: "Lime Juice", juiceNameKr: "라임 주스" }],
+          spirits: [{id: 1, spiritName: "Tequila", spiritNameKr: "데킬라"}],
+          juices: [{id: 1, juiceName: "Lime Juice", juiceNameKr: "라임 주스"}],
           bitters: [],
           syrups: [],
           carbonated: [],
           dairy: [],
-          garnishes: [{ id: 1, garnishName: "Lime Wheel", garnishNameKr: "라임 휠" }],
-          others: [{ id: 1, otherIngredientName: "Salt", otherIngredientNameKr: "소금" }, { id: 2, otherIngredientName: "Triple Sec", otherIngredientNameKr: "트리플 섹" }]
+          garnishes: [{id: 1, garnishName: "Lime Wheel", garnishNameKr: "라임 휠"}],
+          others: [{id: 1, otherIngredientName: "Salt", otherIngredientNameKr: "소금"}, {
+            id: 2,
+            otherIngredientName: "Triple Sec",
+            otherIngredientNameKr: "트리플 섹"
+          }]
         },
-        tools: [{ id: 1, toolName: "Shaker", toolNameKr: "셰이커" }],
-        glassware: [{ id: 1, glassName: "Margarita Glass", glassNameKr: "마가리타 글라스" }],
-        techniques: [{ id: 1, techniqueName: "Shaking", techniqueNameKr: "셰이킹" }],
+        tools: [{id: 1, toolName: "Shaker", toolNameKr: "셰이커"}],
+        glassware: [{id: 1, glassName: "Margarita Glass", glassNameKr: "마가리타 글라스"}],
+        techniques: [{id: 1, techniqueName: "Shaking", techniqueNameKr: "셰이킹"}],
         personalNotes: "멕시코 여행에서 마셔본 그 맛!",
         MakerTips: "소금 림을 만들 때 라임으로 글라스 가장자리를 적시면 소금이 잘 붙어요.",
         personalReview: "상큼하고 짭짤한 맛이 일품입니다.",
-        hashtags: { cocktailHashtagId: 2, cocktailHashtag: "마가리타,데킬라,멕시코,소금림,상큼한" },
+        hashtags: {cocktailHashtagId: 2, cocktailHashtag: "마가리타,데킬라,멕시코,소금림,상큼한"},
         likeCount: 89,
         shareCount: 32,
         comments: [],
@@ -120,22 +164,22 @@ if(USE_MOCK) {
         note: "<p><strong>재료:</strong></p><ul><li>버번 위스키 60ml</li><li>설탕 1티스푼</li><li>앙고스투라 비터스 2대시</li><li>오렌지 필</li></ul>",
         tip_note: "<p><strong>완벽한 올드 패션드를 위한 팁:</strong></p><ul><li>설탕을 완전히 녹이는 것이 중요합니다</li></ul>",
         ingredients: {
-          spirits: [{ id: 1, spiritName: "Bourbon Whiskey", spiritNameKr: "버번 위스키" }],
+          spirits: [{id: 1, spiritName: "Bourbon Whiskey", spiritNameKr: "버번 위스키"}],
           juices: [],
-          bitters: [{ id: 1, bitterName: "Angostura Bitters", bitterNameKr: "앙고스투라 비터스" }],
+          bitters: [{id: 1, bitterName: "Angostura Bitters", bitterNameKr: "앙고스투라 비터스"}],
           syrups: [],
           carbonated: [],
           dairy: [],
-          garnishes: [{ id: 1, garnishName: "Orange Peel", garnishNameKr: "오렌지 필" }],
-          others: [{ id: 1, otherIngredientName: "Sugar", otherIngredientNameKr: "설탕" }]
+          garnishes: [{id: 1, garnishName: "Orange Peel", garnishNameKr: "오렌지 필"}],
+          others: [{id: 1, otherIngredientName: "Sugar", otherIngredientNameKr: "설탕"}]
         },
-        tools: [{ id: 1, toolName: "Bar Spoon", toolNameKr: "바 스푼" }],
-        glassware: [{ id: 1, glassName: "Old Fashioned Glass", glassNameKr: "올드 패션드 글라스" }],
-        techniques: [{ id: 1, techniqueName: "Stirring", techniqueNameKr: "스터링" }],
+        tools: [{id: 1, toolName: "Bar Spoon", toolNameKr: "바 스푼"}],
+        glassware: [{id: 1, glassName: "Old Fashioned Glass", glassNameKr: "올드 패션드 글라스"}],
+        techniques: [{id: 1, techniqueName: "Stirring", techniqueNameKr: "스터링"}],
         personalNotes: "위스키 애호가라면 반드시 마셔봐야 할 칵테일.",
         MakerTips: "오렌지 필을 짜서 향을 내는 것이 포인트예요.",
         personalReview: "진짜 어른의 맛이라고 할 수 있겠어요.",
-        hashtags: { cocktailHashtagId: 3, cocktailHashtag: "올드패션드,위스키,클래식,버번,깊은맛" },
+        hashtags: {cocktailHashtagId: 3, cocktailHashtag: "올드패션드,위스키,클래식,버번,깊은맛"},
         likeCount: 203,
         shareCount: 67,
         comments: [],
@@ -156,22 +200,22 @@ if(USE_MOCK) {
         note: "<p><strong>재료:</strong></p><ul><li>진 30ml</li><li>캄파리 30ml</li><li>스위트 베르무트 30ml</li><li>오렌지 필</li></ul>",
         tip_note: "<p><strong>완벽한 네그로니를 위한 팁:</strong></p><ul><li>모든 재료를 1:1:1 비율로 맞추는 것이 중요합니다</li></ul>",
         ingredients: {
-          spirits: [{ id: 1, spiritName: "Gin", spiritNameKr: "진" }],
+          spirits: [{id: 1, spiritName: "Gin", spiritNameKr: "진"}],
           juices: [],
-          bitters: [{ id: 1, bitterName: "Campari", bitterNameKr: "캄파리" }],
+          bitters: [{id: 1, bitterName: "Campari", bitterNameKr: "캄파리"}],
           syrups: [],
           carbonated: [],
           dairy: [],
-          garnishes: [{ id: 1, garnishName: "Orange Peel", garnishNameKr: "오렌지 필" }],
-          others: [{ id: 1, otherIngredientName: "Sweet Vermouth", otherIngredientNameKr: "스위트 베르무트" }]
+          garnishes: [{id: 1, garnishName: "Orange Peel", garnishNameKr: "오렌지 필"}],
+          others: [{id: 1, otherIngredientName: "Sweet Vermouth", otherIngredientNameKr: "스위트 베르무트"}]
         },
-        tools: [{ id: 1, toolName: "Bar Spoon", toolNameKr: "바 스푼" }],
-        glassware: [{ id: 1, glassName: "Old Fashioned Glass", glassNameKr: "올드 패션드 글라스" }],
-        techniques: [{ id: 1, techniqueName: "Stirring", techniqueNameKr: "스터링" }],
+        tools: [{id: 1, toolName: "Bar Spoon", toolNameKr: "바 스푼"}],
+        glassware: [{id: 1, glassName: "Old Fashioned Glass", glassNameKr: "올드 패션드 글라스"}],
+        techniques: [{id: 1, techniqueName: "Stirring", techniqueNameKr: "스터링"}],
         personalNotes: "처음엔 쓴맛이 강하다고 생각했는데 계속 마시니 중독적이에요.",
         MakerTips: "얼음을 크게 사용하면 희석이 적어져서 더 좋아요.",
         personalReview: "어른의 칵테일이라고 불리는 이유를 알겠어요.",
-        hashtags: { cocktailHashtagId: 4, cocktailHashtag: "네그로니,진,캄파리,이탈리아,쓴맛,클래식" },
+        hashtags: {cocktailHashtagId: 4, cocktailHashtag: "네그로니,진,캄파리,이탈리아,쓴맛,클래식"},
         likeCount: 156,
         shareCount: 43,
         comments: [],
@@ -192,22 +236,22 @@ if(USE_MOCK) {
         note: "<p><strong>재료:</strong></p><ul><li>위스키 60ml</li><li>레몬 주스 30ml</li><li>심플 시럽 15ml</li><li>달걀 흰자 (선택)</li></ul>",
         tip_note: "<p><strong>완벽한 위스키 사워를 위한 팁:</strong></p><ul><li>달걀 흰자를 넣으면 부드러운 폼이 생깁니다</li></ul>",
         ingredients: {
-          spirits: [{ id: 1, spiritName: "Whiskey", spiritNameKr: "위스키" }],
-          juices: [{ id: 1, juiceName: "Lemon Juice", juiceNameKr: "레몬 주스" }],
+          spirits: [{id: 1, spiritName: "Whiskey", spiritNameKr: "위스키"}],
+          juices: [{id: 1, juiceName: "Lemon Juice", juiceNameKr: "레몬 주스"}],
           bitters: [],
-          syrups: [{ id: 1, syrupName: "Simple Syrup", syrupNameKr: "심플 시럽" }],
+          syrups: [{id: 1, syrupName: "Simple Syrup", syrupNameKr: "심플 시럽"}],
           carbonated: [],
           dairy: [],
-          garnishes: [{ id: 1, garnishName: "Lemon Wheel", garnishNameKr: "레몬 휠" }],
-          others: [{ id: 1, otherIngredientName: "Egg White", otherIngredientNameKr: "달걀 흰자" }]
+          garnishes: [{id: 1, garnishName: "Lemon Wheel", garnishNameKr: "레몬 휠"}],
+          others: [{id: 1, otherIngredientName: "Egg White", otherIngredientNameKr: "달걀 흰자"}]
         },
-        tools: [{ id: 1, toolName: "Shaker", toolNameKr: "셰이커" }],
-        glassware: [{ id: 1, glassName: "Coupe Glass", glassNameKr: "쿠페 글라스" }],
-        techniques: [{ id: 1, techniqueName: "Shaking", techniqueNameKr: "셰이킹" }],
+        tools: [{id: 1, toolName: "Shaker", toolNameKr: "셰이커"}],
+        glassware: [{id: 1, glassName: "Coupe Glass", glassNameKr: "쿠페 글라스"}],
+        techniques: [{id: 1, techniqueName: "Shaking", techniqueNameKr: "셰이킹"}],
         personalNotes: "위스키를 잘 못 마시는데 이건 정말 맛있어요!",
         MakerTips: "달걀 흰자 없이도 충분히 맛있으니 부담갖지 마세요.",
         personalReview: "상큼하면서도 위스키 특유의 깊은 맛이 살아있어요.",
-        hashtags: { cocktailHashtagId: 5, cocktailHashtag: "위스키사워,상큼한,레몬,클래식,사워계열" },
+        hashtags: {cocktailHashtagId: 5, cocktailHashtag: "위스키사워,상큼한,레몬,클래식,사워계열"},
         likeCount: 74,
         shareCount: 28,
         comments: [],
@@ -228,22 +272,26 @@ if(USE_MOCK) {
         note: "<p><strong>재료:</strong></p><ul><li>보드카 50ml</li><li>커피 리큐어 20ml</li><li>에스프레소 1샷</li><li>심플 시럽 10ml</li></ul>",
         tip_note: "<p><strong>완벽한 에스프레소 마티니를 위한 팁:</strong></p><ul><li>갓 내린 에스프레소를 사용하는 것이 중요합니다</li></ul>",
         ingredients: {
-          spirits: [{ id: 1, spiritName: "Vodka", spiritNameKr: "보드카" }],
+          spirits: [{id: 1, spiritName: "Vodka", spiritNameKr: "보드카"}],
           juices: [],
           bitters: [],
-          syrups: [{ id: 1, syrupName: "Simple Syrup", syrupNameKr: "심플 시럽" }],
+          syrups: [{id: 1, syrupName: "Simple Syrup", syrupNameKr: "심플 시럽"}],
           carbonated: [],
           dairy: [],
-          garnishes: [{ id: 1, garnishName: "Coffee Beans", garnishNameKr: "커피 원두" }],
-          others: [{ id: 1, otherIngredientName: "Coffee Liqueur", otherIngredientNameKr: "커피 리큐어" }, { id: 2, otherIngredientName: "Espresso", otherIngredientNameKr: "에스프레소" }]
+          garnishes: [{id: 1, garnishName: "Coffee Beans", garnishNameKr: "커피 원두"}],
+          others: [{id: 1, otherIngredientName: "Coffee Liqueur", otherIngredientNameKr: "커피 리큐어"}, {
+            id: 2,
+            otherIngredientName: "Espresso",
+            otherIngredientNameKr: "에스프레소"
+          }]
         },
-        tools: [{ id: 1, toolName: "Shaker", toolNameKr: "셰이커" }],
-        glassware: [{ id: 1, glassName: "Martini Glass", glassNameKr: "마티니 글라스" }],
-        techniques: [{ id: 1, techniqueName: "Shaking", techniqueNameKr: "셰이킹" }],
+        tools: [{id: 1, toolName: "Shaker", toolNameKr: "셰이커"}],
+        glassware: [{id: 1, glassName: "Martini Glass", glassNameKr: "마티니 글라스"}],
+        techniques: [{id: 1, techniqueName: "Shaking", techniqueNameKr: "셰이킹"}],
         personalNotes: "커피 좋아하는 사람이라면 꼭 마셔봐야 해요!",
         MakerTips: "에스프레소가 뜨거우니 조심해서 셰이킹하세요.",
         personalReview: "달콤하면서도 쌉욀한 커피 맛이 정말 좋아요.",
-        hashtags: { cocktailHashtagId: 6, cocktailHashtag: "에스프레소마티니,커피,보드카,모던클래식,카페인" },
+        hashtags: {cocktailHashtagId: 6, cocktailHashtag: "에스프레소마티니,커피,보드카,모던클래식,카페인"},
         likeCount: 92,
         shareCount: 35,
         comments: [],
@@ -251,7 +299,7 @@ if(USE_MOCK) {
         updatedAt: '2024-08-20'
       },
     ];
-    
+
     // 정렬 처리
     let sortedData = [...fullData];
     if (sort === 'popular') {
@@ -260,21 +308,21 @@ if(USE_MOCK) {
       sortedData.sort((a, b) => a.cocktailName.localeCompare(b.cocktailName));
     }
     // recent는 기본 순서 유지
-    
+
     // 검색 처리
     if (search) {
-      sortedData = sortedData.filter(cocktail => 
-        cocktail.cocktailName.toLowerCase().includes(search.toLowerCase()) ||
-        cocktail.cocktailNameKr.includes(search)
+      sortedData = sortedData.filter(cocktail =>
+          cocktail.cocktailName.toLowerCase().includes(search.toLowerCase()) ||
+          cocktail.cocktailNameKr.includes(search)
       );
     }
-    
+
     // 페이지네이션 처리
     const startIndex = (page - 1) * limit;
     const endIndex = startIndex + limit;
     const paginatedData = sortedData.slice(startIndex, endIndex);
-    
-    return [200, { data: paginatedData }];
+
+    return [200, {data: paginatedData}];
   });
 
   /*
@@ -282,7 +330,7 @@ if(USE_MOCK) {
   * */
   mock.onGet(/\/api\/cocktail\/\d+/).reply((config) => {
     const cocktailId = parseInt(config.url?.split('/').pop() || '1');
-    
+
     // 칵테일 데이터 맵
     const cocktailDataMap: { [key: number]: any } = {
       1: {
@@ -300,22 +348,62 @@ if(USE_MOCK) {
         note: "<p><strong>재료:</strong></p><ul><li>화이트 럼 60ml</li><li>신선한 민트 잎 10-12개</li><li>라임 1/2개</li><li>설탕 2티스푼</li><li>소다수</li><li>얼음</li></ul>",
         tip_note: "<p><strong>완벽한 모히토를 위한 팁:</strong></p><ul><li>민트 잎을 너무 세게 머들링하지 마세요</li></ul>",
         ingredients: {
-          spirits: [{ id: 1, image: "https://images.unsplash.com/photo-1572441711009-31e2e5f64ba5?w=100&h=100&fit=crop", spiritName: "White Rum", spiritNameKr: "화이트 럼" }],
-          juices: [{ id: 1, image: "https://images.unsplash.com/photo-1557401279-8e8de6c4659b?w=100&h=100&fit=crop", juiceName: "Lime Juice", juiceNameKr: "라임 주스" }],
+          spirits: [{
+            id: 1,
+            image: "https://images.unsplash.com/photo-1572441711009-31e2e5f64ba5?w=100&h=100&fit=crop",
+            spiritName: "White Rum",
+            spiritNameKr: "화이트 럼"
+          }],
+          juices: [{
+            id: 1,
+            image: "https://images.unsplash.com/photo-1557401279-8e8de6c4659b?w=100&h=100&fit=crop",
+            juiceName: "Lime Juice",
+            juiceNameKr: "라임 주스"
+          }],
           bitters: [],
-          syrups: [{ id: 1, image: "https://images.unsplash.com/photo-1572441755997-6a0e8b3c1d42?w=100&h=100&fit=crop", syrupName: "Simple Syrup", syrupNameKr: "심플 시럽" }],
-          carbonated: [{ id: 1, image: "https://images.unsplash.com/photo-1523362628745-0c100150b504?w=100&h=100&fit=crop", carbonatedName: "Soda Water", carbonatedNameKr: "소다수" }],
+          syrups: [{
+            id: 1,
+            image: "https://images.unsplash.com/photo-1572441755997-6a0e8b3c1d42?w=100&h=100&fit=crop",
+            syrupName: "Simple Syrup",
+            syrupNameKr: "심플 시럽"
+          }],
+          carbonated: [{
+            id: 1,
+            image: "https://images.unsplash.com/photo-1523362628745-0c100150b504?w=100&h=100&fit=crop",
+            carbonatedName: "Soda Water",
+            carbonatedNameKr: "소다수"
+          }],
           dairy: [],
-          garnishes: [{ id: 1, image: "https://images.unsplash.com/photo-1607103688605-8a06a4a4c4fc?w=100&h=100&fit=crop", garnishName: "Mint Leaves", garnishNameKr: "민트 잎" }],
-          others: [{ id: 1, image: "https://images.unsplash.com/photo-1571167025672-ca4cb3cd8af1?w=100&h=100&fit=crop", otherIngredientName: "Sugar", otherIngredientNameKr: "설탕" }]
+          garnishes: [{
+            id: 1,
+            image: "https://images.unsplash.com/photo-1607103688605-8a06a4a4c4fc?w=100&h=100&fit=crop",
+            garnishName: "Mint Leaves",
+            garnishNameKr: "민트 잎"
+          }],
+          others: [{
+            id: 1,
+            image: "https://images.unsplash.com/photo-1571167025672-ca4cb3cd8af1?w=100&h=100&fit=crop",
+            otherIngredientName: "Sugar",
+            otherIngredientNameKr: "설탕"
+          }]
         },
-        tools: [{ id: 1, image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=100&h=100&fit=crop", toolName: "Muddler", toolNameKr: "머들러" }],
-        glassware: [{ id: 1, image: "https://images.unsplash.com/photo-1544145945-f90425340c7e?w=100&h=100&fit=crop", glassName: "Highball Glass", glassNameKr: "하이볼 글라스" }],
-        techniques: [{ id: 1, techniqueName: "Muddling", techniqueNameKr: "머들링" }],
+        tools: [{
+          id: 1,
+          image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=100&h=100&fit=crop",
+          toolName: "Muddler",
+          toolNameKr: "머들러"
+        }],
+        glassware: [{
+          id: 1,
+          image: "https://images.unsplash.com/photo-1544145945-f90425340c7e?w=100&h=100&fit=crop",
+          glassName: "Highball Glass",
+          glassNameKr: "하이볼 글라스"
+        }],
+        techniques: [{id: 1, techniqueName: "Muddling", techniqueNameKr: "머들링"}],
         personalNotes: "처음 만들어본 칵테일이에요. 생각보다 간단해서 놀랐고, 민트향이 정말 상쾌했습니다!",
         MakerTips: "민트를 너무 세게 으깨면 정말 쓴맛이 나더라고요.",
         personalReview: "여름에 마시기 정말 좋은 칵테일이에요.",
-        hashtags: { cocktailHashtagId: 1, cocktailHashtag: "모히토,쿠바,민트,상쾌한,여름칵테일,럼베이스,클래식" },
+        hashtags: {cocktailHashtagId: 1, cocktailHashtag: "모히토,쿠바,민트,상쾌한,여름칵테일,럼베이스,클래식"},
         likeCount: 127,
         shareCount: 45,
         comments: [],
@@ -336,22 +424,26 @@ if(USE_MOCK) {
         note: "<p><strong>재료:</strong></p><ul><li>데킬라 60ml</li><li>라임 주스 30ml</li><li>트리플 섹 15ml</li><li>소금</li></ul>",
         tip_note: "<p><strong>완벽한 마가리타를 위한 팁:</strong></p><ul><li>글라스 림에 소금을 묻히는 것이 포인트입니다</li></ul>",
         ingredients: {
-          spirits: [{ id: 1, spiritName: "Tequila", spiritNameKr: "데킬라" }],
-          juices: [{ id: 1, juiceName: "Lime Juice", juiceNameKr: "라임 주스" }],
+          spirits: [{id: 1, spiritName: "Tequila", spiritNameKr: "데킬라"}],
+          juices: [{id: 1, juiceName: "Lime Juice", juiceNameKr: "라임 주스"}],
           bitters: [],
           syrups: [],
           carbonated: [],
           dairy: [],
-          garnishes: [{ id: 1, garnishName: "Lime Wheel", garnishNameKr: "라임 휠" }],
-          others: [{ id: 1, otherIngredientName: "Salt", otherIngredientNameKr: "소금" }, { id: 2, otherIngredientName: "Triple Sec", otherIngredientNameKr: "트리플 섹" }]
+          garnishes: [{id: 1, garnishName: "Lime Wheel", garnishNameKr: "라임 휠"}],
+          others: [{id: 1, otherIngredientName: "Salt", otherIngredientNameKr: "소금"}, {
+            id: 2,
+            otherIngredientName: "Triple Sec",
+            otherIngredientNameKr: "트리플 섹"
+          }]
         },
-        tools: [{ id: 1, toolName: "Shaker", toolNameKr: "셰이커" }],
-        glassware: [{ id: 1, glassName: "Margarita Glass", glassNameKr: "마가리타 글라스" }],
-        techniques: [{ id: 1, techniqueName: "Shaking", techniqueNameKr: "셰이킹" }],
+        tools: [{id: 1, toolName: "Shaker", toolNameKr: "셰이커"}],
+        glassware: [{id: 1, glassName: "Margarita Glass", glassNameKr: "마가리타 글라스"}],
+        techniques: [{id: 1, techniqueName: "Shaking", techniqueNameKr: "셰이킹"}],
         personalNotes: "멕시코 여행에서 마셔본 그 맛!",
         MakerTips: "소금 림을 만들 때 라임으로 글라스 가장자리를 적시면 소금이 잘 붙어요.",
         personalReview: "상큼하고 짭짤한 맛이 일품입니다.",
-        hashtags: { cocktailHashtagId: 2, cocktailHashtag: "마가리타,데킬라,멕시코,소금림,상큼한" },
+        hashtags: {cocktailHashtagId: 2, cocktailHashtag: "마가리타,데킬라,멕시코,소금림,상큼한"},
         likeCount: 89,
         shareCount: 32,
         comments: [],
@@ -372,22 +464,22 @@ if(USE_MOCK) {
         note: "<p><strong>재료:</strong></p><ul><li>버번 위스키 60ml</li><li>설탕 1티스푼</li><li>앙고스투라 비터스 2대시</li><li>오렌지 필</li></ul>",
         tip_note: "<p><strong>완벽한 올드 패션드를 위한 팁:</strong></p><ul><li>설탕을 완전히 녹이는 것이 중요합니다</li></ul>",
         ingredients: {
-          spirits: [{ id: 1, spiritName: "Bourbon Whiskey", spiritNameKr: "버번 위스키" }],
+          spirits: [{id: 1, spiritName: "Bourbon Whiskey", spiritNameKr: "버번 위스키"}],
           juices: [],
-          bitters: [{ id: 1, bitterName: "Angostura Bitters", bitterNameKr: "앙고스투라 비터스" }],
+          bitters: [{id: 1, bitterName: "Angostura Bitters", bitterNameKr: "앙고스투라 비터스"}],
           syrups: [],
           carbonated: [],
           dairy: [],
-          garnishes: [{ id: 1, garnishName: "Orange Peel", garnishNameKr: "오렌지 필" }],
-          others: [{ id: 1, otherIngredientName: "Sugar", otherIngredientNameKr: "설탕" }]
+          garnishes: [{id: 1, garnishName: "Orange Peel", garnishNameKr: "오렌지 필"}],
+          others: [{id: 1, otherIngredientName: "Sugar", otherIngredientNameKr: "설탕"}]
         },
-        tools: [{ id: 1, toolName: "Bar Spoon", toolNameKr: "바 스푼" }],
-        glassware: [{ id: 1, glassName: "Old Fashioned Glass", glassNameKr: "올드 패션드 글라스" }],
-        techniques: [{ id: 1, techniqueName: "Stirring", techniqueNameKr: "스터링" }],
+        tools: [{id: 1, toolName: "Bar Spoon", toolNameKr: "바 스푼"}],
+        glassware: [{id: 1, glassName: "Old Fashioned Glass", glassNameKr: "올드 패션드 글라스"}],
+        techniques: [{id: 1, techniqueName: "Stirring", techniqueNameKr: "스터링"}],
         personalNotes: "위스키 애호가라면 반드시 마셔봐야 할 칵테일.",
         MakerTips: "오렌지 필을 짜서 향을 내는 것이 포인트예요.",
         personalReview: "진짜 어른의 맛이라고 할 수 있겠어요.",
-        hashtags: { cocktailHashtagId: 3, cocktailHashtag: "올드패션드,위스키,클래식,버번,깊은맛" },
+        hashtags: {cocktailHashtagId: 3, cocktailHashtag: "올드패션드,위스키,클래식,버번,깊은맛"},
         likeCount: 203,
         shareCount: 67,
         comments: [],
@@ -408,22 +500,22 @@ if(USE_MOCK) {
         note: "<p><strong>재료:</strong></p><ul><li>진 30ml</li><li>캄파리 30ml</li><li>스위트 베르무트 30ml</li><li>오렌지 필</li></ul>",
         tip_note: "<p><strong>완벽한 네그로니를 위한 팁:</strong></p><ul><li>모든 재료를 1:1:1 비율로 맞추는 것이 중요합니다</li></ul>",
         ingredients: {
-          spirits: [{ id: 1, spiritName: "Gin", spiritNameKr: "진" }],
+          spirits: [{id: 1, spiritName: "Gin", spiritNameKr: "진"}],
           juices: [],
-          bitters: [{ id: 1, bitterName: "Campari", bitterNameKr: "캄파리" }],
+          bitters: [{id: 1, bitterName: "Campari", bitterNameKr: "캄파리"}],
           syrups: [],
           carbonated: [],
           dairy: [],
-          garnishes: [{ id: 1, garnishName: "Orange Peel", garnishNameKr: "오렌지 필" }],
-          others: [{ id: 1, otherIngredientName: "Sweet Vermouth", otherIngredientNameKr: "스위트 베르무트" }]
+          garnishes: [{id: 1, garnishName: "Orange Peel", garnishNameKr: "오렌지 필"}],
+          others: [{id: 1, otherIngredientName: "Sweet Vermouth", otherIngredientNameKr: "스위트 베르무트"}]
         },
-        tools: [{ id: 1, toolName: "Bar Spoon", toolNameKr: "바 스푼" }],
-        glassware: [{ id: 1, glassName: "Old Fashioned Glass", glassNameKr: "올드 패션드 글라스" }],
-        techniques: [{ id: 1, techniqueName: "Stirring", techniqueNameKr: "스터링" }],
+        tools: [{id: 1, toolName: "Bar Spoon", toolNameKr: "바 스푼"}],
+        glassware: [{id: 1, glassName: "Old Fashioned Glass", glassNameKr: "올드 패션드 글라스"}],
+        techniques: [{id: 1, techniqueName: "Stirring", techniqueNameKr: "스터링"}],
         personalNotes: "처음엔 쓴맛이 강하다고 생각했는데 계속 마시니 중독적이에요.",
         MakerTips: "얼음을 크게 사용하면 희석이 적어져서 더 좋아요.",
         personalReview: "어른의 칵테일이라고 불리는 이유를 알겠어요.",
-        hashtags: { cocktailHashtagId: 4, cocktailHashtag: "네그로니,진,캄파리,이탈리아,쓴맛,클래식" },
+        hashtags: {cocktailHashtagId: 4, cocktailHashtag: "네그로니,진,캄파리,이탈리아,쓴맛,클래식"},
         likeCount: 156,
         shareCount: 43,
         comments: [],
@@ -444,22 +536,22 @@ if(USE_MOCK) {
         note: "<p><strong>재료:</strong></p><ul><li>위스키 60ml</li><li>레몬 주스 30ml</li><li>심플 시럽 15ml</li><li>달걀 흰자 (선택)</li></ul>",
         tip_note: "<p><strong>완벽한 위스키 사워를 위한 팁:</strong></p><ul><li>달걀 흰자를 넣으면 부드러운 폼이 생깁니다</li></ul>",
         ingredients: {
-          spirits: [{ id: 1, spiritName: "Whiskey", spiritNameKr: "위스키" }],
-          juices: [{ id: 1, juiceName: "Lemon Juice", juiceNameKr: "레몬 주스" }],
+          spirits: [{id: 1, spiritName: "Whiskey", spiritNameKr: "위스키"}],
+          juices: [{id: 1, juiceName: "Lemon Juice", juiceNameKr: "레몬 주스"}],
           bitters: [],
-          syrups: [{ id: 1, syrupName: "Simple Syrup", syrupNameKr: "심플 시럽" }],
+          syrups: [{id: 1, syrupName: "Simple Syrup", syrupNameKr: "심플 시럽"}],
           carbonated: [],
           dairy: [],
-          garnishes: [{ id: 1, garnishName: "Lemon Wheel", garnishNameKr: "레몬 휠" }],
-          others: [{ id: 1, otherIngredientName: "Egg White", otherIngredientNameKr: "달걀 흰자" }]
+          garnishes: [{id: 1, garnishName: "Lemon Wheel", garnishNameKr: "레몬 휠"}],
+          others: [{id: 1, otherIngredientName: "Egg White", otherIngredientNameKr: "달걀 흰자"}]
         },
-        tools: [{ id: 1, toolName: "Shaker", toolNameKr: "셰이커" }],
-        glassware: [{ id: 1, glassName: "Coupe Glass", glassNameKr: "쿠페 글라스" }],
-        techniques: [{ id: 1, techniqueName: "Shaking", techniqueNameKr: "셰이킹" }],
+        tools: [{id: 1, toolName: "Shaker", toolNameKr: "셰이커"}],
+        glassware: [{id: 1, glassName: "Coupe Glass", glassNameKr: "쿠페 글라스"}],
+        techniques: [{id: 1, techniqueName: "Shaking", techniqueNameKr: "셰이킹"}],
         personalNotes: "위스키를 잘 못 마시는데 이건 정말 맛있어요!",
         MakerTips: "달걀 흰자 없이도 충분히 맛있으니 부담갖지 마세요.",
         personalReview: "상큼하면서도 위스키 특유의 깊은 맛이 살아있어요.",
-        hashtags: { cocktailHashtagId: 5, cocktailHashtag: "위스키사워,상큼한,레몬,클래식,사워계열" },
+        hashtags: {cocktailHashtagId: 5, cocktailHashtag: "위스키사워,상큼한,레몬,클래식,사워계열"},
         likeCount: 74,
         shareCount: 28,
         comments: [],
@@ -480,22 +572,26 @@ if(USE_MOCK) {
         note: "<p><strong>재료:</strong></p><ul><li>보드카 50ml</li><li>커피 리큐어 20ml</li><li>에스프레소 1샷</li><li>심플 시럽 10ml</li></ul>",
         tip_note: "<p><strong>완벽한 에스프레소 마티니를 위한 팁:</strong></p><ul><li>갓 내린 에스프레소를 사용하는 것이 중요합니다</li></ul>",
         ingredients: {
-          spirits: [{ id: 1, spiritName: "Vodka", spiritNameKr: "보드카" }],
+          spirits: [{id: 1, spiritName: "Vodka", spiritNameKr: "보드카"}],
           juices: [],
           bitters: [],
-          syrups: [{ id: 1, syrupName: "Simple Syrup", syrupNameKr: "심플 시럽" }],
+          syrups: [{id: 1, syrupName: "Simple Syrup", syrupNameKr: "심플 시럽"}],
           carbonated: [],
           dairy: [],
-          garnishes: [{ id: 1, garnishName: "Coffee Beans", garnishNameKr: "커피 원두" }],
-          others: [{ id: 1, otherIngredientName: "Coffee Liqueur", otherIngredientNameKr: "커피 리큐어" }, { id: 2, otherIngredientName: "Espresso", otherIngredientNameKr: "에스프레소" }]
+          garnishes: [{id: 1, garnishName: "Coffee Beans", garnishNameKr: "커피 원두"}],
+          others: [{id: 1, otherIngredientName: "Coffee Liqueur", otherIngredientNameKr: "커피 리큐어"}, {
+            id: 2,
+            otherIngredientName: "Espresso",
+            otherIngredientNameKr: "에스프레소"
+          }]
         },
-        tools: [{ id: 1, toolName: "Shaker", toolNameKr: "셰이커" }],
-        glassware: [{ id: 1, glassName: "Martini Glass", glassNameKr: "마티니 글라스" }],
-        techniques: [{ id: 1, techniqueName: "Shaking", techniqueNameKr: "셰이킹" }],
+        tools: [{id: 1, toolName: "Shaker", toolNameKr: "셰이커"}],
+        glassware: [{id: 1, glassName: "Martini Glass", glassNameKr: "마티니 글라스"}],
+        techniques: [{id: 1, techniqueName: "Shaking", techniqueNameKr: "셰이킹"}],
         personalNotes: "커피 좋아하는 사람이라면 꼭 마셔봐야 해요!",
         MakerTips: "에스프레소가 뜨거우니 조심해서 셰이킹하세요.",
         personalReview: "달콤하면서도 쌉욀한 커피 맛이 정말 좋아요.",
-        hashtags: { cocktailHashtagId: 6, cocktailHashtag: "에스프레소마티니,커피,보드카,모던클래식,카페인" },
+        hashtags: {cocktailHashtagId: 6, cocktailHashtag: "에스프레소마티니,커피,보드카,모던클래식,카페인"},
         likeCount: 92,
         shareCount: 35,
         comments: [],
@@ -507,18 +603,18 @@ if(USE_MOCK) {
     const cocktailData = cocktailDataMap[cocktailId];
 
     if (!cocktailData) {
-      return [404, { error: 'Cocktail not found' }];
+      return [404, {error: 'Cocktail not found'}];
     }
 
-    return [200, { data: cocktailData }];
+    return [200, {data: cocktailData}];
   });
 
   /*
   * 스피릿 Product List
   * */
   mock.onGet('/api/spirit-product').reply((config) => {
-    const { page = 1, limit = 6, sort = 'recent', search } = config.params || {};
-    
+    const {page = 1, limit = 6, sort = 'recent', search} = config.params || {};
+
     // 전체 Mock 데이터 (6개)
     const fullData = [
       {
@@ -555,9 +651,24 @@ if(USE_MOCK) {
         isDiscontinued: false,
         price: 180000,
         availableCocktails: [
-          { id: 1, cocktailName: "Sidecar", cocktailNameKr: "사이드카", image: "https://via.placeholder.com/80x80/FF6B6B/FFFFFF?text=Sidecar" },
-          { id: 2, cocktailName: "French Connection", cocktailNameKr: "프렌치 커넥션", image: "https://via.placeholder.com/80x80/FF6B6B/FFFFFF?text=French" },
-          { id: 3, cocktailName: "Brandy Alexander", cocktailNameKr: "브랜디 알렉산더", image: "https://via.placeholder.com/80x80/FF6B6B/FFFFFF?text=Alexander" }
+          {
+            id: 1,
+            cocktailName: "Sidecar",
+            cocktailNameKr: "사이드카",
+            image: "https://via.placeholder.com/80x80/FF6B6B/FFFFFF?text=Sidecar"
+          },
+          {
+            id: 2,
+            cocktailName: "French Connection",
+            cocktailNameKr: "프렌치 커넥션",
+            image: "https://via.placeholder.com/80x80/FF6B6B/FFFFFF?text=French"
+          },
+          {
+            id: 3,
+            cocktailName: "Brandy Alexander",
+            cocktailNameKr: "브랜디 알렉산더",
+            image: "https://via.placeholder.com/80x80/FF6B6B/FFFFFF?text=Alexander"
+          }
         ]
       },
       {
@@ -594,8 +705,18 @@ if(USE_MOCK) {
         isDiscontinued: true,
         price: 450000,
         availableCocktails: [
-          { id: 4, cocktailName: "Old Fashioned", cocktailNameKr: "올드 패션드", image: "https://via.placeholder.com/80x80/D2691E/FFFFFF?text=Old" },
-          { id: 5, cocktailName: "Whisky Sour", cocktailNameKr: "위스키 사워", image: "https://via.placeholder.com/80x80/D2691E/FFFFFF?text=Sour" }
+          {
+            id: 4,
+            cocktailName: "Old Fashioned",
+            cocktailNameKr: "올드 패션드",
+            image: "https://via.placeholder.com/80x80/D2691E/FFFFFF?text=Old"
+          },
+          {
+            id: 5,
+            cocktailName: "Whisky Sour",
+            cocktailNameKr: "위스키 사워",
+            image: "https://via.placeholder.com/80x80/D2691E/FFFFFF?text=Sour"
+          }
         ]
       },
       {
@@ -632,9 +753,24 @@ if(USE_MOCK) {
         isDiscontinued: false,
         price: 85000,
         availableCocktails: [
-          { id: 6, cocktailName: "Vodka Martini", cocktailNameKr: "보드카 마티니", image: "https://via.placeholder.com/80x80/C0C0C0/000000?text=Martini" },
-          { id: 7, cocktailName: "Cosmopolitan", cocktailNameKr: "코스모폴리탄", image: "https://via.placeholder.com/80x80/C0C0C0/000000?text=Cosmo" },
-          { id: 8, cocktailName: "Moscow Mule", cocktailNameKr: "모스코 뮬", image: "https://via.placeholder.com/80x80/C0C0C0/000000?text=Mule" }
+          {
+            id: 6,
+            cocktailName: "Vodka Martini",
+            cocktailNameKr: "보드카 마티니",
+            image: "https://via.placeholder.com/80x80/C0C0C0/000000?text=Martini"
+          },
+          {
+            id: 7,
+            cocktailName: "Cosmopolitan",
+            cocktailNameKr: "코스모폴리탄",
+            image: "https://via.placeholder.com/80x80/C0C0C0/000000?text=Cosmo"
+          },
+          {
+            id: 8,
+            cocktailName: "Moscow Mule",
+            cocktailNameKr: "모스코 뮬",
+            image: "https://via.placeholder.com/80x80/C0C0C0/000000?text=Mule"
+          }
         ]
       },
       {
@@ -671,8 +807,18 @@ if(USE_MOCK) {
         isDiscontinued: false,
         price: 320000,
         availableCocktails: [
-          { id: 9, cocktailName: "Margarita", cocktailNameKr: "마가리타", image: "https://via.placeholder.com/80x80/DAA520/000000?text=Margarita" },
-          { id: 10, cocktailName: "Paloma", cocktailNameKr: "팔로마", image: "https://via.placeholder.com/80x80/DAA520/000000?text=Paloma" }
+          {
+            id: 9,
+            cocktailName: "Margarita",
+            cocktailNameKr: "마가리타",
+            image: "https://via.placeholder.com/80x80/DAA520/000000?text=Margarita"
+          },
+          {
+            id: 10,
+            cocktailName: "Paloma",
+            cocktailNameKr: "팔로마",
+            image: "https://via.placeholder.com/80x80/DAA520/000000?text=Paloma"
+          }
         ]
       },
       {
@@ -709,9 +855,24 @@ if(USE_MOCK) {
         isDiscontinued: false,
         price: 52000,
         availableCocktails: [
-          { id: 11, cocktailName: "Gin & Tonic", cocktailNameKr: "진 토닉", image: "https://via.placeholder.com/80x80/4169E1/FFFFFF?text=G&T" },
-          { id: 12, cocktailName: "Negroni", cocktailNameKr: "네그로니", image: "https://via.placeholder.com/80x80/4169E1/FFFFFF?text=Negroni" },
-          { id: 13, cocktailName: "Tom Collins", cocktailNameKr: "톰 콜린스", image: "https://via.placeholder.com/80x80/4169E1/FFFFFF?text=Collins" }
+          {
+            id: 11,
+            cocktailName: "Gin & Tonic",
+            cocktailNameKr: "진 토닉",
+            image: "https://via.placeholder.com/80x80/4169E1/FFFFFF?text=G&T"
+          },
+          {
+            id: 12,
+            cocktailName: "Negroni",
+            cocktailNameKr: "네그로니",
+            image: "https://via.placeholder.com/80x80/4169E1/FFFFFF?text=Negroni"
+          },
+          {
+            id: 13,
+            cocktailName: "Tom Collins",
+            cocktailNameKr: "톰 콜린스",
+            image: "https://via.placeholder.com/80x80/4169E1/FFFFFF?text=Collins"
+          }
         ]
       },
       {
@@ -748,12 +909,22 @@ if(USE_MOCK) {
         isDiscontinued: true,
         price: 280000,
         availableCocktails: [
-          { id: 14, cocktailName: "Dark 'n' Stormy", cocktailNameKr: "다크 앤 스토미", image: "https://via.placeholder.com/80x80/8B0000/FFFFFF?text=Dark" },
-          { id: 15, cocktailName: "Rum Old Fashioned", cocktailNameKr: "럼 올드 패션드", image: "https://via.placeholder.com/80x80/8B0000/FFFFFF?text=Rum+OF" }
+          {
+            id: 14,
+            cocktailName: "Dark 'n' Stormy",
+            cocktailNameKr: "다크 앤 스토미",
+            image: "https://via.placeholder.com/80x80/8B0000/FFFFFF?text=Dark"
+          },
+          {
+            id: 15,
+            cocktailName: "Rum Old Fashioned",
+            cocktailNameKr: "럼 올드 패션드",
+            image: "https://via.placeholder.com/80x80/8B0000/FFFFFF?text=Rum+OF"
+          }
         ]
       }
     ];
-    
+
     // 정렬 처리
     let sortedData = [...fullData];
 
@@ -761,29 +932,29 @@ if(USE_MOCK) {
       sortedData.sort((a, b) => a.spiritName.localeCompare(b.spiritName));
     }
     // recent는 기본 순서 유지
-    
+
     // 검색 처리
     if (search) {
-      sortedData = sortedData.filter(spirit => 
-        spirit.spiritName.toLowerCase().includes(search.toLowerCase()) ||
-        spirit.spiritNameKr.includes(search)
+      sortedData = sortedData.filter(spirit =>
+          spirit.spiritName.toLowerCase().includes(search.toLowerCase()) ||
+          spirit.spiritNameKr.includes(search)
       );
     }
-    
+
     // 페이지네이션 처리
     const startIndex = (page - 1) * limit;
     const endIndex = startIndex + limit;
     const paginatedData = sortedData.slice(startIndex, endIndex);
-    
-    return [200, { data: paginatedData }];
+
+    return [200, {data: paginatedData}];
   });
 
   /*
   * 바 도구 List
   * */
   mock.onGet('/api/tool').reply((config) => {
-    const { page = 1, limit = 6, sort = 'recent', search, categorySort = 'all' } = config.params || {};
-    
+    const {page = 1, limit = 6, sort = 'recent', search, categorySort = 'all'} = config.params || {};
+
     // 전체 Mock 데이터
     const fullData = [
       {
@@ -859,34 +1030,34 @@ if(USE_MOCK) {
         updatedAt: new Date().toISOString().split('T')[0]
       }
     ];
-    
+
     // 정렬 처리
     let sortedData = [...fullData];
     if (sort === 'name') {
       sortedData.sort((a, b) => a.toolName.localeCompare(b.toolName));
     }
     // recent는 기본 순서 유지
-    
+
     // 검색 처리
     if (search) {
-      sortedData = sortedData.filter(tool => 
-        tool.toolName.toLowerCase().includes(search.toLowerCase()) ||
-        tool.toolNameKr.includes(search) ||
-        tool.notes.toLowerCase().includes(search.toLowerCase())
+      sortedData = sortedData.filter(tool =>
+          tool.toolName.toLowerCase().includes(search.toLowerCase()) ||
+          tool.toolNameKr.includes(search) ||
+          tool.notes.toLowerCase().includes(search.toLowerCase())
       );
     }
-    
+
     // 카테고리 필터링 처리
     if (categorySort && categorySort !== 'all') {
       sortedData = sortedData.filter(tool => tool.toolCategory === categorySort);
     }
-    
+
     // 페이지네이션 처리
     const startIndex = (page - 1) * limit;
     const endIndex = startIndex + limit;
     const paginatedData = sortedData.slice(startIndex, endIndex);
-    
-    return [200, { data: paginatedData }];
+
+    return [200, {data: paginatedData}];
   });
 
   /*
@@ -909,10 +1080,30 @@ if(USE_MOCK) {
         createAt: "2024-01-15",
         updatedAt: new Date().toISOString().split('T')[0],
         availableCocktails: [
-          { id: 1, cocktailName: "Whiskey Sour", cocktailNameKr: "위스키 사워", image: "https://via.placeholder.com/80x80/D2691E/FFFFFF?text=Sour" },
-          { id: 2, cocktailName: "Margarita", cocktailNameKr: "마가리타", image: "https://via.placeholder.com/80x80/DAA520/000000?text=Margarita" },
-          { id: 3, cocktailName: "Daiquiri", cocktailNameKr: "다이키리", image: "https://via.placeholder.com/80x80/8B0000/FFFFFF?text=Daiquiri" },
-          { id: 4, cocktailName: "Cosmopolitan", cocktailNameKr: "코스모폴리탄", image: "https://via.placeholder.com/80x80/C0C0C0/000000?text=Cosmo" }
+          {
+            id: 1,
+            cocktailName: "Whiskey Sour",
+            cocktailNameKr: "위스키 사워",
+            image: "https://via.placeholder.com/80x80/D2691E/FFFFFF?text=Sour"
+          },
+          {
+            id: 2,
+            cocktailName: "Margarita",
+            cocktailNameKr: "마가리타",
+            image: "https://via.placeholder.com/80x80/DAA520/000000?text=Margarita"
+          },
+          {
+            id: 3,
+            cocktailName: "Daiquiri",
+            cocktailNameKr: "다이키리",
+            image: "https://via.placeholder.com/80x80/8B0000/FFFFFF?text=Daiquiri"
+          },
+          {
+            id: 4,
+            cocktailName: "Cosmopolitan",
+            cocktailNameKr: "코스모폴리탄",
+            image: "https://via.placeholder.com/80x80/C0C0C0/000000?text=Cosmo"
+          }
         ]
       },
       2: {
@@ -927,9 +1118,24 @@ if(USE_MOCK) {
         createAt: "2024-01-20",
         updatedAt: new Date().toISOString().split('T')[0],
         availableCocktails: [
-          { id: 1, cocktailName: "Whiskey Sour", cocktailNameKr: "위스키 사워", image: "https://via.placeholder.com/80x80/D2691E/FFFFFF?text=Sour" },
-          { id: 2, cocktailName: "Margarita", cocktailNameKr: "마가리타", image: "https://via.placeholder.com/80x80/DAA520/000000?text=Margarita" },
-          { id: 5, cocktailName: "Clover Club", cocktailNameKr: "클로버 클럽", image: "https://via.placeholder.com/80x80/FF69B4/FFFFFF?text=Clover" }
+          {
+            id: 1,
+            cocktailName: "Whiskey Sour",
+            cocktailNameKr: "위스키 사워",
+            image: "https://via.placeholder.com/80x80/D2691E/FFFFFF?text=Sour"
+          },
+          {
+            id: 2,
+            cocktailName: "Margarita",
+            cocktailNameKr: "마가리타",
+            image: "https://via.placeholder.com/80x80/DAA520/000000?text=Margarita"
+          },
+          {
+            id: 5,
+            cocktailName: "Clover Club",
+            cocktailNameKr: "클로버 클럽",
+            image: "https://via.placeholder.com/80x80/FF69B4/FFFFFF?text=Clover"
+          }
         ]
       },
       3: {
@@ -944,10 +1150,30 @@ if(USE_MOCK) {
         createAt: "2024-02-01",
         updatedAt: new Date().toISOString().split('T')[0],
         availableCocktails: [
-          { id: 1, cocktailName: "Whiskey Sour", cocktailNameKr: "위스키 사워", image: "https://via.placeholder.com/80x80/D2691E/FFFFFF?text=Sour" },
-          { id: 2, cocktailName: "Margarita", cocktailNameKr: "마가리타", image: "https://via.placeholder.com/80x80/DAA520/000000?text=Margarita" },
-          { id: 3, cocktailName: "Daiquiri", cocktailNameKr: "다이키리", image: "https://via.placeholder.com/80x80/8B0000/FFFFFF?text=Daiquiri" },
-          { id: 6, cocktailName: "Negroni", cocktailNameKr: "네그로니", image: "https://via.placeholder.com/80x80/4169E1/FFFFFF?text=Negroni" }
+          {
+            id: 1,
+            cocktailName: "Whiskey Sour",
+            cocktailNameKr: "위스키 사워",
+            image: "https://via.placeholder.com/80x80/D2691E/FFFFFF?text=Sour"
+          },
+          {
+            id: 2,
+            cocktailName: "Margarita",
+            cocktailNameKr: "마가리타",
+            image: "https://via.placeholder.com/80x80/DAA520/000000?text=Margarita"
+          },
+          {
+            id: 3,
+            cocktailName: "Daiquiri",
+            cocktailNameKr: "다이키리",
+            image: "https://via.placeholder.com/80x80/8B0000/FFFFFF?text=Daiquiri"
+          },
+          {
+            id: 6,
+            cocktailName: "Negroni",
+            cocktailNameKr: "네그로니",
+            image: "https://via.placeholder.com/80x80/4169E1/FFFFFF?text=Negroni"
+          }
         ]
       },
       4: {
@@ -962,10 +1188,30 @@ if(USE_MOCK) {
         createAt: "2024-02-10",
         updatedAt: new Date().toISOString().split('T')[0],
         availableCocktails: [
-          { id: 6, cocktailName: "Negroni", cocktailNameKr: "네그로니", image: "https://via.placeholder.com/80x80/4169E1/FFFFFF?text=Negroni" },
-          { id: 7, cocktailName: "Manhattan", cocktailNameKr: "맨해튼", image: "https://via.placeholder.com/80x80/8B4513/FFFFFF?text=Manhattan" },
-          { id: 8, cocktailName: "Martini", cocktailNameKr: "마티니", image: "https://via.placeholder.com/80x80/C0C0C0/000000?text=Martini" },
-          { id: 9, cocktailName: "Old Fashioned", cocktailNameKr: "올드 패션드", image: "https://via.placeholder.com/80x80/D2691E/FFFFFF?text=Old" }
+          {
+            id: 6,
+            cocktailName: "Negroni",
+            cocktailNameKr: "네그로니",
+            image: "https://via.placeholder.com/80x80/4169E1/FFFFFF?text=Negroni"
+          },
+          {
+            id: 7,
+            cocktailName: "Manhattan",
+            cocktailNameKr: "맨해튼",
+            image: "https://via.placeholder.com/80x80/8B4513/FFFFFF?text=Manhattan"
+          },
+          {
+            id: 8,
+            cocktailName: "Martini",
+            cocktailNameKr: "마티니",
+            image: "https://via.placeholder.com/80x80/C0C0C0/000000?text=Martini"
+          },
+          {
+            id: 9,
+            cocktailName: "Old Fashioned",
+            cocktailNameKr: "올드 패션드",
+            image: "https://via.placeholder.com/80x80/D2691E/FFFFFF?text=Old"
+          }
         ]
       },
       5: {
@@ -980,9 +1226,24 @@ if(USE_MOCK) {
         createAt: "2024-02-15",
         updatedAt: new Date().toISOString().split('T')[0],
         availableCocktails: [
-          { id: 10, cocktailName: "Mojito", cocktailNameKr: "모히또", image: "https://via.placeholder.com/80x80/98FB98/000000?text=Mojito" },
-          { id: 11, cocktailName: "Caipirinha", cocktailNameKr: "카이피리냐", image: "https://via.placeholder.com/80x80/32CD32/FFFFFF?text=Caipirinha" },
-          { id: 9, cocktailName: "Old Fashioned", cocktailNameKr: "올드 패션드", image: "https://via.placeholder.com/80x80/D2691E/FFFFFF?text=Old" }
+          {
+            id: 10,
+            cocktailName: "Mojito",
+            cocktailNameKr: "모히또",
+            image: "https://via.placeholder.com/80x80/98FB98/000000?text=Mojito"
+          },
+          {
+            id: 11,
+            cocktailName: "Caipirinha",
+            cocktailNameKr: "카이피리냐",
+            image: "https://via.placeholder.com/80x80/32CD32/FFFFFF?text=Caipirinha"
+          },
+          {
+            id: 9,
+            cocktailName: "Old Fashioned",
+            cocktailNameKr: "올드 패션드",
+            image: "https://via.placeholder.com/80x80/D2691E/FFFFFF?text=Old"
+          }
         ]
       },
       6: {
@@ -997,10 +1258,30 @@ if(USE_MOCK) {
         createAt: "2024-02-20",
         updatedAt: new Date().toISOString().split('T')[0],
         availableCocktails: [
-          { id: 8, cocktailName: "Martini", cocktailNameKr: "마티니", image: "https://via.placeholder.com/80x80/C0C0C0/000000?text=Martini" },
-          { id: 9, cocktailName: "Old Fashioned", cocktailNameKr: "올드 패션드", image: "https://via.placeholder.com/80x80/D2691E/FFFFFF?text=Old" },
-          { id: 6, cocktailName: "Negroni", cocktailNameKr: "네그로니", image: "https://via.placeholder.com/80x80/4169E1/FFFFFF?text=Negroni" },
-          { id: 12, cocktailName: "Sidecar", cocktailNameKr: "사이드카", image: "https://via.placeholder.com/80x80/FF6B6B/FFFFFF?text=Sidecar" }
+          {
+            id: 8,
+            cocktailName: "Martini",
+            cocktailNameKr: "마티니",
+            image: "https://via.placeholder.com/80x80/C0C0C0/000000?text=Martini"
+          },
+          {
+            id: 9,
+            cocktailName: "Old Fashioned",
+            cocktailNameKr: "올드 패션드",
+            image: "https://via.placeholder.com/80x80/D2691E/FFFFFF?text=Old"
+          },
+          {
+            id: 6,
+            cocktailName: "Negroni",
+            cocktailNameKr: "네그로니",
+            image: "https://via.placeholder.com/80x80/4169E1/FFFFFF?text=Negroni"
+          },
+          {
+            id: 12,
+            cocktailName: "Sidecar",
+            cocktailNameKr: "사이드카",
+            image: "https://via.placeholder.com/80x80/FF6B6B/FFFFFF?text=Sidecar"
+          }
         ]
       }
     };
@@ -1008,10 +1289,10 @@ if(USE_MOCK) {
     const toolData = toolDataMap[toolId];
 
     if (!toolData) {
-      return [404, { error: 'Tool not found' }];
+      return [404, {error: 'Tool not found'}];
     }
 
-    return [200, { data: toolData }];
+    return [200, {data: toolData}];
   });
 
   /*
@@ -1019,7 +1300,7 @@ if(USE_MOCK) {
   * */
   mock.onGet(/\/api\/spirit-product\/\d+/).reply((config) => {
     const spiritProductId = parseInt(config.url?.split('/').pop() || '1');
-    
+
     // 스피릿 상세 데이터 맵
     const spiritProductDataMap: { [key: number]: any } = {
       1: {
@@ -1056,9 +1337,24 @@ if(USE_MOCK) {
         isDiscontinued: false,
         price: 180000,
         availableCocktails: [
-          { id: 1, cocktailName: "Sidecar", cocktailNameKr: "사이드카", image: "https://via.placeholder.com/80x80/FF6B6B/FFFFFF?text=Sidecar" },
-          { id: 2, cocktailName: "French Connection", cocktailNameKr: "프렌치 커넥션", image: "https://via.placeholder.com/80x80/FF6B6B/FFFFFF?text=French" },
-          { id: 3, cocktailName: "Brandy Alexander", cocktailNameKr: "브랜디 알렉산더", image: "https://via.placeholder.com/80x80/FF6B6B/FFFFFF?text=Alexander" }
+          {
+            id: 1,
+            cocktailName: "Sidecar",
+            cocktailNameKr: "사이드카",
+            image: "https://via.placeholder.com/80x80/FF6B6B/FFFFFF?text=Sidecar"
+          },
+          {
+            id: 2,
+            cocktailName: "French Connection",
+            cocktailNameKr: "프렌치 커넥션",
+            image: "https://via.placeholder.com/80x80/FF6B6B/FFFFFF?text=French"
+          },
+          {
+            id: 3,
+            cocktailName: "Brandy Alexander",
+            cocktailNameKr: "브랜디 알렉산더",
+            image: "https://via.placeholder.com/80x80/FF6B6B/FFFFFF?text=Alexander"
+          }
         ]
       },
       2: {
@@ -1095,8 +1391,18 @@ if(USE_MOCK) {
         isDiscontinued: true,
         price: 450000,
         availableCocktails: [
-          { id: 4, cocktailName: "Old Fashioned", cocktailNameKr: "올드 패션드", image: "https://via.placeholder.com/80x80/D2691E/FFFFFF?text=Old" },
-          { id: 5, cocktailName: "Whisky Sour", cocktailNameKr: "위스키 사워", image: "https://via.placeholder.com/80x80/D2691E/FFFFFF?text=Sour" }
+          {
+            id: 4,
+            cocktailName: "Old Fashioned",
+            cocktailNameKr: "올드 패션드",
+            image: "https://via.placeholder.com/80x80/D2691E/FFFFFF?text=Old"
+          },
+          {
+            id: 5,
+            cocktailName: "Whisky Sour",
+            cocktailNameKr: "위스키 사워",
+            image: "https://via.placeholder.com/80x80/D2691E/FFFFFF?text=Sour"
+          }
         ]
       },
       3: {
@@ -1133,9 +1439,24 @@ if(USE_MOCK) {
         isDiscontinued: false,
         price: 85000,
         availableCocktails: [
-          { id: 6, cocktailName: "Vodka Martini", cocktailNameKr: "보드카 마티니", image: "https://via.placeholder.com/80x80/C0C0C0/000000?text=Martini" },
-          { id: 7, cocktailName: "Cosmopolitan", cocktailNameKr: "코스모폴리탄", image: "https://via.placeholder.com/80x80/C0C0C0/000000?text=Cosmo" },
-          { id: 8, cocktailName: "Moscow Mule", cocktailNameKr: "모스코 뮬", image: "https://via.placeholder.com/80x80/C0C0C0/000000?text=Mule" }
+          {
+            id: 6,
+            cocktailName: "Vodka Martini",
+            cocktailNameKr: "보드카 마티니",
+            image: "https://via.placeholder.com/80x80/C0C0C0/000000?text=Martini"
+          },
+          {
+            id: 7,
+            cocktailName: "Cosmopolitan",
+            cocktailNameKr: "코스모폴리탄",
+            image: "https://via.placeholder.com/80x80/C0C0C0/000000?text=Cosmo"
+          },
+          {
+            id: 8,
+            cocktailName: "Moscow Mule",
+            cocktailNameKr: "모스코 뮬",
+            image: "https://via.placeholder.com/80x80/C0C0C0/000000?text=Mule"
+          }
         ]
       },
       4: {
@@ -1172,8 +1493,18 @@ if(USE_MOCK) {
         isDiscontinued: false,
         price: 320000,
         availableCocktails: [
-          { id: 9, cocktailName: "Margarita", cocktailNameKr: "마가리타", image: "https://via.placeholder.com/80x80/DAA520/000000?text=Margarita" },
-          { id: 10, cocktailName: "Paloma", cocktailNameKr: "팔로마", image: "https://via.placeholder.com/80x80/DAA520/000000?text=Paloma" }
+          {
+            id: 9,
+            cocktailName: "Margarita",
+            cocktailNameKr: "마가리타",
+            image: "https://via.placeholder.com/80x80/DAA520/000000?text=Margarita"
+          },
+          {
+            id: 10,
+            cocktailName: "Paloma",
+            cocktailNameKr: "팔로마",
+            image: "https://via.placeholder.com/80x80/DAA520/000000?text=Paloma"
+          }
         ]
       },
       5: {
@@ -1210,9 +1541,24 @@ if(USE_MOCK) {
         isDiscontinued: false,
         price: 52000,
         availableCocktails: [
-          { id: 11, cocktailName: "Gin & Tonic", cocktailNameKr: "진 토닉", image: "https://via.placeholder.com/80x80/4169E1/FFFFFF?text=G&T" },
-          { id: 12, cocktailName: "Negroni", cocktailNameKr: "네그로니", image: "https://via.placeholder.com/80x80/4169E1/FFFFFF?text=Negroni" },
-          { id: 13, cocktailName: "Tom Collins", cocktailNameKr: "톰 콜린스", image: "https://via.placeholder.com/80x80/4169E1/FFFFFF?text=Collins" }
+          {
+            id: 11,
+            cocktailName: "Gin & Tonic",
+            cocktailNameKr: "진 토닉",
+            image: "https://via.placeholder.com/80x80/4169E1/FFFFFF?text=G&T"
+          },
+          {
+            id: 12,
+            cocktailName: "Negroni",
+            cocktailNameKr: "네그로니",
+            image: "https://via.placeholder.com/80x80/4169E1/FFFFFF?text=Negroni"
+          },
+          {
+            id: 13,
+            cocktailName: "Tom Collins",
+            cocktailNameKr: "톰 콜린스",
+            image: "https://via.placeholder.com/80x80/4169E1/FFFFFF?text=Collins"
+          }
         ]
       },
       6: {
@@ -1249,8 +1595,18 @@ if(USE_MOCK) {
         isDiscontinued: true,
         price: 280000,
         availableCocktails: [
-          { id: 14, cocktailName: "Dark 'n' Stormy", cocktailNameKr: "다크 앤 스토미", image: "https://via.placeholder.com/80x80/8B0000/FFFFFF?text=Dark" },
-          { id: 15, cocktailName: "Rum Old Fashioned", cocktailNameKr: "럼 올드 패션드", image: "https://via.placeholder.com/80x80/8B0000/FFFFFF?text=Rum+OF" }
+          {
+            id: 14,
+            cocktailName: "Dark 'n' Stormy",
+            cocktailNameKr: "다크 앤 스토미",
+            image: "https://via.placeholder.com/80x80/8B0000/FFFFFF?text=Dark"
+          },
+          {
+            id: 15,
+            cocktailName: "Rum Old Fashioned",
+            cocktailNameKr: "럼 올드 패션드",
+            image: "https://via.placeholder.com/80x80/8B0000/FFFFFF?text=Rum+OF"
+          }
         ]
       }
     };
@@ -1258,9 +1614,290 @@ if(USE_MOCK) {
     const spiritProductData = spiritProductDataMap[spiritProductId];
 
     if (!spiritProductData) {
-      return [404, { error: 'Spirit product not found' }];
+      return [404, {error: 'Spirit product not found'}];
     }
 
-    return [200, { data: spiritProductData }];
+    return [200, {data: spiritProductData}];
+  });
+
+  /*
+ * 제조 기법 Technique List
+ * */
+  mock.onGet('/api/technique').reply((config) => {
+    const { page = 1, limit = 6, sort = 'recent', search } = config.params || {};
+
+    // 전체 Mock 데이터 (6개)
+    const fullData = [
+      {
+        techniqueId: 1,
+        techniqueName: "Shaking",
+        techniqueNameKr: "쉐이킹",
+        techniqueCategory: "shaking",
+        image: "https://via.placeholder.com/200x200/4A90E2/FFFFFF?text=Shaking",
+        notes: "<p>쉐이커에 재료와 얼음을 넣고 강하게 흔드는 기법입니다.</p><p>재료를 빠르게 차갑게 만들고 혼합하며, 공기를 주입하여 부드러운 질감을 만듭니다.</p>",
+        whenToUseNotes: "<p>과일 주스, 크림, 계란 흰자 등 무거운 재료를 포함한 칵테일에 사용합니다.</p><p>재료를 완전히 유화시키고 차갑게 만들어야 할 때 적합합니다.</p>",
+        dilutionLevel: "medium",
+        aerationLevel: "high",
+        temperatureChange: "chill",
+        createdAt: "2024-01-15",
+        updatedAt: "2024-01-20",
+        availableCocktails: [
+          { id: 1, cocktailName: "Margarita", cocktailNameKr: "마가리타", image: "https://via.placeholder.com/80x80/FFD700/000000?text=Margarita" },
+          { id: 2, cocktailName: "Cosmopolitan", cocktailNameKr: "코스모폴리탄", image: "https://via.placeholder.com/80x80/FF69B4/FFFFFF?text=Cosmo" },
+          { id: 3, cocktailName: "Daiquiri", cocktailNameKr: "다이키리", image: "https://via.placeholder.com/80x80/98FB98/000000?text=Daiquiri" }
+        ]
+      },
+      {
+        techniqueId: 2,
+        techniqueName: "Stirring",
+        techniqueNameKr: "스터링",
+        techniqueCategory: "stirring",
+        image: "https://via.placeholder.com/200x200/8B4513/FFFFFF?text=Stirring",
+        notes: "<p>믹싱 글라스에 재료와 얼음을 넣고 바 스푼으로 부드럽게 저어주는 기법입니다.</p><p>재료를 차갑게 만들면서도 맑고 깨끗한 질감을 유지합니다.</p>",
+        whenToUseNotes: "<p>스피릿 베이스의 투명한 칵테일에 사용합니다.</p><p>재료의 맑은 질감을 유지하면서 차갑게 만들고 싶을 때 적합합니다.</p>",
+        dilutionLevel: "low",
+        aerationLevel: "none",
+        temperatureChange: "chill",
+        createdAt: "2024-01-14",
+        updatedAt: "2024-01-19",
+        availableCocktails: [
+          { id: 4, cocktailName: "Martini", cocktailNameKr: "마티니", image: "https://via.placeholder.com/80x80/E6E6FA/000000?text=Martini" },
+          { id: 5, cocktailName: "Manhattan", cocktailNameKr: "맨해튼", image: "https://via.placeholder.com/80x80/8B0000/FFFFFF?text=Manhattan" },
+          { id: 6, cocktailName: "Negroni", cocktailNameKr: "네그로니", image: "https://via.placeholder.com/80x80/DC143C/FFFFFF?text=Negroni" }
+        ]
+      },
+      {
+        techniqueId: 3,
+        techniqueName: "Muddling",
+        techniqueNameKr: "머들링",
+        techniqueCategory: "muddling",
+        image: "https://via.placeholder.com/200x200/228B22/FFFFFF?text=Muddling",
+        notes: "<p>머들러를 사용하여 허브, 과일, 설탕 등을 으깨는 기법입니다.</p><p>재료의 에센셜 오일과 향을 추출하여 칵테일에 풍미를 더합니다.</p>",
+        whenToUseNotes: "<p>민트, 바질 등의 허브나 신선한 과일의 향과 맛을 추출할 때 사용합니다.</p><p>재료의 본연의 향을 살리고 싶을 때 적합합니다.</p>",
+        dilutionLevel: "none",
+        aerationLevel: "low",
+        temperatureChange: "none",
+        createdAt: "2024-01-13",
+        updatedAt: "2024-01-18",
+        availableCocktails: [
+          { id: 7, cocktailName: "Mojito", cocktailNameKr: "모히또", image: "https://via.placeholder.com/80x80/7FFFD4/000000?text=Mojito" },
+          { id: 8, cocktailName: "Caipirinha", cocktailNameKr: "까이삐리냐", image: "https://via.placeholder.com/80x80/32CD32/FFFFFF?text=Caipirinha" },
+          { id: 9, cocktailName: "Old Fashioned", cocktailNameKr: "올드 패션드", image: "https://via.placeholder.com/80x80/D2691E/FFFFFF?text=Old+Fashioned" }
+        ]
+      },
+      {
+        techniqueId: 4,
+        techniqueName: "Building",
+        techniqueNameKr: "빌딩",
+        techniqueCategory: "building",
+        image: "https://via.placeholder.com/200x200/FF6347/FFFFFF?text=Building",
+        notes: "<p>글라스에 직접 재료를 순서대로 붓는 가장 간단한 기법입니다.</p><p>별도의 도구 없이 글라스에서 바로 칵테일을 완성합니다.</p>",
+        whenToUseNotes: "<p>간단한 롱 드링크나 탄산이 들어가는 칵테일에 사용합니다.</p><p>재료의 층을 만들거나 탄산의 기포를 유지하고 싶을 때 적합합니다.</p>",
+        dilutionLevel: "low",
+        aerationLevel: "none",
+        temperatureChange: "none",
+        createdAt: "2024-01-12",
+        updatedAt: "2024-01-17",
+        availableCocktails: [
+          { id: 10, cocktailName: "Gin & Tonic", cocktailNameKr: "진 토닉", image: "https://via.placeholder.com/80x80/87CEEB/000000?text=G&T" },
+          { id: 11, cocktailName: "Cuba Libre", cocktailNameKr: "쿠바 리브레", image: "https://via.placeholder.com/80x80/8B4513/FFFFFF?text=Cuba+Libre" },
+          { id: 12, cocktailName: "Screwdriver", cocktailNameKr: "스크류드라이버", image: "https://via.placeholder.com/80x80/FFA500/000000?text=Screwdriver" }
+        ]
+      },
+      {
+        techniqueId: 5,
+        techniqueName: "Layering",
+        techniqueNameKr: "레이어링",
+        techniqueCategory: "layering",
+        image: "https://via.placeholder.com/200x200/9370DB/FFFFFF?text=Layering",
+        notes: "<p>비중이 다른 재료들을 층층이 쌓아 올리는 기법입니다.</p><p>바 스푼의 뒷면을 이용하여 천천히 부어 재료가 섞이지 않도록 합니다.</p>",
+        whenToUseNotes: "<p>시각적으로 아름다운 칵테일을 만들 때 사용합니다.</p><p>재료의 비중 차이를 이용하여 색다른 음용 경험을 제공하고 싶을 때 적합합니다.</p>",
+        dilutionLevel: "none",
+        aerationLevel: "none",
+        temperatureChange: "none",
+        createdAt: "2024-01-11",
+        updatedAt: "2024-01-16",
+        availableCocktails: [
+          { id: 13, cocktailName: "B-52", cocktailNameKr: "B-52", image: "https://via.placeholder.com/80x80/8B4513/FFFFFF?text=B-52" },
+          { id: 14, cocktailName: "Pousse Café", cocktailNameKr: "푸스 카페", image: "https://via.placeholder.com/80x80/FF1493/FFFFFF?text=Pousse+Cafe" },
+          { id: 15, cocktailName: "Irish Coffee", cocktailNameKr: "아이리시 커피", image: "https://via.placeholder.com/80x80/654321/FFFFFF?text=Irish+Coffee" }
+        ]
+      },
+      {
+        techniqueId: 6,
+        techniqueName: "Blending",
+        techniqueNameKr: "블렌딩",
+        techniqueCategory: "blending",
+        image: "https://via.placeholder.com/200x200/00CED1/FFFFFF?text=Blending",
+        notes: "<p>블렌더를 사용하여 재료와 얼음을 함께 갈아서 만드는 기법입니다.</p><p>슬러시 형태의 부드럽고 시원한 질감을 만들어냅니다.</p>",
+        whenToUseNotes: "<p>프로즌 칵테일이나 과일을 으깨야 하는 칵테일에 사용합니다.</p><p>더운 날씨에 시원하고 부드러운 질감의 칵테일을 만들고 싶을 때 적합합니다.</p>",
+        dilutionLevel: "high",
+        aerationLevel: "medium",
+        temperatureChange: "chill",
+        createdAt: "2024-01-10",
+        updatedAt: "2024-01-15",
+        availableCocktails: [
+          { id: 16, cocktailName: "Frozen Margarita", cocktailNameKr: "프로즌 마가리타", image: "https://via.placeholder.com/80x80/ADFF2F/000000?text=Frozen+Marg" },
+          { id: 17, cocktailName: "Piña Colada", cocktailNameKr: "피냐 콜라다", image: "https://via.placeholder.com/80x80/F0E68C/000000?text=Pina+Colada" },
+          { id: 18, cocktailName: "Frozen Daiquiri", cocktailNameKr: "프로즌 다이키리", image: "https://via.placeholder.com/80x80/FFB6C1/000000?text=Frozen+Daiq" }
+        ]
+      }
+    ];
+
+    // 정렬 처리
+    let sortedData = [...fullData];
+
+    if (sort === 'name') {
+      sortedData.sort((a, b) => a.techniqueName.localeCompare(b.techniqueName));
+    }
+    // recent는 기본 순서 유지
+
+    // 검색 처리
+    if (search) {
+      sortedData = sortedData.filter(technique =>
+          technique.techniqueName.toLowerCase().includes(search.toLowerCase()) ||
+          technique.techniqueNameKr.includes(search)
+      );
+    }
+
+    // 페이지네이션 처리
+    const startIndex = (page - 1) * limit;
+    const endIndex = startIndex + limit;
+    const paginatedData = sortedData.slice(startIndex, endIndex);
+
+    return [200, { data: paginatedData }];
+  });
+
+  /*
+   * 제조 기법 Detail (개별 조회)
+   * */
+  mock.onGet(/\/api\/technique\/\d+/).reply((config) => {
+    const techniqueId = parseInt(config.url?.split('/').pop() || '1');
+
+    // 제조 기법 데이터 맵
+    const techniqueDataMap: { [key: number]: any } = {
+      1: {
+        techniqueId: 1,
+        techniqueName: "Shaking",
+        techniqueNameKr: "쉐이킹",
+        techniqueCategory: "shaking",
+        image: "https://via.placeholder.com/200x200/4A90E2/FFFFFF?text=Shaking",
+        notes: "<p>쉐이커에 재료와 얼음을 넣고 강하게 흔드는 기법입니다.</p><p>재료를 빠르게 차갑게 만들고 혼합하며, 공기를 주입하여 부드러운 질감을 만듭니다.</p>",
+        whenToUseNotes: "<p>과일 주스, 크림, 계란 흰자 등 무거운 재료를 포함한 칵테일에 사용합니다.</p><p>재료를 완전히 유화시키고 차갑게 만들어야 할 때 적합합니다.</p>",
+        dilutionLevel: "medium",
+        aerationLevel: "high",
+        temperatureChange: "chill",
+        createdAt: "2024-01-15",
+        updatedAt: "2024-01-20",
+        availableCocktails: [
+          { id: 1, cocktailName: "Margarita", cocktailNameKr: "마가리타", image: "https://via.placeholder.com/80x80/FFD700/000000?text=Margarita" },
+          { id: 2, cocktailName: "Cosmopolitan", cocktailNameKr: "코스모폴리탄", image: "https://via.placeholder.com/80x80/FF69B4/FFFFFF?text=Cosmo" },
+          { id: 3, cocktailName: "Daiquiri", cocktailNameKr: "다이키리", image: "https://via.placeholder.com/80x80/98FB98/000000?text=Daiquiri" }
+        ]
+      },
+      2: {
+        techniqueId: 2,
+        techniqueName: "Stirring",
+        techniqueNameKr: "스터링",
+        techniqueCategory: "stirring",
+        image: "https://via.placeholder.com/200x200/8B4513/FFFFFF?text=Stirring",
+        notes: "<p>믹싱 글라스에 재료와 얼음을 넣고 바 스푼으로 부드럽게 저어주는 기법입니다.</p><p>재료를 차갑게 만들면서도 맑고 깨끗한 질감을 유지합니다.</p>",
+        whenToUseNotes: "<p>스피릿 베이스의 투명한 칵테일에 사용합니다.</p><p>재료의 맑은 질감을 유지하면서 차갑게 만들고 싶을 때 적합합니다.</p>",
+        dilutionLevel: "low",
+        aerationLevel: "none",
+        temperatureChange: "chill",
+        createdAt: "2024-01-14",
+        updatedAt: "2024-01-19",
+        availableCocktails: [
+          { id: 4, cocktailName: "Martini", cocktailNameKr: "마티니", image: "https://via.placeholder.com/80x80/E6E6FA/000000?text=Martini" },
+          { id: 5, cocktailName: "Manhattan", cocktailNameKr: "맨해튼", image: "https://via.placeholder.com/80x80/8B0000/FFFFFF?text=Manhattan" },
+          { id: 6, cocktailName: "Negroni", cocktailNameKr: "네그로니", image: "https://via.placeholder.com/80x80/DC143C/FFFFFF?text=Negroni" }
+        ]
+      },
+      3: {
+        techniqueId: 3,
+        techniqueName: "Muddling",
+        techniqueNameKr: "머들링",
+        techniqueCategory: "muddling",
+        image: "https://via.placeholder.com/200x200/228B22/FFFFFF?text=Muddling",
+        notes: "<p>머들러를 사용하여 허브, 과일, 설탕 등을 으깨는 기법입니다.</p><p>재료의 에센셜 오일과 향을 추출하여 칵테일에 풍미를 더합니다.</p>",
+        whenToUseNotes: "<p>민트, 바질 등의 허브나 신선한 과일의 향과 맛을 추출할 때 사용합니다.</p><p>재료의 본연의 향을 살리고 싶을 때 적합합니다.</p>",
+        dilutionLevel: "none",
+        aerationLevel: "low",
+        temperatureChange: "none",
+        createdAt: "2024-01-13",
+        updatedAt: "2024-01-18",
+        availableCocktails: [
+          { id: 7, cocktailName: "Mojito", cocktailNameKr: "모히또", image: "https://via.placeholder.com/80x80/7FFFD4/000000?text=Mojito" },
+          { id: 8, cocktailName: "Caipirinha", cocktailNameKr: "까이삐리냐", image: "https://via.placeholder.com/80x80/32CD32/FFFFFF?text=Caipirinha" },
+          { id: 9, cocktailName: "Old Fashioned", cocktailNameKr: "올드 패션드", image: "https://via.placeholder.com/80x80/D2691E/FFFFFF?text=Old+Fashioned" }
+        ]
+      },
+      4: {
+        techniqueId: 4,
+        techniqueName: "Building",
+        techniqueNameKr: "빌딩",
+        techniqueCategory: "building",
+        image: "https://via.placeholder.com/200x200/FF6347/FFFFFF?text=Building",
+        notes: "<p>글라스에 직접 재료를 순서대로 붓는 가장 간단한 기법입니다.</p><p>별도의 도구 없이 글라스에서 바로 칵테일을 완성합니다.</p>",
+        whenToUseNotes: "<p>간단한 롱 드링크나 탄산이 들어가는 칵테일에 사용합니다.</p><p>재료의 층을 만들거나 탄산의 기포를 유지하고 싶을 때 적합합니다.</p>",
+        dilutionLevel: "low",
+        aerationLevel: "none",
+        temperatureChange: "none",
+        createdAt: "2024-01-12",
+        updatedAt: "2024-01-17",
+        availableCocktails: [
+          { id: 10, cocktailName: "Gin & Tonic", cocktailNameKr: "진 토닉", image: "https://via.placeholder.com/80x80/87CEEB/000000?text=G&T" },
+          { id: 11, cocktailName: "Cuba Libre", cocktailNameKr: "쿠바 리브레", image: "https://via.placeholder.com/80x80/8B4513/FFFFFF?text=Cuba+Libre" },
+          { id: 12, cocktailName: "Screwdriver", cocktailNameKr: "스크류드라이버", image: "https://via.placeholder.com/80x80/FFA500/000000?text=Screwdriver" }
+        ]
+      },
+      5: {
+        techniqueId: 5,
+        techniqueName: "Layering",
+        techniqueNameKr: "레이어링",
+        techniqueCategory: "layering",
+        image: "https://via.placeholder.com/200x200/9370DB/FFFFFF?text=Layering",
+        notes: "<p>비중이 다른 재료들을 층층이 쌓아 올리는 기법입니다.</p><p>바 스푼의 뒷면을 이용하여 천천히 부어 재료가 섞이지 않도록 합니다.</p>",
+        whenToUseNotes: "<p>시각적으로 아름다운 칵테일을 만들 때 사용합니다.</p><p>재료의 비중 차이를 이용하여 색다른 음용 경험을 제공하고 싶을 때 적합합니다.</p>",
+        dilutionLevel: "none",
+        aerationLevel: "none",
+        temperatureChange: "none",
+        createdAt: "2024-01-11",
+        updatedAt: "2024-01-16",
+        availableCocktails: [
+          { id: 13, cocktailName: "B-52", cocktailNameKr: "B-52", image: "https://via.placeholder.com/80x80/8B4513/FFFFFF?text=B-52" },
+          { id: 14, cocktailName: "Pousse Café", cocktailNameKr: "푸스 카페", image: "https://via.placeholder.com/80x80/FF1493/FFFFFF?text=Pousse+Cafe" },
+          { id: 15, cocktailName: "Irish Coffee", cocktailNameKr: "아이리시 커피", image: "https://via.placeholder.com/80x80/654321/FFFFFF?text=Irish+Coffee" }
+        ]
+      },
+      6: {
+        techniqueId: 6,
+        techniqueName: "Blending",
+        techniqueNameKr: "블렌딩",
+        techniqueCategory: "blending",
+        image: "https://via.placeholder.com/200x200/00CED1/FFFFFF?text=Blending",
+        notes: "<p>블렌더를 사용하여 재료와 얼음을 함께 갈아서 만드는 기법입니다.</p><p>슬러시 형태의 부드럽고 시원한 질감을 만들어냅니다.</p>",
+        whenToUseNotes: "<p>프로즌 칵테일이나 과일을 으깨야 하는 칵테일에 사용합니다.</p><p>더운 날씨에 시원하고 부드러운 질감의 칵테일을 만들고 싶을 때 적합합니다.</p>",
+        dilutionLevel: "high",
+        aerationLevel: "medium",
+        temperatureChange: "chill",
+        createdAt: "2024-01-10",
+        updatedAt: "2024-01-15",
+        availableCocktails: [
+          { id: 16, cocktailName: "Frozen Margarita", cocktailNameKr: "프로즌 마가리타", image: "https://via.placeholder.com/80x80/ADFF2F/000000?text=Frozen+Marg" },
+          { id: 17, cocktailName: "Piña Colada", cocktailNameKr: "피냐 콜라다", image: "https://via.placeholder.com/80x80/F0E68C/000000?text=Pina+Colada" },
+          { id: 18, cocktailName: "Frozen Daiquiri", cocktailNameKr: "프로즌 다이키리", image: "https://via.placeholder.com/80x80/FFB6C1/000000?text=Frozen+Daiq" }
+        ]
+      }
+    };
+
+    const techniqueData = techniqueDataMap[techniqueId];
+
+    if (!techniqueData) {
+      return [404, { error: 'Technique not found' }];
+    }
+
+    return [200, { data: techniqueData }];
   });
 }
