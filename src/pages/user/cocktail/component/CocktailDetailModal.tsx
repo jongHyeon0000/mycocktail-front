@@ -4,13 +4,12 @@ import {
   FavoriteOutlined,
   ShareOutlined,
   LocalBarOutlined,
-  LocalBarRounded
 } from "@mui/icons-material";
-import {commonDragStyle} from "../../common/style/CommonDrag.style.ts";
 import {COMMON_MODAL_STYLE} from "../../common/style/CommonModal.style.ts";
 import type {CocktailDetail} from "../interface/CocktailDetail.ts";
 import styled from "styled-components";
 import {Box, Chip, IconButton, Modal, Paper, Typography} from "@mui/material";
+import {CategorySlide} from "../../common/component/CategorySlide.tsx";
 
 interface CocktailDetailModalProps {
   open: boolean;
@@ -133,266 +132,106 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                   <IngredientsSection>
                     {/* 기주 */}
                     {data.ingredients.spirits.length > 0 && (
-                      <CategorySection>
-                        <SlideCategoryTitle>기주</SlideCategoryTitle>
-                        <SlideContainer ref={spiritsRef}>
-                          <SlideWrapper>
-                            <SlideTrack {...commonDragStyle(spiritsRef)}>
-                              {data.ingredients.spirits.map((item) => (
-                                <SlideItem 
-                                  key={item.id}
-                                  as={motion.div}
-                                  whileHover={{ scale: 1.05, y: -2 }}
-                                  whileTap={{ scale: 0.95 }}
-                                >
-                                  <SlideItemImage>
-                                    {item.image ? (
-                                      <img src={item.image} alt={item.spiritName} />
-                                    ) : (
-                                      <SlideItemPlaceholder>
-                                        <LocalBarRounded fontSize="inherit" />
-                                      </SlideItemPlaceholder>
-                                    )}
-                                  </SlideItemImage>
-                                  <SlideItemEnglishName>{item.spiritName}</SlideItemEnglishName>
-                                  <SlideItemKoreanName>{item.spiritNameKr}</SlideItemKoreanName>
-                                </SlideItem>
-                              ))}
-                            </SlideTrack>
-                          </SlideWrapper>
-                        </SlideContainer>
-                      </CategorySection>
+                      <CategorySlide
+                        title="기주"
+                        items={data.ingredients.spirits}
+                        slideRef={spiritsRef}
+                        getName={(item) => item.spiritName}
+                        getNameKr={(item) => item.spiritNameKr}
+                        getImage={(item) => item.image}
+                        getId={(item) => item.id}
+                      />
                     )}
 
                     {/* 주스 */}
                     {data.ingredients.juices.length > 0 && (
-                      <CategorySection>
-                        <SlideCategoryTitle>주스</SlideCategoryTitle>
-                        <SlideContainer ref={juicesRef}>
-                          <SlideWrapper>
-                            <SlideTrack {...commonDragStyle(juicesRef)}>
-                              {data.ingredients.juices.map((item) => (
-                                <SlideItem 
-                                  key={item.id}
-                                  as={motion.div}
-                                  whileHover={{ scale: 1.05, y: -2 }}
-                                  whileTap={{ scale: 0.95 }}
-                                >
-                                  <SlideItemImage>
-                                    {item.image ? (
-                                      <img src={item.image} alt={item.juiceName} />
-                                    ) : (
-                                      <SlideItemPlaceholder>
-                                        <LocalBarRounded fontSize="inherit" />
-                                      </SlideItemPlaceholder>
-                                    )}
-                                  </SlideItemImage>
-                                  <SlideItemEnglishName>{item.juiceName}</SlideItemEnglishName>
-                                  <SlideItemKoreanName>{item.juiceNameKr}</SlideItemKoreanName>
-                                </SlideItem>
-                              ))}
-                            </SlideTrack>
-                          </SlideWrapper>
-                        </SlideContainer>
-                      </CategorySection>
+                      <CategorySlide
+                        title="주스"
+                        items={data.ingredients.juices}
+                        slideRef={juicesRef}
+                        getName={(item) => item.juiceName}
+                        getNameKr={(item) => item.juiceNameKr}
+                        getImage={(item) => item.image}
+                        getId={(item) => item.id}
+                      />
                     )}
 
                     {/* 비터스 */}
                     {data.ingredients.bitters.length > 0 && (
-                      <CategorySection>
-                        <SlideCategoryTitle>비터스</SlideCategoryTitle>
-                        <SlideContainer ref={bittersRef}>
-                          <SlideWrapper>
-                            <SlideTrack {...commonDragStyle(bittersRef)}>
-                              {data.ingredients.bitters.map((item) => (
-                                <SlideItem 
-                                  key={item.id}
-                                  as={motion.div}
-                                  whileHover={{ scale: 1.05, y: -2 }}
-                                  whileTap={{ scale: 0.95 }}
-                                >
-                                  <SlideItemImage>
-                                    {item.image ? (
-                                      <img src={item.image} alt={item.bitterName} />
-                                    ) : (
-                                      <SlideItemPlaceholder>
-                                        <LocalBarRounded fontSize="inherit" />
-                                      </SlideItemPlaceholder>
-                                    )}
-                                  </SlideItemImage>
-                                  <SlideItemEnglishName>{item.bitterName}</SlideItemEnglishName>
-                                  <SlideItemKoreanName>{item.bitterNameKr}</SlideItemKoreanName>
-                                </SlideItem>
-                              ))}
-                            </SlideTrack>
-                          </SlideWrapper>
-                        </SlideContainer>
-                      </CategorySection>
+                      <CategorySlide
+                        title="비터스"
+                        items={data.ingredients.bitters}
+                        slideRef={bittersRef}
+                        getName={(item) => item.bitterName}
+                        getNameKr={(item) => item.bitterNameKr}
+                        getImage={(item) => item.image}
+                        getId={(item) => item.id}
+                      />
                     )}
 
                     {/* 시럽 */}
                     {data.ingredients.syrups.length > 0 && (
-                      <CategorySection>
-                        <SlideCategoryTitle>시럽</SlideCategoryTitle>
-                        <SlideContainer ref={syrupsRef}>
-                          <SlideWrapper>
-                            <SlideTrack {...commonDragStyle(syrupsRef)}>
-                              {data.ingredients.syrups.map((item) => (
-                                <SlideItem 
-                                  key={item.id}
-                                  as={motion.div}
-                                  whileHover={{ scale: 1.05, y: -2 }}
-                                  whileTap={{ scale: 0.95 }}
-                                >
-                                  <SlideItemImage>
-                                    {item.image ? (
-                                      <img src={item.image} alt={item.syrupName} />
-                                    ) : (
-                                      <SlideItemPlaceholder>
-                                        <LocalBarRounded fontSize="inherit" />
-                                      </SlideItemPlaceholder>
-                                    )}
-                                  </SlideItemImage>
-                                  <SlideItemEnglishName>{item.syrupName}</SlideItemEnglishName>
-                                  <SlideItemKoreanName>{item.syrupNameKr}</SlideItemKoreanName>
-                                </SlideItem>
-                              ))}
-                            </SlideTrack>
-                          </SlideWrapper>
-                        </SlideContainer>
-                      </CategorySection>
+                      <CategorySlide
+                        title="시럽"
+                        items={data.ingredients.syrups}
+                        slideRef={syrupsRef}
+                        getName={(item) => item.syrupName}
+                        getNameKr={(item) => item.syrupNameKr}
+                        getImage={(item) => item.image}
+                        getId={(item) => item.id}
+                      />
                     )}
 
                     {/* 탄산/소다 */}
                     {data.ingredients.carbonated.length > 0 && (
-                      <CategorySection>
-                        <SlideCategoryTitle>탄산/소다</SlideCategoryTitle>
-                        <SlideContainer ref={carbonatedRef}>
-                          <SlideWrapper>
-                            <SlideTrack {...commonDragStyle(carbonatedRef)}>
-                              {data.ingredients.carbonated.map((item) => (
-                                <SlideItem 
-                                  key={item.id}
-                                  as={motion.div}
-                                  whileHover={{ scale: 1.05, y: -2 }}
-                                  whileTap={{ scale: 0.95 }}
-                                >
-                                  <SlideItemImage>
-                                    {item.image ? (
-                                      <img src={item.image} alt={item.carbonatedName} />
-                                    ) : (
-                                      <SlideItemPlaceholder>
-                                        <LocalBarRounded fontSize="inherit" />
-                                      </SlideItemPlaceholder>
-                                    )}
-                                  </SlideItemImage>
-                                  <SlideItemEnglishName>{item.carbonatedName}</SlideItemEnglishName>
-                                  <SlideItemKoreanName>{item.carbonatedNameKr}</SlideItemKoreanName>
-                                </SlideItem>
-                              ))}
-                            </SlideTrack>
-                          </SlideWrapper>
-                        </SlideContainer>
-                      </CategorySection>
+                      <CategorySlide
+                        title="탄산/소다"
+                        items={data.ingredients.carbonated}
+                        slideRef={carbonatedRef}
+                        getName={(item) => item.carbonatedName}
+                        getNameKr={(item) => item.carbonatedNameKr}
+                        getImage={(item) => item.image}
+                        getId={(item) => item.id}
+                      />
                     )}
 
                     {/* 유제품/크림 */}
                     {data.ingredients.dairy.length > 0 && (
-                      <CategorySection>
-                        <SlideCategoryTitle>유제품/크림</SlideCategoryTitle>
-                        <SlideContainer ref={dairyRef}>
-                          <SlideWrapper>
-                            <SlideTrack {...commonDragStyle(dairyRef)}>
-                              {data.ingredients.dairy.map((item) => (
-                                <SlideItem 
-                                  key={item.id}
-                                  as={motion.div}
-                                  whileHover={{ scale: 1.05, y: -2 }}
-                                  whileTap={{ scale: 0.95 }}
-                                >
-                                  <SlideItemImage>
-                                    {item.image ? (
-                                      <img src={item.image} alt={item.dairyName} />
-                                    ) : (
-                                      <SlideItemPlaceholder>
-                                        <LocalBarRounded fontSize="inherit" />
-                                      </SlideItemPlaceholder>
-                                    )}
-                                  </SlideItemImage>
-                                  <SlideItemEnglishName>{item.dairyName}</SlideItemEnglishName>
-                                  <SlideItemKoreanName>{item.dairyNameKr}</SlideItemKoreanName>
-                                </SlideItem>
-                              ))}
-                            </SlideTrack>
-                          </SlideWrapper>
-                        </SlideContainer>
-                      </CategorySection>
+                      <CategorySlide
+                        title="유제품/크림"
+                        items={data.ingredients.dairy}
+                        slideRef={dairyRef}
+                        getName={(item) => item.dairyName}
+                        getNameKr={(item) => item.dairyNameKr}
+                        getImage={(item) => item.image}
+                        getId={(item) => item.id}
+                      />
                     )}
 
                     {/* 가니쉬 */}
                     {data.ingredients.garnishes.length > 0 && (
-                      <CategorySection>
-                        <SlideCategoryTitle>가니쉬</SlideCategoryTitle>
-                        <SlideContainer ref={garnishesRef}>
-                          <SlideWrapper>
-                            <SlideTrack {...commonDragStyle(garnishesRef)}>
-                              {data.ingredients.garnishes.map((item) => (
-                                <SlideItem 
-                                  key={item.id}
-                                  as={motion.div}
-                                  whileHover={{ scale: 1.05, y: -2 }}
-                                  whileTap={{ scale: 0.95 }}
-                                >
-                                  <SlideItemImage>
-                                    {item.image ? (
-                                      <img src={item.image} alt={item.garnishName} />
-                                    ) : (
-                                      <SlideItemPlaceholder>
-                                        <LocalBarRounded fontSize="inherit" />
-                                      </SlideItemPlaceholder>
-                                    )}
-                                  </SlideItemImage>
-                                  <SlideItemEnglishName>{item.garnishName}</SlideItemEnglishName>
-                                  <SlideItemKoreanName>{item.garnishNameKr}</SlideItemKoreanName>
-                                </SlideItem>
-                              ))}
-                            </SlideTrack>
-                          </SlideWrapper>
-                        </SlideContainer>
-                      </CategorySection>
+                      <CategorySlide
+                        title="가니쉬"
+                        items={data.ingredients.garnishes}
+                        slideRef={garnishesRef}
+                        getName={(item) => item.garnishName}
+                        getNameKr={(item) => item.garnishNameKr}
+                        getImage={(item) => item.image}
+                        getId={(item) => item.id}
+                      />
                     )}
 
                     {/* 기타 */}
                     {data.ingredients.others.length > 0 && (
-                      <CategorySection>
-                        <SlideCategoryTitle>기타</SlideCategoryTitle>
-                        <SlideContainer ref={othersRef}>
-                          <SlideWrapper>
-                            <SlideTrack {...commonDragStyle(othersRef)}>
-                              {data.ingredients.others.map((item) => (
-                                <SlideItem 
-                                  key={item.id}
-                                  as={motion.div}
-                                  whileHover={{ scale: 1.05, y: -2 }}
-                                  whileTap={{ scale: 0.95 }}
-                                >
-                                  <SlideItemImage>
-                                    {item.image ? (
-                                      <img src={item.image} alt={item.otherIngredientName} />
-                                    ) : (
-                                      <SlideItemPlaceholder>
-                                        <LocalBarRounded fontSize="inherit" />
-                                      </SlideItemPlaceholder>
-                                    )}
-                                  </SlideItemImage>
-                                  <SlideItemEnglishName>{item.otherIngredientName}</SlideItemEnglishName>
-                                  <SlideItemKoreanName>{item.otherIngredientNameKr}</SlideItemKoreanName>
-                                </SlideItem>
-                              ))}
-                            </SlideTrack>
-                          </SlideWrapper>
-                        </SlideContainer>
-                      </CategorySection>
+                      <CategorySlide
+                        title="기타"
+                        items={data.ingredients.others}
+                        slideRef={othersRef}
+                        getName={(item) => item.otherIngredientName}
+                        getNameKr={(item) => item.otherIngredientNameKr}
+                        getImage={(item) => item.image}
+                        getId={(item) => item.id}
+                      />
                     )}
                   </IngredientsSection>
                 </motion.div>
@@ -407,101 +246,44 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                   <TechniquesSection>
                     {/* 도구/기물 */}
                     {data.tools.length > 0 && (
-                      <CategorySection className="technique">
-                        <SlideCategoryTitle className="technique">도구/기물</SlideCategoryTitle>
-                        <SlideContainer ref={toolsRef}>
-                          <SlideWrapper>
-                            <SlideTrack {...commonDragStyle(toolsRef)}>
-                              {data.tools.map((item) => (
-                                <SlideItem 
-                                  key={item.id}
-                                  as={motion.div}
-                                  whileHover={{ scale: 1.05, y: -2 }}
-                                  whileTap={{ scale: 0.95 }}
-                                >
-                                  <SlideItemImage>
-                                    {item.image ? (
-                                      <img src={item.image} alt={item.toolName} />
-                                    ) : (
-                                      <SlideItemPlaceholder>
-                                        <LocalBarRounded fontSize="inherit" />
-                                      </SlideItemPlaceholder>
-                                    )}
-                                  </SlideItemImage>
-                                  <SlideItemEnglishName>{item.toolName}</SlideItemEnglishName>
-                                  <SlideItemKoreanName>{item.toolNameKr}</SlideItemKoreanName>
-                                </SlideItem>
-                              ))}
-                            </SlideTrack>
-                          </SlideWrapper>
-                        </SlideContainer>
-                      </CategorySection>
+                      <CategorySlide
+                        title="도구/기물"
+                        items={data.tools}
+                        slideRef={toolsRef}
+                        getName={(item) => item.toolName}
+                        getNameKr={(item) => item.toolNameKr}
+                        getImage={(item) => item.image}
+                        getId={(item) => item.id}
+                        className="technique"
+                      />
                     )}
 
                     {/* 사용 잔 */}
                     {data.glassware.length > 0 && (
-                      <CategorySection className="technique">
-                        <SlideCategoryTitle className="technique">사용 잔</SlideCategoryTitle>
-                        <SlideContainer ref={glasswareRef}>
-                          <SlideWrapper>
-                            <SlideTrack {...commonDragStyle(glasswareRef)}>
-                              {data.glassware.map((item) => (
-                                <SlideItem 
-                                  key={item.id}
-                                  as={motion.div}
-                                  whileHover={{ scale: 1.05, y: -2 }}
-                                  whileTap={{ scale: 0.95 }}
-                                >
-                                  <SlideItemImage>
-                                    {item.image ? (
-                                      <img src={item.image} alt={item.glassName} />
-                                    ) : (
-                                      <SlideItemPlaceholder>
-                                        <LocalBarRounded fontSize="inherit" />
-                                      </SlideItemPlaceholder>
-                                    )}
-                                  </SlideItemImage>
-                                  <SlideItemEnglishName>{item.glassName}</SlideItemEnglishName>
-                                  <SlideItemKoreanName>{item.glassNameKr}</SlideItemKoreanName>
-                                </SlideItem>
-                              ))}
-                            </SlideTrack>
-                          </SlideWrapper>
-                        </SlideContainer>
-                      </CategorySection>
+                      <CategorySlide
+                        title="사용 잔"
+                        items={data.glassware}
+                        slideRef={glasswareRef}
+                        getName={(item) => item.glassName}
+                        getNameKr={(item) => item.glassNameKr}
+                        getImage={(item) => item.image}
+                        getId={(item) => item.id}
+                        className="technique"
+                      />
                     )}
 
                     {/* 제조 기법 */}
                     {data.techniques.length > 0 && (
-                      <CategorySection className="technique">
-                        <SlideCategoryTitle className="technique">제조 기법</SlideCategoryTitle>
-                        <SlideContainer ref={methodsRef}>
-                          <SlideWrapper>
-                            <SlideTrack {...commonDragStyle(methodsRef)}>
-                              {data.techniques.map((item) => (
-                                <SlideItem 
-                                  key={item.id}
-                                  as={motion.div}
-                                  whileHover={{ scale: 1.05, y: -2 }}
-                                  whileTap={{ scale: 0.95 }}
-                                >
-                                  <SlideItemImage>
-                                    {item.image ? (
-                                      <img src={item.image} alt={item.techniqueName} />
-                                    ) : (
-                                      <SlideItemPlaceholder>
-                                        <LocalBarRounded fontSize="inherit" />
-                                      </SlideItemPlaceholder>
-                                    )}
-                                  </SlideItemImage>
-                                  <SlideItemEnglishName>{item.techniqueName}</SlideItemEnglishName>
-                                  <SlideItemKoreanName>{item.techniqueNameKr}</SlideItemKoreanName>
-                                </SlideItem>
-                              ))}
-                            </SlideTrack>
-                          </SlideWrapper>
-                        </SlideContainer>
-                      </CategorySection>
+                      <CategorySlide
+                        title="제조 기법"
+                        items={data.techniques}
+                        slideRef={methodsRef}
+                        getName={(item) => item.techniqueName}
+                        getNameKr={(item) => item.techniqueNameKr}
+                        getImage={(item) => item.image}
+                        getId={(item) => item.id}
+                        className="technique"
+                      />
                     )}
                   </TechniquesSection>
                 </motion.div>
@@ -1104,178 +886,6 @@ const TechniquesSection = styled(Box)`
     padding: 24px;
     margin-bottom: 24px;
     border: 1px solid rgba(33, 150, 243, 0.2);
-  }
-`;
-
-const SlideContainer = styled(Box)`
-  && {
-    margin-top: 16px;
-    position: relative;
-  }
-`;
-
-const SlideWrapper = styled(Box)`
-  && {
-    overflow: hidden; /* 스크롤바 완전 제거 */
-    border-radius: 12px;
-    padding: 8px 0;
-    
-    /* 모든 스크롤바 숨기기 */
-    &::-webkit-scrollbar {
-      display: none;
-    }
-    
-    /* Firefox */
-    scrollbar-width: none;
-    
-    /* 모바일 터치 스크롤 개선 */
-    -webkit-overflow-scrolling: touch;
-  }
-`;
-
-const SlideTrack = styled(Box)`
-  && {
-    display: flex;
-    gap: 16px;
-    padding: 0 16px;
-    width: max-content;
-  }
-`;
-
-const SlideItem = styled(Box)`
-  && {
-    min-width: 140px;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 12px;
-    padding: 16px;
-    text-align: center;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
-    
-    &:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    }
-    
-    @media (max-width: 600px) {
-      min-width: 120px;
-      padding: 12px;
-    }
-  }
-`;
-
-const SlideItemImage = styled(Box)`
-  && {
-    width: 80px;
-    height: 80px;
-    border-radius: 12px;
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 12px;
-      pointer-events: none; /* 이미지에서 드래그 방해 방지 */
-      user-select: none;
-    }
-    
-    @media (max-width: 600px) {
-      width: 60px;
-      height: 60px;
-      margin-bottom: 8px;
-    }
-  }
-`;
-
-const SlideItemPlaceholder = styled(Box)`
-  && {
-    width: 32px;
-    height: 32px;
-    color: #adb5bd;
-    
-    @media (max-width: 600px) {
-      width: 24px;
-      height: 24px;
-    }
-  }
-`;
-
-const SlideItemEnglishName = styled(Typography)`
-  && {
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: #495057;
-    margin-bottom: 4px;
-    line-height: 1.2;
-    
-    @media (max-width: 600px) {
-      font-size: 0.75rem;
-    }
-  }
-`;
-
-const SlideItemKoreanName = styled(Typography)`
-  && {
-    font-size: 0.75rem;
-    color: #6c757d;
-    line-height: 1.2;
-    
-    @media (max-width: 600px) {
-      font-size: 0.7rem;
-    }
-  }
-`;
-
-const SlideCategoryTitle = styled(Typography)`
-  && {
-    font-size: 1rem;
-    font-weight: 700;
-    color: #2e7d32;
-    margin-bottom: 8px; /* 기존 16px에서 8px로 축소 */
-    padding: 8px 16px;
-    background: rgba(255, 255, 255, 0.8);
-    border-radius: 20px;
-    display: inline-block;
-    border: 1px solid rgba(76, 175, 80, 0.3);
-    
-    &.technique {
-      color: #1565c0;
-      border-color: rgba(33, 150, 243, 0.3);
-    }
-  }
-`;
-
-// 카테고리 구분을 위한 새로운 컨테이너 스타일
-const CategorySection = styled(Box)`
-  && {
-    margin-bottom: 32px; /* 카테고리 간 간격 */
-    position: relative;
-    
-    &:not(:last-child)::after {
-      content: '';
-      position: absolute;
-      bottom: -16px;
-      left: 24px; /* 카테고리 제목 위치에 맞춰 시작 */
-      right: 10%;
-      height: 2px;
-      background: linear-gradient(90deg, rgba(76, 175, 80, 1) 0%, rgba(76, 175, 80, 0.8) 50%, rgba(76, 175, 80, 0.3) 100%);
-      border-radius: 1px;
-      box-shadow: 0 1px 3px rgba(76, 175, 80, 0.3);
-    }
-    
-    /* 기법 섹션용 구분선 */
-    &.technique:not(:last-child)::after {
-      background: linear-gradient(90deg, rgba(33, 150, 243, 1) 0%, rgba(33, 150, 243, 0.8) 50%, rgba(33, 150, 243, 0.3) 100%);
-      box-shadow: 0 1px 3px rgba(33, 150, 243, 0.3);
-    }
   }
 `;
 
