@@ -18,10 +18,10 @@ import {
 import CocktailDetailModal from "../component/CocktailDetailModal";
 import useReadCocktail from "../service/useReadCocktail.tsx";
 import LoadingOverlay from "../../common/component/LoadingOverlay";
-import SearchLoadingOverlay from "../component/SearchLoadingOverlay.tsx";
 import { showErrorAlert } from "../../common/utils/AlertUtils";
 import useReadCocktailList from "../service/useReadCocktailList.tsx";
 import CocktailListComponent from "../component/CocktailListComponent.tsx";
+import SearchLoadingOverlay from "../../common/component/SearchLoadingOverlay.tsx";
 
 const CocktailListPage: React.FC = () => {
   /*

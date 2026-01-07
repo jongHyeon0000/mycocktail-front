@@ -20,7 +20,7 @@ import useReadSpiritProductList from "../service/useReadSpiritProductList.tsx";
 import useReadSpiritProduct from "../service/useReadSpiritProduct.tsx";
 import {showErrorAlert} from "../../common/utils/AlertUtils.ts";
 import LoadingOverlay from "../../common/component/LoadingOverlay.tsx";
-import SearchLoadingOverlay from "../component/SearchLoadingOverlay.tsx";
+import SearchLoadingOverlay from "../../common/component/SearchLoadingOverlay.tsx";
 
 const SpiritProductListPage: React.FC = () => {
   /*

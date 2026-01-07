@@ -181,7 +181,7 @@ const GNB: React.FC = () => {
             sx={{ p: 0 }}
           >
             <Avatar 
-              src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&h=200&fit=crop"
+              src="https://yt3.googleusercontent.com/e3_TBkHSBwuzKRSkG1Uv5uGLiHmLUBMVogjWD35MJL7Fi_iccr8DonU6q_1XSmO4djEY9Cunabo=s900-c-k-c0x00ffffff-no-rj"
               sx={{ 
                 width: { xs: 36, sm: 40 }, 
                 height: { xs: 36, sm: 40 },
@@ -251,12 +251,12 @@ const GNB: React.FC = () => {
               <Box sx={{ p: 3, height: "100vh", display: "flex", flexDirection: "column", boxSizing: "border-box" }}>
                 {/* 프로필 이미지 */}
                 <Box sx={{ display: "flex", justifyContent: "center", mb: 3 }}>
-                  <ProfileImage src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&h=200&fit=crop" />
+                  <ProfileImage src="https://yt3.googleusercontent.com/e3_TBkHSBwuzKRSkG1Uv5uGLiHmLUBMVogjWD35MJL7Fi_iccr8DonU6q_1XSmO4djEY9Cunabo=s900-c-k-c0x00ffffff-no-rj" />
                 </Box>
 
                 {/* 사용자명 */}
                 <UserName variant="h6">
-                  이름 테스트
+                  아야츠노 유니
                 </UserName>
 
                 {/* 가입일 */}
@@ -272,7 +272,7 @@ const GNB: React.FC = () => {
                     자기소개
                   </IntroTitle>
                   <IntroText variant="body2">
-                    칵테일을 사랑하는 홈텐더입니다. 🍸
+                    아야츠노 유니입니다. 🍸
                     주말마다 새로운 레시피에 도전하고 있어요!
                   </IntroText>
                 </Box>
