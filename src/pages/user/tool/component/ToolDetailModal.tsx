@@ -56,11 +56,6 @@ const ToolDetailModal: React.FC<ToolDetailModalProps> = ({
                     <CategoryChip label={getToolCategoryKorean(data.toolCategory)} size="small" />
                   </InfoCard>
                 </InfoGrid>
-
-                {/* 상단 한줄 설명 */}
-                <ProfileDescription>
-                  {data.profileNotes}
-                </ProfileDescription>
               </HeaderSection>
 
               {/* 콘텐츠 섹션 */}
@@ -262,21 +257,6 @@ const CategoryChip = styled(Chip)`
     color: white;
     font-weight: 600;
     border-radius: 20px;
-  }
-`;
-
-const ProfileDescription = styled(Typography)`
-  && {
-    font-size: 1.125rem;
-    line-height: 1.6;
-    color: #34495e;
-    text-align: center;
-    font-style: italic;
-    background: rgba(255, 255, 255, 0.6);
-    padding: 20px;
-    border-radius: 16px;
-    border-left: 4px solid #2C3E50;
-    margin-bottom: 32px;
   }
 `;
 
