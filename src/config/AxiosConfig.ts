@@ -897,6 +897,149 @@ if(USE_MOCK) {
   });
 
   /*
+ * Tool Detail (개별 조회)
+ * */
+  mock.onGet(/\/api\/tool\/\d+/).reply((config) => {
+    const toolId = parseInt(config.url?.split('/').pop() || '1');
+
+    // Tool 상세 데이터 맵
+    const toolDataMap: { [key: number]: any } = {
+      1: {
+        toolId: 1,
+        toolName: "Boston Shaker",
+        toolNameKr: "보스턴 셰이커",
+        image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=300&h=200&fit=crop",
+        profileNote: "프로 바텐더들이 가장 선호하는 클래식한 두 피스 셰이커",
+        historyNote: "<p>보스턴 셰이커는 19세기 미국 보스턴에서 유래한 전통적인 칵테일 도구입니다.</p><p>금속 틴과 유리 틴의 조합으로 시작되었으며, 현대에는 두 개의 금속 틴을 사용하는 버전도 인기입니다.</p>",
+        notes: "<p>보스턴 셰이커는 금속 틴과 유리 틴으로 구성된 두 피스 구조의 셰이커입니다. 코블러 셰이커와 달리 내장 스트레이너가 없어 별도의 스트레이너가 필요하지만, 더 빠르고 효율적인 작업이 가능합니다.</p><p>금속 틴은 내구성이 뛰어나고 유리 틴은 재료의 색상과 양을 확인할 수 있어 실용적입니다. 대용량 제작에도 적합하여 바쁜 바 환경에서 특히 유용합니다.</p>",
+        whenToUseNotes: "<p><strong>셰이킹이 필요한 칵테일 제작 시 사용:</strong></p><ul><li>시트러스 주스가 포함된 칵테일 (사워류)</li><li>크림이나 계란이 들어간 칵테일</li><li>시럽이나 리큐어가 포함된 복합적인 칵테일</li><li>재료들을 강하게 혼합해야 하는 경우</li></ul><p><strong>사용하지 않는 경우:</strong></p><ul><li>스피릿만으로 구성된 칵테일 (마티니, 맨해튼 등)</li><li>스털링으로 만드는 칵테일</li><li>탄산이 들어간 칵테일</li></ul>",
+        alternativeTools: "<p><strong>코블러 셰이커:</strong> 내장 스트레이너가 있는 3피스 셰이커로 초보자에게 사용하기 쉽지만, 속도와 효율성에서는 보스턴 셰이커에 비해 떨어집니다.</p><p><strong>프렌치 셰이커:</strong> 두 개의 금속 틴으로 구성된 셰이커로, 보스턴 셰이커와 유사하지만 분리가 더 어려울 수 있습니다.</p>",
+        personalNotes: "처음 바텐딩을 시작할 때는 코블러 셰이커를 사용했지만, 보스턴 셰이커로 바꾼 후 작업 속도가 눈에 띄게 빨라졌습니다. 익숙해지기까지 시간이 걸리지만, 일단 익숙해지면 절대 코블러로 돌아갈 수 없습니다.",
+        toolCategory: "shaker" as const,
+        createAt: "2024-01-15",
+        updatedAt: new Date().toISOString().split('T')[0],
+        availableCocktails: [
+          { id: 1, cocktailName: "Whiskey Sour", cocktailNameKr: "위스키 사워", image: "https://via.placeholder.com/80x80/D2691E/FFFFFF?text=Sour" },
+          { id: 2, cocktailName: "Margarita", cocktailNameKr: "마가리타", image: "https://via.placeholder.com/80x80/DAA520/000000?text=Margarita" },
+          { id: 3, cocktailName: "Daiquiri", cocktailNameKr: "다이키리", image: "https://via.placeholder.com/80x80/8B0000/FFFFFF?text=Daiquiri" },
+          { id: 4, cocktailName: "Cosmopolitan", cocktailNameKr: "코스모폴리탄", image: "https://via.placeholder.com/80x80/C0C0C0/000000?text=Cosmo" }
+        ]
+      },
+      2: {
+        toolId: 2,
+        toolName: "Hawthorne Strainer",
+        toolNameKr: "호손 스트레이너",
+        image: "https://images.unsplash.com/photo-1544145945-f90425340c7e?w=300&h=200&fit=crop",
+        profileNote: "셰이킹한 칵테일에서 얼음과 재료를 걸러내는 필수 도구",
+        historyNote: "<p>호손 스트레이너는 1892년 미국 특허청에 처음 등록된 칵테일 도구입니다.</p><p>이름은 발명자나 제조사에서 유래했다는 설이 있으며, 특징적인 스프링 코일 디자인으로 100년 이상 변함없이 사용되고 있습니다.</p>",
+        notes: "<p>호손 스트레이너는 스프링이 달린 스트레이너로, 셰이킹이나 스털링 후 칵테일을 잔에 따를 때 얼음과 고형 재료를 걸러내는 데 사용됩니다.</p><p>특징적인 스프링 코일이 용기의 가장자리에 밀착되어 효과적으로 여과 작용을 합니다. 대부분의 바에서 필수적으로 사용하는 기본 도구 중 하나입니다.</p>",
+        whenToUseNotes: "<p><strong>사용하는 경우:</strong></p><ul><li>셰이킹한 칵테일을 잔에 따를 때</li><li>스털링한 칵테일에서 얼음을 걸러낼 때</li><li>과일 조각이나 허브가 들어간 칵테일 여과</li><li>더블 스트레이닝의 첫 번째 단계</li></ul><p><strong>주의사항:</strong></p><ul><li>미세한 찌꺼기까지 걸러내려면 파인 스트레이너와 함께 사용</li><li>크러쉬드 아이스 사용 시에는 특히 필요</li></ul>",
+        alternativeTools: "<p><strong>줄리엣 스트레이너:</strong> 구멍이 뚫린 평평한 스트레이너로, 스털링 전용으로 사용되며 호손 스트레이너보다 여과 능력이 떨어집니다.</p><p><strong>파인 스트레이너:</strong> 더블 스트레이닝 시 함께 사용하는 미세한 망 스트레이너로, 단독 사용 시에는 효율성이 떨어집니다.</p>",
+        personalNotes: "더블 스트레이닝을 처음 배웠을 때 칵테일의 질이 확연히 달라지는 것을 느꼈습니다. 호손 스트레이너 하나만으로도 충분하지만, 파인 스트레이너와 함께 사용하면 정말 깨끗하고 부드러운 칵테일을 만들 수 있습니다.",
+        toolCategory: "strainer" as const,
+        createAt: "2024-01-20",
+        updatedAt: new Date().toISOString().split('T')[0],
+        availableCocktails: [
+          { id: 1, cocktailName: "Whiskey Sour", cocktailNameKr: "위스키 사워", image: "https://via.placeholder.com/80x80/D2691E/FFFFFF?text=Sour" },
+          { id: 2, cocktailName: "Margarita", cocktailNameKr: "마가리타", image: "https://via.placeholder.com/80x80/DAA520/000000?text=Margarita" },
+          { id: 5, cocktailName: "Clover Club", cocktailNameKr: "클로버 클럽", image: "https://via.placeholder.com/80x80/FF69B4/FFFFFF?text=Clover" }
+        ]
+      },
+      3: {
+        toolId: 3,
+        toolName: "Jigger",
+        toolNameKr: "지거",
+        image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=300&h=200&fit=crop",
+        profileNote: "정확한 양의 술과 재료를 계량하기 위한 필수 도구",
+        historyNote: "<p>지거라는 이름은 1800년대 후반 미국에서 유래했으며, 당시 1.5온스 측정 단위를 의미했습니다.</p><p>초기에는 단순한 컵 형태였으나, 현대의 더블 지거는 양쪽 끝에 다른 용량을 가진 형태로 발전했습니다.</p>",
+        notes: "<p>지거는 정확한 레시피 구현을 위해 술과 재료를 정밀하게 계량하는 도구입니다. 일반적으로 양쪽 끝이 다른 용량을 가지고 있어 다양한 레시피에 대응할 수 있습니다.</p><p>가장 일반적인 조합은 1oz(30ml)와 0.5oz(15ml)이며, 일부는 1.5oz와 0.75oz 조합도 있습니다. 정확한 계량은 일관된 맛의 칵테일을 만드는 핵심입니다.</p>",
+        whenToUseNotes: "<p><strong>항상 사용해야 하는 경우:</strong></p><ul><li>모든 칵테일 제작 시 재료 계량</li><li>레시피 테스트 및 개발</li><li>일관된 맛 유지가 필요한 상업적 환경</li><li>새로운 레시피 학습 시</li></ul><p><strong>특히 중요한 상황:</strong></p><ul><li>강한 술이 들어가는 칵테일</li><li>밸런스가 중요한 클래식 칵테일</li><li>비싼 재료를 사용하는 경우</li></ul>",
+        alternativeTools: "<p><strong>바 스푼:</strong> 1 바 스푼 = 약 0.125oz(3.7ml)로 소량 계량에 사용할 수 있지만 정확도가 떨어집니다.</p><p><strong>계량컵:</strong> 큰 용량 계량에는 유용하지만 칵테일 제작에는 부정확하고 비효율적입니다.</p><p><strong>푸어러 카운트:</strong> 숙련된 바텐더의 방법이지만 정확도가 떨어지고 일관성을 보장하기 어렵습니다.</p>",
+        personalNotes: "초보 시절 프리푸어로 칵테일을 만들다가 실패를 많이 경험했습니다. 지거를 사용하기 시작한 후 칵테일의 일관성이 확보되었고, 이제는 숙련되었지만 여전히 지거를 사용합니다. 정확성은 프로의 기본입니다.",
+        toolCategory: "measuring" as const,
+        createAt: "2024-02-01",
+        updatedAt: new Date().toISOString().split('T')[0],
+        availableCocktails: [
+          { id: 1, cocktailName: "Whiskey Sour", cocktailNameKr: "위스키 사워", image: "https://via.placeholder.com/80x80/D2691E/FFFFFF?text=Sour" },
+          { id: 2, cocktailName: "Margarita", cocktailNameKr: "마가리타", image: "https://via.placeholder.com/80x80/DAA520/000000?text=Margarita" },
+          { id: 3, cocktailName: "Daiquiri", cocktailNameKr: "다이키리", image: "https://via.placeholder.com/80x80/8B0000/FFFFFF?text=Daiquiri" },
+          { id: 6, cocktailName: "Negroni", cocktailNameKr: "네그로니", image: "https://via.placeholder.com/80x80/4169E1/FFFFFF?text=Negroni" }
+        ]
+      },
+      4: {
+        toolId: 4,
+        toolName: "Bar Spoon",
+        toolNameKr: "바 스푼",
+        image: "https://images.unsplash.com/photo-1544145945-f90425340c7e?w=300&h=200&fit=crop",
+        profileNote: "스털링과 가니쉬 작업을 위한 긴 손잡이 스푼",
+        historyNote: "<p>바 스푼은 19세기 유럽의 약국에서 사용하던 긴 스푼에서 유래했습니다.</p><p>약을 혼합하는 도구였던 것이 칵테일 문화의 발전과 함께 바텐더의 필수 도구가 되었으며, 특유의 트위스트 핸들은 효율적인 스털링을 위해 디자인되었습니다.</p>",
+        notes: "<p>바 스푼은 긴 손잡이를 가진 스푼으로 칵테일을 저어 혼합하거나 가니쉬 작업에 사용합니다. 특징적인 트위스트된 손잡이는 효율적인 스털링을 위해 설계되었습니다.</p><p>길이는 보통 30-40cm이며, 끝부분이 다양한 형태(포크, 머들러, 플랫)로 되어 있어 다목적으로 사용 가능합니다. 스털링뿐만 아니라 레이어링, 가니쉬 배치 등에도 활용됩니다.</p>",
+        whenToUseNotes: "<p><strong>스털링이 필요한 칵테일:</strong></p><ul><li>스피릿 베이스 칵테일 (마티니, 맨해튼, 네그로니)</li><li>온더락 칵테일 (올드 패션드)</li><li>아이스가 많이 들어간 칵테일</li></ul><p><strong>가니쉬 작업:</strong></p><ul><li>체리나 올리브 올리기</li><li>레몬 트위스트 배치</li><li>레이어링 칵테일 제작</li></ul><p><strong>기타 용도:</strong></p><ul><li>소량 재료 계량 (1 바스푼 = 3.7ml)</li><li>재료 혼합 확인</li></ul>",
+        alternativeTools: "<p><strong>일반 스푼:</strong> 길이가 짧아 깊은 글라스에서 사용하기 어렵고 효율성이 떨어집니다.</p><p><strong>젓가락:</strong> 임시 대용으로 사용 가능하지만 스털링 효과가 제한적입니다.</p><p><strong>나이프:</strong> 가니쉬 작업에는 사용할 수 있지만 스털링에는 부적합합니다.</p>",
+        personalNotes: "좋은 바 스푼을 찾기까지 여러 개를 시도했습니다. 무게감과 밸런스가 중요한데, 현재 사용하는 일본산 바 스푼은 손에 완벽하게 맞고 스털링이 정말 부드럽습니다. 도구에 대한 투자는 절대 아깝지 않습니다.",
+        toolCategory: "mixing" as const,
+        createAt: "2024-02-10",
+        updatedAt: new Date().toISOString().split('T')[0],
+        availableCocktails: [
+          { id: 6, cocktailName: "Negroni", cocktailNameKr: "네그로니", image: "https://via.placeholder.com/80x80/4169E1/FFFFFF?text=Negroni" },
+          { id: 7, cocktailName: "Manhattan", cocktailNameKr: "맨해튼", image: "https://via.placeholder.com/80x80/8B4513/FFFFFF?text=Manhattan" },
+          { id: 8, cocktailName: "Martini", cocktailNameKr: "마티니", image: "https://via.placeholder.com/80x80/C0C0C0/000000?text=Martini" },
+          { id: 9, cocktailName: "Old Fashioned", cocktailNameKr: "올드 패션드", image: "https://via.placeholder.com/80x80/D2691E/FFFFFF?text=Old" }
+        ]
+      },
+      5: {
+        toolId: 5,
+        toolName: "Muddler",
+        toolNameKr: "머들러",
+        image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=300&h=200&fit=crop",
+        profileNote: "과일과 허브를 으깨어 에센셜 오일을 추출하는 도구",
+        historyNote: "<p>머들러는 약국에서 약재를 으깨던 도구인 페슬(pestle)에서 유래했습니다.</p><p>19세기 칵테일 문화가 발전하면서 과일과 허브를 으깨는 전용 도구로 자리잡았으며, 특히 모히또의 인기와 함께 필수 도구가 되었습니다.</p>",
+        notes: "<p>머들러는 과일이나 허브를 으깨어 칵테일에 풍미를 더할 때 사용하는 도구입니다. 주로 목재나 스테인리스 스틸로 제작되며, 끝부분이 평평하게 되어 있어 효과적으로 재료를 으깰 수 있습니다.</p><p>목재 머들러는 허브에 부드럽고, 스테인리스 스틸은 과일에 효과적입니다. 적절한 압력으로 사용해야 쓴맛을 피할 수 있습니다.</p>",
+        whenToUseNotes: "<p><strong>허브류 (부드럽게):</strong></p><ul><li>모히또 - 민트 잎</li><li>바질 스매시 - 바질 잎</li><li>로즈마리 칵테일 - 로즈마리</li></ul><p><strong>과일류 (충분히):</strong></p><ul><li>카이피리냐 - 라임</li><li>올드 패션드 - 오렌지</li><li>위스키 스매시 - 레몬</li></ul><p><strong>주의사항:</strong></p><ul><li>허브는 과도하게 으깨면 쓴맛 발생</li><li>과일은 충분히 으깨야 과즙 추출</li><li>글라스 바닥에서만 작업</li></ul>",
+        alternativeTools: "<p><strong>바 스푼 끝:</strong> 일부 바스푼 끝이 머들러 형태로 되어 있어 소량 작업에 사용 가능하지만 효율성이 떨어집니다.</p><p><strong>나무 스푼:</strong> 임시 대용으로 사용할 수 있지만 길이와 효율성에서 제한적입니다.</p><p><strong>포크:</strong> 라임 등 작은 과일에는 사용 가능하지만 허브류에는 부적합합니다.</p>",
+        personalNotes: "민트를 처음 머들링할 때 너무 세게 으깨서 쓴맛이 났던 기억이 있습니다. 허브는 '프레스'하는 느낌으로 가볍게, 과일은 충분히 으깨는 것이 핵심입니다. 재료마다 다른 압력을 사용하는 것을 배우는 데 시간이 걸렸습니다.",
+        toolCategory: "muddling" as const,
+        createAt: "2024-02-15",
+        updatedAt: new Date().toISOString().split('T')[0],
+        availableCocktails: [
+          { id: 10, cocktailName: "Mojito", cocktailNameKr: "모히또", image: "https://via.placeholder.com/80x80/98FB98/000000?text=Mojito" },
+          { id: 11, cocktailName: "Caipirinha", cocktailNameKr: "카이피리냐", image: "https://via.placeholder.com/80x80/32CD32/FFFFFF?text=Caipirinha" },
+          { id: 9, cocktailName: "Old Fashioned", cocktailNameKr: "올드 패션드", image: "https://via.placeholder.com/80x80/D2691E/FFFFFF?text=Old" }
+        ]
+      },
+      6: {
+        toolId: 6,
+        toolName: "Citrus Peeler",
+        toolNameKr: "시트러스 필러",
+        image: "https://images.unsplash.com/photo-1544145945-f90425340c7e?w=300&h=200&fit=crop",
+        profileNote: "시트러스 껍질을 얇고 균일하게 벗겨 가니쉬를 만드는 도구",
+        historyNote: "<p>시트러스 필러는 20세기 초 칵테일 문화가 정교해지면서 개발된 전문 도구입니다.</p><p>초기에는 파링 나이프를 사용했으나, 일정한 두께와 폭의 껍질을 만들기 위해 전용 도구가 만들어졌습니다.</p>",
+        notes: "<p>시트러스 필러는 레몬, 라임, 오렌지 등의 껍질을 얇고 균일하게 벗겨 아름다운 트위스트 가니쉬를 만들 수 있게 해주는 전문 도구입니다.</p><p>날카로운 블레이드가 과일의 표면만을 얇게 벗겨내어 쓴맛이 나는 흰 부분(피스)을 피할 수 있습니다. 일정한 폭과 두께로 껍질을 벗길 수 있어 전문적인 가니쉬 제작이 가능합니다.</p>",
+        whenToUseNotes: "<p><strong>트위스트 가니쉬가 필요한 칵테일:</strong></p><ul><li>마티니 - 레몬 트위스트</li><li>올드 패션드 - 오렌지 트위스트</li><li>네그로니 - 오렌지 필</li><li>사이드카 - 레몬 트위스트</li></ul><p><strong>작업 팁:</strong></p><ul><li>신선하고 껍질이 두꺼운 과일 선택</li><li>일정한 압력으로 길게 벗기기</li><li>사용 직전에 껍질 제작하여 신선도 유지</li></ul>",
+        alternativeTools: "<p><strong>파링 나이프:</strong> 작은 날로 껍질을 벗길 수 있지만 일정한 두께를 유지하기 어렵고 기술이 필요합니다.</p><p><strong>감자깎이:</strong> 넓은 껍질을 만들 수 있지만 두께 조절이 어렵고 모양이 불규칙합니다.</p><p><strong>제스터:</strong> 잘게 간 제스트는 만들 수 있지만 트위스트 가니쉬용 긴 껍질은 만들 수 없습니다.</p>",
+        personalNotes: "파링 나이프로 트위스트를 만들다가 손을 다친 적이 있습니다. 시트러스 필러를 사용한 후로는 안전하고 일관된 가니쉬를 만들 수 있게 되었습니다. 특히 손님 앞에서 작업할 때 전문성을 보여줄 수 있는 도구입니다.",
+        toolCategory: "garnish" as const,
+        createAt: "2024-02-20",
+        updatedAt: new Date().toISOString().split('T')[0],
+        availableCocktails: [
+          { id: 8, cocktailName: "Martini", cocktailNameKr: "마티니", image: "https://via.placeholder.com/80x80/C0C0C0/000000?text=Martini" },
+          { id: 9, cocktailName: "Old Fashioned", cocktailNameKr: "올드 패션드", image: "https://via.placeholder.com/80x80/D2691E/FFFFFF?text=Old" },
+          { id: 6, cocktailName: "Negroni", cocktailNameKr: "네그로니", image: "https://via.placeholder.com/80x80/4169E1/FFFFFF?text=Negroni" },
+          { id: 12, cocktailName: "Sidecar", cocktailNameKr: "사이드카", image: "https://via.placeholder.com/80x80/FF6B6B/FFFFFF?text=Sidecar" }
+        ]
+      }
+    };
+
+    const toolData = toolDataMap[toolId];
+
+    if (!toolData) {
+      return [404, { error: 'Tool not found' }];
+    }
+
+    return [200, { data: toolData }];
+  });
+
+  /*
   * 스피릿 Product Detail (개별 조회)
   * */
   mock.onGet(/\/api\/spirit-product\/\d+/).reply((config) => {
