@@ -12,9 +12,9 @@ import ToolDetailModal from "../component/ToolDetailModal.tsx";
 import useReadToolList from "../service/useReadToolList.tsx";
 import useReadTool from "../service/useReadTool.tsx";
 import {showErrorAlert} from "../../common/utils/AlertUtils.ts";
-import LoadingOverlay from "../../common/component/LoadingOverlay.tsx";
+import LoadingOverlay from "../../common/component/loading/LoadingOverlay.tsx";
 import type {TOOL_CATEGORY_MAP_KEY} from "../common/ToolUtils.ts";
-import SearchLoadingOverlay from "../../common/component/SearchLoadingOverlay.tsx";
+import SearchLoadingOverlay from "../../common/component/loading/SearchLoadingOverlay.tsx";
 import styled from "styled-components";
 
 const ToolListPage: React.FC = () => {

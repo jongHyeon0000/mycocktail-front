@@ -12,8 +12,8 @@ import SpiritProductDetailModal from "../component/SpiritProductDetailModal.tsx"
 import useReadSpiritProductList from "../service/useReadSpiritProductList.tsx";
 import useReadSpiritProduct from "../service/useReadSpiritProduct.tsx";
 import {showErrorAlert} from "../../common/utils/AlertUtils.ts";
-import LoadingOverlay from "../../common/component/LoadingOverlay.tsx";
-import SearchLoadingOverlay from "../../common/component/SearchLoadingOverlay.tsx";
+import LoadingOverlay from "../../common/component/loading/LoadingOverlay.tsx";
+import SearchLoadingOverlay from "../../common/component/loading/SearchLoadingOverlay.tsx";
 import styled from "styled-components";
 
 const SpiritProductListPage: React.FC = () => {

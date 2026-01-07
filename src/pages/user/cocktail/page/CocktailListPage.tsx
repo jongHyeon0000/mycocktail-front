@@ -10,11 +10,11 @@ import {
 } from "@mui/material";
 import CocktailDetailModal from "../component/CocktailDetailModal";
 import useReadCocktail from "../service/useReadCocktail.tsx";
-import LoadingOverlay from "../../common/component/LoadingOverlay";
+import LoadingOverlay from "../../common/component/loading/LoadingOverlay.tsx";
 import { showErrorAlert } from "../../common/utils/AlertUtils";
 import useReadCocktailList from "../service/useReadCocktailList.tsx";
 import CocktailListComponent from "../component/CocktailListComponent.tsx";
-import SearchLoadingOverlay from "../../common/component/SearchLoadingOverlay.tsx";
+import SearchLoadingOverlay from "../../common/component/loading/SearchLoadingOverlay.tsx";
 import styled from "styled-components";
 
 const CocktailListPage: React.FC = () => {
