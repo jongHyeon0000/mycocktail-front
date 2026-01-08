@@ -11,8 +11,8 @@ import TechniqueDetailModal from "../component/TechniqueDetailModal.tsx";
 
 const TechniqueListPage: React.FC = () => {
   /*
-* 검색 카테고리 (최신순, 이름순)
-* */
+  * 검색 카테고리 (최신순, 이름순)
+  * */
   type SortOrderType = "recent" | "name";
 
   /*

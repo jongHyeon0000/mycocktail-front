@@ -93,11 +93,3 @@ export const getAerationLevelKorean = (level: string): string => {
 export const getTemperatureChangeKorean = (change: string): string => {
   return TEMPERATURE_CHANGE_MAP[change as TEMPERATURE_CHANGE_MAP_KEY] || change;
 };
-
-/**
- * HTML 태그를 제거하고 순수 텍스트만 반환하는 함수
- */
-export const stripHtmlTags = (html: string | null): string => {
-  if (!html) return '';
-  return html.replace(/<[^>]*>/g, '');
-};
