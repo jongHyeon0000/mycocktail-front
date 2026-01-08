@@ -3,31 +3,24 @@ import { motion } from 'framer-motion';
 import { LocalBarRounded } from '@mui/icons-material';
 import styled from "styled-components";
 import {Box, Typography} from "@mui/material";
-import {commonDragStyle} from "../style/CommonDrag.style.ts"; // 스타일 경로는 조정 필요
+import {commonDragStyle} from "../style/CommonDrag.style.ts";
+import type {CommonSlideElement} from "../interface/CommonSlideElement.ts";
 
-interface CategorySlideProps<T> {
+interface CategorySlideProps {
   title: string;
-  items: T[];
+  items: CommonSlideElement[];
   slideRef: RefObject<HTMLDivElement | null>;
-  getName: (item: T) => string;
-  getNameKr: (item: T) => string;
-  getImage?: (item: T) => string | undefined;
-  getId: (item: T) => number | string;
-  onItemClick?: (item: T) => void;
+  onItemClick?: (item: CommonSlideElement) => void;
   className?: string;
 }
 
-export const CategorySlide = <T,>({
+export const CategorySlide = ({
       title,
       items,
       slideRef,
-      getName,
-      getNameKr,
-      getImage,
-      getId,
       onItemClick,
       className,
-    }: CategorySlideProps<T>) => {
+    }: CategorySlideProps) => {
   return (
       <CategorySection className={className}>
         <SlideCategoryTitle className={className}>{title}</SlideCategoryTitle>
@@ -35,14 +28,9 @@ export const CategorySlide = <T,>({
           <SlideWrapper>
             <SlideTrack {...commonDragStyle(slideRef)}>
               {items.map((item) => {
-                const id = getId(item);
-                const name = getName(item);
-                const nameKr = getNameKr(item);
-                const image = getImage?.(item);
-
                 return (
                     <SlideItem
-                        key={id}
+                        key={item.id}
                         as={motion.div}
                         whileHover={{ scale: 1.05, y: -2 }}
                         whileTap={{ scale: 0.95 }}
@@ -50,16 +38,16 @@ export const CategorySlide = <T,>({
                         style={{ cursor: onItemClick ? 'pointer' : 'default' }}
                     >
                       <SlideItemImage>
-                        {image ? (
-                            <img src={image} alt={name} />
+                        {item?.image ? (
+                            <img src={item?.image} alt={item.name} />
                         ) : (
                             <SlideItemPlaceholder>
                               <LocalBarRounded fontSize="inherit" />
                             </SlideItemPlaceholder>
                         )}
                       </SlideItemImage>
-                      <SlideItemEnglishName>{name}</SlideItemEnglishName>
-                      <SlideItemKoreanName>{nameKr}</SlideItemKoreanName>
+                      <SlideItemEnglishName>{item.name}</SlideItemEnglishName>
+                      <SlideItemKoreanName>{item.nameKr}</SlideItemKoreanName>
                     </SlideItem>
                 );
               })}

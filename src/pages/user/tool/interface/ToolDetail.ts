@@ -1,3 +1,5 @@
+import type {CommonSlideElement} from "../../common/interface/CommonSlideElement.ts";
+
 export interface ToolDetail {
   toolId: number;
   toolName: string;
@@ -14,4 +16,7 @@ export interface ToolDetail {
   // 등록 / 업데이트 일
   createAt: string;
   updatedAt: string;
+
+  // 관련 칵테일
+  availableCocktails: Array<CommonSlideElement>;
 }

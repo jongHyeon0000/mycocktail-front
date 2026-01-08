@@ -1,3 +1,5 @@
+import type {CommonSlideElement} from "../../common/interface/CommonSlideElement.ts";
+
 export interface SpiritProductDetail {
   spiritProductId: number;
   image?: string;
@@ -48,7 +50,7 @@ export interface SpiritProductDetail {
   personalReview?: string;
 
   // 사용 가능한 칵테일
-  availableCocktails: Array<{ id: number; image?: string; cocktailName: string; cocktailNameKr: string; }>;
+  availableCocktails: Array<CommonSlideElement>;
 
   // 등록 / 업데이트 일
   createAt: string;

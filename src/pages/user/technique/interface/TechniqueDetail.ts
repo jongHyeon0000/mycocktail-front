@@ -1,4 +1,7 @@
+import type {CommonSlideElement} from "../../common/interface/CommonSlideElement.ts";
+
 export interface TechniqueDetail {
+
   /** 기법 ID */
   techniqueId: number;
 
@@ -34,4 +37,7 @@ export interface TechniqueDetail {
 
   /** 썸네일 이미지 */
   image?: string;
+
+  /** 관련 칵테일 */
+  availableCocktails: CommonSlideElement[];
 }

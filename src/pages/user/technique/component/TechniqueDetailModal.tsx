@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useRef} from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Build } from "@mui/icons-material";
 import {COMMON_MODAL_STYLE} from "../../common/style/CommonModal.style.ts";
@@ -10,6 +10,7 @@ import {
   getTechniqueCategoryKorean, getTemperatureChangeKorean
 } from "../common/TechniqueUtils.ts";
 import type {TechniqueDetail} from "../interface/TechniqueDetail.ts";
+import {CategorySlide} from "../../common/component/CategorySlide.tsx";
 
 interface TechniqueDetailModalProps {
   open: boolean;
@@ -22,6 +23,9 @@ const TechniqueDetailModal: React.FC<TechniqueDetailModalProps> = ({
    onClose,
    data
  }) => {
+  // 슬라이드 섹션용 ref
+  const availableCocktailsRef = useRef<HTMLDivElement>(null);
+
   return (
       <AnimatePresence>
         {open && (
@@ -97,6 +101,25 @@ const TechniqueDetailModal: React.FC<TechniqueDetailModalProps> = ({
                   >
                     <SectionTitle>사용 시기</SectionTitle>
                     <TextContent dangerouslySetInnerHTML={{ __html: data.whenToUseNotes || '' }} />
+                  </motion.div>
+
+                  {/* 관련 칵테일 섹션 - 드래그 스크롤 슬라이드 */}
+                  <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.5 }}
+                  >
+                    <SectionTitle>관련 칵테일</SectionTitle>
+                    <AvailableCocktailsSection>
+                      {/* 칵테일 */}
+                      {data.availableCocktails.length > 0 && (
+                          <CategorySlide
+                              title="관련 칵테일"
+                              items={data.availableCocktails}
+                              slideRef={availableCocktailsRef}
+                          />
+                      )}
+                    </AvailableCocktailsSection>
                   </motion.div>
                 </ContentSection>
               </ModalContainer>
@@ -333,5 +356,16 @@ const TextContent = styled(Box)`
       color: #2c3e50;
       font-weight: 700;
     }
+  }
+`;
+
+// 사용 칵테일 섹션 스타일들
+const AvailableCocktailsSection = styled(Box)`
+  && {
+    background: linear-gradient(135deg, #e8f5e8 0%, #f0f8f0 100%);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+    border: 1px solid rgba(76, 175, 80, 0.2);
   }
 `;

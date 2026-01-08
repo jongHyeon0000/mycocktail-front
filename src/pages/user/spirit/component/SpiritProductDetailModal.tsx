@@ -167,10 +167,6 @@ const SpiritProductDetailModal: React.FC<SpiritDetailModalProps> = ({
                         title="이 술로 만들 수 있는 칵테일"
                         items={data.availableCocktails}
                         slideRef={cocktailsRef}
-                        getName={(item) => item.cocktailName}
-                        getNameKr={(item) => item.cocktailNameKr}
-                        getImage={(item) => item.image}
-                        getId={(item) => item.id}
                       />
                     )}
                   </CocktailsSection>

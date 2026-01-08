@@ -1,3 +1,5 @@
+import type {CommonSlideElement} from "../../common/interface/CommonSlideElement.ts";
+
 export interface CocktailDetail{
   cocktailId: number;
   image?: string;
@@ -17,24 +19,24 @@ export interface CocktailDetail{
 
   // 재료 정보 (슬라이드 형태)
   ingredients: {
-    spirits: Array<{ id: number; image?: string; spiritName: string; spiritNameKr: string; }>;
-    juices: Array<{ id: number; image?: string; juiceName: string; juiceNameKr: string; }>;
-    bitters: Array<{ id: number; image?: string; bitterName: string; bitterNameKr: string; }>;
-    syrups: Array<{ id: number; image?: string; syrupName: string; syrupNameKr: string; }>;
-    carbonated: Array<{ id: number; image?: string; carbonatedName: string; carbonatedNameKr: string; }>;
-    dairy: Array<{ id: number; image?: string; dairyName: string; dairyNameKr: string; }>;
-    garnishes: Array<{ id: number; image?: string; garnishName: string; garnishNameKr: string; }>;
-    others: Array<{ id: number; image?: string; otherIngredientName: string; otherIngredientNameKr: string; }>;
+    spirits: Array<CommonSlideElement>;
+    juices: Array<CommonSlideElement>;
+    bitters: Array<CommonSlideElement>;
+    syrups: Array<CommonSlideElement>;
+    carbonated: Array<CommonSlideElement>;
+    dairy: Array<CommonSlideElement>;
+    garnishes: Array<CommonSlideElement>;
+    others: Array<CommonSlideElement>;
   };
 
   // 도구/기물
-  tools: Array<{ id: number; image?: string; toolName: string; toolNameKr: string; }>;
+  tools: Array<CommonSlideElement>;
 
   // 잔
-  glassware: Array<{ id: number; image?: string; glassName: string; glassNameKr: string; }>;
+  glassware: Array<CommonSlideElement>;
 
   // 제조 기법
-  techniques: Array<{ id: number; image?: string; techniqueName: string; techniqueNameKr: string; }>;
+  techniques: Array<CommonSlideElement>;
 
   // 개인적인 정보
   personalNotes?: string;

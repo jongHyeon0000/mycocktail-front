@@ -136,10 +136,6 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                         title="기주"
                         items={data.ingredients.spirits}
                         slideRef={spiritsRef}
-                        getName={(item) => item.spiritName}
-                        getNameKr={(item) => item.spiritNameKr}
-                        getImage={(item) => item.image}
-                        getId={(item) => item.id}
                       />
                     )}
 
@@ -149,10 +145,6 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                         title="주스"
                         items={data.ingredients.juices}
                         slideRef={juicesRef}
-                        getName={(item) => item.juiceName}
-                        getNameKr={(item) => item.juiceNameKr}
-                        getImage={(item) => item.image}
-                        getId={(item) => item.id}
                       />
                     )}
 
@@ -162,10 +154,6 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                         title="비터스"
                         items={data.ingredients.bitters}
                         slideRef={bittersRef}
-                        getName={(item) => item.bitterName}
-                        getNameKr={(item) => item.bitterNameKr}
-                        getImage={(item) => item.image}
-                        getId={(item) => item.id}
                       />
                     )}
 
@@ -175,10 +163,6 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                         title="시럽"
                         items={data.ingredients.syrups}
                         slideRef={syrupsRef}
-                        getName={(item) => item.syrupName}
-                        getNameKr={(item) => item.syrupNameKr}
-                        getImage={(item) => item.image}
-                        getId={(item) => item.id}
                       />
                     )}
 
@@ -188,10 +172,6 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                         title="탄산/소다"
                         items={data.ingredients.carbonated}
                         slideRef={carbonatedRef}
-                        getName={(item) => item.carbonatedName}
-                        getNameKr={(item) => item.carbonatedNameKr}
-                        getImage={(item) => item.image}
-                        getId={(item) => item.id}
                       />
                     )}
 
@@ -201,10 +181,6 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                         title="유제품/크림"
                         items={data.ingredients.dairy}
                         slideRef={dairyRef}
-                        getName={(item) => item.dairyName}
-                        getNameKr={(item) => item.dairyNameKr}
-                        getImage={(item) => item.image}
-                        getId={(item) => item.id}
                       />
                     )}
 
@@ -214,10 +190,6 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                         title="가니쉬"
                         items={data.ingredients.garnishes}
                         slideRef={garnishesRef}
-                        getName={(item) => item.garnishName}
-                        getNameKr={(item) => item.garnishNameKr}
-                        getImage={(item) => item.image}
-                        getId={(item) => item.id}
                       />
                     )}
 
@@ -227,10 +199,6 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                         title="기타"
                         items={data.ingredients.others}
                         slideRef={othersRef}
-                        getName={(item) => item.otherIngredientName}
-                        getNameKr={(item) => item.otherIngredientNameKr}
-                        getImage={(item) => item.image}
-                        getId={(item) => item.id}
                       />
                     )}
                   </IngredientsSection>
@@ -250,10 +218,6 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                         title="도구/기물"
                         items={data.tools}
                         slideRef={toolsRef}
-                        getName={(item) => item.toolName}
-                        getNameKr={(item) => item.toolNameKr}
-                        getImage={(item) => item.image}
-                        getId={(item) => item.id}
                         className="technique"
                       />
                     )}
@@ -264,10 +228,6 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                         title="사용 잔"
                         items={data.glassware}
                         slideRef={glasswareRef}
-                        getName={(item) => item.glassName}
-                        getNameKr={(item) => item.glassNameKr}
-                        getImage={(item) => item.image}
-                        getId={(item) => item.id}
                         className="technique"
                       />
                     )}
@@ -278,10 +238,6 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                         title="제조 기법"
                         items={data.techniques}
                         slideRef={methodsRef}
-                        getName={(item) => item.techniqueName}
-                        getNameKr={(item) => item.techniqueNameKr}
-                        getImage={(item) => item.image}
-                        getId={(item) => item.id}
                         className="technique"
                       />
                     )}
