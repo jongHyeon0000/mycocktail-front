@@ -6,15 +6,15 @@ export const commonDragStyle = (ref: React.RefObject<HTMLDivElement | null>) => 
   as: motion.div,
   drag: "x" as const,
   dragConstraints: ref,
-  dragElastic: 0.2,
-  dragMomentum: false,
+  dragElastic: 0.6,
+  dragMomentum: true,
   whileDrag: {
     scale: 0.99,
     cursor: "grabbing"
   },
   dragTransition: {
-    bounceStiffness: 400,
-    bounceDamping: 40
+    bounceStiffness: 200,
+    bounceDamping: 25
   },
   style: {
     cursor: "grab",

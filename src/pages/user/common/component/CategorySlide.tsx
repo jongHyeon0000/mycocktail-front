@@ -1,10 +1,11 @@
 import type {RefObject} from 'react';
-import { motion } from 'framer-motion';
+import { motion, useAnimation } from 'framer-motion';
 import { LocalBarRounded } from '@mui/icons-material';
 import styled from "styled-components";
 import {Box, Typography} from "@mui/material";
 import {commonDragStyle} from "../style/CommonDrag.style.ts";
 import type {CommonSlideElement} from "../interface/CommonSlideElement.ts";
+import {useEffect} from "react";
 
 interface CategorySlideProps {
   title: string;
@@ -21,12 +22,61 @@ export const CategorySlide = ({
       onItemClick,
       className,
     }: CategorySlideProps) => {
+  const controls = useAnimation();
+
+  useEffect(() => {
+    // 아이템이 적을 때 초기 위치로 설정
+    if (slideRef.current) {
+      const container = slideRef.current;
+      const track = container.querySelector('[data-track="true"]') as HTMLElement;
+      
+      if (track) {
+        const containerWidth = container.offsetWidth;
+        const trackWidth = track.scrollWidth;
+        
+        // 콘텐츠가 컨테이너보다 작으면 드래그 제한
+        if (trackWidth <= containerWidth) {
+          controls.start({ x: 0 });
+        }
+      }
+    }
+  }, [items, slideRef, controls]);
+
+  const handleDragEnd = () => {
+    if (slideRef.current) {
+      const container = slideRef.current;
+      const track = container.querySelector('[data-track="true"]') as HTMLElement;
+      
+      if (track) {
+        const containerWidth = container.offsetWidth;
+        const trackWidth = track.scrollWidth;
+        
+        // 콘텐츠가 컨테이너보다 작으면 원위치로 복귀
+        if (trackWidth <= containerWidth) {
+          controls.start({
+            x: 0,
+            transition: {
+              type: "spring",
+              stiffness: 200,
+              damping: 25
+            }
+          });
+        }
+      }
+    }
+  };
+
   return (
       <CategorySection className={className}>
         <SlideCategoryTitle className={className}>{title}</SlideCategoryTitle>
         <SlideContainer ref={slideRef}>
           <SlideWrapper>
-            <SlideTrack {...commonDragStyle(slideRef)}>
+            <SlideTrack 
+              {...commonDragStyle(slideRef)}
+              data-track="true"
+              animate={controls}
+              onDragEnd={handleDragEnd}
+            >
               {items.map((item) => {
                 return (
                     <SlideItem

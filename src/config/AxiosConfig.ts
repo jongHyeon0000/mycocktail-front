@@ -48,12 +48,50 @@ if(USE_MOCK) {
         note: "<p><strong>재료:</strong></p><ul><li>화이트 럼 60ml</li><li>신선한 민트 잎 10-12개</li><li>라임 1/2개</li><li>설탕 2티스푼</li><li>소다수</li><li>얼음</li></ul>",
         tip_note: "<p><strong>완벽한 모히토를 위한 팁:</strong></p><ul><li>민트 잎을 너무 세게 머들링하지 마세요</li></ul>",
         ingredients: {
-          spirits: [{
-            id: 1,
-            image: "https://images.unsplash.com/photo-1572441711009-31e2e5f64ba5?w=100&h=100&fit=crop",
-            name: "White Rum",
-            nameKr: "화이트 럼"
-          }],
+          spirits: [
+            {
+              id: 1,
+              image: "https://images.unsplash.com/photo-1572441711009-31e2e5f64ba5?w=100&h=100&fit=crop",
+              name: "White Rum",
+              nameKr: "화이트 럼"
+            },
+            {
+              id: 2,
+              image: "https://images.unsplash.com/photo-1572441711009-31e2e5f64ba5?w=100&h=100&fit=crop",
+              name: "White Rum",
+              nameKr: "화이트 럼"
+            },
+            {
+              id: 3,
+              image: "https://images.unsplash.com/photo-1572441711009-31e2e5f64ba5?w=100&h=100&fit=crop",
+              name: "White Rum",
+              nameKr: "화이트 럼"
+            },
+            {
+              id: 4,
+              image: "https://images.unsplash.com/photo-1572441711009-31e2e5f64ba5?w=100&h=100&fit=crop",
+              name: "White Rum",
+              nameKr: "화이트 럼"
+            },
+            {
+              id: 5,
+              image: "https://images.unsplash.com/photo-1572441711009-31e2e5f64ba5?w=100&h=100&fit=crop",
+              name: "White Rum",
+              nameKr: "화이트 럼"
+            },
+            {
+              id: 6,
+              image: "https://images.unsplash.com/photo-1572441711009-31e2e5f64ba5?w=100&h=100&fit=crop",
+              name: "White Rum",
+              nameKr: "화이트 럼"
+            },
+            {
+              id: 7,
+              image: "https://images.unsplash.com/photo-1572441711009-31e2e5f64ba5?w=100&h=100&fit=crop",
+              name: "White Rum",
+              nameKr: "화이트 럼"
+            },
+          ],
           juices: [{
             id: 1,
             image: "https://images.unsplash.com/photo-1557401279-8e8de6c4659b?w=100&h=100&fit=crop",
@@ -348,12 +386,50 @@ if(USE_MOCK) {
         note: "<p><strong>재료:</strong></p><ul><li>화이트 럼 60ml</li><li>신선한 민트 잎 10-12개</li><li>라임 1/2개</li><li>설탕 2티스푼</li><li>소다수</li><li>얼음</li></ul>",
         tip_note: "<p><strong>완벽한 모히토를 위한 팁:</strong></p><ul><li>민트 잎을 너무 세게 머들링하지 마세요</li></ul>",
         ingredients: {
-          spirits: [{
-            id: 1,
-            image: "https://images.unsplash.com/photo-1572441711009-31e2e5f64ba5?w=100&h=100&fit=crop",
-            name: "White Rum",
-            nameKr: "화이트 럼"
-          }],
+          spirits: [
+            {
+              id: 1,
+              image: "https://images.unsplash.com/photo-1572441711009-31e2e5f64ba5?w=100&h=100&fit=crop",
+              name: "White Rum",
+              nameKr: "화이트 럼"
+            },
+            {
+              id: 2,
+              image: "https://images.unsplash.com/photo-1572441711009-31e2e5f64ba5?w=100&h=100&fit=crop",
+              name: "White Rum",
+              nameKr: "화이트 럼"
+            },
+            {
+              id: 3,
+              image: "https://images.unsplash.com/photo-1572441711009-31e2e5f64ba5?w=100&h=100&fit=crop",
+              name: "White Rum",
+              nameKr: "화이트 럼"
+            },
+            {
+              id: 4,
+              image: "https://images.unsplash.com/photo-1572441711009-31e2e5f64ba5?w=100&h=100&fit=crop",
+              name: "White Rum",
+              nameKr: "화이트 럼"
+            },
+            {
+              id: 5,
+              image: "https://images.unsplash.com/photo-1572441711009-31e2e5f64ba5?w=100&h=100&fit=crop",
+              name: "White Rum",
+              nameKr: "화이트 럼"
+            },
+            {
+              id: 6,
+              image: "https://images.unsplash.com/photo-1572441711009-31e2e5f64ba5?w=100&h=100&fit=crop",
+              name: "White Rum",
+              nameKr: "화이트 럼"
+            },
+            {
+              id: 7,
+              image: "https://images.unsplash.com/photo-1572441711009-31e2e5f64ba5?w=100&h=100&fit=crop",
+              name: "White Rum",
+              nameKr: "화이트 럼"
+            },
+          ],
           juices: [{
             id: 1,
             image: "https://images.unsplash.com/photo-1557401279-8e8de6c4659b?w=100&h=100&fit=crop",
