@@ -3,17 +3,17 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Build } from "@mui/icons-material";
 import styled from "styled-components";
 import {Box, Chip, Modal, Paper, Typography} from "@mui/material";
-import type {BittersDetail} from "../interface/BittersDetail.ts";
 import {COMMON_MODAL_STYLE} from "../../../common/style/CommonModal.style.ts";
 import {CategorySlide} from "../../../common/component/CategorySlide.tsx";
+import type {CarbonatedDetail} from "../interface/CarbonatedDetail.ts";
 
-interface BittersDetailModalProps {
+interface CarbonatedDetailModalProps {
   open: boolean;
   onClose: () => void;
-  data: BittersDetail;
+  data: CarbonatedDetail;
 }
 
-const BittersDetailModal: React.FC<BittersDetailModalProps> = ({
+const CarbonatedDetailModal: React.FC<CarbonatedDetailModalProps> = ({
    open,
    onClose,
    data
@@ -40,7 +40,7 @@ const BittersDetailModal: React.FC<BittersDetailModalProps> = ({
                 <HeaderSection>
                   <ToolImage>
                     {data.image ? (
-                        <img src={data.image} alt={data.bittersName} />
+                        <img src={data.image} alt={data.carbonatedName} />
                     ) : (
                         <PlaceholderIcon>
                           <Build fontSize="inherit" />
@@ -49,8 +49,8 @@ const BittersDetailModal: React.FC<BittersDetailModalProps> = ({
                   </ToolImage>
 
                   <TitleSection>
-                    <EnglishTitle>{data.bittersName}</EnglishTitle>
-                    <KoreanTitle>{data.bittersNameKr}</KoreanTitle>
+                    <EnglishTitle>{data.carbonatedName}</EnglishTitle>
+                    <KoreanTitle>{data.carbonatedNameKr}</KoreanTitle>
                   </TitleSection>
 
                   <InfoGrid>
@@ -65,8 +65,8 @@ const BittersDetailModal: React.FC<BittersDetailModalProps> = ({
                     </InfoCard>
 
                     <InfoCard>
-                      <InfoLabel>도수</InfoLabel>
-                      <CategoryChip label={`${data.abv} 도`} size="small" />
+                      <InfoLabel>유통기한</InfoLabel>
+                      <CategoryChip label={`평균 ${data.shelfLifeDays}일`} size="small" />
                     </InfoCard>
                   </InfoGrid>
                 </HeaderSection>
@@ -139,7 +139,7 @@ const BittersDetailModal: React.FC<BittersDetailModalProps> = ({
   );
 };
 
-export default BittersDetailModal;
+export default CarbonatedDetailModal;
 
 const StyledModal = styled(Modal)`
   && {

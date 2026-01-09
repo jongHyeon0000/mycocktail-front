@@ -1,9 +1,9 @@
 import type {CommonSlideElement} from "../../../common/interface/CommonSlideElement.ts";
 
-export interface BittersDetail {
+export interface CarbonatedDetail {
 
-  /** 비터스 ID */
-  bittersId: number;
+  /** 탄산/소다 ID */
+  carbonatedId: number;
 
   /** 브랜드 ID */
   brandId: number;
@@ -23,23 +23,23 @@ export interface BittersDetail {
   /** 원산지 국가명 (한글) */
   countryNameKr?: string;
 
-  /** 비터스명 (영문) */
-  bittersName: string;
+  /** 탄산/소다명 (영문) */
+  carbonatedName: string;
 
-  /** 비터스명 (한글) */
-  bittersNameKr: string;
+  /** 탄산/소다명 (한글) */
+  carbonatedNameKr: string;
 
-  /** 도수 */
-  abv: number;
+  /** 당도 (1~5) */
+  sugarLevel: number;
 
   /** 설명 */
   notes: string | null;
 
-  /** 보관방법 */
-  storageType: string | null;
-
   /** 유통기한 (일수) */
   shelfLifeDays: number | null;
+
+  /** 보관방법 */
+  storageType: string | null;
 
   /** 사용 시기 */
   whenToUseNotes: string | null;

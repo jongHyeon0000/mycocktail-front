@@ -2556,4 +2556,334 @@ if(USE_MOCK) {
 
     return [200, { data: bittersData }];
   });
+
+  /*
+   * 탄산/소다 Carbonated List
+   * */
+  mock.onGet('/api/carbonated').reply((config) => {
+    const { page = 1, limit = 6, sort = 'recent', search } = config.params || {};
+
+    // 전체 Mock 데이터 (6개)
+    const fullData = [
+      {
+        carbonatedId: 1,
+        brandId: 1,
+        brandName: "Fever-Tree",
+        countryId: 1,
+        countryName: "United Kingdom",
+        carbonatedName: "Fever-Tree Indian Tonic Water",
+        carbonatedNameKr: "피버트리 인디언 토닉워터",
+        sugarLevel: 3,
+        image: "https://via.placeholder.com/200x200/87CEEB/000000?text=Tonic+Water",
+        notes: "<p>천연 퀴닌을 사용한 프리미엄 토닉워터입니다.</p><p>은은한 쓴맛과 시트러스 노트가 특징이며, 진 앤 토닉의 표준으로 자리잡았습니다.</p>",
+        shelfLifeDays: 730, // 약 2년
+        storageType: "냉장 보관 권장, 개봉 후 3일 이내 소비",
+        whenToUseNotes: "<p>진 베이스 롱 드링크 칵테일에서 가장 많이 사용됩니다.</p><p>진 앤 토닉에서는 진의 보타니컬을 강조하며, 보드카 토닉에서는 깔끔한 청량감을 제공합니다.</p><p>퀴닌의 쓴맛이 스피릿의 알코올감을 부드럽게 만들어줍니다.</p>",
+        substituteNotes: "<p>Schweppes Tonic Water로 대체 가능하나 단맛이 더 강합니다.</p><p>Q Tonic이나 Fentimans Tonic Water도 좋은 대안입니다.</p>",
+        createdAt: "2024-01-15",
+        updatedAt: "2024-01-20",
+        availableCocktails: [
+          { id: 1, name: "Gin & Tonic", nameKr: "진 토닉", image: "https://via.placeholder.com/80x80/87CEEB/000000?text=G&T" },
+          { id: 2, name: "Vodka Tonic", nameKr: "보드카 토닉", image: "https://via.placeholder.com/80x80/E0E0E0/000000?text=Vodka+Tonic" },
+          { id: 3, name: "Elderflower Tonic", nameKr: "엘더플라워 토닉", image: "https://via.placeholder.com/80x80/FFFACD/000000?text=Elderflower" }
+        ]
+      },
+      {
+        carbonatedId: 2,
+        brandId: 2,
+        brandName: "Fever-Tree",
+        countryId: 1,
+        countryName: "United Kingdom",
+        carbonatedName: "Fever-Tree Ginger Beer",
+        carbonatedNameKr: "피버트리 진저비어",
+        sugarLevel: 4,
+        image: "https://via.placeholder.com/200x200/FFD700/000000?text=Ginger+Beer",
+        notes: "<p>나이지리아산 생강을 사용한 강렬한 진저비어입니다.</p><p>매콤하고 스파이시한 생강 향이 두드러지며, 적당한 단맛이 조화를 이룹니다.</p>",
+        shelfLifeDays: 730, // 약 2년
+        storageType: "냉장 보관 권장, 개봉 후 3일 이내 소비",
+        whenToUseNotes: "<p>럼 베이스 칵테일에서 스파이시한 킥을 더하기 위해 사용됩니다.</p><p>모스코 뮬에서는 보드카와 라임의 상큼함에 생강의 매운맛을 더해주며, 다크 앤 스토미에서는 다크 럼의 깊은 맛을 끌어올립니다.</p><p>진저에일보다 생강 맛이 훨씬 강해 칵테일에 캐릭터를 부여합니다.</p>",
+        substituteNotes: "<p>Bundaberg Ginger Beer로 대체 가능하나 더 달고 부드럽습니다.</p><p>Gosling's Ginger Beer는 다크 앤 스토미의 클래식 선택입니다.</p>",
+        createdAt: "2024-01-14",
+        updatedAt: "2024-01-19",
+        availableCocktails: [
+          { id: 4, name: "Moscow Mule", nameKr: "모스코 뮬", image: "https://via.placeholder.com/80x80/CD853F/FFFFFF?text=Moscow+Mule" },
+          { id: 5, name: "Dark 'n' Stormy", nameKr: "다크 앤 스토미", image: "https://via.placeholder.com/80x80/8B4513/FFFFFF?text=Dark+Stormy" },
+          { id: 6, name: "Jamaican Mule", nameKr: "자메이칸 뮬", image: "https://via.placeholder.com/80x80/D2691E/FFFFFF?text=Jamaican" }
+        ]
+      },
+      {
+        carbonatedId: 3,
+        brandId: 3,
+        brandName: "Schweppes",
+        countryId: 1,
+        countryName: "United Kingdom",
+        carbonatedName: "Schweppes Ginger Ale",
+        carbonatedNameKr: "슈웹스 진저에일",
+        sugarLevel: 3,
+        image: "https://via.placeholder.com/200x200/F0E68C/000000?text=Ginger+Ale",
+        notes: "<p>1870년부터 이어온 클래식 진저에일입니다.</p><p>진저비어보다 부드러운 생강 향과 달콤한 맛이 특징입니다.</p>",
+        shelfLifeDays: 365, // 약 1년
+        storageType: "실온 또는 냉장 보관, 개봉 후 냉장 보관",
+        whenToUseNotes: "<p>위스키 베이스 하이볼에서 부드러운 생강 향을 더하기 위해 사용됩니다.</p><p>위스키 진저에서는 위스키의 풍미를 해치지 않으면서 청량감을 제공하며, 호스넥에서는 브랜디와 완벽한 조화를 이룹니다.</p><p>진저비어보다 순하고 달콤해 대중적으로 선호됩니다.</p>",
+        substituteNotes: "<p>Canada Dry Ginger Ale로 대체 가능하며 맛이 유사합니다.</p><p>Fever-Tree Ginger Ale은 프리미엄 대안입니다.</p>",
+        createdAt: "2024-01-13",
+        updatedAt: "2024-01-18",
+        availableCocktails: [
+          { id: 7, name: "Whiskey Ginger", nameKr: "위스키 진저", image: "https://via.placeholder.com/80x80/CD853F/FFFFFF?text=Whiskey+Ginger" },
+          { id: 8, name: "Horse's Neck", nameKr: "호스넥", image: "https://via.placeholder.com/80x80/D2691E/FFFFFF?text=Horses+Neck" },
+          { id: 9, name: "Presbyterian", nameKr: "프레스비테리안", image: "https://via.placeholder.com/80x80/F4A460/000000?text=Presbyterian" }
+        ]
+      },
+      {
+        carbonatedId: 4,
+        brandId: 4,
+        brandName: "Coca-Cola",
+        countryId: 2,
+        countryName: "United States",
+        carbonatedName: "Coca-Cola Classic",
+        carbonatedNameKr: "코카콜라 클래식",
+        sugarLevel: 5,
+        image: "https://via.placeholder.com/200x200/8B0000/FFFFFF?text=Coca+Cola",
+        notes: "<p>세계에서 가장 유명한 콜라 음료입니다.</p><p>바닐라, 시나몬, 시트러스의 복합적인 향미와 높은 당도가 특징입니다.</p>",
+        shelfLifeDays: 270, // 약 9개월
+        storageType: "실온 보관, 개봉 후 냉장 보관",
+        whenToUseNotes: "<p>럼 베이스 칵테일에서 달콤함과 깊이를 더하기 위해 사용됩니다.</p><p>쿠바 리브레에서는 럼과 라임에 콜라의 캐러멜 노트를 더해주며, 롱 아일랜드 아이스티에서는 여러 스피릿을 하나로 묶어주는 역할을 합니다.</p><p>위스키 콕에서는 위스키의 오크 향과 조화를 이룹니다.</p>",
+        substituteNotes: "<p>Pepsi Cola로 대체 가능하나 약간 더 달고 시트러스 향이 강합니다.</p><p>RC Cola나 Mexican Coke(사탕수수 설탕 사용)도 대안입니다.</p>",
+        createdAt: "2024-01-12",
+        updatedAt: "2024-01-17",
+        availableCocktails: [
+          { id: 10, name: "Cuba Libre", nameKr: "쿠바 리브레", image: "https://via.placeholder.com/80x80/8B4513/FFFFFF?text=Cuba+Libre" },
+          { id: 11, name: "Long Island Iced Tea", nameKr: "롱 아일랜드 아이스티", image: "https://via.placeholder.com/80x80/A0522D/FFFFFF?text=LIIT" },
+          { id: 12, name: "Whiskey Coke", nameKr: "위스키 콕", image: "https://via.placeholder.com/80x80/654321/FFFFFF?text=Whiskey+Coke" }
+        ]
+      },
+      {
+        carbonatedId: 5,
+        brandId: 5,
+        brandName: "San Pellegrino",
+        countryId: 3,
+        countryName: "Italy",
+        carbonatedName: "San Pellegrino Sparkling Water",
+        carbonatedNameKr: "산펠레그리노 탄산수",
+        sugarLevel: 1,
+        image: "https://via.placeholder.com/200x200/E0E0E0/000000?text=Sparkling+Water",
+        notes: "<p>이탈리아 알프스에서 나오는 천연 미네랄 탄산수입니다.</p><p>미세한 탄산과 깔끔한 맛이 특징이며, 칵테일의 본래 맛을 해치지 않습니다.</p>",
+        shelfLifeDays: 730, // 약 2년
+        storageType: "실온 보관, 개봉 후 냉장 보관 및 즉시 소비",
+        whenToUseNotes: "<p>스피릿의 맛을 희석하지 않으면서 청량감을 더하기 위해 사용됩니다.</p><p>하이볼이나 스프리츠 계열에서 탄산감만 제공하며, 베네치안 스프리츠에서는 아페롤과 프로세코에 가벼움을 더해줍니다.</p><p>무설탕이라 칵테일의 당도 조절이 용이합니다.</p>",
+        substituteNotes: "<p>Perrier나 Topo Chico로 대체 가능합니다.</p><p>일반 탄산수(Club Soda)도 사용 가능하나 미네랄 풍미가 적습니다.</p>",
+        createdAt: "2024-01-11",
+        updatedAt: "2024-01-16",
+        availableCocktails: [
+          { id: 13, name: "Aperol Spritz", nameKr: "아페롤 스프리츠", image: "https://via.placeholder.com/80x80/FF6347/FFFFFF?text=Aperol+Spritz" },
+          { id: 14, name: "Highball", nameKr: "하이볼", image: "https://via.placeholder.com/80x80/F5DEB3/000000?text=Highball" },
+          { id: 15, name: "Tom Collins", nameKr: "톰 콜린스", image: "https://via.placeholder.com/80x80/FFFACD/000000?text=Tom+Collins" }
+        ]
+      },
+      {
+        carbonatedId: 6,
+        brandId: 6,
+        brandName: "Fentimans",
+        countryId: 1,
+        countryName: "United Kingdom",
+        carbonatedName: "Fentimans Victorian Lemonade",
+        carbonatedNameKr: "펜티먼스 빅토리안 레모네이드",
+        sugarLevel: 3,
+        image: "https://via.placeholder.com/200x200/FFFACD/000000?text=Lemonade",
+        notes: "<p>전통 보타니컬 발효 방식으로 만든 프리미엄 레모네이드입니다.</p><p>레몬과 허브의 복합적인 향미, 적당한 단맛과 탄산이 특징입니다.</p>",
+        shelfLifeDays: 365, // 약 1년
+        storageType: "냉장 보관 권장, 개봉 후 3일 이내 소비",
+        whenToUseNotes: "<p>보드카나 진 베이스 칵테일에서 시트러스 노트와 청량감을 동시에 제공하기 위해 사용됩니다.</p><p>리네이드 스프리츠에서는 화이트 와인과 조화를 이루며, 섄디에서는 맥주에 상큼함을 더해줍니다.</p><p>일반 레몬 사이다보다 허브 향이 있어 복합적인 맛을 만들어냅니다.</p>",
+        substituteNotes: "<p>Schweppes Lemonade나 7UP으로 대체 가능하나 향미가 단순합니다.</p><p>직접 만든 레모네이드에 탄산수를 섞어도 좋습니다.</p>",
+        createdAt: "2024-01-10",
+        updatedAt: "2024-01-15",
+        availableCocktails: [
+          { id: 16, name: "Vodka Lemonade", nameKr: "보드카 레모네이드", image: "https://via.placeholder.com/80x80/FFFFE0/000000?text=Vodka+Lemonade" },
+          { id: 17, name: "Shandy", nameKr: "섄디", image: "https://via.placeholder.com/80x80/F0E68C/000000?text=Shandy" },
+          { id: 18, name: "Lynchburg Lemonade", nameKr: "린치버그 레모네이드", image: "https://via.placeholder.com/80x80/FFD700/000000?text=Lynchburg" }
+        ]
+      }
+    ];
+
+    // 정렬 처리
+    let sortedData = [...fullData];
+
+    if (sort === 'name') {
+      sortedData.sort((a, b) => a.carbonatedName.localeCompare(b.carbonatedName));
+    }
+    // recent는 기본 순서 유지
+
+    // 검색 처리
+    if (search) {
+      sortedData = sortedData.filter(carbonated =>
+          carbonated.carbonatedName.toLowerCase().includes(search.toLowerCase()) ||
+          carbonated.carbonatedNameKr.includes(search) ||
+          carbonated.brandName.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+
+    // 페이지네이션 처리
+    const startIndex = (page - 1) * limit;
+    const endIndex = startIndex + limit;
+    const paginatedData = sortedData.slice(startIndex, endIndex);
+
+    return [200, { data: paginatedData }];
+  });
+
+  /*
+   * 탄산/소다 Detail (개별 조회)
+   * */
+  mock.onGet(/\/api\/carbonated\/\d+/).reply((config) => {
+    const carbonatedId = parseInt(config.url?.split('/').pop() || '1');
+
+    // 탄산/소다 데이터 맵
+    const carbonatedDataMap: { [key: number]: any } = {
+      1: {
+        carbonatedId: 1,
+        brandId: 1,
+        brandName: "Fever-Tree",
+        countryId: 1,
+        countryName: "United Kingdom",
+        carbonatedName: "Fever-Tree Indian Tonic Water",
+        carbonatedNameKr: "피버트리 인디언 토닉워터",
+        sugarLevel: 3,
+        image: "https://via.placeholder.com/200x200/87CEEB/000000?text=Tonic+Water",
+        notes: "<p>천연 퀴닌을 사용한 프리미엄 토닉워터입니다.</p><p>은은한 쓴맛과 시트러스 노트가 특징이며, 진 앤 토닉의 표준으로 자리잡았습니다.</p>",
+        shelfLifeDays: 730, // 약 2년
+        storageType: "냉장 보관 권장, 개봉 후 3일 이내 소비",
+        whenToUseNotes: "<p>진 베이스 롱 드링크 칵테일에서 가장 많이 사용됩니다.</p><p>진 앤 토닉에서는 진의 보타니컬을 강조하며, 보드카 토닉에서는 깔끔한 청량감을 제공합니다.</p><p>퀴닌의 쓴맛이 스피릿의 알코올감을 부드럽게 만들어줍니다.</p>",
+        substituteNotes: "<p>Schweppes Tonic Water로 대체 가능하나 단맛이 더 강합니다.</p><p>Q Tonic이나 Fentimans Tonic Water도 좋은 대안입니다.</p>",
+        createdAt: "2024-01-15",
+        updatedAt: "2024-01-20",
+        availableCocktails: [
+          { id: 1, name: "Gin & Tonic", nameKr: "진 토닉", image: "https://via.placeholder.com/80x80/87CEEB/000000?text=G&T" },
+          { id: 2, name: "Vodka Tonic", nameKr: "보드카 토닉", image: "https://via.placeholder.com/80x80/E0E0E0/000000?text=Vodka+Tonic" },
+          { id: 3, name: "Elderflower Tonic", nameKr: "엘더플라워 토닉", image: "https://via.placeholder.com/80x80/FFFACD/000000?text=Elderflower" }
+        ]
+      },
+      2: {
+        carbonatedId: 2,
+        brandId: 2,
+        brandName: "Fever-Tree",
+        countryId: 1,
+        countryName: "United Kingdom",
+        carbonatedName: "Fever-Tree Ginger Beer",
+        carbonatedNameKr: "피버트리 진저비어",
+        sugarLevel: 4,
+        image: "https://via.placeholder.com/200x200/FFD700/000000?text=Ginger+Beer",
+        notes: "<p>나이지리아산 생강을 사용한 강렬한 진저비어입니다.</p><p>매콤하고 스파이시한 생강 향이 두드러지며, 적당한 단맛이 조화를 이룹니다.</p>",
+        shelfLifeDays: 730, // 약 2년
+        storageType: "냉장 보관 권장, 개봉 후 3일 이내 소비",
+        whenToUseNotes: "<p>럼 베이스 칵테일에서 스파이시한 킥을 더하기 위해 사용됩니다.</p><p>모스코 뮬에서는 보드카와 라임의 상큼함에 생강의 매운맛을 더해주며, 다크 앤 스토미에서는 다크 럼의 깊은 맛을 끌어올립니다.</p><p>진저에일보다 생강 맛이 훨씬 강해 칵테일에 캐릭터를 부여합니다.</p>",
+        substituteNotes: "<p>Bundaberg Ginger Beer로 대체 가능하나 더 달고 부드럽습니다.</p><p>Gosling's Ginger Beer는 다크 앤 스토미의 클래식 선택입니다.</p>",
+        createdAt: "2024-01-14",
+        updatedAt: "2024-01-19",
+        availableCocktails: [
+          { id: 4, name: "Moscow Mule", nameKr: "모스코 뮬", image: "https://via.placeholder.com/80x80/CD853F/FFFFFF?text=Moscow+Mule" },
+          { id: 5, name: "Dark 'n' Stormy", nameKr: "다크 앤 스토미", image: "https://via.placeholder.com/80x80/8B4513/FFFFFF?text=Dark+Stormy" },
+          { id: 6, name: "Jamaican Mule", nameKr: "자메이칸 뮬", image: "https://via.placeholder.com/80x80/D2691E/FFFFFF?text=Jamaican" }
+        ]
+      },
+      3: {
+        carbonatedId: 3,
+        brandId: 3,
+        brandName: "Schweppes",
+        countryId: 1,
+        countryName: "United Kingdom",
+        carbonatedName: "Schweppes Ginger Ale",
+        carbonatedNameKr: "슈웹스 진저에일",
+        sugarLevel: 3,
+        image: "https://via.placeholder.com/200x200/F0E68C/000000?text=Ginger+Ale",
+        notes: "<p>1870년부터 이어온 클래식 진저에일입니다.</p><p>진저비어보다 부드러운 생강 향과 달콤한 맛이 특징입니다.</p>",
+        shelfLifeDays: 365, // 약 1년
+        storageType: "실온 또는 냉장 보관, 개봉 후 냉장 보관",
+        whenToUseNotes: "<p>위스키 베이스 하이볼에서 부드러운 생강 향을 더하기 위해 사용됩니다.</p><p>위스키 진저에서는 위스키의 풍미를 해치지 않으면서 청량감을 제공하며, 호스넥에서는 브랜디와 완벽한 조화를 이룹니다.</p><p>진저비어보다 순하고 달콤해 대중적으로 선호됩니다.</p>",
+        substituteNotes: "<p>Canada Dry Ginger Ale로 대체 가능하며 맛이 유사합니다.</p><p>Fever-Tree Ginger Ale은 프리미엄 대안입니다.</p>",
+        createdAt: "2024-01-13",
+        updatedAt: "2024-01-18",
+        availableCocktails: [
+          { id: 7, name: "Whiskey Ginger", nameKr: "위스키 진저", image: "https://via.placeholder.com/80x80/CD853F/FFFFFF?text=Whiskey+Ginger" },
+          { id: 8, name: "Horse's Neck", nameKr: "호스넥", image: "https://via.placeholder.com/80x80/D2691E/FFFFFF?text=Horses+Neck" },
+          { id: 9, name: "Presbyterian", nameKr: "프레스비테리안", image: "https://via.placeholder.com/80x80/F4A460/000000?text=Presbyterian" }
+        ]
+      },
+      4: {
+        carbonatedId: 4,
+        brandId: 4,
+        brandName: "Coca-Cola",
+        countryId: 2,
+        countryName: "United States",
+        carbonatedName: "Coca-Cola Classic",
+        carbonatedNameKr: "코카콜라 클래식",
+        sugarLevel: 5,
+        image: "https://via.placeholder.com/200x200/8B0000/FFFFFF?text=Coca+Cola",
+        notes: "<p>세계에서 가장 유명한 콜라 음료입니다.</p><p>바닐라, 시나몬, 시트러스의 복합적인 향미와 높은 당도가 특징입니다.</p>",
+        shelfLifeDays: 270, // 약 9개월
+        storageType: "실온 보관, 개봉 후 냉장 보관",
+        whenToUseNotes: "<p>럼 베이스 칵테일에서 달콤함과 깊이를 더하기 위해 사용됩니다.</p><p>쿠바 리브레에서는 럼과 라임에 콜라의 캐러멜 노트를 더해주며, 롱 아일랜드 아이스티에서는 여러 스피릿을 하나로 묶어주는 역할을 합니다.</p><p>위스키 콕에서는 위스키의 오크 향과 조화를 이룹니다.</p>",
+        substituteNotes: "<p>Pepsi Cola로 대체 가능하나 약간 더 달고 시트러스 향이 강합니다.</p><p>RC Cola나 Mexican Coke(사탕수수 설탕 사용)도 대안입니다.</p>",
+        createdAt: "2024-01-12",
+        updatedAt: "2024-01-17",
+        availableCocktails: [
+          { id: 10, name: "Cuba Libre", nameKr: "쿠바 리브레", image: "https://via.placeholder.com/80x80/8B4513/FFFFFF?text=Cuba+Libre" },
+          { id: 11, name: "Long Island Iced Tea", nameKr: "롱 아일랜드 아이스티", image: "https://via.placeholder.com/80x80/A0522D/FFFFFF?text=LIIT" },
+          { id: 12, name: "Whiskey Coke", nameKr: "위스키 콕", image: "https://via.placeholder.com/80x80/654321/FFFFFF?text=Whiskey+Coke" }
+        ]
+      },
+      5: {
+        carbonatedId: 5,
+        brandId: 5,
+        brandName: "San Pellegrino",
+        countryId: 3,
+        countryName: "Italy",
+        carbonatedName: "San Pellegrino Sparkling Water",
+        carbonatedNameKr: "산펠레그리노 탄산수",
+        sugarLevel: 1,
+        image: "https://via.placeholder.com/200x200/E0E0E0/000000?text=Sparkling+Water",
+        notes: "<p>이탈리아 알프스에서 나오는 천연 미네랄 탄산수입니다.</p><p>미세한 탄산과 깔끔한 맛이 특징이며, 칵테일의 본래 맛을 해치지 않습니다.</p>",
+        shelfLifeDays: 730, // 약 2년
+        storageType: "실온 보관, 개봉 후 냉장 보관 및 즉시 소비",
+        whenToUseNotes: "<p>스피릿의 맛을 희석하지 않으면서 청량감을 더하기 위해 사용됩니다.</p><p>하이볼이나 스프리츠 계열에서 탄산감만 제공하며, 베네치안 스프리츠에서는 아페롤과 프로세코에 가벼움을 더해줍니다.</p><p>무설탕이라 칵테일의 당도 조절이 용이합니다.</p>",
+        substituteNotes: "<p>Perrier나 Topo Chico로 대체 가능합니다.</p><p>일반 탄산수(Club Soda)도 사용 가능하나 미네랄 풍미가 적습니다.</p>",
+        createdAt: "2024-01-11",
+        updatedAt: "2024-01-16",
+        availableCocktails: [
+          { id: 13, name: "Aperol Spritz", nameKr: "아페롤 스프리츠", image: "https://via.placeholder.com/80x80/FF6347/FFFFFF?text=Aperol+Spritz" },
+          { id: 14, name: "Highball", nameKr: "하이볼", image: "https://via.placeholder.com/80x80/F5DEB3/000000?text=Highball" },
+          { id: 15, name: "Tom Collins", nameKr: "톰 콜린스", image: "https://via.placeholder.com/80x80/FFFACD/000000?text=Tom+Collins" }
+        ]
+      },
+      6: {
+        carbonatedId: 6,
+        brandId: 6,
+        brandName: "Fentimans",
+        countryId: 1,
+        countryName: "United Kingdom",
+        carbonatedName: "Fentimans Victorian Lemonade",
+        carbonatedNameKr: "펜티먼스 빅토리안 레모네이드",
+        sugarLevel: 3,
+        image: "https://via.placeholder.com/200x200/FFFACD/000000?text=Lemonade",
+        notes: "<p>전통 보타니컬 발효 방식으로 만든 프리미엄 레모네이드입니다.</p><p>레몬과 허브의 복합적인 향미, 적당한 단맛과 탄산이 특징입니다.</p>",
+        shelfLifeDays: 365, // 약 1년
+        storageType: "냉장 보관 권장, 개봉 후 3일 이내 소비",
+        whenToUseNotes: "<p>보드카나 진 베이스 칵테일에서 시트러스 노트와 청량감을 동시에 제공하기 위해 사용됩니다.</p><p>리네이드 스프리츠에서는 화이트 와인과 조화를 이루며, 섄디에서는 맥주에 상큼함을 더해줍니다.</p><p>일반 레몬 사이다보다 허브 향이 있어 복합적인 맛을 만들어냅니다.</p>",
+        substituteNotes: "<p>Schweppes Lemonade나 7UP으로 대체 가능하나 향미가 단순합니다.</p><p>직접 만든 레모네이드에 탄산수를 섞어도 좋습니다.</p>",
+        createdAt: "2024-01-10",
+        updatedAt: "2024-01-15",
+        availableCocktails: [
+          { id: 16, name: "Vodka Lemonade", nameKr: "보드카 레모네이드", image: "https://via.placeholder.com/80x80/FFFFE0/000000?text=Vodka+Lemonade" },
+          { id: 17, name: "Shandy", nameKr: "섄디", image: "https://via.placeholder.com/80x80/F0E68C/000000?text=Shandy" },
+          { id: 18, name: "Lynchburg Lemonade", nameKr: "린치버그 레모네이드", image: "https://via.placeholder.com/80x80/FFD700/000000?text=Lynchburg" }
+        ]
+      }
+    };
+
+    const carbonatedData = carbonatedDataMap[carbonatedId];
+
+    if (!carbonatedData) {
+      return [404, { error: 'Carbonated not found' }];
+    }
+
+    return [200, { data: carbonatedData }];
+  });
 }
