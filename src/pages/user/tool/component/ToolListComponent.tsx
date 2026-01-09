@@ -70,12 +70,6 @@ const ToolListComponent: React.FC<ToolListComponentProps> = ({ tool, index, onCl
                 {stripHtmlTags(tool.notes)}
               </ToolDescription>
             </Box>
-
-            <BottomInfo>
-              <DateText variant="caption">
-                {tool.createAt}
-              </DateText>
-            </BottomInfo>
           </ContentSection>
         </CardContentArea>
       </Card>
@@ -147,21 +141,5 @@ const ToolCategory = styled(Typography)`
     border-radius: 16px;
     display: inline-block;
     width: fit-content;
-  }
-`;
-
-const BottomInfo = styled(Box)`
-  && {
-    display: flex;
-    justify-content: flex-start;
-    align-items: flex-end;
-  }
-`;
-
-const DateText = styled(Typography)`
-  && {
-    color: #999;
-    font-size: 0.875rem;
-    align-self: flex-end;
   }
 `;

@@ -70,16 +70,12 @@ const SpiritProductListComponent: React.FC<SpiritListComponentProps> = ({ spirit
               <SpiritDescription variant="body2">
                 {spirit.profileNote}
               </SpiritDescription>
-
-              <SpiritAlcohol variant="body2">
-                abz {spirit.absPercentage}%
-              </SpiritAlcohol>
             </Box>
 
             <BottomInfo>
-              <DateText variant="caption">
-                {spirit.createAt}
-              </DateText>
+              <SpiritAlcohol variant="body2">
+                abz {spirit.absPercentage}%
+              </SpiritAlcohol>
               <Box sx={{ textAlign: 'right' }}>
                 <DiscontinuedText 
                   variant="caption" 
@@ -166,14 +162,6 @@ const BottomInfo = styled(Box)`
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-  }
-`;
-
-const DateText = styled(Typography)`
-  && {
-    color: #999;
-    font-size: 0.875rem;
-    align-self: flex-end;
   }
 `;
 

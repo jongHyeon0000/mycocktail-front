@@ -63,16 +63,12 @@ const CocktailListComponent: React.FC<CocktailListComponentProps> = ({ cocktail,
               <CocktailDescription variant="body2">
                 {cocktail.profileNote}
               </CocktailDescription>
-
-              <CocktailAlcohol variant="body2">
-                abz {cocktail.absPercentage}%
-              </CocktailAlcohol>
             </Box>
 
             <BottomInfo>
-              <DateText variant="caption">
-                {cocktail.createAt}
-              </DateText>
+              <CocktailAlcohol variant="body2">
+                abz {cocktail.absPercentage}%
+              </CocktailAlcohol>
               <LikeText variant="caption">
                 ❤️ {cocktail.likeCount}
               </LikeText>
@@ -161,13 +157,6 @@ const BottomInfo = styled(Box)`
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-`;
-
-const DateText = styled(Typography)`
-  && {
-    color: #999;
-    font-size: 0.875rem;
   }
 `;
 
