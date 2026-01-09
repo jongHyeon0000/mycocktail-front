@@ -2272,4 +2272,288 @@ if(USE_MOCK) {
 
     return [200, { data: glasswareData }];
   });
+
+  /*
+   * 비터스 Bitters List
+   * */
+  mock.onGet('/api/bitters').reply((config) => {
+    const { page = 1, limit = 6, sort = 'recent', search } = config.params || {};
+
+    // 전체 Mock 데이터 (5개)
+    const fullData = [
+      {
+        bittersId: 1,
+        brandId: 1,
+        brandName: "Angostura",
+        countryId: 1,
+        countryName: "Trinidad and Tobago",
+        bittersName: "Angostura Aromatic Bitters",
+        bittersNameKr: "앙고스투라 아로마틱 비터스",
+        abv: 44.7,
+        image: "https://via.placeholder.com/200x200/8B4513/FFFFFF?text=Angostura",
+        notes: "<p>1824년부터 생산된 세계에서 가장 유명한 비터스입니다.</p><p>겐티안 뿌리, 허브, 스파이스의 복합적인 향미가 특징입니다.</p>",
+        storageType: "실온 보관, 직사광선 피함",
+        shelfLifeDays: 1825, // 약 5년
+        whenToUseNotes: "<p>위스키 베이스 클래식 칵테일에서 깊이와 복합성을 더하기 위해 사용됩니다.</p><p>올드 패션드에서는 설탕과 함께 비터스윗한 밸런스를, 맨해튼에서는 베르무트의 허브 노트를 강화하는 역할을 합니다.</p><p>2~3대시 정도가 적당하며, 과하게 사용하면 쓴맛이 지배적이 됩니다.</p>",
+        substituteNotes: "<p>Peychaud's Bitters로 대체 가능하나 향미가 다릅니다.</p><p>자체 제작 아로마틱 비터스로도 대체할 수 있습니다.</p>",
+        createdAt: "2024-01-15",
+        updatedAt: "2024-01-20",
+        availableCocktails: [
+          { id: 1, name: "Old Fashioned", nameKr: "올드 패션드", image: "https://via.placeholder.com/80x80/D2691E/FFFFFF?text=Old+Fashioned" },
+          { id: 2, name: "Manhattan", nameKr: "맨해튼", image: "https://via.placeholder.com/80x80/8B0000/FFFFFF?text=Manhattan" },
+          { id: 3, name: "Whiskey Sour", nameKr: "위스키 사워", image: "https://via.placeholder.com/80x80/FFD700/000000?text=Whiskey+Sour" }
+        ]
+      },
+      {
+        bittersId: 2,
+        brandId: 2,
+        brandName: "Peychaud's",
+        countryId: 2,
+        countryName: "United States",
+        bittersName: "Peychaud's Bitters",
+        bittersNameKr: "페이쇼즈 비터스",
+        abv: 35.0,
+        image: "https://via.placeholder.com/200x200/DC143C/FFFFFF?text=Peychauds",
+        notes: "<p>1830년대 뉴올리언스에서 탄생한 아니스 향의 비터스입니다.</p><p>밝은 붉은색이 특징이며, 달콤하고 꽃향기가 나는 프로필을 가지고 있습니다.</p>",
+        storageType: "실온 보관, 밀봉 보관",
+        shelfLifeDays: 1460, // 약 4년
+        whenToUseNotes: "<p>뉴올리언스 스타일 칵테일에서 아니스와 플로럴 노트를 더하기 위해 사용됩니다.</p><p>사제락에서는 압생트와 조화를 이루며 독특한 향미 프로필을 만들어냅니다.</p><p>앙고스투라보다 부드럽고 달콤한 느낌으로, 라이 위스키 베이스 칵테일과 특히 잘 어울립니다.</p>",
+        substituteNotes: "<p>Angostura Bitters로 대체 가능하지만 색과 향이 다릅니다.</p><p>아니스나 펜넬을 넣은 자체 비터스로 유사하게 만들 수 있습니다.</p>",
+        createdAt: "2024-01-14",
+        updatedAt: "2024-01-19",
+        availableCocktails: [
+          { id: 4, name: "Sazerac", nameKr: "사제락", image: "https://via.placeholder.com/80x80/8B4513/FFFFFF?text=Sazerac" },
+          { id: 5, name: "Vieux Carré", nameKr: "비외 카레", image: "https://via.placeholder.com/80x80/A0522D/FFFFFF?text=Vieux+Carre" },
+          { id: 6, name: "Creole Cocktail", nameKr: "크리올 칵테일", image: "https://via.placeholder.com/80x80/CD5C5C/FFFFFF?text=Creole" }
+        ]
+      },
+      {
+        bittersId: 3,
+        brandId: 3,
+        brandName: "The Bitter Truth",
+        countryId: 3,
+        countryName: "Germany",
+        bittersName: "The Bitter Truth Orange Bitters",
+        bittersNameKr: "더 비터 트루스 오렌지 비터스",
+        abv: 39.0,
+        image: "https://via.placeholder.com/200x200/FF8C00/000000?text=Orange+Bitters",
+        notes: "<p>독일의 크래프트 비터스 브랜드에서 만든 오렌지 비터스입니다.</p><p>신선한 오렌지 껍질과 스파이스의 조화로운 향미가 특징입니다.</p>",
+        storageType: "서늘한 곳에 보관, 개봉 후 냉장 권장",
+        shelfLifeDays: 1095, // 약 3년
+        whenToUseNotes: "<p>진 베이스 칵테일에서 시트러스 향을 강화하고 밝은 느낌을 더하기 위해 사용됩니다.</p><p>마티니에 1~2대시 추가하면 복합적인 아로마를 더해주며, 진 토닉에서는 토닉워터의 쓴맛과 조화를 이룹니다.</p><p>베르무트나 캄파리 같은 재료와도 잘 어울려 이탈리아 스타일 칵테일에도 적합합니다.</p>",
+        substituteNotes: "<p>Regan's Orange Bitters No.6로 대체 가능합니다.</p><p>오렌지 필과 스파이스로 자체 제작도 가능합니다.</p>",
+        createdAt: "2024-01-13",
+        updatedAt: "2024-01-18",
+        availableCocktails: [
+          { id: 7, name: "Martini", nameKr: "마티니", image: "https://via.placeholder.com/80x80/E6E6FA/000000?text=Martini" },
+          { id: 8, name: "Gin & Tonic", nameKr: "진 토닉", image: "https://via.placeholder.com/80x80/87CEEB/000000?text=G&T" },
+          { id: 9, name: "Brooklyn", nameKr: "브루클린", image: "https://via.placeholder.com/80x80/8B4513/FFFFFF?text=Brooklyn" }
+        ]
+      },
+      {
+        bittersId: 4,
+        brandId: 4,
+        brandName: "Fee Brothers",
+        countryId: 2,
+        countryName: "United States",
+        bittersName: "Fee Brothers Chocolate Bitters",
+        bittersNameKr: "피 브라더스 초콜릿 비터스",
+        abv: 2.7,
+        image: "https://via.placeholder.com/200x200/654321/FFFFFF?text=Chocolate+Bitters",
+        notes: "<p>1864년부터 이어온 전통의 비터스 브랜드에서 만든 초콜릿 비터스입니다.</p><p>진한 다크 초콜릿과 카카오의 풍미가 특징입니다.</p>",
+        storageType: "실온 보관",
+        shelfLifeDays: 730, // 약 2년
+        whenToUseNotes: "<p>커피나 초콜릿 풍미가 들어간 디저트 칵테일에서 깊이와 리치함을 더하기 위해 사용됩니다.</p><p>에스프레소 마티니에서는 커피의 로스티한 맛을 강화하고, 위스키나 럼 베이스 칵테일에서는 다크 초콜릿 노트를 추가합니다.</p><p>저도수라서 비교적 많이 사용해도 안전하며, 3~4대시 정도가 적당합니다.</p>",
+        substituteNotes: "<p>Aztec Chocolate Bitters로 대체 가능합니다.</p><p>카카오 닙을 이용한 자체 비터스로 만들 수도 있습니다.</p>",
+        createdAt: "2024-01-12",
+        updatedAt: "2024-01-17",
+        availableCocktails: [
+          { id: 10, name: "Espresso Martini", nameKr: "에스프레소 마티니", image: "https://via.placeholder.com/80x80/3B2F2F/FFFFFF?text=Espresso" },
+          { id: 11, name: "Revolver", nameKr: "리볼버", image: "https://via.placeholder.com/80x80/8B4513/FFFFFF?text=Revolver" },
+          { id: 12, name: "Brandy Alexander", nameKr: "브랜디 알렉산더", image: "https://via.placeholder.com/80x80/D2691E/FFFFFF?text=Alexander" }
+        ]
+      },
+      {
+        bittersId: 5,
+        brandId: 5,
+        brandName: "Scrappy's",
+        countryId: 2,
+        countryName: "United States",
+        bittersName: "Scrappy's Lavender Bitters",
+        bittersNameKr: "스크래피스 라벤더 비터스",
+        abv: 52.5,
+        image: "https://via.placeholder.com/200x200/E6E6FA/000000?text=Lavender+Bitters",
+        notes: "<p>시애틀 기반의 크래프트 비터스 브랜드입니다.</p><p>유기농 라벤더를 사용하여 섬세한 꽃향기와 허브 노트가 특징입니다.</p>",
+        storageType: "서늘하고 어두운 곳에 보관",
+        shelfLifeDays: 1095, // 약 3년
+        whenToUseNotes: "<p>진 베이스나 샴페인 칵테일에서 우아한 플로럴 노트를 더하기 위해 사용됩니다.</p><p>에비에이션이나 프렌치 75 같은 섬세한 칵테일에 1~2대시만으로도 꽃향기를 선사합니다.</p><p>과하게 사용하면 비누 같은 향이 날 수 있으니 주의가 필요하며, 레몬이나 바이올렛 리큐르와 특히 잘 어울립니다.</p>",
+        substituteNotes: "<p>The Bitter Truth Violet Bitters로 유사한 플로럴 느낌을 낼 수 있습니다.</p><p>건조 라벤더로 자체 틴크처를 만들어 사용 가능합니다.</p>",
+        createdAt: "2024-01-11",
+        updatedAt: "2024-01-16",
+        availableCocktails: [
+          { id: 13, name: "Aviation", nameKr: "에비에이션", image: "https://via.placeholder.com/80x80/9370DB/FFFFFF?text=Aviation" },
+          { id: 14, name: "French 75", nameKr: "프렌치 75", image: "https://via.placeholder.com/80x80/F0E68C/000000?text=French+75" },
+          { id: 15, name: "Bee's Knees", nameKr: "비즈 니즈", image: "https://via.placeholder.com/80x80/FFD700/000000?text=Bees+Knees" }
+        ]
+      }
+    ];
+
+    // 정렬 처리
+    let sortedData = [...fullData];
+
+    if (sort === 'name') {
+      sortedData.sort((a, b) => a.bittersName.localeCompare(b.bittersName));
+    }
+    // recent는 기본 순서 유지
+
+    // 검색 처리
+    if (search) {
+      sortedData = sortedData.filter(bitters =>
+          bitters.bittersName.toLowerCase().includes(search.toLowerCase()) ||
+          bitters.bittersNameKr.includes(search) ||
+          bitters.brandName.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+
+    // 페이지네이션 처리
+    const startIndex = (page - 1) * limit;
+    const endIndex = startIndex + limit;
+    const paginatedData = sortedData.slice(startIndex, endIndex);
+
+    return [200, { data: paginatedData }];
+  });
+
+  /*
+   * 비터스 Detail (개별 조회)
+   * */
+  mock.onGet(/\/api\/bitters\/\d+/).reply((config) => {
+    const bittersId = parseInt(config.url?.split('/').pop() || '1');
+
+    // 비터스 데이터 맵
+    const bittersDataMap: { [key: number]: any } = {
+      1: {
+        bittersId: 1,
+        brandId: 1,
+        brandName: "Angostura",
+        countryId: 1,
+        countryName: "Trinidad and Tobago",
+        bittersName: "Angostura Aromatic Bitters",
+        bittersNameKr: "앙고스투라 아로마틱 비터스",
+        abv: 44.7,
+        image: "https://via.placeholder.com/200x200/8B4513/FFFFFF?text=Angostura",
+        notes: "<p>1824년부터 생산된 세계에서 가장 유명한 비터스입니다.</p><p>겐티안 뿌리, 허브, 스파이스의 복합적인 향미가 특징입니다.</p>",
+        storageType: "실온 보관, 직사광선 피함",
+        shelfLifeDays: 1825, // 약 5년
+        whenToUseNotes: "<p>위스키 베이스 클래식 칵테일에서 깊이와 복합성을 더하기 위해 사용됩니다.</p><p>올드 패션드에서는 설탕과 함께 비터스윗한 밸런스를, 맨해튼에서는 베르무트의 허브 노트를 강화하는 역할을 합니다.</p><p>2~3대시 정도가 적당하며, 과하게 사용하면 쓴맛이 지배적이 됩니다.</p>",
+        substituteNotes: "<p>Peychaud's Bitters로 대체 가능하나 향미가 다릅니다.</p><p>자체 제작 아로마틱 비터스로도 대체할 수 있습니다.</p>",
+        createdAt: "2024-01-15",
+        updatedAt: "2024-01-20",
+        availableCocktails: [
+          { id: 1, name: "Old Fashioned", nameKr: "올드 패션드", image: "https://via.placeholder.com/80x80/D2691E/FFFFFF?text=Old+Fashioned" },
+          { id: 2, name: "Manhattan", nameKr: "맨해튼", image: "https://via.placeholder.com/80x80/8B0000/FFFFFF?text=Manhattan" },
+          { id: 3, name: "Whiskey Sour", nameKr: "위스키 사워", image: "https://via.placeholder.com/80x80/FFD700/000000?text=Whiskey+Sour" }
+        ]
+      },
+      2: {
+        bittersId: 2,
+        brandId: 2,
+        brandName: "Peychaud's",
+        countryId: 2,
+        countryName: "United States",
+        bittersName: "Peychaud's Bitters",
+        bittersNameKr: "페이쇼즈 비터스",
+        abv: 35.0,
+        image: "https://via.placeholder.com/200x200/DC143C/FFFFFF?text=Peychauds",
+        notes: "<p>1830년대 뉴올리언스에서 탄생한 아니스 향의 비터스입니다.</p><p>밝은 붉은색이 특징이며, 달콤하고 꽃향기가 나는 프로필을 가지고 있습니다.</p>",
+        storageType: "실온 보관, 밀봉 보관",
+        shelfLifeDays: 1460, // 약 4년
+        whenToUseNotes: "<p>뉴올리언스 스타일 칵테일에서 아니스와 플로럴 노트를 더하기 위해 사용됩니다.</p><p>사제락에서는 압생트와 조화를 이루며 독특한 향미 프로필을 만들어냅니다.</p><p>앙고스투라보다 부드럽고 달콤한 느낌으로, 라이 위스키 베이스 칵테일과 특히 잘 어울립니다.</p>",
+        substituteNotes: "<p>Angostura Bitters로 대체 가능하지만 색과 향이 다릅니다.</p><p>아니스나 펜넬을 넣은 자체 비터스로 유사하게 만들 수 있습니다.</p>",
+        createdAt: "2024-01-14",
+        updatedAt: "2024-01-19",
+        availableCocktails: [
+          { id: 4, name: "Sazerac", nameKr: "사제락", image: "https://via.placeholder.com/80x80/8B4513/FFFFFF?text=Sazerac" },
+          { id: 5, name: "Vieux Carré", nameKr: "비외 카레", image: "https://via.placeholder.com/80x80/A0522D/FFFFFF?text=Vieux+Carre" },
+          { id: 6, name: "Creole Cocktail", nameKr: "크리올 칵테일", image: "https://via.placeholder.com/80x80/CD5C5C/FFFFFF?text=Creole" }
+        ]
+      },
+      3: {
+        bittersId: 3,
+        brandId: 3,
+        brandName: "The Bitter Truth",
+        countryId: 3,
+        countryName: "Germany",
+        bittersName: "The Bitter Truth Orange Bitters",
+        bittersNameKr: "더 비터 트루스 오렌지 비터스",
+        abv: 39.0,
+        image: "https://via.placeholder.com/200x200/FF8C00/000000?text=Orange+Bitters",
+        notes: "<p>독일의 크래프트 비터스 브랜드에서 만든 오렌지 비터스입니다.</p><p>신선한 오렌지 껍질과 스파이스의 조화로운 향미가 특징입니다.</p>",
+        storageType: "서늘한 곳에 보관, 개봉 후 냉장 권장",
+        shelfLifeDays: 1095, // 약 3년
+        whenToUseNotes: "<p>진 베이스 칵테일에서 시트러스 향을 강화하고 밝은 느낌을 더하기 위해 사용됩니다.</p><p>마티니에 1~2대시 추가하면 복합적인 아로마를 더해주며, 진 토닉에서는 토닉워터의 쓴맛과 조화를 이룹니다.</p><p>베르무트나 캄파리 같은 재료와도 잘 어울려 이탈리아 스타일 칵테일에도 적합합니다.</p>",
+        substituteNotes: "<p>Regan's Orange Bitters No.6로 대체 가능합니다.</p><p>오렌지 필과 스파이스로 자체 제작도 가능합니다.</p>",
+        createdAt: "2024-01-13",
+        updatedAt: "2024-01-18",
+        availableCocktails: [
+          { id: 7, name: "Martini", nameKr: "마티니", image: "https://via.placeholder.com/80x80/E6E6FA/000000?text=Martini" },
+          { id: 8, name: "Gin & Tonic", nameKr: "진 토닉", image: "https://via.placeholder.com/80x80/87CEEB/000000?text=G&T" },
+          { id: 9, name: "Brooklyn", nameKr: "브루클린", image: "https://via.placeholder.com/80x80/8B4513/FFFFFF?text=Brooklyn" }
+        ]
+      },
+      4: {
+        bittersId: 4,
+        brandId: 4,
+        brandName: "Fee Brothers",
+        countryId: 2,
+        countryName: "United States",
+        bittersName: "Fee Brothers Chocolate Bitters",
+        bittersNameKr: "피 브라더스 초콜릿 비터스",
+        abv: 2.7,
+        image: "https://via.placeholder.com/200x200/654321/FFFFFF?text=Chocolate+Bitters",
+        notes: "<p>1864년부터 이어온 전통의 비터스 브랜드에서 만든 초콜릿 비터스입니다.</p><p>진한 다크 초콜릿과 카카오의 풍미가 특징입니다.</p>",
+        storageType: "실온 보관",
+        shelfLifeDays: 730, // 약 2년
+        whenToUseNotes: "<p>커피나 초콜릿 풍미가 들어간 디저트 칵테일에서 깊이와 리치함을 더하기 위해 사용됩니다.</p><p>에스프레소 마티니에서는 커피의 로스티한 맛을 강화하고, 위스키나 럼 베이스 칵테일에서는 다크 초콜릿 노트를 추가합니다.</p><p>저도수라서 비교적 많이 사용해도 안전하며, 3~4대시 정도가 적당합니다.</p>",
+        substituteNotes: "<p>Aztec Chocolate Bitters로 대체 가능합니다.</p><p>카카오 닙을 이용한 자체 비터스로 만들 수도 있습니다.</p>",
+        createdAt: "2024-01-12",
+        updatedAt: "2024-01-17",
+        availableCocktails: [
+          { id: 10, name: "Espresso Martini", nameKr: "에스프레소 마티니", image: "https://via.placeholder.com/80x80/3B2F2F/FFFFFF?text=Espresso" },
+          { id: 11, name: "Revolver", nameKr: "리볼버", image: "https://via.placeholder.com/80x80/8B4513/FFFFFF?text=Revolver" },
+          { id: 12, name: "Brandy Alexander", nameKr: "브랜디 알렉산더", image: "https://via.placeholder.com/80x80/D2691E/FFFFFF?text=Alexander" }
+        ]
+      },
+      5: {
+        bittersId: 5,
+        brandId: 5,
+        brandName: "Scrappy's",
+        countryId: 2,
+        countryName: "United States",
+        bittersName: "Scrappy's Lavender Bitters",
+        bittersNameKr: "스크래피스 라벤더 비터스",
+        abv: 52.5,
+        image: "https://via.placeholder.com/200x200/E6E6FA/000000?text=Lavender+Bitters",
+        notes: "<p>시애틀 기반의 크래프트 비터스 브랜드입니다.</p><p>유기농 라벤더를 사용하여 섬세한 꽃향기와 허브 노트가 특징입니다.</p>",
+        storageType: "서늘하고 어두운 곳에 보관",
+        shelfLifeDays: 1095, // 약 3년
+        whenToUseNotes: "<p>진 베이스나 샴페인 칵테일에서 우아한 플로럴 노트를 더하기 위해 사용됩니다.</p><p>에비에이션이나 프렌치 75 같은 섬세한 칵테일에 1~2대시만으로도 꽃향기를 선사합니다.</p><p>과하게 사용하면 비누 같은 향이 날 수 있으니 주의가 필요하며, 레몬이나 바이올렛 리큐르와 특히 잘 어울립니다.</p>",
+        substituteNotes: "<p>The Bitter Truth Violet Bitters로 유사한 플로럴 느낌을 낼 수 있습니다.</p><p>건조 라벤더로 자체 틴크처를 만들어 사용 가능합니다.</p>",
+        createdAt: "2024-01-11",
+        updatedAt: "2024-01-16",
+        availableCocktails: [
+          { id: 13, name: "Aviation", nameKr: "에비에이션", image: "https://via.placeholder.com/80x80/9370DB/FFFFFF?text=Aviation" },
+          { id: 14, name: "French 75", nameKr: "프렌치 75", image: "https://via.placeholder.com/80x80/F0E68C/000000?text=French+75" },
+          { id: 15, name: "Bee's Knees", nameKr: "비즈 니즈", image: "https://via.placeholder.com/80x80/FFD700/000000?text=Bees+Knees" }
+        ]
+      }
+    };
+
+    const bittersData = bittersDataMap[bittersId];
+
+    if (!bittersData) {
+      return [404, { error: 'Bitters not found' }];
+    }
+
+    return [200, { data: bittersData }];
+  });
 }
