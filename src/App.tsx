@@ -1,9 +1,9 @@
 import { RecoilRoot } from "recoil";
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { APP_ROUTES } from "./config/RoutesConfig.tsx";
+import { APP_ROUTES } from "./route/RoutesConfig.tsx";
 import { Box } from "@mui/material";
-import GNB from "./pages/user/common/component/GNB.tsx";
+import GNB from "./app/user/common/component/GNB.tsx";
 
 const App: React.FC = () => {
   return (
