@@ -3,7 +3,7 @@ import { Box, Typography } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import styled from "styled-components";
-import {MY_PAGE_SUB_ROUTES} from "../MyPageRoutes.tsx";
+import {MY_PAGE_SUB_ROUTES} from "../../../../route/MyPageRoutes.tsx";
 
 const MyPageSidebar: React.FC = () => {
   const navigate = useNavigate();

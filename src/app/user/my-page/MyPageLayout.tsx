@@ -3,7 +3,7 @@ import { Box, Container } from "@mui/material";
 import { Routes, Route, Navigate } from "react-router-dom";
 import styled from "styled-components";
 import MyPageSidebar from "./component/MyPageSidebar";
-import {MY_PAGE_SUB_ROUTES} from "./MyPageRoutes.tsx";
+import {MY_PAGE_SUB_ROUTES} from "../../../route/MyPageRoutes.tsx";
 
 const MyPageLayout: React.FC = () => {
   return (
