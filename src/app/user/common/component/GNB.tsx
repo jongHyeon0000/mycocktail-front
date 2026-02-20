@@ -270,7 +270,14 @@ const GNB: React.FC = () => {
                 {/* 하단 영역 - 마이페이지와 활성 상태 */}
                 <Box sx={{ mt: "auto" }}>
                   {/* 마이페이지 버튼 */}
-                  <MyPageButton variant="outlined" fullWidth>
+                  <MyPageButton
+                      variant="outlined"
+                      fullWidth
+                      onClick={() => {
+                        navigate('/my-page');
+                        setIsProfileOpen(false);  // drawer 닫기
+                      }}
+                  >
                     마이페이지
                   </MyPageButton>
 
