@@ -32,6 +32,7 @@ export const APP_ROUTES: readonly RouteType[] = [
   // ══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
   // GNB 탭
   // ══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+      // GNB 재료 탭
       { path: '/cocktail', name: 'cocktail list', nameKr: '레시피', element: <CocktailListPage/>, type: 'gnb'},
       { path: '/spirit', name: 'spirit list', nameKr: '기주', element: <SpiritProductListPage/>, type: 'gnb'},
       { path: '/ingredients', name: 'ingredients list', nameKr: '재료', element: <IngredientListPage/>, type: 'gnb'},
