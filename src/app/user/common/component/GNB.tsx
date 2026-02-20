@@ -263,7 +263,7 @@ const GNB: React.FC = () => {
                   </IntroTitle>
                   <IntroText variant="body2">
                     아야츠노 유니입니다. 🍸
-                    주말마다 새로운 레시피에 도전하고 있어요!
+                    안녕하시지~~~~
                   </IntroText>
                 </Box>
 
@@ -271,7 +271,7 @@ const GNB: React.FC = () => {
                 <Box sx={{ mt: "auto" }}>
                   {/* 마이페이지 버튼 */}
                   <MyPageButton variant="outlined" fullWidth>
-                    마이페이지 &gt;
+                    마이페이지
                   </MyPageButton>
 
                   {/* 활성 상태 */}
