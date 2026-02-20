@@ -108,7 +108,7 @@ const CocktailListPage: React.FC = () => {
   const handleScroll = useCallback(async () => {
     // 현재 스크롤 위치 + 뷰포트 높이가 전체 문서 높이에서 100px 이내에 도달하면 로드
     if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 100) {
-      if (cocktailListHasMore || !cocktailListLoading || !cocktailListLoadingMore) {
+      if (cocktailListHasMore && !cocktailListLoading && !cocktailListLoadingMore) {
         await fetchReadCocktailList({
           page: currentPage + 1,
           limit: PAGE_SIZE,
@@ -237,23 +237,20 @@ const CocktailListPage: React.FC = () => {
           )}
         </CocktailList>
 
-        {/* 무한 스크롤 로딩 인디케이터 */}
-        {cocktailListLoadingMore && (
-          <Box display="flex" justifyContent="center" alignItems="center" py={4}>
-            <CircularProgress size={40} />
-            <Typography variant="body2" sx={{ ml: 2 }}>
-              더 많은 칵테일을 불러오는 중...
-            </Typography>
-          </Box>
+        {/* 추가 로딩 중 (무한 스크롤) */}
+        {cocktailListLoading && (
+            <Box display="flex" justifyContent="center" alignItems="center" py={4}>
+              <CircularProgress size={48} />
+            </Box>
         )}
 
-        {/* 더 이상 불러올 데이터가 없을 때 */}
-        {!isSearching && cocktailList && cocktailList.length > 0 && !cocktailListHasMore && !cocktailListLoadingMore && (
-          <Box display="flex" justifyContent="center" alignItems="center" py={4}>
-            <Typography variant="body2" color="text.secondary">
-              모든 칵테일을 불러왔습니다 🍸
-            </Typography>
-          </Box>
+        {/* 리스트 끝 메시지 */}
+        {!isSearching && !cocktailListHasMore && (
+            <Box display="flex" justifyContent="center" alignItems="center" py={4}>
+              <Typography variant="body2" color="text.secondary">
+                모든 칵테일을 불러왔습니다 🍸
+              </Typography>
+            </Box>
         )}
       </Container>
 

@@ -1,6 +1,16 @@
 import React, {type SetStateAction, useCallback, useEffect, useState} from "react";
 import styled from "styled-components";
-import {Box, Container, FormControl, InputAdornment, MenuItem, Select, TextField, Typography} from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  Container,
+  FormControl,
+  InputAdornment,
+  MenuItem,
+  Select,
+  TextField,
+  Typography
+} from "@mui/material";
 import useReadGlassware from "../service/useReadGlassware.tsx";
 import useReadGlasswareList from "../service/useReadGlasswareList.tsx";
 import {showErrorAlert} from "../../common/utils/AlertUtils.ts";
@@ -100,7 +110,7 @@ const GlasswareListPage: React.FC = () => {
   const handleScroll = useCallback(async () => {
     // 현재 스크롤 위치 + 뷰포트 높이가 전체 문서 높이에서 100px 이내에 도달하면 로드
     if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 100) {
-      if (glasswareListHasMore || !glasswareListLoading || !glasswareListLoadingMore) {
+      if (glasswareListHasMore && !glasswareListLoading && !glasswareListLoadingMore) {
         await fetchReadGlasswareList({
           page: currentPage + 1,
           limit: PAGE_SIZE,
@@ -235,8 +245,15 @@ const GlasswareListPage: React.FC = () => {
             )}
           </GlasswareList>
 
+          {/* 추가 로딩 중 (무한 스크롤) */}
+          {glasswareListLoadingMore && (
+              <Box display="flex" justifyContent="center" alignItems="center" py={4}>
+                <CircularProgress size={48} />
+              </Box>
+          )}
+
           {/* 리스트 끝 메시지 */}
-          {!isSearching && (
+          {!isSearching && !glasswareListHasMore && (
               <Box display="flex" justifyContent="center" alignItems="center" py={4}>
                 <Typography variant="body2" color="text.secondary">
                   모든 서빙 잔을 확인했습니다 🍸

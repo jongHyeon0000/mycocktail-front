@@ -3,7 +3,17 @@ import useReadGarnishes from "../service/useReadGarnishes.tsx";
 import useReadGarnishesList from "../service/useReadGarnishesList.tsx";
 import {showErrorAlert} from "../../../common/utils/AlertUtils.ts";
 import LoadingOverlay from "../../../common/component/loading/LoadingOverlay.tsx";
-import {Box, Container, FormControl, InputAdornment, MenuItem, Select, TextField, Typography} from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  Container,
+  FormControl,
+  InputAdornment,
+  MenuItem,
+  Select,
+  TextField,
+  Typography
+} from "@mui/material";
 import SearchLoadingOverlay from "../../../common/component/loading/SearchLoadingOverlay.tsx";
 import styled from "styled-components";
 import GarnishesListComponent from "../component/GarnishesListComponent.tsx";
@@ -100,7 +110,7 @@ const GarnishesListPage: React.FC = () => {
   const handleScroll = useCallback(async () => {
     // 현재 스크롤 위치 + 뷰포트 높이가 전체 문서 높이에서 100px 이내에 도달하면 로드
     if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 100) {
-      if (garnishesListHasMore || !garnishesListLoading || !garnishesListLoadingMore) {
+      if (garnishesListHasMore && !garnishesListLoading && !garnishesListLoadingMore) {
         await fetchReadGarnishesList({
           page: currentPage + 1,
           limit: PAGE_SIZE,
@@ -235,8 +245,15 @@ const GarnishesListPage: React.FC = () => {
             )}
           </GarnishesList>
 
+          {/* 추가 로딩 중 (무한 스크롤) */}
+          {garnishesListLoadingMore && (
+              <Box display="flex" justifyContent="center" alignItems="center" py={4}>
+                <CircularProgress size={48} />
+              </Box>
+          )}
+
           {/* 리스트 끝 메시지 */}
-          {!isSearching && (
+          {!isSearching && !garnishesListHasMore && (
               <Box display="flex" justifyContent="center" alignItems="center" py={4}>
                 <Typography variant="body2" color="text.secondary">
                   모든 가니쉬를 확인했습니다 🍸

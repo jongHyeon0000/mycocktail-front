@@ -9,7 +9,17 @@ import useReadSyrup from "../../syrup/service/useReadSyrup.tsx";
 import useReadOtherIngredients from "../../other_ingredients/service/useReadOtherIngredients.tsx";
 import {showErrorAlert} from "../../../common/utils/AlertUtils.ts";
 import LoadingOverlay from "../../../common/component/loading/LoadingOverlay.tsx";
-import {Box, Container, FormControl, InputAdornment, MenuItem, Select, TextField, Typography} from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  Container,
+  FormControl,
+  InputAdornment,
+  MenuItem,
+  Select,
+  TextField,
+  Typography
+} from "@mui/material";
 import SearchLoadingOverlay from "../../../common/component/loading/SearchLoadingOverlay.tsx";
 import styled from "styled-components";
 import IngredientListComponent from "../component/IngredientListComponent.tsx";
@@ -295,6 +305,13 @@ const IngredientListPage: React.FC = () => {
                 ))
             )}
           </IngredientList>
+
+          {/* 추가 로딩 중 (무한 스크롤) */}
+          {ingredientListLoadingMore && (
+              <Box display="flex" justifyContent="center" alignItems="center" py={4}>
+                <CircularProgress size={48} />
+              </Box>
+          )}
 
           {/* 리스트 끝 메시지 */}
           {!isSearching && !ingredientListHasMore && (
