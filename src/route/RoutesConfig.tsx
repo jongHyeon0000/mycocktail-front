@@ -9,7 +9,7 @@ import GarnishesListPage from "../app/user/ingredients/garnishes/page/GarnishesL
 import JuiceListPage from "../app/user/ingredients/juice/page/JuiceListPage.tsx";
 import OtherListPage from "../app/user/ingredients/other_ingredients/page/OtherListPage.tsx";
 import SyrupListPage from "../app/user/ingredients/syrup/page/SyrupListPage.tsx";
-import IngredientsListPage from "../app/user/ingredients/common/page/IngredientsListPage.tsx";
+import IngredientListPage from "../app/user/ingredients/ingredient/page/IngredientListPage.tsx";
 import ToolListPage from "../app/user/tool/page/ToolListPage.tsx";
 import TechniqueListPage from "../app/user/technique/page/TechniqueListPage.tsx";
 import GlasswareListPage from "../app/user/glassware/page/GlasswareListPage.tsx";
@@ -33,7 +33,7 @@ export const APP_ROUTES: readonly RouteType[] = [
     * */
     { path: '/cocktail', name: 'cocktail list', nameKr: '레시피', element: <CocktailListPage/>, type: 'gnb'},
     { path: '/spirit', name: 'spirit list', nameKr: '기주', element: <SpiritProductListPage/>, type: 'gnb'},
-    { path: '/ingredients', name: 'ingredients list', nameKr: '재료', element: <IngredientsListPage/>, type: 'gnb'},
+    { path: '/ingredients', name: 'ingredients list', nameKr: '재료', element: <IngredientListPage/>, type: 'gnb'},
     { path: '/tool', name: 'tool list', nameKr: '도구', element: <ToolListPage/>, type: 'gnb'},
     { path: '/technique', name: 'technique list', nameKr: '기법', element: <TechniqueListPage/>, type: 'gnb'},
     { path: '/glassware', name: 'glassware list', nameKr: '잔', element: <GlasswareListPage/>, type: 'gnb'},

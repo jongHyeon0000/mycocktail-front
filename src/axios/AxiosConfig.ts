@@ -4511,4 +4511,478 @@ if(USE_MOCK) {
       }, 1000);
     });
   });
+
+  // ==========================================
+  // Unified Ingredients API (7 types x 2 = 14 items)
+  // ==========================================
+  const unifiedIngredientsMockData = [
+    // Juice (2개)
+    {
+      type: 'juice',
+      juiceId: 1,
+      brandId: 7,
+      brandName: "Tropicana",
+      brandNameKr: "트로피카나",
+      countryId: 2,
+      countryName: "United States",
+      countryNameKr: "미국",
+      juiceName: "Tropicana Pure Premium Orange Juice",
+      juiceNameKr: "트로피카나 퓨어 프리미엄 오렌지 주스",
+      sugarLevel: 4,
+      acidityLevel: 3,
+      image: "https://via.placeholder.com/200x200/FFA500/FFFFFF?text=Orange+Juice",
+      notes: "<p>100% 착즙 오렌지 주스로 농축 환원 과정 없이 신선함을 유지합니다.</p><p>자연스러운 단맛과 상큼한 산미가 균형을 이루며, 과육이 살아있습니다.</p>",
+      shelfLifeDays: 14,
+      storageType: "냉장 보관 필수, 개봉 후 5일 이내 소비",
+      whenToUseNotes: "<p>칵테일에 가장 많이 사용되는 기본 주스입니다.</p><p>신선한 오렌지 향이 스피릿의 알코올감을 부드럽게 만들어줍니다.</p>",
+      substituteNotes: "<p>Minute Maid나 Simply Orange로 대체 가능합니다.</p><p>생과일 직접 착즙이 가장 이상적이지만 편의성이 떨어집니다.</p>",
+      createdAt: "2024-01-15",
+      updatedAt: "2024-01-20",
+      availableCocktails: [
+        { id: 19, name: "Screwdriver", nameKr: "스크루드라이버", image: "https://via.placeholder.com/80x80/FFA500/FFFFFF?text=Screwdriver" },
+        { id: 20, name: "Tequila Sunrise", nameKr: "데킬라 선라이즈", image: "https://via.placeholder.com/80x80/FF6347/FFFFFF?text=Tequila+Sunrise" }
+      ]
+    },
+    {
+      type: 'juice',
+      juiceId: 2,
+      brandId: 8,
+      brandName: "Ocean Spray",
+      brandNameKr: "오션 스프레이",
+      countryId: 2,
+      countryName: "United States",
+      countryNameKr: "미국",
+      juiceName: "Ocean Spray Cranberry Juice Cocktail",
+      juiceNameKr: "오션 스프레이 크랜베리 주스 칵테일",
+      sugarLevel: 4,
+      acidityLevel: 4,
+      image: "https://via.placeholder.com/200x200/DC143C/FFFFFF?text=Cranberry+Juice",
+      notes: "<p>크랜베리 특유의 강한 산미와 떫은맛에 적당한 당분을 추가한 제품입니다.</p><p>진한 루비 색상과 타르트한 풍미가 칵테일에 깊이를 더해줍니다.</p>",
+      shelfLifeDays: 21,
+      storageType: "냉장 보관 필수, 개봉 후 7일 이내 소비",
+      whenToUseNotes: "<p>보드카 베이스 칵테일의 필수 재료입니다.</p><p>강한 산미가 알코올의 무게감을 줄여주고 칵테일을 가볍게 만들어줍니다.</p>",
+      substituteNotes: "<p>100% 크랜베리 주스를 사용할 경우 당분 추가가 필요합니다.</p><p>석류 주스로 대체 시 비슷한 색감과 산미를 얻을 수 있습니다.</p>",
+      createdAt: "2024-01-14",
+      updatedAt: "2024-01-19",
+      availableCocktails: [
+        { id: 22, name: "Cosmopolitan", nameKr: "코스모폴리탄", image: "https://via.placeholder.com/80x80/FF1493/FFFFFF?text=Cosmopolitan" },
+        { id: 23, name: "Sea Breeze", nameKr: "씨 브리즈", image: "https://via.placeholder.com/80x80/FF69B4/FFFFFF?text=Sea+Breeze" }
+      ]
+    },
+    // Bitters (2개)
+    {
+      type: 'bitters',
+      bittersId: 1,
+      brandId: 1,
+      brandName: "Angostura",
+      brandNameKr: "앙고스투라",
+      countryId: 5,
+      countryName: "Trinidad and Tobago",
+      countryNameKr: "트리니다드 토바고",
+      bittersName: "Angostura Aromatic Bitters",
+      bittersNameKr: "앙고스투라 아로마틱 비터스",
+      abv: 44.7,
+      notes: "1824년부터 생산된 세계에서 가장 유명한 비터스입니다. 칵테일에 복합적인 풍미와 깊이를 더해주며, 독특한 허브와 스파이스 향이 특징입니다.",
+      shelfLifeDays: 1825,
+      storageType: "직사광선을 피해 서늘한 곳에 보관",
+      whenToUseNotes: "Manhattan, Old Fashioned 등 클래식 칵테일의 필수 재료입니다.",
+      substituteNotes: "Peychaud's Bitters나 Fee Brothers Bitters로 대체 가능하나 풍미가 다릅니다.",
+      createdAt: "2025-01-15T10:00:00Z",
+      updatedAt: "2025-01-15T10:00:00Z",
+      image: "https://example.com/images/angostura-bitters.jpg",
+      availableCocktails: [
+        { id: 1, name: "Old Fashioned", nameKr: "올드 패션드", image: "https://example.com/cocktails/old-fashioned.jpg" },
+        { id: 2, name: "Manhattan", nameKr: "맨해튼", image: "https://example.com/cocktails/manhattan.jpg" }
+      ]
+    },
+    {
+      type: 'bitters',
+      bittersId: 2,
+      brandId: 2,
+      brandName: "Peychaud's",
+      brandNameKr: "페이쇼",
+      countryId: 2,
+      countryName: "United States",
+      countryNameKr: "미국",
+      bittersName: "Peychaud's Aromatic Cocktail Bitters",
+      bittersNameKr: "페이쇼 아로마틱 칵테일 비터스",
+      abv: 35.0,
+      notes: "1830년대 뉴올리언스에서 만들어진 비터스로, Angostura보다 가볍고 과일향이 강합니다. 아니스와 체리 풍미가 특징이며, Sazerac의 필수 재료입니다.",
+      shelfLifeDays: 1825,
+      storageType: "직사광선을 피해 서늘한 곳에 보관",
+      whenToUseNotes: "Sazerac, Vieux Carré 등 뉴올리언스 스타일 칵테일에 사용됩니다.",
+      substituteNotes: "Angostura로 대체 가능하나 Sazerac 고유의 맛은 재현하기 어렵습니다.",
+      createdAt: "2025-01-15T10:00:00Z",
+      updatedAt: "2025-01-15T10:00:00Z",
+      image: "https://example.com/images/peychauds-bitters.jpg",
+      availableCocktails: [
+        { id: 3, name: "Sazerac", nameKr: "사제락", image: "https://example.com/cocktails/sazerac.jpg" },
+        { id: 4, name: "Vieux Carré", nameKr: "비유 카레", image: "https://example.com/cocktails/vieux-carre.jpg" }
+      ]
+    },
+    // Carbonated (2개)
+    {
+      type: 'carbonated',
+      carbonatedId: 1,
+      brandId: 10,
+      brandName: "Fever-Tree",
+      brandNameKr: "피버트리",
+      countryId: 1,
+      countryName: "United Kingdom",
+      countryNameKr: "영국",
+      carbonatedName: "Fever-Tree Premium Indian Tonic Water",
+      carbonatedNameKr: "피버트리 프리미엄 인디언 토닉워터",
+      sugarLevel: 3,
+      notes: "천연 퀴닌을 사용한 프리미엄 토닉워터입니다. 부드러운 탄산과 은은한 쓴맛이 특징이며, 진의 보타니컬 향을 살려줍니다.",
+      shelfLifeDays: 365,
+      storageType: "직사광선을 피해 서늘한 곳에 보관, 개봉 후 냉장 보관",
+      whenToUseNotes: "Gin & Tonic, Vodka Tonic 등 토닉워터 베이스 칵테일에 사용됩니다.",
+      substituteNotes: "Schweppes나 Canada Dry로 대체 가능하나 퀴닌 함량과 품질이 다릅니다.",
+      createdAt: "2025-01-15T10:00:00Z",
+      updatedAt: "2025-01-15T10:00:00Z",
+      image: "https://example.com/images/fever-tree-tonic.jpg",
+      availableCocktails: [
+        { id: 5, name: "Gin & Tonic", nameKr: "진 앤 토닉", image: "https://example.com/cocktails/gin-tonic.jpg" },
+        { id: 6, name: "Vodka Tonic", nameKr: "보드카 토닉", image: "https://example.com/cocktails/vodka-tonic.jpg" }
+      ]
+    },
+    {
+      type: 'carbonated',
+      carbonatedId: 2,
+      brandId: 11,
+      brandName: "Perrier",
+      brandNameKr: "페리에",
+      countryId: 4,
+      countryName: "France",
+      countryNameKr: "프랑스",
+      carbonatedName: "Perrier Sparkling Natural Mineral Water",
+      carbonatedNameKr: "페리에 탄산 천연 미네랄 워터",
+      sugarLevel: 0,
+      notes: "프랑스 남부 베르제즈 지역의 천연 탄산수입니다. 강한 탄산과 깨끗한 맛이 특징이며, 칵테일에 청량감을 더해줍니다.",
+      shelfLifeDays: 730,
+      storageType: "직사광선을 피해 서늘한 곳에 보관",
+      whenToUseNotes: "칵테일을 가볍게 만들거나 탄산감을 추가할 때 사용됩니다.",
+      substituteNotes: "S.Pellegrino나 Topo Chico로 대체 가능합니다.",
+      createdAt: "2025-01-15T10:00:00Z",
+      updatedAt: "2025-01-15T10:00:00Z",
+      image: "https://example.com/images/perrier.jpg",
+      availableCocktails: [
+        { id: 7, name: "Aperol Spritz", nameKr: "아페롤 스프리츠", image: "https://example.com/cocktails/aperol-spritz.jpg" },
+        { id: 8, name: "Mojito", nameKr: "모히또", image: "https://example.com/cocktails/mojito.jpg" }
+      ]
+    },
+    // Dairy/Cream (2개)
+    {
+      type: 'dairyCream',
+      dairyCreamId: 1,
+      brandId: 12,
+      brandName: "Horizon Organic",
+      brandNameKr: "호라이즌 오가닉",
+      countryId: 2,
+      countryName: "United States",
+      countryNameKr: "미국",
+      dairyCreamName: "Horizon Organic Heavy Whipping Cream",
+      dairyCreamNameKr: "호라이즌 오가닉 헤비 휘핑 크림",
+      fatContent: 36,
+      isDairyFree: false,
+      notes: "유기농 인증을 받은 고지방 크림으로, 부드럽고 진한 맛이 특징입니다. 칵테일에 크리미한 질감을 더해줍니다.",
+      shelfLifeDays: 30,
+      storageType: "냉장 보관 필수, 개봉 후 7일 이내 소비",
+      whenToUseNotes: "White Russian, Brandy Alexander 등 크림 칵테일에 사용됩니다.",
+      substituteNotes: "일반 휘핑 크림으로 대체 가능하나 풍미가 다소 감소합니다.",
+      createdAt: "2025-01-15T10:00:00Z",
+      updatedAt: "2025-01-15T10:00:00Z",
+      image: "https://example.com/images/horizon-cream.jpg",
+      availableCocktails: [
+        { id: 9, name: "White Russian", nameKr: "화이트 러시안", image: "https://example.com/cocktails/white-russian.jpg" },
+        { id: 10, name: "Brandy Alexander", nameKr: "브랜디 알렉산더", image: "https://example.com/cocktails/brandy-alexander.jpg" }
+      ]
+    },
+    {
+      type: 'dairyCream',
+      dairyCreamId: 2,
+      brandId: 13,
+      brandName: "Silk",
+      brandNameKr: "실크",
+      countryId: 2,
+      countryName: "United States",
+      countryNameKr: "미국",
+      dairyCreamName: "Silk Oat Yeah Oatmilk Creamer",
+      dairyCreamNameKr: "실크 오트 예 오트밀크 크리머",
+      fatContent: 5,
+      isDairyFree: true,
+      notes: "귀리로 만든 식물성 크리머로, 부드러운 단맛과 크리미한 질감이 특징입니다. 유제품 대체 옵션으로 인기가 높습니다.",
+      shelfLifeDays: 10,
+      storageType: "냉장 보관 필수, 개봉 후 7일 이내 소비",
+      whenToUseNotes: "유제품 프리 칵테일이나 비건 옵션이 필요할 때 사용됩니다.",
+      substituteNotes: "두유나 아몬드밀크로 대체 가능합니다.",
+      createdAt: "2025-01-15T10:00:00Z",
+      updatedAt: "2025-01-15T10:00:00Z",
+      image: "https://example.com/images/silk-oatmilk.jpg",
+      availableCocktails: [
+        { id: 11, name: "Vegan White Russian", nameKr: "비건 화이트 러시안", image: "https://example.com/cocktails/vegan-white-russian.jpg" },
+        { id: 12, name: "Oat Milk Espresso Martini", nameKr: "오트밀크 에스프레소 마티니", image: "https://example.com/cocktails/oat-espresso.jpg" }
+      ]
+    },
+    // Garnishes (2개)
+    {
+      type: 'garnishes',
+      garnishId: 1,
+      brandId: 14,
+      brandName: "Luxardo",
+      brandNameKr: "룩사르도",
+      countryId: 3,
+      countryName: "Italy",
+      countryNameKr: "이탈리아",
+      garnishName: "Luxardo Maraschino Cherries",
+      garnishNameKr: "룩사르도 마라스키노 체리",
+      primaryFunction: "all",
+      notes: "1905년부터 전통 방식으로 만들어진 프리미엄 칵테일 체리입니다. 인공 색소나 방부제 없이 마라스카 체리를 시럽에 절여 만들며, 깊고 복잡한 맛이 특징입니다.",
+      shelfLifeDays: 1095,
+      storageType: "직사광선을 피해 서늘한 곳에 보관, 개봉 후 냉장 보관",
+      whenToUseNotes: "Manhattan, Old Fashioned 등의 클래식 칵테일에 가니쉬로 사용됩니다.",
+      substituteNotes: "일반 마라스키노 체리로 대체 가능하나 품질과 맛에서 큰 차이가 있습니다.",
+      createdAt: "2025-01-15T10:00:00Z",
+      updatedAt: "2025-01-15T10:00:00Z",
+      image: "https://example.com/images/luxardo-cherries.jpg",
+      availableCocktails: [
+        { id: 13, name: "Manhattan", nameKr: "맨해튼", image: "https://example.com/cocktails/manhattan.jpg" },
+        { id: 14, name: "Old Fashioned", nameKr: "올드 패션드", image: "https://example.com/cocktails/old-fashioned.jpg" }
+      ]
+    },
+    {
+      type: 'garnishes',
+      garnishId: 2,
+      brandId: 15,
+      brandName: "Trader Joe's",
+      brandNameKr: "트레이더 조스",
+      countryId: 2,
+      countryName: "United States",
+      countryNameKr: "미국",
+      garnishName: "Organic Fresh Mint",
+      garnishNameKr: "유기농 신선 민트",
+      primaryFunction: "aroma",
+      notes: "신선한 유기농 민트로, 강렬한 향과 시원한 맛이 특징입니다. 칵테일에 청량감을 더해주는 필수 가니쉬입니다.",
+      shelfLifeDays: 7,
+      storageType: "냉장 보관 필수, 물에 담가 보관하면 더 오래 유지",
+      whenToUseNotes: "Mojito, Mint Julep 등 민트 칵테일의 필수 재료입니다.",
+      substituteNotes: "건조 민트로 대체 가능하나 신선한 향을 재현하기 어렵습니다.",
+      createdAt: "2025-01-15T10:00:00Z",
+      updatedAt: "2025-01-15T10:00:00Z",
+      image: "https://example.com/images/fresh-mint.jpg",
+      availableCocktails: [
+        { id: 15, name: "Mojito", nameKr: "모히또", image: "https://example.com/cocktails/mojito.jpg" },
+        { id: 16, name: "Mint Julep", nameKr: "민트 줄렙", image: "https://example.com/cocktails/mint-julep.jpg" }
+      ]
+    },
+    // Syrup (2개)
+    {
+      type: 'syrup',
+      syrupId: 1,
+      brandId: 16,
+      brandName: "Monin",
+      brandNameKr: "모닝",
+      countryId: 4,
+      countryName: "France",
+      countryNameKr: "프랑스",
+      syrupName: "Monin Pure Cane Sugar Syrup",
+      syrupNameKr: "모닝 퓨어 케인 슈가 시럽",
+      sugarLevel: 5,
+      notes: "100% 사탕수수로 만든 천연 설탕 시럽입니다. 깨끗한 단맛과 부드러운 질감이 특징이며, 칵테일의 기본 감미료로 사용됩니다.",
+      shelfLifeDays: 365,
+      storageType: "직사광선을 피해 서늘한 곳에 보관, 개봉 후 냉장 보관",
+      whenToUseNotes: "모든 클래식 칵테일의 기본 감미료로 사용됩니다.",
+      substituteNotes: "집에서 만든 심플 시럽(설탕:물 1:1)으로 대체 가능합니다.",
+      createdAt: "2025-01-15T10:00:00Z",
+      updatedAt: "2025-01-15T10:00:00Z",
+      image: "https://example.com/images/monin-simple-syrup.jpg",
+      availableCocktails: [
+        { id: 17, name: "Daiquiri", nameKr: "다이키리", image: "https://example.com/cocktails/daiquiri.jpg" },
+        { id: 18, name: "Whiskey Sour", nameKr: "위스키 사워", image: "https://example.com/cocktails/whiskey-sour.jpg" }
+      ]
+    },
+    {
+      type: 'syrup',
+      syrupId: 2,
+      brandId: 17,
+      brandName: "Torani",
+      brandNameKr: "토라니",
+      countryId: 2,
+      countryName: "United States",
+      countryNameKr: "미국",
+      syrupName: "Torani Vanilla Syrup",
+      syrupNameKr: "토라니 바닐라 시럽",
+      sugarLevel: 5,
+      notes: "마다가스카르산 바닐라 빈으로 만든 천연 바닐라 시럽입니다. 풍부하고 크리미한 바닐라 향이 특징이며, 다양한 칵테일에 깊이를 더해줍니다.",
+      shelfLifeDays: 730,
+      storageType: "직사광선을 피해 서늘한 곳에 보관",
+      whenToUseNotes: "Espresso Martini, French Vanilla Martini 등 바닐라 풍미가 필요한 칵테일에 사용됩니다.",
+      substituteNotes: "바닐라 익스트랙 + 심플 시럽으로 대체 가능합니다.",
+      createdAt: "2025-01-15T10:00:00Z",
+      updatedAt: "2025-01-15T10:00:00Z",
+      image: "https://example.com/images/torani-vanilla.jpg",
+      availableCocktails: [
+        { id: 19, name: "Espresso Martini", nameKr: "에스프레소 마티니", image: "https://example.com/cocktails/espresso-martini.jpg" },
+        { id: 20, name: "French Vanilla Martini", nameKr: "프렌치 바닐라 마티니", image: "https://example.com/cocktails/french-vanilla.jpg" }
+      ]
+    },
+    // Other Ingredients (2개)
+    {
+      type: 'other',
+      otherIngredientId: 1,
+      brandId: 18,
+      brandName: "Rose's",
+      brandNameKr: "로즈",
+      countryId: 1,
+      countryName: "United Kingdom",
+      countryNameKr: "영국",
+      otherIngredientName: "Rose's Lime Juice Cordial",
+      otherIngredientNameKr: "로즈 라임 주스 코디얼",
+      notes: "1867년부터 생산된 전통적인 라임 코디얼로, 클래식 칵테일 Gimlet의 필수 재료입니다. 농축된 라임 주스에 설탕이 첨가되어 있어 달콤하면서도 산미가 있는 맛이 특징입니다.",
+      shelfLifeDays: 365,
+      storageType: "개봉 후 냉장 보관",
+      whenToUseNotes: "Gimlet, Kamikaze 등 라임의 달콤한 풍미가 필요한 칵테일에 사용됩니다.",
+      substituteNotes: "신선한 라임 주스 + 심플 시럽으로 대체 가능하나, 전통적인 Gimlet의 맛을 원한다면 Rose's를 권장합니다.",
+      createdAt: "2025-01-15T10:00:00Z",
+      updatedAt: "2025-01-15T10:00:00Z",
+      image: "https://example.com/images/roses-lime-cordial.jpg",
+      availableCocktails: [
+        { id: 21, name: "Gimlet", nameKr: "김렛", image: "https://example.com/cocktails/gimlet.jpg" },
+        { id: 22, name: "Kamikaze", nameKr: "카미카제", image: "https://example.com/cocktails/kamikaze.jpg" }
+      ]
+    },
+    {
+      type: 'other',
+      otherIngredientId: 2,
+      brandId: 19,
+      brandName: "Fee Brothers",
+      brandNameKr: "피 브라더스",
+      countryId: 2,
+      countryName: "United States",
+      countryNameKr: "미국",
+      otherIngredientName: "Orgeat Syrup",
+      otherIngredientNameKr: "오르지트 시럽",
+      notes: "아몬드와 오렌지 플라워 워터로 만든 달콤한 시럽입니다. Tiki 칵테일의 필수 재료이며, Mai Tai의 독특한 아몬드 풍미를 만들어냅니다.",
+      shelfLifeDays: 730,
+      storageType: "직사광선을 피해 서늘한 곳에 보관, 개봉 후 냉장 보관",
+      whenToUseNotes: "Mai Tai, Japanese Cocktail 등 아몬드 풍미가 필요한 칵테일에 사용됩니다.",
+      substituteNotes: "아마레또 리큐어 + 심플 시럽으로 대체 가능하나, 오렌지 플라워의 향은 재현하기 어렵습니다.",
+      createdAt: "2025-01-15T10:00:00Z",
+      updatedAt: "2025-01-15T10:00:00Z",
+      image: "https://example.com/images/orgeat-syrup.jpg",
+      availableCocktails: [
+        { id: 23, name: "Mai Tai", nameKr: "마이 타이", image: "https://example.com/cocktails/mai-tai.jpg" },
+        { id: 24, name: "Japanese Cocktail", nameKr: "재패니즈 칵테일", image: "https://example.com/cocktails/japanese.jpg" }
+      ]
+    }
+  ];
+
+  // Unified Ingredients List API
+  mock.onGet('/api/ingredients').reply((config) => {
+    const { page = 1, limit = 6, sort = 'recent', search = '', category = '' } = config.params || {};
+
+    let filteredData = [...unifiedIngredientsMockData];
+
+    // 카테고리 필터링
+    if (category) {
+      filteredData = filteredData.filter(item => item.type === category);
+    }
+
+    // 검색 필터링
+    if (search) {
+      const searchLower = search.toLowerCase();
+      filteredData = filteredData.filter(item => {
+        // type별로 다른 필드명 처리
+        let name = '';
+        let nameKr = '';
+        let brandName = item.brandName;
+        let brandNameKr = item.brandNameKr || '';
+
+        switch(item.type) {
+          case 'juice':
+            name = item.juiceName;
+            nameKr = item.juiceNameKr;
+            break;
+          case 'bitters':
+            name = item.bittersName;
+            nameKr = item.bittersNameKr;
+            break;
+          case 'carbonated':
+            name = item.carbonatedName;
+            nameKr = item.carbonatedNameKr;
+            break;
+          case 'dairyCream':
+            name = item.dairyCreamName;
+            nameKr = item.dairyCreamNameKr;
+            break;
+          case 'garnishes':
+            name = item.garnishName;
+            nameKr = item.garnishNameKr;
+            break;
+          case 'syrup':
+            name = item.syrupName;
+            nameKr = item.syrupNameKr;
+            break;
+          case 'other':
+            name = item.otherIngredientName;
+            nameKr = item.otherIngredientNameKr;
+            break;
+        }
+
+        return name.toLowerCase().includes(searchLower) ||
+               nameKr.toLowerCase().includes(searchLower) ||
+               brandName.toLowerCase().includes(searchLower) ||
+               brandNameKr.toLowerCase().includes(searchLower);
+      });
+    }
+
+    // 정렬
+    filteredData.sort((a, b) => {
+      if (sort === 'name') {
+        // type별로 다른 필드명 처리
+        let aName = '';
+        let bName = '';
+
+        switch(a.type) {
+          case 'juice': aName = a.juiceName; break;
+          case 'bitters': aName = a.bittersName; break;
+          case 'carbonated': aName = a.carbonatedName; break;
+          case 'dairyCream': aName = a.dairyCreamName; break;
+          case 'garnishes': aName = a.garnishName; break;
+          case 'syrup': aName = a.syrupName; break;
+          case 'other': aName = a.otherIngredientName; break;
+        }
+
+        switch(b.type) {
+          case 'juice': bName = b.juiceName; break;
+          case 'bitters': bName = b.bittersName; break;
+          case 'carbonated': bName = b.carbonatedName; break;
+          case 'dairyCream': bName = b.dairyCreamName; break;
+          case 'garnishes': bName = b.garnishName; break;
+          case 'syrup': bName = b.syrupName; break;
+          case 'other': bName = b.otherIngredientName; break;
+        }
+
+        return aName.localeCompare(bName);
+      } else {
+        // recent: 배열 순서 유지 (뒤집기)
+        return 0;
+      }
+    });
+
+    if (sort === 'recent') {
+      filteredData.reverse();
+    }
+
+    // 페이지네이션
+    const startIndex = (Number(page) - 1) * Number(limit);
+    const endIndex = startIndex + Number(limit);
+    const paginatedData = filteredData.slice(startIndex, endIndex);
+
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve([200, { data: paginatedData }]);
+      }, 1000);
+    });
+  });
 }

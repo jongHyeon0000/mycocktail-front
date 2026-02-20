@@ -1,15 +1,28 @@
 import React, {type SetStateAction, useCallback, useEffect, useState} from "react";
-import useReadJuice from "../service/useReadJuice.tsx";
-import useReadJuiceList from "../service/useReadJuiceList.tsx";
+import useReadIngredientList from "../service/useReadIngredientList.tsx";
+import useReadJuice from "../../juice/service/useReadJuice.tsx";
+import useReadBitters from "../../bitters/service/useReadBitters.tsx";
+import useReadCarbonated from "../../carbonated/service/useReadCarbonated.tsx";
+import useReadDairyCream from "../../dairy_cream/service/useReadDairyCream.tsx";
+import useReadGarnishes from "../../garnishes/service/useReadGarnishes.tsx";
+import useReadSyrup from "../../syrup/service/useReadSyrup.tsx";
+import useReadOtherIngredients from "../../other_ingredients/service/useReadOtherIngredients.tsx";
 import {showErrorAlert} from "../../../common/utils/AlertUtils.ts";
 import LoadingOverlay from "../../../common/component/loading/LoadingOverlay.tsx";
 import {Box, Container, FormControl, InputAdornment, MenuItem, Select, TextField, Typography} from "@mui/material";
 import SearchLoadingOverlay from "../../../common/component/loading/SearchLoadingOverlay.tsx";
 import styled from "styled-components";
-import JuiceListComponent from "../component/JuiceListComponent.tsx";
-import JuiceDetailModal from "../component/JuiceDetailModal.tsx";
+import IngredientListComponent from "../component/IngredientListComponent.tsx";
+import JuiceDetailModal from "../../juice/component/JuiceDetailModal.tsx";
+import BittersDetailModal from "../../bitters/component/BittersDetailModal.tsx";
+import CarbonatedDetailModal from "../../carbonated/component/CarbonatedDetailModal.tsx";
+import DairyCreamDetailModal from "../../dairy_cream/component/DairyCreamDetailModal.tsx";
+import GarnishesDetailModal from "../../garnishes/component/GarnishesDetailModal.tsx";
+import SyrupDetailModal from "../../syrup/component/SyrupDetailModal.tsx";
+import OtherIngredientsDetailModal from "../../other_ingredients/component/OtherIngredientsDetailModal.tsx";
+import type {UnifiedIngredient} from "../interface/UnifiedIngredient.ts";
 
-const JuiceListPage: React.FC = () => {
+const IngredientListPage: React.FC = () => {
   /*
    * 검색 카테고리 (최신순, 이름순)
    * */
@@ -23,21 +36,30 @@ const JuiceListPage: React.FC = () => {
   const [ currentPage, setCurrentPage ] = useState<number>(1);
   const [ sortOrder, setSortOrder ] = useState<SortOrderType>("recent");
   const [ modalOpen, setModalOpen ] = useState<boolean>(false);
+  const [ selectedType, setSelectedType ] = useState<string>('');
   const [ searchKeyword, setSearchKeyword ] = useState<string>("");
   const [ searchDebounceTimer, setSearchDebounceTimer ] = useState<number | null>(null);
   const [ isSearching, setIsSearching ] = useState<boolean>(false);
 
+  // 통합 재료 리스트 hook
+  const { ingredientList, ingredientListError, ingredientListLoading, ingredientListLoadingMore, ingredientListHasMore, fetchReadIngredientList } = useReadIngredientList();
+
+  // 각 타입별 detail hook
   const { juice, juiceError, juiceLoading, fetchReadJuice } = useReadJuice();
-  const { juiceList, juiceListError, juiceListLoading, juiceListLoadingMore, juiceListHasMore, fetchReadJuiceList } = useReadJuiceList();
+  const { bitters, bittersError, bittersLoading, fetchReadBitters } = useReadBitters();
+  const { carbonated, carbonatedError, carbonatedLoading, fetchReadCarbonated } = useReadCarbonated();
+  const { dairyCream, dairyCreamError, dairyCreamLoading, fetchReadDairyCream } = useReadDairyCream();
+  const { garnishes, garnishesError, garnishesLoading, fetchReadGarnishes } = useReadGarnishes();
+  const { syrup, syrupError, syrupLoading, fetchReadSyrup } = useReadSyrup();
+  const { otherIngredients, otherIngredientsError, otherIngredientsLoading, fetchReadOtherIngredients } = useReadOtherIngredients();
 
   /*
   * 초기 데이터 로드 및 정렬 변경 시 로드
   * */
   useEffect(() => {
-    fetchReadJuiceList({
+    fetchReadIngredientList({
       page: 1,
       limit: PAGE_SIZE,
-      order: "desc",
       sort: sortOrder,
       search: searchKeyword.trim() || undefined
     });
@@ -62,10 +84,9 @@ const JuiceListPage: React.FC = () => {
     const newTimer = setTimeout(() => {
       setCurrentPage(1);
 
-      fetchReadJuiceList({
+      fetchReadIngredientList({
         page: 1,
         limit: PAGE_SIZE,
-        order: "desc",
         sort: sortOrder,
         search: keyword.trim() || undefined
       }).finally(() => {
@@ -84,10 +105,9 @@ const JuiceListPage: React.FC = () => {
     setCurrentPage(1);
     setIsSearching(true);
 
-    fetchReadJuiceList({
+    fetchReadIngredientList({
       page: 1,
       limit: PAGE_SIZE,
-      order: "desc",
       sort: sortOrder,
     }).finally(() => {
       setIsSearching(false);
@@ -100,11 +120,10 @@ const JuiceListPage: React.FC = () => {
   const handleScroll = useCallback(async () => {
     // 현재 스크롤 위치 + 뷰포트 높이가 전체 문서 높이에서 100px 이내에 도달하면 로드
     if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 100) {
-      if (juiceListHasMore || !juiceListLoading || !juiceListLoadingMore) {
-        await fetchReadJuiceList({
+      if (ingredientListHasMore && !ingredientListLoading && !ingredientListLoadingMore) {
+        await fetchReadIngredientList({
           page: currentPage + 1,
           limit: PAGE_SIZE,
-          order: "desc",
           sort: sortOrder,
           search: searchKeyword.trim() || undefined
         }, true);
@@ -112,7 +131,7 @@ const JuiceListPage: React.FC = () => {
         setCurrentPage(currentPage + 1);
       }
     }
-  }, [currentPage, sortOrder, searchKeyword, juiceListHasMore, juiceListLoading, juiceListLoadingMore]);
+  }, [currentPage, sortOrder, searchKeyword, ingredientListHasMore, ingredientListLoading, ingredientListLoadingMore]);
 
   /*
   * 이벤트 리스너 등록 및 해제
@@ -130,49 +149,91 @@ const JuiceListPage: React.FC = () => {
   }, [handleScroll, searchDebounceTimer]);
 
   /*
+  * 재료 클릭 핸들러 - type별 분기
+  * */
+  const handleIngredientClick = (item: UnifiedIngredient) => {
+    setSelectedType(item.type);
+
+    switch(item.type) {
+      case 'juice':
+        fetchReadJuice(item.juiceId);
+        break;
+      case 'bitters':
+        fetchReadBitters(item.bittersId);
+        break;
+      case 'carbonated':
+        fetchReadCarbonated(item.carbonatedId);
+        break;
+      case 'dairyCream':
+        fetchReadDairyCream(item.dairyCreamId);
+        break;
+      case 'garnishes':
+        fetchReadGarnishes(item.garnishId);
+        break;
+      case 'syrup':
+        fetchReadSyrup(item.syrupId);
+        break;
+      case 'other':
+        fetchReadOtherIngredients(item.otherIngredientId);
+        break;
+    }
+  };
+
+  /*
   * Modal State 제어
   * */
   useEffect(() => {
-    if (juice) {
+    if (juice || bitters || carbonated || dairyCream || garnishes || syrup || otherIngredients) {
       setModalOpen(true);
     }
-  }, [juice]);
+  }, [juice, bitters, carbonated, dairyCream, garnishes, syrup, otherIngredients]);
 
   /*
   * Axios Error 제어
   * */
   useEffect(() => {
-    if (juiceListError) {
-      showErrorAlert(
-          '주스 리스트 로드 실패',
-          juiceListError
-      ).then();
+    if (ingredientListError) {
+      showErrorAlert('재료 리스트 로드 실패', ingredientListError).then();
     }
-
     if (juiceError) {
-      showErrorAlert(
-          '주스 로드 실패',
-          juiceError
-      ).then();
+      showErrorAlert('주스 로드 실패', juiceError).then();
     }
-  }, [juiceListError, juiceError]);
+    if (bittersError) {
+      showErrorAlert('비터스 로드 실패', bittersError).then();
+    }
+    if (carbonatedError) {
+      showErrorAlert('탄산류 로드 실패', carbonatedError).then();
+    }
+    if (dairyCreamError) {
+      showErrorAlert('유제품 로드 실패', dairyCreamError).then();
+    }
+    if (garnishesError) {
+      showErrorAlert('가니쉬 로드 실패', garnishesError).then();
+    }
+    if (syrupError) {
+      showErrorAlert('시럽 로드 실패', syrupError).then();
+    }
+    if (otherIngredientsError) {
+      showErrorAlert('기타 첨가물 로드 실패', otherIngredientsError).then();
+    }
+  }, [ingredientListError, juiceError, bittersError, carbonatedError, dairyCreamError, garnishesError, syrupError, otherIngredientsError]);
 
   return (
       <PageContainer>
         {/* 로딩 오버레이 - 초기 로딩시에만 */}
         <LoadingOverlay
-            open={juiceListLoading && !isSearching}
-            message="탄산 리스트를 불러오는 중..."
+            open={ingredientListLoading && !isSearching}
+            message="재료 리스트를 불러오는 중..."
         />
         <LoadingOverlay
-            open={juiceLoading}
-            message="탄산 정보를 불러오는 중..."
+            open={juiceLoading || bittersLoading || carbonatedLoading || dairyCreamLoading || garnishesLoading || syrupLoading || otherIngredientsLoading}
+            message="재료 정보를 불러오는 중..."
         />
 
         <Container maxWidth="lg">
           {/* 상단 컨트롤 영역 */}
           <ControlsContainer>
-            {/* 정렬 드롭다운들 */}
+            {/* 정렬 드롭다운 */}
             <SortContainer>
               <FormControl size="small">
                 <SortSelect
@@ -187,7 +248,7 @@ const JuiceListPage: React.FC = () => {
 
             {/* 검색창 */}
             <SearchField
-                placeholder="주스 검색..."
+                placeholder="재료 검색..."
                 variant="outlined"
                 size="small"
                 value={searchKeyword}
@@ -216,48 +277,90 @@ const JuiceListPage: React.FC = () => {
             />
           </ControlsContainer>
 
-          {/* 주스 리스트 */}
-          <JuiceList>
+          {/* 재료 리스트 */}
+          <IngredientList>
             {isSearching ? (
                 <SearchLoadingOverlay
                     open={isSearching}
                     message="검색 중..."
                 />
             ) : (
-                juiceList && juiceList.map((juice, index) => (
-                    <JuiceListComponent
-                        key={`${juice.juiceId}-${index}`}
-                        data={juice}
+                ingredientList && ingredientList.map((ingredient, index) => (
+                    <IngredientListComponent
+                        key={`${ingredient.type}-${index}`}
+                        data={ingredient}
                         index={index}
-                        onClickEvent={() => fetchReadJuice(juice.juiceId)}
+                        onClickEvent={() => handleIngredientClick(ingredient)}
                     />
                 ))
             )}
-          </JuiceList>
+          </IngredientList>
 
           {/* 리스트 끝 메시지 */}
-          {!isSearching && (
+          {!isSearching && !ingredientListHasMore && (
               <Box display="flex" justifyContent="center" alignItems="center" py={4}>
                 <Typography variant="body2" color="text.secondary">
-                  모든 주스를 확인했습니다 🍸
+                  모든 재료를 확인했습니다 🍸
                 </Typography>
               </Box>
           )}
         </Container>
 
-        {/* 기법 상세 모달 */}
-        {juice && (
+        {/* type별 DetailModal 렌더링 */}
+        {juice && selectedType === 'juice' && (
             <JuiceDetailModal
                 open={modalOpen}
                 onClose={() => setModalOpen(false)}
                 data={juice}
             />
         )}
+        {bitters && selectedType === 'bitters' && (
+            <BittersDetailModal
+                open={modalOpen}
+                onClose={() => setModalOpen(false)}
+                data={bitters}
+            />
+        )}
+        {carbonated && selectedType === 'carbonated' && (
+            <CarbonatedDetailModal
+                open={modalOpen}
+                onClose={() => setModalOpen(false)}
+                data={carbonated}
+            />
+        )}
+        {dairyCream && selectedType === 'dairyCream' && (
+            <DairyCreamDetailModal
+                open={modalOpen}
+                onClose={() => setModalOpen(false)}
+                data={dairyCream}
+            />
+        )}
+        {garnishes && selectedType === 'garnishes' && (
+            <GarnishesDetailModal
+                open={modalOpen}
+                onClose={() => setModalOpen(false)}
+                data={garnishes}
+            />
+        )}
+        {syrup && selectedType === 'syrup' && (
+            <SyrupDetailModal
+                open={modalOpen}
+                onClose={() => setModalOpen(false)}
+                data={syrup}
+            />
+        )}
+        {otherIngredients && selectedType === 'other' && (
+            <OtherIngredientsDetailModal
+                open={modalOpen}
+                onClose={() => setModalOpen(false)}
+                data={otherIngredients}
+            />
+        )}
       </PageContainer>
   );
 }
 
-export default JuiceListPage;
+export default IngredientListPage;
 
 const PageContainer = styled(Box)`
     && {
@@ -274,7 +377,7 @@ const ControlsContainer = styled(Box)`
     align-items: center;
     margin-bottom: 32px;
     gap: 16px;
-    
+
     @media (max-width: 600px) {
       flex-wrap: wrap;
     }
@@ -294,11 +397,11 @@ const SortSelect = styled(Select)`
     background-color: #fff;
     border-radius: 16px;
     min-width: 150px;
-    
+
     .MuiOutlinedInput-notchedOutline {
       border-color: #eee;
     }
-    
+
     &:hover .MuiOutlinedInput-notchedOutline {
       border-color: #ddd;
     }
@@ -309,30 +412,30 @@ const SearchField = styled(TextField)`
   && {
     width: 300px;
     background-color: #fff;
-    
+
     .MuiOutlinedInput-root {
       border-radius: 16px;
-      
+
       &:hover fieldset {
         border-color: #ddd;
       }
-      
+
       &.Mui-focused fieldset {
         border-color: #888;
       }
     }
-    
+
     & fieldset {
       border-color: #eee;
     }
-    
+
     @media (max-width: 600px) {
       width: 100%;
     }
   }
 `;
 
-const JuiceList = styled(Box)`
+const IngredientList = styled(Box)`
   && {
     position: relative;
     display: flex;
