@@ -7,7 +7,7 @@ import CarbonatedListPage from "../app/user/ingredients/carbonated/page/Carbonat
 import DairyCreamListPage from "../app/user/ingredients/dairy_cream/page/DairyCreamListPage.tsx";
 import GarnishesListPage from "../app/user/ingredients/garnishes/page/GarnishesListPage.tsx";
 import JuiceListPage from "../app/user/ingredients/juice/page/JuiceListPage.tsx";
-import OtherListPage from "../app/user/ingredients/other/page/OtherListPage.tsx";
+import OtherListPage from "../app/user/ingredients/other_ingredients/page/OtherListPage.tsx";
 import SyrupListPage from "../app/user/ingredients/syrup/page/SyrupListPage.tsx";
 import IngredientsListPage from "../app/user/ingredients/common/page/IngredientsListPage.tsx";
 import ToolListPage from "../app/user/tool/page/ToolListPage.tsx";

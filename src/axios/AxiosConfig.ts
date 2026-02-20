@@ -4305,4 +4305,210 @@ if(USE_MOCK) {
       }, 1000);
     });
   });
+
+  /*
+   * ==========================================
+   * Other Ingredients (기타 첨가물) Mock API
+   * ==========================================
+   */
+  const otherIngredientsMockData = [
+    {
+      otherIngredientId: 1,
+      brandId: 1,
+      brandName: "Rose's",
+      brandNameKr: "로즈",
+      countryId: 1,
+      countryName: "United Kingdom",
+      countryNameKr: "영국",
+      otherIngredientName: "Rose's Lime Juice Cordial",
+      otherIngredientNameKr: "로즈 라임 주스 코디얼",
+      notes: "1867년부터 생산된 전통적인 라임 코디얼로, 클래식 칵테일 Gimlet의 필수 재료입니다. 농축된 라임 주스에 설탕이 첨가되어 있어 달콤하면서도 산미가 있는 맛이 특징입니다.",
+      shelfLifeDays: 365,
+      storageType: "개봉 후 냉장 보관",
+      whenToUseNotes: "Gimlet, Kamikaze 등 라임의 달콤한 풍미가 필요한 칵테일에 사용됩니다.",
+      substituteNotes: "신선한 라임 주스 + 심플 시럽으로 대체 가능하나, 전통적인 Gimlet의 맛을 원한다면 Rose's를 권장합니다.",
+      createdAt: "2025-01-15T10:00:00Z",
+      updatedAt: "2025-01-15T10:00:00Z",
+      image: "https://example.com/images/roses-lime-cordial.jpg",
+      availableCocktails: [
+        { id: 1, name: "Gimlet", nameKr: "김렛", image: "https://example.com/cocktails/gimlet.jpg" },
+        { id: 2, name: "Kamikaze", nameKr: "카미카제", image: "https://example.com/cocktails/kamikaze.jpg" }
+      ]
+    },
+    {
+      otherIngredientId: 2,
+      brandId: 2,
+      brandName: "Fever-Tree",
+      brandNameKr: "피버트리",
+      countryId: 1,
+      countryName: "United Kingdom",
+      countryNameKr: "영국",
+      otherIngredientName: "Aromatic Tonic Water",
+      otherIngredientNameKr: "아로마틱 토닉워터",
+      notes: "천연 퀴닌과 식물성 향료로 만든 프리미엄 토닉워터입니다. 일반 토닉워터보다 복잡하고 깊은 맛을 제공하며, 진 앤 토닉의 품질을 한층 높여줍니다.",
+      shelfLifeDays: 730,
+      storageType: "직사광선을 피해 서늘한 곳에 보관, 개봉 후 냉장 보관",
+      whenToUseNotes: "Gin & Tonic, Vodka Tonic 등 토닉워터가 주요 재료인 칵테일에 사용됩니다.",
+      substituteNotes: "일반 토닉워터로 대체 가능하나, 맛의 복잡성과 깊이는 감소합니다.",
+      createdAt: "2025-01-15T10:00:00Z",
+      updatedAt: "2025-01-15T10:00:00Z",
+      image: "https://example.com/images/fever-tree-tonic.jpg",
+      availableCocktails: [
+        { id: 3, name: "Gin & Tonic", nameKr: "진 앤 토닉", image: "https://example.com/cocktails/gin-tonic.jpg" },
+        { id: 4, name: "Vodka Tonic", nameKr: "보드카 토닉", image: "https://example.com/cocktails/vodka-tonic.jpg" }
+      ]
+    },
+    {
+      otherIngredientId: 3,
+      brandId: 3,
+      brandName: "Luxardo",
+      brandNameKr: "룩사르도",
+      countryId: 3,
+      countryName: "Italy",
+      countryNameKr: "이탈리아",
+      otherIngredientName: "Luxardo Maraschino Cherries",
+      otherIngredientNameKr: "룩사르도 마라스키노 체리",
+      notes: "1905년부터 전통 방식으로 만들어진 프리미엄 칵테일 체리입니다. 인공 색소나 방부제 없이 마라스카 체리를 시럽에 절여 만들며, 깊고 복잡한 맛이 특징입니다. Manhattan, Old Fashioned 등의 클래식 칵테일에 가니쉬로 사용됩니다.",
+      shelfLifeDays: 1095,
+      storageType: "직사광선을 피해 서늘한 곳에 보관, 개봉 후 냉장 보관",
+      whenToUseNotes: "칵테일의 가니쉬로 사용되거나, 체리의 풍미를 칵테일에 더할 때 사용됩니다.",
+      substituteNotes: "일반 마라스키노 체리로 대체 가능하나, 품질과 맛에서 큰 차이가 있습니다.",
+      createdAt: "2025-01-15T10:00:00Z",
+      updatedAt: "2025-01-15T10:00:00Z",
+      image: "https://example.com/images/luxardo-cherries.jpg",
+      availableCocktails: [
+        { id: 5, name: "Manhattan", nameKr: "맨해튼", image: "https://example.com/cocktails/manhattan.jpg" },
+        { id: 6, name: "Old Fashioned", nameKr: "올드 패션드", image: "https://example.com/cocktails/old-fashioned.jpg" }
+      ]
+    },
+    {
+      otherIngredientId: 4,
+      brandId: 4,
+      brandName: "Fee Brothers",
+      brandNameKr: "피 브라더스",
+      countryId: 2,
+      countryName: "United States",
+      countryNameKr: "미국",
+      otherIngredientName: "Orgeat Syrup",
+      otherIngredientNameKr: "오르지트 시럽",
+      notes: "아몬드와 오렌지 플라워 워터로 만든 달콤한 시럽입니다. Tiki 칵테일의 필수 재료이며, Mai Tai의 독특한 아몬드 풍미를 만들어냅니다. 중세 시대부터 사용된 전통적인 재료입니다.",
+      shelfLifeDays: 730,
+      storageType: "직사광선을 피해 서늘한 곳에 보관, 개봉 후 냉장 보관",
+      whenToUseNotes: "Mai Tai, Japanese Cocktail, Army & Navy 등 아몬드 풍미가 필요한 칵테일에 사용됩니다.",
+      substituteNotes: "아마레또 리큐어 + 심플 시럽으로 대체 가능하나, 오렌지 플라워의 향은 재현하기 어렵습니다.",
+      createdAt: "2025-01-15T10:00:00Z",
+      updatedAt: "2025-01-15T10:00:00Z",
+      image: "https://example.com/images/orgeat-syrup.jpg",
+      availableCocktails: [
+        { id: 7, name: "Mai Tai", nameKr: "마이 타이", image: "https://example.com/cocktails/mai-tai.jpg" },
+        { id: 8, name: "Japanese Cocktail", nameKr: "재패니즈 칵테일", image: "https://example.com/cocktails/japanese.jpg" }
+      ]
+    },
+    {
+      otherIngredientId: 5,
+      brandId: 5,
+      brandName: "Monin",
+      brandNameKr: "모닝",
+      countryId: 4,
+      countryName: "France",
+      countryNameKr: "프랑스",
+      otherIngredientName: "Falernum Syrup",
+      otherIngredientNameKr: "팔레넘 시럽",
+      notes: "라임, 아몬드, 생강, 정향이 혼합된 카리브해 스타일의 달콤한 시럽입니다. Tiki 칵테일에서 독특한 스파이시한 단맛을 더하는 데 사용되며, 복잡한 레이어드 풍미를 만들어냅니다.",
+      shelfLifeDays: 365,
+      storageType: "개봉 후 냉장 보관",
+      whenToUseNotes: "Zombie, Corn 'n' Oil, Royal Bermuda Yacht Club 등 Tiki 및 트로피칼 칵테일에 사용됩니다.",
+      substituteNotes: "직접 제작 가능: 라임 제스트, 아몬드, 생강, 정향을 설탕 시럽에 우려내어 만듭니다.",
+      createdAt: "2025-01-15T10:00:00Z",
+      updatedAt: "2025-01-15T10:00:00Z",
+      image: "https://example.com/images/falernum-syrup.jpg",
+      availableCocktails: [
+        { id: 9, name: "Zombie", nameKr: "좀비", image: "https://example.com/cocktails/zombie.jpg" },
+        { id: 10, name: "Corn 'n' Oil", nameKr: "콘 앤 오일", image: "https://example.com/cocktails/corn-n-oil.jpg" }
+      ]
+    },
+    {
+      otherIngredientId: 6,
+      brandId: 6,
+      brandName: "Scrappy's",
+      brandNameKr: "스크래피스",
+      countryId: 2,
+      countryName: "United States",
+      countryNameKr: "미국",
+      otherIngredientName: "Vanilla Bean Syrup",
+      otherIngredientNameKr: "바닐라 빈 시럽",
+      notes: "마다가스카르산 바닐라 빈으로 만든 천연 바닐라 시럽입니다. 인공 향료 없이 진짜 바닐라 빈을 사용하여 깊고 풍부한 바닐라 향을 제공합니다. 디저트 칵테일이나 크리미한 칵테일에 사용됩니다.",
+      shelfLifeDays: 365,
+      storageType: "개봉 후 냉장 보관",
+      whenToUseNotes: "Espresso Martini, Pornstar Martini, Brandy Alexander 등 바닐라 풍미를 더하고 싶은 칵테일에 사용됩니다.",
+      substituteNotes: "바닐라 익스트랙 + 심플 시럽으로 대체 가능하나, 풍미의 깊이는 다소 감소합니다.",
+      createdAt: "2025-01-15T10:00:00Z",
+      updatedAt: "2025-01-15T10:00:00Z",
+      image: "https://example.com/images/vanilla-syrup.jpg",
+      availableCocktails: [
+        { id: 11, name: "Espresso Martini", nameKr: "에스프레소 마티니", image: "https://example.com/cocktails/espresso-martini.jpg" },
+        { id: 12, name: "Pornstar Martini", nameKr: "포른스타 마티니", image: "https://example.com/cocktails/pornstar-martini.jpg" }
+      ]
+    }
+  ];
+
+  // Other Ingredients List API
+  mock.onGet('/api/other-ingredients').reply((config) => {
+    const { page = 1, limit = 6, sort = 'recent', order = 'desc', search = '' } = config.params || {};
+
+    let filteredData = [...otherIngredientsMockData];
+
+    // 검색 필터링
+    if (search) {
+      const searchLower = search.toLowerCase();
+      filteredData = filteredData.filter(item =>
+          item.otherIngredientName.toLowerCase().includes(searchLower) ||
+          item.otherIngredientNameKr.toLowerCase().includes(searchLower) ||
+          item.brandName.toLowerCase().includes(searchLower) ||
+          (item.brandNameKr && item.brandNameKr.toLowerCase().includes(searchLower))
+      );
+    }
+
+    // 정렬
+    filteredData.sort((a, b) => {
+      if (sort === 'name') {
+        const comparison = a.otherIngredientName.localeCompare(b.otherIngredientName);
+        return order === 'asc' ? comparison : -comparison;
+      } else {
+        // recent: id 기준 정렬
+        return order === 'asc' ? a.otherIngredientId - b.otherIngredientId : b.otherIngredientId - a.otherIngredientId;
+      }
+    });
+
+    // 페이지네이션
+    const startIndex = (Number(page) - 1) * Number(limit);
+    const endIndex = startIndex + Number(limit);
+    const paginatedData = filteredData.slice(startIndex, endIndex);
+
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve([200, { data: paginatedData }]);
+      }, 1000);
+    });
+  });
+
+  // Other Ingredients Detail API
+  mock.onGet(/\/api\/other-ingredients\/\d+/).reply((config) => {
+    const id = Number(config.url?.split('/').pop());
+    const otherIngredientData = otherIngredientsMockData.find(item => item.otherIngredientId === id);
+
+    if (!otherIngredientData) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve([404, { message: 'Other ingredient not found' }]);
+        }, 1000);
+      });
+    }
+
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve([200, { data: otherIngredientData }]);
+      }, 1000);
+    });
+  });
 }
