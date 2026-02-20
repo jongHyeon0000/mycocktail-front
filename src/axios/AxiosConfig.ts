@@ -3253,4 +3253,359 @@ if(USE_MOCK) {
 
     return [200, { data: juiceData }];
   });
+
+  /*
+ * 시럽 Syrup List
+ * */
+  mock.onGet('/api/syrup').reply((config) => {
+    const { page = 1, limit = 6, sort = 'recent', search } = config.params || {};
+
+    // 전체 Mock 데이터 (6개)
+    const fullData = [
+      {
+        syrupId: 1,
+        brandId: 13,
+        brandName: "Monin",
+        brandNameKr: "모닌",
+        countryId: 5,
+        countryName: "France",
+        countryNameKr: "프랑스",
+        syrupName: "Monin Grenadine Syrup",
+        syrupNameKr: "모닌 그레나딘 시럽",
+        sugarContent: 65.0,
+        image: "https://via.placeholder.com/200x200/DC143C/FFFFFF?text=Grenadine",
+        notes: "<p>석류를 베이스로 한 진한 붉은색 시럽입니다.</p><p>달콤하고 프루티한 맛과 함께 아름다운 레이어 효과를 만들어냅니다.</p>",
+        shelfLifeDays: 1095, // 약 3년
+        storageType: "실온 보관 가능, 개봉 후 냉장 보관 권장",
+        whenToUseNotes: "<p>데킬라 선라이즈의 시그니처 레이어 효과를 만들 때 필수입니다.</p><p>셜리 템플이나 로이 로저스 같은 논알콜 칵테일에도 많이 사용됩니다.</p><p>색감과 단맛을 동시에 제공하여 시각적 효과가 중요한 칵테일에 적합합니다.</p>",
+        substituteNotes: "<p>Rose's Grenadine으로 대체 가능하나 인공적인 맛이 강합니다.</p><p>석류 주스에 설탕을 섞어 직접 만들 수도 있습니다.</p>",
+        createdAt: "2024-01-15",
+        updatedAt: "2024-01-20",
+        availableCocktails: [
+          { id: 37, name: "Tequila Sunrise", nameKr: "데킬라 선라이즈", image: "https://via.placeholder.com/80x80/FF6347/FFFFFF?text=Tequila+Sunrise" },
+          { id: 38, name: "Shirley Temple", nameKr: "셜리 템플", image: "https://via.placeholder.com/80x80/FF69B4/FFFFFF?text=Shirley+Temple" },
+          { id: 39, name: "Planter's Punch", nameKr: "플랜터스 펀치", image: "https://via.placeholder.com/80x80/FF4500/FFFFFF?text=Planters+Punch" }
+        ]
+      },
+      {
+        syrupId: 2,
+        brandId: 13,
+        brandName: "Monin",
+        brandNameKr: "모닌",
+        countryId: 5,
+        countryName: "France",
+        countryNameKr: "프랑스",
+        syrupName: "Monin Vanilla Syrup",
+        syrupNameKr: "모닌 바닐라 시럽",
+        sugarContent: 68.0,
+        image: "https://via.placeholder.com/200x200/F5DEB3/000000?text=Vanilla",
+        notes: "<p>마다가스카르 바닐라 빈 추출물로 만든 프리미엄 바닐라 시럽입니다.</p><p>부드럽고 크리미한 바닐라 향과 적당한 단맛이 특징입니다.</p>",
+        shelfLifeDays: 1095, // 약 3년
+        storageType: "실온 보관 가능, 개봉 후 냉장 보관 권장",
+        whenToUseNotes: "<p>에스프레소 마티니에 깊이와 부드러움을 더합니다.</p><p>프렌치 마티니나 알렉산더 같은 크리미한 칵테일과 잘 어울립니다.</p><p>바닐라 향이 위스키나 럼의 오크 풍미를 더욱 강조해줍니다.</p>",
+        substituteNotes: "<p>Torani Vanilla나 DaVinci Vanilla로 대체 가능합니다.</p><p>바닐라 익스트랙과 심플 시럽을 섞어 직접 만들 수도 있습니다.</p>",
+        createdAt: "2024-01-14",
+        updatedAt: "2024-01-19",
+        availableCocktails: [
+          { id: 40, name: "Espresso Martini", nameKr: "에스프레소 마티니", image: "https://via.placeholder.com/80x80/654321/FFFFFF?text=Espresso" },
+          { id: 41, name: "French Martini", nameKr: "프렌치 마티니", image: "https://via.placeholder.com/80x80/8B008B/FFFFFF?text=French+Martini" },
+          { id: 42, name: "Vanilla Old Fashioned", nameKr: "바닐라 올드 패션드", image: "https://via.placeholder.com/80x80/D2691E/FFFFFF?text=Vanilla+OF" }
+        ]
+      },
+      {
+        syrupId: 3,
+        brandId: 14,
+        brandName: "Giffard",
+        brandNameKr: "지파드",
+        countryId: 5,
+        countryName: "France",
+        countryNameKr: "프랑스",
+        syrupName: "Giffard Orgeat Syrup",
+        syrupNameKr: "지파드 오르지아 시럽",
+        sugarContent: 70.0,
+        image: "https://via.placeholder.com/200x200/FAEBD7/000000?text=Orgeat",
+        notes: "<p>아몬드와 오렌지 블로썸 워터로 만든 프랑스 전통 시럽입니다.</p><p>고소하고 달콤한 아몬드 향과 은은한 플로럴 노트가 특징입니다.</p>",
+        shelfLifeDays: 730, // 약 2년
+        storageType: "개봉 전 실온 보관, 개봉 후 냉장 보관 필수",
+        whenToUseNotes: "<p>마이타이의 필수 재료로 럼의 풍미를 더욱 풍부하게 만듭니다.</p><p>티키 칵테일에서 고소하고 부드러운 질감을 제공합니다.</p><p>일본식 위스키 칵테일에서도 자주 사용되어 복잡한 풍미를 더합니다.</p>",
+        substituteNotes: "<p>Monin Orgeat나 Small Hand Foods Orgeat로 대체 가능합니다.</p><p>아몬드 밀크에 설탕과 오렌지 블로썸 워터를 섞어 직접 만들 수 있습니다.</p>",
+        createdAt: "2024-01-13",
+        updatedAt: "2024-01-18",
+        availableCocktails: [
+          { id: 43, name: "Mai Tai", nameKr: "마이타이", image: "https://via.placeholder.com/80x80/FF8C00/FFFFFF?text=Mai+Tai" },
+          { id: 44, name: "Japanese Cocktail", nameKr: "재패니즈 칵테일", image: "https://via.placeholder.com/80x80/DAA520/000000?text=Japanese" },
+          { id: 45, name: "Fog Cutter", nameKr: "포그 커터", image: "https://via.placeholder.com/80x80/FFA07A/000000?text=Fog+Cutter" }
+        ]
+      },
+      {
+        syrupId: 4,
+        brandId: 15,
+        brandName: "BG Reynolds",
+        brandNameKr: "비지 레이놀즈",
+        countryId: 2,
+        countryName: "United States",
+        countryNameKr: "미국",
+        syrupName: "BG Reynolds Passion Fruit Syrup",
+        syrupNameKr: "비지 레이놀즈 패션프루트 시럽",
+        sugarContent: 62.5,
+        image: "https://via.placeholder.com/200x200/FF6347/FFFFFF?text=Passion+Fruit",
+        notes: "<p>천연 패션프루트로 만든 진한 열대 과일 시럽입니다.</p><p>강렬한 패션프루트 향과 적당한 산미, 농축된 단맛이 특징입니다.</p>",
+        shelfLifeDays: 365, // 약 1년
+        storageType: "개봉 후 냉장 보관 필수, 3개월 이내 소비 권장",
+        whenToUseNotes: "<p>허리케인에서 열대 과일의 복잡한 풍미를 더합니다.</p><p>패션프루트 마티니나 트로피컬 칵테일의 핵심 재료입니다.</p><p>주스보다 농축되어 있어 소량으로도 강한 풍미를 낼 수 있습니다.</p>",
+        substituteNotes: "<p>패션프루트 퓨레에 설탕을 섞어 직접 만들 수 있습니다.</p><p>Monin Passion Fruit로 대체 가능하나 덜 진합니다.</p>",
+        createdAt: "2024-01-12",
+        updatedAt: "2024-01-17",
+        availableCocktails: [
+          { id: 46, name: "Hurricane", nameKr: "허리케인", image: "https://via.placeholder.com/80x80/FF4500/FFFFFF?text=Hurricane" },
+          { id: 47, name: "Pornstar Martini", nameKr: "포른스타 마티니", image: "https://via.placeholder.com/80x80/FFD700/000000?text=Pornstar" },
+          { id: 48, name: "Zombie", nameKr: "좀비", image: "https://via.placeholder.com/80x80/8B0000/FFFFFF?text=Zombie" }
+        ]
+      },
+      {
+        syrupId: 5,
+        brandId: 13,
+        brandName: "Monin",
+        brandNameKr: "모닌",
+        countryId: 5,
+        countryName: "France",
+        countryNameKr: "프랑스",
+        syrupName: "Monin Honey Syrup",
+        syrupNameKr: "모닌 허니 시럽",
+        sugarContent: 75.0,
+        image: "https://via.placeholder.com/200x200/FFD700/000000?text=Honey",
+        notes: "<p>천연 꿀을 베이스로 만든 시럽으로 물에 잘 녹도록 조정되었습니다.</p><p>은은한 꽃향기와 부드러운 단맛, 그리고 독특한 깊이가 특징입니다.</p>",
+        shelfLifeDays: 1095, // 약 3년
+        storageType: "실온 보관 가능, 결정화 방지를 위해 서늘한 곳에 보관",
+        whenToUseNotes: "<p>비즈니즈에서 위스키의 스파이시함과 레몬의 산미를 부드럽게 연결합니다.</p><p>페니실린이나 골드 러시 같은 현대 클래식 칵테일의 핵심입니다.</p><p>일반 설탕보다 복잡한 풍미를 제공하여 칵테일에 깊이를 더합니다.</p>",
+        substituteNotes: "<p>생꿀을 따뜻한 물과 1:1로 섞어 직접 만들 수 있습니다.</p><p>아카시아 꿀이나 클로버 꿀이 가장 중성적인 맛을 냅니다.</p>",
+        createdAt: "2024-01-11",
+        updatedAt: "2024-01-16",
+        availableCocktails: [
+          { id: 49, name: "Bees Knees", nameKr: "비즈 니즈", image: "https://via.placeholder.com/80x80/FFD700/000000?text=Bees+Knees" },
+          { id: 50, name: "Penicillin", nameKr: "페니실린", image: "https://via.placeholder.com/80x80/F4A460/000000?text=Penicillin" },
+          { id: 51, name: "Gold Rush", nameKr: "골드 러시", image: "https://via.placeholder.com/80x80/DAA520/000000?text=Gold+Rush" }
+        ]
+      },
+      {
+        syrupId: 6,
+        brandId: 16,
+        brandName: "Finest Call",
+        brandNameKr: "파이니스트 콜",
+        countryId: 2,
+        countryName: "United States",
+        countryNameKr: "미국",
+        syrupName: "Finest Call Simple Syrup",
+        syrupNameKr: "파이니스트 콜 심플 시럽",
+        sugarContent: 50.0,
+        image: "https://via.placeholder.com/200x200/FFFFFF/000000?text=Simple+Syrup",
+        notes: "<p>순수 설탕과 물을 1:1 비율로 만든 가장 기본적인 시럽입니다.</p><p>중성적인 단맛만을 제공하며 칵테일의 다른 풍미를 해치지 않습니다.</p>",
+        shelfLifeDays: 180, // 약 6개월
+        storageType: "냉장 보관 필수, 개봉 후 1개월 이내 소비",
+        whenToUseNotes: "<p>거의 모든 클래식 칵테일에 사용되는 기본 재료입니다.</p><p>다이키리, 모히또, 위스키 사워 등 수많은 칵테일의 베이스 단맛을 제공합니다.</p><p>다른 재료의 풍미를 방해하지 않아 가장 많이 사용됩니다.</p>",
+        substituteNotes: "<p>설탕과 물을 1:1로 섞어 직접 만들 수 있습니다.</p><p>Rich Simple Syrup(2:1)은 더 진하고 부드러운 질감을 원할 때 사용합니다.</p>",
+        createdAt: "2024-01-10",
+        updatedAt: "2024-01-15",
+        availableCocktails: [
+          { id: 52, name: "Daiquiri", nameKr: "다이키리", image: "https://via.placeholder.com/80x80/ADFF2F/000000?text=Daiquiri" },
+          { id: 53, name: "Mojito", nameKr: "모히또", image: "https://via.placeholder.com/80x80/98FB98/000000?text=Mojito" },
+          { id: 54, name: "Whiskey Sour", nameKr: "위스키 사워", image: "https://via.placeholder.com/80x80/FFE4B5/000000?text=Whiskey+Sour" }
+        ]
+      }
+    ];
+
+    // 정렬 처리
+    let sortedData = [...fullData];
+
+    if (sort === 'name') {
+      sortedData.sort((a, b) => a.syrupName.localeCompare(b.syrupName));
+    }
+    // recent는 기본 순서 유지
+
+    // 검색 처리
+    if (search) {
+      sortedData = sortedData.filter(syrup =>
+          syrup.syrupName.toLowerCase().includes(search.toLowerCase()) ||
+          syrup.syrupNameKr.includes(search) ||
+          syrup.brandName.toLowerCase().includes(search.toLowerCase()) ||
+          (syrup.brandNameKr && syrup.brandNameKr.includes(search))
+      );
+    }
+
+    // 페이지네이션 처리
+    const startIndex = (page - 1) * limit;
+    const endIndex = startIndex + limit;
+    const paginatedData = sortedData.slice(startIndex, endIndex);
+
+    return [200, { data: paginatedData }];
+  });
+
+  /*
+   * 시럽 Detail (개별 조회)
+   * */
+  mock.onGet(/\/api\/syrup\/\d+/).reply((config) => {
+    const syrupId = parseInt(config.url?.split('/').pop() || '1');
+
+    // 시럽 데이터 맵
+    const syrupDataMap: { [key: number]: any } = {
+      1: {
+        syrupId: 1,
+        brandId: 13,
+        brandName: "Monin",
+        brandNameKr: "모닌",
+        countryId: 5,
+        countryName: "France",
+        countryNameKr: "프랑스",
+        syrupName: "Monin Grenadine Syrup",
+        syrupNameKr: "모닌 그레나딘 시럽",
+        sugarContent: 65.0,
+        image: "https://via.placeholder.com/200x200/DC143C/FFFFFF?text=Grenadine",
+        notes: "<p>석류를 베이스로 한 진한 붉은색 시럽입니다.</p><p>달콤하고 프루티한 맛과 함께 아름다운 레이어 효과를 만들어냅니다.</p>",
+        shelfLifeDays: 1095, // 약 3년
+        storageType: "실온 보관 가능, 개봉 후 냉장 보관 권장",
+        whenToUseNotes: "<p>데킬라 선라이즈의 시그니처 레이어 효과를 만들 때 필수입니다.</p><p>셜리 템플이나 로이 로저스 같은 논알콜 칵테일에도 많이 사용됩니다.</p><p>색감과 단맛을 동시에 제공하여 시각적 효과가 중요한 칵테일에 적합합니다.</p>",
+        substituteNotes: "<p>Rose's Grenadine으로 대체 가능하나 인공적인 맛이 강합니다.</p><p>석류 주스에 설탕을 섞어 직접 만들 수도 있습니다.</p>",
+        createdAt: "2024-01-15",
+        updatedAt: "2024-01-20",
+        availableCocktails: [
+          { id: 37, name: "Tequila Sunrise", nameKr: "데킬라 선라이즈", image: "https://via.placeholder.com/80x80/FF6347/FFFFFF?text=Tequila+Sunrise" },
+          { id: 38, name: "Shirley Temple", nameKr: "셜리 템플", image: "https://via.placeholder.com/80x80/FF69B4/FFFFFF?text=Shirley+Temple" },
+          { id: 39, name: "Planter's Punch", nameKr: "플랜터스 펀치", image: "https://via.placeholder.com/80x80/FF4500/FFFFFF?text=Planters+Punch" }
+        ]
+      },
+      2: {
+        syrupId: 2,
+        brandId: 13,
+        brandName: "Monin",
+        brandNameKr: "모닌",
+        countryId: 5,
+        countryName: "France",
+        countryNameKr: "프랑스",
+        syrupName: "Monin Vanilla Syrup",
+        syrupNameKr: "모닌 바닐라 시럽",
+        sugarContent: 68.0,
+        image: "https://via.placeholder.com/200x200/F5DEB3/000000?text=Vanilla",
+        notes: "<p>마다가스카르 바닐라 빈 추출물로 만든 프리미엄 바닐라 시럽입니다.</p><p>부드럽고 크리미한 바닐라 향과 적당한 단맛이 특징입니다.</p>",
+        shelfLifeDays: 1095, // 약 3년
+        storageType: "실온 보관 가능, 개봉 후 냉장 보관 권장",
+        whenToUseNotes: "<p>에스프레소 마티니에 깊이와 부드러움을 더합니다.</p><p>프렌치 마티니나 알렉산더 같은 크리미한 칵테일과 잘 어울립니다.</p><p>바닐라 향이 위스키나 럼의 오크 풍미를 더욱 강조해줍니다.</p>",
+        substituteNotes: "<p>Torani Vanilla나 DaVinci Vanilla로 대체 가능합니다.</p><p>바닐라 익스트랙과 심플 시럽을 섞어 직접 만들 수도 있습니다.</p>",
+        createdAt: "2024-01-14",
+        updatedAt: "2024-01-19",
+        availableCocktails: [
+          { id: 40, name: "Espresso Martini", nameKr: "에스프레소 마티니", image: "https://via.placeholder.com/80x80/654321/FFFFFF?text=Espresso" },
+          { id: 41, name: "French Martini", nameKr: "프렌치 마티니", image: "https://via.placeholder.com/80x80/8B008B/FFFFFF?text=French+Martini" },
+          { id: 42, name: "Vanilla Old Fashioned", nameKr: "바닐라 올드 패션드", image: "https://via.placeholder.com/80x80/D2691E/FFFFFF?text=Vanilla+OF" }
+        ]
+      },
+      3: {
+        syrupId: 3,
+        brandId: 14,
+        brandName: "Giffard",
+        brandNameKr: "지파드",
+        countryId: 5,
+        countryName: "France",
+        countryNameKr: "프랑스",
+        syrupName: "Giffard Orgeat Syrup",
+        syrupNameKr: "지파드 오르지아 시럽",
+        sugarContent: 70.0,
+        image: "https://via.placeholder.com/200x200/FAEBD7/000000?text=Orgeat",
+        notes: "<p>아몬드와 오렌지 블로썸 워터로 만든 프랑스 전통 시럽입니다.</p><p>고소하고 달콤한 아몬드 향과 은은한 플로럴 노트가 특징입니다.</p>",
+        shelfLifeDays: 730, // 약 2년
+        storageType: "개봉 전 실온 보관, 개봉 후 냉장 보관 필수",
+        whenToUseNotes: "<p>마이타이의 필수 재료로 럼의 풍미를 더욱 풍부하게 만듭니다.</p><p>티키 칵테일에서 고소하고 부드러운 질감을 제공합니다.</p><p>일본식 위스키 칵테일에서도 자주 사용되어 복잡한 풍미를 더합니다.</p>",
+        substituteNotes: "<p>Monin Orgeat나 Small Hand Foods Orgeat로 대체 가능합니다.</p><p>아몬드 밀크에 설탕과 오렌지 블로썸 워터를 섞어 직접 만들 수 있습니다.</p>",
+        createdAt: "2024-01-13",
+        updatedAt: "2024-01-18",
+        availableCocktails: [
+          { id: 43, name: "Mai Tai", nameKr: "마이타이", image: "https://via.placeholder.com/80x80/FF8C00/FFFFFF?text=Mai+Tai" },
+          { id: 44, name: "Japanese Cocktail", nameKr: "재패니즈 칵테일", image: "https://via.placeholder.com/80x80/DAA520/000000?text=Japanese" },
+          { id: 45, name: "Fog Cutter", nameKr: "포그 커터", image: "https://via.placeholder.com/80x80/FFA07A/000000?text=Fog+Cutter" }
+        ]
+      },
+      4: {
+        syrupId: 4,
+        brandId: 15,
+        brandName: "BG Reynolds",
+        brandNameKr: "비지 레이놀즈",
+        countryId: 2,
+        countryName: "United States",
+        countryNameKr: "미국",
+        syrupName: "BG Reynolds Passion Fruit Syrup",
+        syrupNameKr: "비지 레이놀즈 패션프루트 시럽",
+        sugarContent: 62.5,
+        image: "https://via.placeholder.com/200x200/FF6347/FFFFFF?text=Passion+Fruit",
+        notes: "<p>천연 패션프루트로 만든 진한 열대 과일 시럽입니다.</p><p>강렬한 패션프루트 향과 적당한 산미, 농축된 단맛이 특징입니다.</p>",
+        shelfLifeDays: 365, // 약 1년
+        storageType: "개봉 후 냉장 보관 필수, 3개월 이내 소비 권장",
+        whenToUseNotes: "<p>허리케인에서 열대 과일의 복잡한 풍미를 더합니다.</p><p>패션프루트 마티니나 트로피컬 칵테일의 핵심 재료입니다.</p><p>주스보다 농축되어 있어 소량으로도 강한 풍미를 낼 수 있습니다.</p>",
+        substituteNotes: "<p>패션프루트 퓨레에 설탕을 섞어 직접 만들 수 있습니다.</p><p>Monin Passion Fruit로 대체 가능하나 덜 진합니다.</p>",
+        createdAt: "2024-01-12",
+        updatedAt: "2024-01-17",
+        availableCocktails: [
+          { id: 46, name: "Hurricane", nameKr: "허리케인", image: "https://via.placeholder.com/80x80/FF4500/FFFFFF?text=Hurricane" },
+          { id: 47, name: "Pornstar Martini", nameKr: "포른스타 마티니", image: "https://via.placeholder.com/80x80/FFD700/000000?text=Pornstar" },
+          { id: 48, name: "Zombie", nameKr: "좀비", image: "https://via.placeholder.com/80x80/8B0000/FFFFFF?text=Zombie" }
+        ]
+      },
+      5: {
+        syrupId: 5,
+        brandId: 13,
+        brandName: "Monin",
+        brandNameKr: "모닌",
+        countryId: 5,
+        countryName: "France",
+        countryNameKr: "프랑스",
+        syrupName: "Monin Honey Syrup",
+        syrupNameKr: "모닌 허니 시럽",
+        sugarContent: 75.0,
+        image: "https://via.placeholder.com/200x200/FFD700/000000?text=Honey",
+        notes: "<p>천연 꿀을 베이스로 만든 시럽으로 물에 잘 녹도록 조정되었습니다.</p><p>은은한 꽃향기와 부드러운 단맛, 그리고 독특한 깊이가 특징입니다.</p>",
+        shelfLifeDays: 1095, // 약 3년
+        storageType: "실온 보관 가능, 결정화 방지를 위해 서늘한 곳에 보관",
+        whenToUseNotes: "<p>비즈니즈에서 위스키의 스파이시함과 레몬의 산미를 부드럽게 연결합니다.</p><p>페니실린이나 골드 러시 같은 현대 클래식 칵테일의 핵심입니다.</p><p>일반 설탕보다 복잡한 풍미를 제공하여 칵테일에 깊이를 더합니다.</p>",
+        substituteNotes: "<p>생꿀을 따뜻한 물과 1:1로 섞어 직접 만들 수 있습니다.</p><p>아카시아 꿀이나 클로버 꿀이 가장 중성적인 맛을 냅니다.</p>",
+        createdAt: "2024-01-11",
+        updatedAt: "2024-01-16",
+        availableCocktails: [
+          { id: 49, name: "Bees Knees", nameKr: "비즈 니즈", image: "https://via.placeholder.com/80x80/FFD700/000000?text=Bees+Knees" },
+          { id: 50, name: "Penicillin", nameKr: "페니실린", image: "https://via.placeholder.com/80x80/F4A460/000000?text=Penicillin" },
+          { id: 51, name: "Gold Rush", nameKr: "골드 러시", image: "https://via.placeholder.com/80x80/DAA520/000000?text=Gold+Rush" }
+        ]
+      },
+      6: {
+        syrupId: 6,
+        brandId: 16,
+        brandName: "Finest Call",
+        brandNameKr: "파이니스트 콜",
+        countryId: 2,
+        countryName: "United States",
+        countryNameKr: "미국",
+        syrupName: "Finest Call Simple Syrup",
+        syrupNameKr: "파이니스트 콜 심플 시럽",
+        sugarContent: 50.0,
+        image: "https://via.placeholder.com/200x200/FFFFFF/000000?text=Simple+Syrup",
+        notes: "<p>순수 설탕과 물을 1:1 비율로 만든 가장 기본적인 시럽입니다.</p><p>중성적인 단맛만을 제공하며 칵테일의 다른 풍미를 해치지 않습니다.</p>",
+        shelfLifeDays: 180, // 약 6개월
+        storageType: "냉장 보관 필수, 개봉 후 1개월 이내 소비",
+        whenToUseNotes: "<p>거의 모든 클래식 칵테일에 사용되는 기본 재료입니다.</p><p>다이키리, 모히또, 위스키 사워 등 수많은 칵테일의 베이스 단맛을 제공합니다.</p><p>다른 재료의 풍미를 방해하지 않아 가장 많이 사용됩니다.</p>",
+        substituteNotes: "<p>설탕과 물을 1:1로 섞어 직접 만들 수 있습니다.</p><p>Rich Simple Syrup(2:1)은 더 진하고 부드러운 질감을 원할 때 사용합니다.</p>",
+        createdAt: "2024-01-10",
+        updatedAt: "2024-01-15",
+        availableCocktails: [
+          { id: 52, name: "Daiquiri", nameKr: "다이키리", image: "https://via.placeholder.com/80x80/ADFF2F/000000?text=Daiquiri" },
+          { id: 53, name: "Mojito", nameKr: "모히또", image: "https://via.placeholder.com/80x80/98FB98/000000?text=Mojito" },
+          { id: 54, name: "Whiskey Sour", nameKr: "위스키 사워", image: "https://via.placeholder.com/80x80/FFE4B5/000000?text=Whiskey+Sour" }
+        ]
+      }
+    };
+
+    const syrupData = syrupDataMap[syrupId];
+
+    if (!syrupData) {
+      return [404, { error: 'Syrup not found' }];
+    }
+
+    return [200, { data: syrupData }];
+  });
 }

@@ -6,7 +6,6 @@ import {Box, Chip, Modal, Paper, Typography} from "@mui/material";
 import {COMMON_MODAL_STYLE} from "../../../common/style/CommonModal.style.ts";
 import {CategorySlide} from "../../../common/component/CategorySlide.tsx";
 import type {CarbonatedDetail} from "../interface/CarbonatedDetail.ts";
-import {getSugarLevelKorean} from "../common/CarbonatedUtils.ts";
 
 interface CarbonatedDetailModalProps {
   open: boolean;
@@ -72,7 +71,12 @@ const CarbonatedDetailModal: React.FC<CarbonatedDetailModalProps> = ({
 
                     <InfoCard>
                       <InfoLabel>당도</InfoLabel>
-                      <CategoryChip label={getSugarLevelKorean(data.sugarLevel)} size="small" />
+                      <FlavorMeterContainer>
+                        <FlavorMeterBar>
+                          <FlavorMeterFill level={data.sugarLevel} color="#ffa726" />
+                        </FlavorMeterBar>
+                        <FlavorMeterLabel>{data.sugarLevel}/5</FlavorMeterLabel>
+                      </FlavorMeterContainer>
                     </InfoCard>
                   </InfoGrid>
                 </HeaderSection>
@@ -383,5 +387,44 @@ const AvailableCocktailsSection = styled(Box)`
     padding: 24px;
     margin-bottom: 24px;
     border: 1px solid rgba(76, 175, 80, 0.2);
+  }
+`;
+
+// 플레이버 미터 관련 스타일들
+const FlavorMeterContainer = styled(Box)`
+  && {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+`;
+
+const FlavorMeterBar = styled(Box)`
+  && {
+    flex: 1;
+    height: 8px;
+    background-color: #e9ecef;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+`;
+
+const FlavorMeterFill = styled(Box)<{ level: number; color: string }>`
+  && {
+    height: 100%;
+    width: ${({ level }) => (level / 5) * 100}%;
+    background: linear-gradient(90deg, ${({ color }) => color} 0%, ${({ color }) => color}CC 100%);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+  }
+`;
+
+const FlavorMeterLabel = styled(Typography)`
+  && {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #6c757d;
+    min-width: 24px;
   }
 `;
