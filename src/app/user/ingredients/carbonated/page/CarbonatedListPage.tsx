@@ -216,7 +216,7 @@ const CarbonatedListPage: React.FC = () => {
             />
           </ControlsContainer>
 
-          {/* 기법 리스트 */}
+          {/* 탄산 리스트 */}
           <CarbonatedList>
             {isSearching ? (
                 <SearchLoadingOverlay
@@ -239,13 +239,13 @@ const CarbonatedListPage: React.FC = () => {
           {!isSearching && (
               <Box display="flex" justifyContent="center" alignItems="center" py={4}>
                 <Typography variant="body2" color="text.secondary">
-                  모든 비터스를 확인했습니다 🍸
+                  모든 탄산 음료를 확인했습니다 🍸
                 </Typography>
               </Box>
           )}
         </Container>
 
-        {/* 기법 상세 모달 */}
+        {/* 탄산 상세 모달 */}
         {carbonated && (
             <CarbonatedDetailModal
                 open={modalOpen}

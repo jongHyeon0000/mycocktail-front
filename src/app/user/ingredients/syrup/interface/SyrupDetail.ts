@@ -31,7 +31,7 @@ export interface SyrupDetail {
   syrupNameKr: string;
 
   /** 당도 */
-  sugarContent: number;
+  sugarLevel: number;
 
   /** 설명 */
   notes: string | null;

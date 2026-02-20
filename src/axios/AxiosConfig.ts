@@ -3272,7 +3272,7 @@ if(USE_MOCK) {
         countryNameKr: "프랑스",
         syrupName: "Monin Grenadine Syrup",
         syrupNameKr: "모닌 그레나딘 시럽",
-        sugarContent: 65.0,
+        sugarLevel: 65.0,
         image: "https://via.placeholder.com/200x200/DC143C/FFFFFF?text=Grenadine",
         notes: "<p>석류를 베이스로 한 진한 붉은색 시럽입니다.</p><p>달콤하고 프루티한 맛과 함께 아름다운 레이어 효과를 만들어냅니다.</p>",
         shelfLifeDays: 1095, // 약 3년
@@ -3297,7 +3297,7 @@ if(USE_MOCK) {
         countryNameKr: "프랑스",
         syrupName: "Monin Vanilla Syrup",
         syrupNameKr: "모닌 바닐라 시럽",
-        sugarContent: 68.0,
+        sugarLevel: 1,
         image: "https://via.placeholder.com/200x200/F5DEB3/000000?text=Vanilla",
         notes: "<p>마다가스카르 바닐라 빈 추출물로 만든 프리미엄 바닐라 시럽입니다.</p><p>부드럽고 크리미한 바닐라 향과 적당한 단맛이 특징입니다.</p>",
         shelfLifeDays: 1095, // 약 3년
@@ -3322,7 +3322,7 @@ if(USE_MOCK) {
         countryNameKr: "프랑스",
         syrupName: "Giffard Orgeat Syrup",
         syrupNameKr: "지파드 오르지아 시럽",
-        sugarContent: 70.0,
+        sugarLevel: 2,
         image: "https://via.placeholder.com/200x200/FAEBD7/000000?text=Orgeat",
         notes: "<p>아몬드와 오렌지 블로썸 워터로 만든 프랑스 전통 시럽입니다.</p><p>고소하고 달콤한 아몬드 향과 은은한 플로럴 노트가 특징입니다.</p>",
         shelfLifeDays: 730, // 약 2년
@@ -3347,7 +3347,7 @@ if(USE_MOCK) {
         countryNameKr: "미국",
         syrupName: "BG Reynolds Passion Fruit Syrup",
         syrupNameKr: "비지 레이놀즈 패션프루트 시럽",
-        sugarContent: 62.5,
+        sugarLevel: 3,
         image: "https://via.placeholder.com/200x200/FF6347/FFFFFF?text=Passion+Fruit",
         notes: "<p>천연 패션프루트로 만든 진한 열대 과일 시럽입니다.</p><p>강렬한 패션프루트 향과 적당한 산미, 농축된 단맛이 특징입니다.</p>",
         shelfLifeDays: 365, // 약 1년
@@ -3372,7 +3372,7 @@ if(USE_MOCK) {
         countryNameKr: "프랑스",
         syrupName: "Monin Honey Syrup",
         syrupNameKr: "모닌 허니 시럽",
-        sugarContent: 75.0,
+        sugarLevel: 4,
         image: "https://via.placeholder.com/200x200/FFD700/000000?text=Honey",
         notes: "<p>천연 꿀을 베이스로 만든 시럽으로 물에 잘 녹도록 조정되었습니다.</p><p>은은한 꽃향기와 부드러운 단맛, 그리고 독특한 깊이가 특징입니다.</p>",
         shelfLifeDays: 1095, // 약 3년
@@ -3397,7 +3397,7 @@ if(USE_MOCK) {
         countryNameKr: "미국",
         syrupName: "Finest Call Simple Syrup",
         syrupNameKr: "파이니스트 콜 심플 시럽",
-        sugarContent: 50.0,
+        sugarLevel: 5,
         image: "https://via.placeholder.com/200x200/FFFFFF/000000?text=Simple+Syrup",
         notes: "<p>순수 설탕과 물을 1:1 비율로 만든 가장 기본적인 시럽입니다.</p><p>중성적인 단맛만을 제공하며 칵테일의 다른 풍미를 해치지 않습니다.</p>",
         shelfLifeDays: 180, // 약 6개월
@@ -3458,7 +3458,7 @@ if(USE_MOCK) {
         countryNameKr: "프랑스",
         syrupName: "Monin Grenadine Syrup",
         syrupNameKr: "모닌 그레나딘 시럽",
-        sugarContent: 65.0,
+        sugarLevel: 1,
         image: "https://via.placeholder.com/200x200/DC143C/FFFFFF?text=Grenadine",
         notes: "<p>석류를 베이스로 한 진한 붉은색 시럽입니다.</p><p>달콤하고 프루티한 맛과 함께 아름다운 레이어 효과를 만들어냅니다.</p>",
         shelfLifeDays: 1095, // 약 3년
@@ -3483,7 +3483,7 @@ if(USE_MOCK) {
         countryNameKr: "프랑스",
         syrupName: "Monin Vanilla Syrup",
         syrupNameKr: "모닌 바닐라 시럽",
-        sugarContent: 68.0,
+        sugarLevel: 2,
         image: "https://via.placeholder.com/200x200/F5DEB3/000000?text=Vanilla",
         notes: "<p>마다가스카르 바닐라 빈 추출물로 만든 프리미엄 바닐라 시럽입니다.</p><p>부드럽고 크리미한 바닐라 향과 적당한 단맛이 특징입니다.</p>",
         shelfLifeDays: 1095, // 약 3년
@@ -3508,7 +3508,7 @@ if(USE_MOCK) {
         countryNameKr: "프랑스",
         syrupName: "Giffard Orgeat Syrup",
         syrupNameKr: "지파드 오르지아 시럽",
-        sugarContent: 70.0,
+        sugarLevel: 3,
         image: "https://via.placeholder.com/200x200/FAEBD7/000000?text=Orgeat",
         notes: "<p>아몬드와 오렌지 블로썸 워터로 만든 프랑스 전통 시럽입니다.</p><p>고소하고 달콤한 아몬드 향과 은은한 플로럴 노트가 특징입니다.</p>",
         shelfLifeDays: 730, // 약 2년
@@ -3533,7 +3533,7 @@ if(USE_MOCK) {
         countryNameKr: "미국",
         syrupName: "BG Reynolds Passion Fruit Syrup",
         syrupNameKr: "비지 레이놀즈 패션프루트 시럽",
-        sugarContent: 62.5,
+        sugarLevel: 4,
         image: "https://via.placeholder.com/200x200/FF6347/FFFFFF?text=Passion+Fruit",
         notes: "<p>천연 패션프루트로 만든 진한 열대 과일 시럽입니다.</p><p>강렬한 패션프루트 향과 적당한 산미, 농축된 단맛이 특징입니다.</p>",
         shelfLifeDays: 365, // 약 1년
@@ -3558,7 +3558,7 @@ if(USE_MOCK) {
         countryNameKr: "프랑스",
         syrupName: "Monin Honey Syrup",
         syrupNameKr: "모닌 허니 시럽",
-        sugarContent: 75.0,
+        sugarLevel: 5,
         image: "https://via.placeholder.com/200x200/FFD700/000000?text=Honey",
         notes: "<p>천연 꿀을 베이스로 만든 시럽으로 물에 잘 녹도록 조정되었습니다.</p><p>은은한 꽃향기와 부드러운 단맛, 그리고 독특한 깊이가 특징입니다.</p>",
         shelfLifeDays: 1095, // 약 3년
@@ -3583,7 +3583,7 @@ if(USE_MOCK) {
         countryNameKr: "미국",
         syrupName: "Finest Call Simple Syrup",
         syrupNameKr: "파이니스트 콜 심플 시럽",
-        sugarContent: 50.0,
+        sugarLevel: 5,
         image: "https://via.placeholder.com/200x200/FFFFFF/000000?text=Simple+Syrup",
         notes: "<p>순수 설탕과 물을 1:1 비율로 만든 가장 기본적인 시럽입니다.</p><p>중성적인 단맛만을 제공하며 칵테일의 다른 풍미를 해치지 않습니다.</p>",
         shelfLifeDays: 180, // 약 6개월

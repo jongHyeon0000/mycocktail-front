@@ -1,7 +1,13 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, {type SetStateAction, useCallback, useEffect, useState} from "react";
 import useReadSyrupList from "../service/useReadSyrupList.tsx";
 import useReadSyrup from "../service/useReadSyrup.tsx";
 import {showErrorAlert} from "../../../common/utils/AlertUtils.ts";
+import LoadingOverlay from "../../../common/component/loading/LoadingOverlay.tsx";
+import {Box, Container, FormControl, InputAdornment, MenuItem, Select, TextField, Typography} from "@mui/material";
+import SearchLoadingOverlay from "../../../common/component/loading/SearchLoadingOverlay.tsx";
+import styled from "styled-components";
+import SyrupListComponent from "../component/SyrupListComponent.tsx";
+import SyrupDetailModal from "../component/SyrupDetailModal.tsx";
 
 const SyrupListPage: React.FC = () => {
   /*
@@ -138,23 +144,199 @@ const SyrupListPage: React.FC = () => {
   useEffect(() => {
     if (syrupListError) {
       showErrorAlert(
-          '주스 리스트 로드 실패',
+          '시럽 리스트 로드 실패',
           syrupListError
       ).then();
     }
 
     if (syrupError) {
       showErrorAlert(
-          '주스 로드 실패',
+          '시럽 로드 실패',
           syrupError
       ).then();
     }
   }, [syrupListError, syrupError]);
 
   return (
-      <>
-      </>
+      <PageContainer>
+        {/* 로딩 오버레이 - 초기 로딩시에만 */}
+        <LoadingOverlay
+            open={syrupListLoading && !isSearching}
+            message="시럽 리스트를 불러오는 중..."
+        />
+        <LoadingOverlay
+            open={syrupLoading}
+            message="시럽 정보를 불러오는 중..."
+        />
+
+        <Container maxWidth="lg">
+          {/* 상단 컨트롤 영역 */}
+          <ControlsContainer>
+            {/* 정렬 드롭다운들 */}
+            <SortContainer>
+              <FormControl size="small">
+                <SortSelect
+                    value={sortOrder}
+                    onChange={(e) => setSortOrder(e.target.value as SetStateAction<SortOrderType>)}
+                >
+                  <MenuItem value="recent">최신순</MenuItem>
+                  <MenuItem value="name">이름순</MenuItem>
+                </SortSelect>
+              </FormControl>
+            </SortContainer>
+
+            {/* 검색창 */}
+            <SearchField
+                placeholder="시럽 검색..."
+                variant="outlined"
+                size="small"
+                value={searchKeyword}
+                onChange={handleSearchChange}
+                InputProps={{
+                  startAdornment: (
+                      <InputAdornment position="start">
+                        <span style={{ fontSize: "18px" }}>🔍</span>
+                      </InputAdornment>
+                  ),
+                  endAdornment: searchKeyword && (
+                      <InputAdornment position="end">
+                    <span
+                        style={{
+                          fontSize: "16px",
+                          cursor: "pointer",
+                          padding: "4px"
+                        }}
+                        onClick={handleSearchClear}
+                    >
+                      ✕
+                    </span>
+                      </InputAdornment>
+                  ),
+                }}
+            />
+          </ControlsContainer>
+
+          {/* 시럽 리스트 */}
+          <CarbonatedList>
+            {isSearching ? (
+                <SearchLoadingOverlay
+                    open={isSearching}
+                    message="검색 중..."
+                />
+            ) : (
+                syrupList && syrupList.map((syrup, index) => (
+                    <SyrupListComponent
+                        key={`${syrup.syrupId}-${index}`}
+                        data={syrup}
+                        index={index}
+                        onClickEvent={() => fetchReadSyrup(syrup.syrupId)}
+                    />
+                ))
+            )}
+          </CarbonatedList>
+
+          {/* 리스트 끝 메시지 */}
+          {!isSearching && (
+              <Box display="flex" justifyContent="center" alignItems="center" py={4}>
+                <Typography variant="body2" color="text.secondary">
+                  모든 시럽을 확인했습니다 🍸
+                </Typography>
+              </Box>
+          )}
+        </Container>
+
+        {/* 시럽 상세 모달 */}
+        {syrup && (
+            <SyrupDetailModal
+                open={modalOpen}
+                onClose={() => setModalOpen(false)}
+                data={syrup}
+            />
+        )}
+      </PageContainer>
   );
 }
+
+const PageContainer = styled(Box)`
+    && {
+        min-height: 100vh;
+        background-color: #f5f5f5;
+        padding-top: 96px;
+    }
+`;
+
+const ControlsContainer = styled(Box)`
+  && {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+    gap: 16px;
+    
+    @media (max-width: 600px) {
+      flex-wrap: wrap;
+    }
+  }
+`;
+
+const SortContainer = styled(Box)`
+  && {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+`;
+
+const SortSelect = styled(Select)`
+  && {
+    background-color: #fff;
+    border-radius: 16px;
+    min-width: 150px;
+    
+    .MuiOutlinedInput-notchedOutline {
+      border-color: #eee;
+    }
+    
+    &:hover .MuiOutlinedInput-notchedOutline {
+      border-color: #ddd;
+    }
+  }
+`;
+
+const SearchField = styled(TextField)`
+  && {
+    width: 300px;
+    background-color: #fff;
+    
+    .MuiOutlinedInput-root {
+      border-radius: 16px;
+      
+      &:hover fieldset {
+        border-color: #ddd;
+      }
+      
+      &.Mui-focused fieldset {
+        border-color: #888;
+      }
+    }
+    
+    & fieldset {
+      border-color: #eee;
+    }
+    
+    @media (max-width: 600px) {
+      width: 100%;
+    }
+  }
+`;
+
+const CarbonatedList = styled(Box)`
+  && {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+`;
 
 export default SyrupListPage;
