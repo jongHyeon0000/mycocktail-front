@@ -3608,4 +3608,701 @@ if(USE_MOCK) {
 
     return [200, { data: syrupData }];
   });
+
+  /*
+   * 가니쉬 Garnishes List
+   * */
+  mock.onGet('/api/garnishes').reply((config) => {
+    const { page = 1, limit = 6, sort = 'recent', search } = config.params || {};
+
+    // 전체 Mock 데이터 (6개)
+    const fullData = [
+      {
+        garnishId: 1,
+        brandId: 17,
+        brandName: "Fresh Produce",
+        brandNameKr: "신선 농산물",
+        countryId: 2,
+        countryName: "United States",
+        countryNameKr: "미국",
+        garnishName: "Mint Leaves",
+        garnishNameKr: "민트 잎",
+        primaryFunction: "all",
+        image: "https://via.placeholder.com/200x200/90EE90/000000?text=Mint",
+        notes: "<p>가장 널리 사용되는 칵테일 가니쉬 중 하나입니다.</p><p>상쾌한 향과 초록빛 비주얼이 특징이며, 모히또와 민트 줄렙의 핵심 재료입니다.</p>",
+        shelfLifeDays: 7,
+        storageType: "냉장 보관, 젖은 키친타월로 감싸 보관하면 더 오래 신선함 유지",
+        whenToUseNotes: "<p>모히또에서 머들링하여 향을 내고 장식으로도 사용합니다.</p><p>민트 줄렙에서 얼음과 함께 으깨어 상쾌한 향을 극대화합니다.</p><p>위스키 스매시나 사우스사이드 같은 칵테일에서 장식과 향을 동시에 제공합니다.</p>",
+        substituteNotes: "<p>페퍼민트나 스피어민트 모두 사용 가능하며, 각각 다른 향의 강도를 제공합니다.</p><p>신선한 바질로 대체하면 색다른 허브 풍미를 낼 수 있습니다.</p>",
+        createdAt: "2024-02-15",
+        updatedAt: "2024-02-20",
+        availableCocktails: [
+          { id: 1, name: "Mojito", nameKr: "모히또", image: "https://via.placeholder.com/80x80/98FB98/000000?text=Mojito" },
+          { id: 55, name: "Mint Julep", nameKr: "민트 줄렙", image: "https://via.placeholder.com/80x80/90EE90/000000?text=Mint+Julep" },
+          { id: 56, name: "Southside", nameKr: "사우스사이드", image: "https://via.placeholder.com/80x80/7FFF00/000000?text=Southside" }
+        ]
+      },
+      {
+        garnishId: 2,
+        brandId: 18,
+        brandName: "Citrus Fresh",
+        brandNameKr: "시트러스 프레시",
+        countryId: 3,
+        countryName: "Mexico",
+        countryNameKr: "멕시코",
+        garnishName: "Lime Wheel",
+        garnishNameKr: "라임 휠",
+        primaryFunction: "visual",
+        image: "https://via.placeholder.com/200x200/32CD32/000000?text=Lime",
+        notes: "<p>라임을 얇게 슬라이스한 가니쉬로 시각적 효과가 뛰어납니다.</p><p>산뜻한 시트러스 향과 함께 칵테일에 신선함을 더해줍니다.</p>",
+        shelfLifeDays: 3,
+        storageType: "냉장 보관, 밀폐 용기에 보관하면 건조 방지",
+        whenToUseNotes: "<p>마가리타 글라스 가장자리에 걸쳐 시각적 포인트를 줍니다.</p><p>모스코 뮬이나 다크 앤 스토미에서 구리 머그와 대비되는 색감을 제공합니다.</p><p>진 앤 토닉에 라임 웨지 대신 사용하면 더 세련된 느낌을 연출할 수 있습니다.</p>",
+        substituteNotes: "<p>레몬 휠로 대체 가능하지만 향과 색감이 달라집니다.</p><p>라임 웨지(조각)로 대체하면 더 많은 주스를 짜낼 수 있습니다.</p>",
+        createdAt: "2024-02-14",
+        updatedAt: "2024-02-19",
+        availableCocktails: [
+          { id: 2, name: "Margarita", nameKr: "마가리타", image: "https://via.placeholder.com/80x80/FFE4B5/000000?text=Margarita" },
+          { id: 57, name: "Moscow Mule", nameKr: "모스코 뮬", image: "https://via.placeholder.com/80x80/CD853F/FFFFFF?text=Moscow+Mule" },
+          { id: 58, name: "Gin and Tonic", nameKr: "진 앤 토닉", image: "https://via.placeholder.com/80x80/E0FFFF/000000?text=GT" }
+        ]
+      },
+      {
+        garnishId: 3,
+        brandId: 19,
+        brandName: "Luxardo",
+        brandNameKr: "룩사르도",
+        countryId: 6,
+        countryName: "Italy",
+        countryNameKr: "이탈리아",
+        garnishName: "Luxardo Maraschino Cherry",
+        garnishNameKr: "룩사르도 마라스키노 체리",
+        primaryFunction: "flavor",
+        image: "https://via.placeholder.com/200x200/8B0000/FFFFFF?text=Cherry",
+        notes: "<p>프리미엄 마라스카 체리를 마라스키노 시럽에 절인 최고급 가니쉬입니다.</p><p>인공 착색료가 없는 자연스러운 진한 붉은색과 복잡한 체리 풍미가 특징입니다.</p>",
+        shelfLifeDays: 1095,
+        storageType: "실온 보관 가능, 개봉 후 냉장 보관 권장",
+        whenToUseNotes: "<p>올드 패션드나 맨해튼 같은 클래식 칵테일의 마무리에 필수입니다.</p><p>위스키 사워에서 시각적 포인트와 달콤한 풍미를 더합니다.</p><p>일반 체리와 달리 칵테일의 풍미를 해치지 않고 오히려 깊이를 더해줍니다.</p>",
+        substituteNotes: "<p>일반 마라스키노 체리로 대체 가능하나 인공적인 맛이 강합니다.</p><p>신선한 체리를 설탕 시럽에 절여 직접 만들 수도 있습니다.</p>",
+        createdAt: "2024-02-13",
+        updatedAt: "2024-02-18",
+        availableCocktails: [
+          { id: 3, name: "Old Fashioned", nameKr: "올드 패션드", image: "https://via.placeholder.com/80x80/D2691E/FFFFFF?text=Old+Fashioned" },
+          { id: 59, name: "Manhattan", nameKr: "맨해튼", image: "https://via.placeholder.com/80x80/8B4513/FFFFFF?text=Manhattan" },
+          { id: 54, name: "Whiskey Sour", nameKr: "위스키 사워", image: "https://via.placeholder.com/80x80/FFE4B5/000000?text=Whiskey+Sour" }
+        ]
+      },
+      {
+        garnishId: 4,
+        brandId: 18,
+        brandName: "Citrus Fresh",
+        brandNameKr: "시트러스 프레시",
+        countryId: 4,
+        countryName: "Spain",
+        countryNameKr: "스페인",
+        garnishName: "Orange Peel",
+        garnishNameKr: "오렌지 필",
+        primaryFunction: "aroma",
+        image: "https://via.placeholder.com/200x200/FFA500/000000?text=Orange",
+        notes: "<p>오렌지 껍질을 길게 벗긴 가니쉬로 향이 가장 중요한 역할을 합니다.</p><p>껍질의 오일을 불 위에서 짜내면 시각적 효과와 함께 강렬한 시트러스 향이 칵테일 표면을 감쌉니다.</p>",
+        shelfLifeDays: 5,
+        storageType: "냉장 보관, 밀폐 용기에 보관하여 수분 증발 방지",
+        whenToUseNotes: "<p>올드 패션드에서 불꽃 쇼와 함께 오렌지 오일을 칵테일 위로 뿌립니다.</p><p>네그로니에서 쓴맛을 부드럽게 하고 시트러스 향을 더합니다.</p><p>사제락에서 압생트와 어우러지는 오렌지 향을 제공합니다.</p>",
+        substituteNotes: "<p>레몬 필로 대체하면 더 밝고 상큼한 향을 낼 수 있습니다.</p><p>자몽 필은 더 쓴맛과 함께 복잡한 풍미를 제공합니다.</p>",
+        createdAt: "2024-02-12",
+        updatedAt: "2024-02-17",
+        availableCocktails: [
+          { id: 3, name: "Old Fashioned", nameKr: "올드 패션드", image: "https://via.placeholder.com/80x80/D2691E/FFFFFF?text=Old+Fashioned" },
+          { id: 60, name: "Negroni", nameKr: "네그로니", image: "https://via.placeholder.com/80x80/DC143C/FFFFFF?text=Negroni" },
+          { id: 61, name: "Sazerac", nameKr: "사제락", image: "https://via.placeholder.com/80x80/8B4513/FFFFFF?text=Sazerac" }
+        ]
+      },
+      {
+        garnishId: 5,
+        brandId: 20,
+        brandName: "Gourmet Garnish",
+        brandNameKr: "고메 가니쉬",
+        countryId: 7,
+        countryName: "United Kingdom",
+        countryNameKr: "영국",
+        garnishName: "Cocktail Olive",
+        garnishNameKr: "칵테일 올리브",
+        primaryFunction: "flavor",
+        image: "https://via.placeholder.com/200x200/808000/FFFFFF?text=Olive",
+        notes: "<p>마티니의 전통적인 가니쉬로 짭짤한 풍미를 더합니다.</p><p>스터프드 올리브(피망이나 블루치즈가 들어간)는 추가적인 풍미 레이어를 제공합니다.</p>",
+        shelfLifeDays: 365,
+        storageType: "브라인(소금물)에 담가 냉장 보관",
+        whenToUseNotes: "<p>드라이 마티니에서 진의 보타니컬과 어우러지는 짭짤함을 제공합니다.</p><p>더티 마티니에서 올리브 브라인과 함께 풍미를 강화합니다.</p><p>깁슨 칵테일에서는 올리브 대신 칵테일 어니언을 사용합니다.</p>",
+        substituteNotes: "<p>칵테일 어니언(실버스킨 어니언)으로 대체하면 깁슨이 됩니다.</p><p>레몬 트위스트로 대체하면 더 가볍고 상쾌한 느낌이 됩니다.</p>",
+        createdAt: "2024-02-11",
+        updatedAt: "2024-02-16",
+        availableCocktails: [
+          { id: 62, name: "Dry Martini", nameKr: "드라이 마티니", image: "https://via.placeholder.com/80x80/F0F0F0/000000?text=Martini" },
+          { id: 63, name: "Dirty Martini", nameKr: "더티 마티니", image: "https://via.placeholder.com/80x80/D3D3D3/000000?text=Dirty" },
+          { id: 64, name: "Gibson", nameKr: "깁슨", image: "https://via.placeholder.com/80x80/E0E0E0/000000?text=Gibson" }
+        ]
+      },
+      {
+        garnishId: 6,
+        brandId: 21,
+        brandName: "Celery Farm",
+        brandNameKr: "셀러리 팜",
+        countryId: 2,
+        countryName: "United States",
+        countryNameKr: "미국",
+        garnishName: "Celery Stalk",
+        garnishNameKr: "셀러리 줄기",
+        primaryFunction: "visual",
+        image: "https://via.placeholder.com/200x200/228B22/FFFFFF?text=Celery",
+        notes: "<p>블러디 메리의 시그니처 가니쉬이자 스터러로 사용됩니다.</p><p>시각적으로 눈에 띄며, 칵테일을 마시는 동안 아삭한 식감을 즐길 수 있습니다.</p>",
+        shelfLifeDays: 7,
+        storageType: "냉장 보관, 물에 담가 두면 더 오래 신선함 유지",
+        whenToUseNotes: "<p>블러디 메리에서 토마토 주스와 함께 채소의 신선함을 강조합니다.</p><p>칵테일을 저으면서 셀러리 향이 은은하게 배어나옵니다.</p><p>시각적으로 강한 인상을 주어 브런치 칵테일의 완성도를 높입니다.</p>",
+        substituteNotes: "<p>오이 스틱으로 대체하면 더 가볍고 상큼한 느낌을 줍니다.</p><p>아스파라거스로 대체하면 색다른 비주얼과 풍미를 낼 수 있습니다.</p>",
+        createdAt: "2024-02-10",
+        updatedAt: "2024-02-15",
+        availableCocktails: [
+          { id: 65, name: "Bloody Mary", nameKr: "블러디 메리", image: "https://via.placeholder.com/80x80/DC143C/FFFFFF?text=Bloody+Mary" },
+          { id: 66, name: "Bloody Caesar", nameKr: "블러디 시저", image: "https://via.placeholder.com/80x80/B22222/FFFFFF?text=Caesar" },
+          { id: 67, name: "Red Snapper", nameKr: "레드 스내퍼", image: "https://via.placeholder.com/80x80/CD5C5C/FFFFFF?text=Red+Snapper" }
+        ]
+      }
+    ];
+
+    // 정렬 처리
+    let sortedData = [...fullData];
+
+    if (sort === 'name') {
+      sortedData.sort((a, b) => a.garnishName.localeCompare(b.garnishName));
+    }
+    // recent는 기본 순서 유지
+
+    // 검색 처리
+    if (search) {
+      sortedData = sortedData.filter(garnish =>
+          garnish.garnishName.toLowerCase().includes(search.toLowerCase()) ||
+          garnish.garnishNameKr.includes(search) ||
+          garnish.brandName.toLowerCase().includes(search.toLowerCase()) ||
+          (garnish.brandNameKr && garnish.brandNameKr.includes(search))
+      );
+    }
+
+    // 페이지네이션 처리
+    const startIndex = (page - 1) * limit;
+    const endIndex = startIndex + limit;
+    const paginatedData = sortedData.slice(startIndex, endIndex);
+
+    return [200, { data: paginatedData }];
+  });
+
+  /*
+   * 가니쉬 Detail (개별 조회)
+   * */
+  mock.onGet(/\/api\/garnishes\/\d+/).reply((config) => {
+    const garnishId = parseInt(config.url?.split('/').pop() || '1');
+
+    // 가니쉬 데이터 맵
+    const garnishDataMap: { [key: number]: any } = {
+      1: {
+        garnishId: 1,
+        brandId: 17,
+        brandName: "Fresh Produce",
+        brandNameKr: "신선 농산물",
+        countryId: 2,
+        countryName: "United States",
+        countryNameKr: "미국",
+        garnishName: "Mint Leaves",
+        garnishNameKr: "민트 잎",
+        primaryFunction: "all",
+        image: "https://via.placeholder.com/200x200/90EE90/000000?text=Mint",
+        notes: "<p>가장 널리 사용되는 칵테일 가니쉬 중 하나입니다.</p><p>상쾌한 향과 초록빛 비주얼이 특징이며, 모히또와 민트 줄렙의 핵심 재료입니다.</p>",
+        shelfLifeDays: 7,
+        storageType: "냉장 보관, 젖은 키친타월로 감싸 보관하면 더 오래 신선함 유지",
+        whenToUseNotes: "<p>모히또에서 머들링하여 향을 내고 장식으로도 사용합니다.</p><p>민트 줄렙에서 얼음과 함께 으깨어 상쾌한 향을 극대화합니다.</p><p>위스키 스매시나 사우스사이드 같은 칵테일에서 장식과 향을 동시에 제공합니다.</p>",
+        substituteNotes: "<p>페퍼민트나 스피어민트 모두 사용 가능하며, 각각 다른 향의 강도를 제공합니다.</p><p>신선한 바질로 대체하면 색다른 허브 풍미를 낼 수 있습니다.</p>",
+        createdAt: "2024-02-15",
+        updatedAt: "2024-02-20",
+        availableCocktails: [
+          { id: 1, name: "Mojito", nameKr: "모히또", image: "https://via.placeholder.com/80x80/98FB98/000000?text=Mojito" },
+          { id: 55, name: "Mint Julep", nameKr: "민트 줄렙", image: "https://via.placeholder.com/80x80/90EE90/000000?text=Mint+Julep" },
+          { id: 56, name: "Southside", nameKr: "사우스사이드", image: "https://via.placeholder.com/80x80/7FFF00/000000?text=Southside" }
+        ]
+      },
+      2: {
+        garnishId: 2,
+        brandId: 18,
+        brandName: "Citrus Fresh",
+        brandNameKr: "시트러스 프레시",
+        countryId: 3,
+        countryName: "Mexico",
+        countryNameKr: "멕시코",
+        garnishName: "Lime Wheel",
+        garnishNameKr: "라임 휠",
+        primaryFunction: "visual",
+        image: "https://via.placeholder.com/200x200/32CD32/000000?text=Lime",
+        notes: "<p>라임을 얇게 슬라이스한 가니쉬로 시각적 효과가 뛰어납니다.</p><p>산뜻한 시트러스 향과 함께 칵테일에 신선함을 더해줍니다.</p>",
+        shelfLifeDays: 3,
+        storageType: "냉장 보관, 밀폐 용기에 보관하면 건조 방지",
+        whenToUseNotes: "<p>마가리타 글라스 가장자리에 걸쳐 시각적 포인트를 줍니다.</p><p>모스코 뮬이나 다크 앤 스토미에서 구리 머그와 대비되는 색감을 제공합니다.</p><p>진 앤 토닉에 라임 웨지 대신 사용하면 더 세련된 느낌을 연출할 수 있습니다.</p>",
+        substituteNotes: "<p>레몬 휠로 대체 가능하지만 향과 색감이 달라집니다.</p><p>라임 웨지(조각)로 대체하면 더 많은 주스를 짜낼 수 있습니다.</p>",
+        createdAt: "2024-02-14",
+        updatedAt: "2024-02-19",
+        availableCocktails: [
+          { id: 2, name: "Margarita", nameKr: "마가리타", image: "https://via.placeholder.com/80x80/FFE4B5/000000?text=Margarita" },
+          { id: 57, name: "Moscow Mule", nameKr: "모스코 뮬", image: "https://via.placeholder.com/80x80/CD853F/FFFFFF?text=Moscow+Mule" },
+          { id: 58, name: "Gin and Tonic", nameKr: "진 앤 토닉", image: "https://via.placeholder.com/80x80/E0FFFF/000000?text=GT" }
+        ]
+      },
+      3: {
+        garnishId: 3,
+        brandId: 19,
+        brandName: "Luxardo",
+        brandNameKr: "룩사르도",
+        countryId: 6,
+        countryName: "Italy",
+        countryNameKr: "이탈리아",
+        garnishName: "Luxardo Maraschino Cherry",
+        garnishNameKr: "룩사르도 마라스키노 체리",
+        primaryFunction: "flavor",
+        image: "https://via.placeholder.com/200x200/8B0000/FFFFFF?text=Cherry",
+        notes: "<p>프리미엄 마라스카 체리를 마라스키노 시럽에 절인 최고급 가니쉬입니다.</p><p>인공 착색료가 없는 자연스러운 진한 붉은색과 복잡한 체리 풍미가 특징입니다.</p>",
+        shelfLifeDays: 1095,
+        storageType: "실온 보관 가능, 개봉 후 냉장 보관 권장",
+        whenToUseNotes: "<p>올드 패션드나 맨해튼 같은 클래식 칵테일의 마무리에 필수입니다.</p><p>위스키 사워에서 시각적 포인트와 달콤한 풍미를 더합니다.</p><p>일반 체리와 달리 칵테일의 풍미를 해치지 않고 오히려 깊이를 더해줍니다.</p>",
+        substituteNotes: "<p>일반 마라스키노 체리로 대체 가능하나 인공적인 맛이 강합니다.</p><p>신선한 체리를 설탕 시럽에 절여 직접 만들 수도 있습니다.</p>",
+        createdAt: "2024-02-13",
+        updatedAt: "2024-02-18",
+        availableCocktails: [
+          { id: 3, name: "Old Fashioned", nameKr: "올드 패션드", image: "https://via.placeholder.com/80x80/D2691E/FFFFFF?text=Old+Fashioned" },
+          { id: 59, name: "Manhattan", nameKr: "맨해튼", image: "https://via.placeholder.com/80x80/8B4513/FFFFFF?text=Manhattan" },
+          { id: 54, name: "Whiskey Sour", nameKr: "위스키 사워", image: "https://via.placeholder.com/80x80/FFE4B5/000000?text=Whiskey+Sour" }
+        ]
+      },
+      4: {
+        garnishId: 4,
+        brandId: 18,
+        brandName: "Citrus Fresh",
+        brandNameKr: "시트러스 프레시",
+        countryId: 4,
+        countryName: "Spain",
+        countryNameKr: "스페인",
+        garnishName: "Orange Peel",
+        garnishNameKr: "오렌지 필",
+        primaryFunction: "aroma",
+        image: "https://via.placeholder.com/200x200/FFA500/000000?text=Orange",
+        notes: "<p>오렌지 껍질을 길게 벗긴 가니쉬로 향이 가장 중요한 역할을 합니다.</p><p>껍질의 오일을 불 위에서 짜내면 시각적 효과와 함께 강렬한 시트러스 향이 칵테일 표면을 감쌉니다.</p>",
+        shelfLifeDays: 5,
+        storageType: "냉장 보관, 밀폐 용기에 보관하여 수분 증발 방지",
+        whenToUseNotes: "<p>올드 패션드에서 불꽃 쇼와 함께 오렌지 오일을 칵테일 위로 뿌립니다.</p><p>네그로니에서 쓴맛을 부드럽게 하고 시트러스 향을 더합니다.</p><p>사제락에서 압생트와 어우러지는 오렌지 향을 제공합니다.</p>",
+        substituteNotes: "<p>레몬 필로 대체하면 더 밝고 상큼한 향을 낼 수 있습니다.</p><p>자몽 필은 더 쓴맛과 함께 복잡한 풍미를 제공합니다.</p>",
+        createdAt: "2024-02-12",
+        updatedAt: "2024-02-17",
+        availableCocktails: [
+          { id: 3, name: "Old Fashioned", nameKr: "올드 패션드", image: "https://via.placeholder.com/80x80/D2691E/FFFFFF?text=Old+Fashioned" },
+          { id: 60, name: "Negroni", nameKr: "네그로니", image: "https://via.placeholder.com/80x80/DC143C/FFFFFF?text=Negroni" },
+          { id: 61, name: "Sazerac", nameKr: "사제락", image: "https://via.placeholder.com/80x80/8B4513/FFFFFF?text=Sazerac" }
+        ]
+      },
+      5: {
+        garnishId: 5,
+        brandId: 20,
+        brandName: "Gourmet Garnish",
+        brandNameKr: "고메 가니쉬",
+        countryId: 7,
+        countryName: "United Kingdom",
+        countryNameKr: "영국",
+        garnishName: "Cocktail Olive",
+        garnishNameKr: "칵테일 올리브",
+        primaryFunction: "flavor",
+        image: "https://via.placeholder.com/200x200/808000/FFFFFF?text=Olive",
+        notes: "<p>마티니의 전통적인 가니쉬로 짭짤한 풍미를 더합니다.</p><p>스터프드 올리브(피망이나 블루치즈가 들어간)는 추가적인 풍미 레이어를 제공합니다.</p>",
+        shelfLifeDays: 365,
+        storageType: "브라인(소금물)에 담가 냉장 보관",
+        whenToUseNotes: "<p>드라이 마티니에서 진의 보타니컬과 어우러지는 짭짤함을 제공합니다.</p><p>더티 마티니에서 올리브 브라인과 함께 풍미를 강화합니다.</p><p>깁슨 칵테일에서는 올리브 대신 칵테일 어니언을 사용합니다.</p>",
+        substituteNotes: "<p>칵테일 어니언(실버스킨 어니언)으로 대체하면 깁슨이 됩니다.</p><p>레몬 트위스트로 대체하면 더 가볍고 상쾌한 느낌이 됩니다.</p>",
+        createdAt: "2024-02-11",
+        updatedAt: "2024-02-16",
+        availableCocktails: [
+          { id: 62, name: "Dry Martini", nameKr: "드라이 마티니", image: "https://via.placeholder.com/80x80/F0F0F0/000000?text=Martini" },
+          { id: 63, name: "Dirty Martini", nameKr: "더티 마티니", image: "https://via.placeholder.com/80x80/D3D3D3/000000?text=Dirty" },
+          { id: 64, name: "Gibson", nameKr: "깁슨", image: "https://via.placeholder.com/80x80/E0E0E0/000000?text=Gibson" }
+        ]
+      },
+      6: {
+        garnishId: 6,
+        brandId: 21,
+        brandName: "Celery Farm",
+        brandNameKr: "셀러리 팜",
+        countryId: 2,
+        countryName: "United States",
+        countryNameKr: "미국",
+        garnishName: "Celery Stalk",
+        garnishNameKr: "셀러리 줄기",
+        primaryFunction: "visual",
+        image: "https://via.placeholder.com/200x200/228B22/FFFFFF?text=Celery",
+        notes: "<p>블러디 메리의 시그니처 가니쉬이자 스터러로 사용됩니다.</p><p>시각적으로 눈에 띄며, 칵테일을 마시는 동안 아삭한 식감을 즐길 수 있습니다.</p>",
+        shelfLifeDays: 7,
+        storageType: "냉장 보관, 물에 담가 두면 더 오래 신선함 유지",
+        whenToUseNotes: "<p>블러디 메리에서 토마토 주스와 함께 채소의 신선함을 강조합니다.</p><p>칵테일을 저으면서 셀러리 향이 은은하게 배어나옵니다.</p><p>시각적으로 강한 인상을 주어 브런치 칵테일의 완성도를 높입니다.</p>",
+        substituteNotes: "<p>오이 스틱으로 대체하면 더 가볍고 상큼한 느낌을 줍니다.</p><p>아스파라거스로 대체하면 색다른 비주얼과 풍미를 낼 수 있습니다.</p>",
+        createdAt: "2024-02-10",
+        updatedAt: "2024-02-15",
+        availableCocktails: [
+          { id: 65, name: "Bloody Mary", nameKr: "블러디 메리", image: "https://via.placeholder.com/80x80/DC143C/FFFFFF?text=Bloody+Mary" },
+          { id: 66, name: "Bloody Caesar", nameKr: "블러디 시저", image: "https://via.placeholder.com/80x80/B22222/FFFFFF?text=Caesar" },
+          { id: 67, name: "Red Snapper", nameKr: "레드 스내퍼", image: "https://via.placeholder.com/80x80/CD5C5C/FFFFFF?text=Red+Snapper" }
+        ]
+      }
+    };
+
+    const garnishData = garnishDataMap[garnishId];
+
+    if (!garnishData) {
+      return [404, { error: 'Garnish not found' }];
+    }
+
+    return [200, { data: garnishData }];
+  });
+
+  // ===================================================
+  // Dairy/Cream Mock API
+  // ===================================================
+
+  // GET /api/dairy-cream - 유제품/크림 리스트
+  mock.onGet('/api/dairy-cream').reply((config) => {
+    const params = config.params || {};
+    const page = Number(params.page) || 1;
+    const limit = Number(params.limit) || 6;
+    const sort = params.sort || 'recent';
+    const order = params.order || 'desc';
+    const search = params.search?.toLowerCase() || '';
+
+    const allDairyCream = [
+      {
+        dairyCreamId: 1,
+        brandId: 22,
+        brandName: "Organic Valley",
+        brandNameKr: "오가닉 밸리",
+        countryId: 2,
+        countryName: "United States",
+        countryNameKr: "미국",
+        dairyCreamName: "Heavy Cream",
+        dairyCreamNameKr: "헤비 크림",
+        fatContent: 36.0,
+        isDairyFree: false,
+        image: "https://via.placeholder.com/200x200/FFF8DC/000000?text=Heavy+Cream",
+        notes: null,
+        shelfLifeDays: 14,
+        storageType: "냉장 보관 (1-4°C)",
+        substituteNotes: null,
+        createdAt: "2024-02-15",
+        updatedAt: "2024-02-20",
+        availableCocktails: []
+      },
+      {
+        dairyCreamId: 2,
+        brandId: 23,
+        brandName: "Bailey's",
+        brandNameKr: "베일리스",
+        countryId: 8,
+        countryName: "Ireland",
+        countryNameKr: "아일랜드",
+        dairyCreamName: "Irish Cream Liqueur",
+        dairyCreamNameKr: "아이리시 크림 리큐어",
+        fatContent: 17.0,
+        isDairyFree: false,
+        image: "https://via.placeholder.com/200x200/D2691E/FFFFFF?text=Irish+Cream",
+        notes: null,
+        shelfLifeDays: 730,
+        storageType: "개봉 전 상온 보관, 개봉 후 냉장 보관",
+        substituteNotes: null,
+        createdAt: "2024-02-14",
+        updatedAt: "2024-02-19",
+        availableCocktails: []
+      },
+      {
+        dairyCreamId: 3,
+        brandId: 24,
+        brandName: "Coconut Cloud",
+        brandNameKr: "코코넛 클라우드",
+        countryId: 9,
+        countryName: "Thailand",
+        countryNameKr: "태국",
+        dairyCreamName: "Coconut Cream",
+        dairyCreamNameKr: "코코넛 크림",
+        fatContent: 24.0,
+        isDairyFree: true,
+        image: "https://via.placeholder.com/200x200/FFFACD/000000?text=Coconut+Cream",
+        notes: null,
+        shelfLifeDays: 365,
+        storageType: "상온 보관, 개봉 후 냉장 보관",
+        substituteNotes: null,
+        createdAt: "2024-02-13",
+        updatedAt: "2024-02-18",
+        availableCocktails: []
+      },
+      {
+        dairyCreamId: 4,
+        brandId: 25,
+        brandName: "Anchor",
+        brandNameKr: "앵커",
+        countryId: 10,
+        countryName: "New Zealand",
+        countryNameKr: "뉴질랜드",
+        dairyCreamName: "Whipping Cream",
+        dairyCreamNameKr: "휘핑 크림",
+        fatContent: 35.0,
+        isDairyFree: false,
+        image: "https://via.placeholder.com/200x200/F5F5DC/000000?text=Whipping+Cream",
+        notes: null,
+        shelfLifeDays: 21,
+        storageType: "냉장 보관 (1-4°C)",
+        substituteNotes: null,
+        createdAt: "2024-02-12",
+        updatedAt: "2024-02-17",
+        availableCocktails: []
+      },
+      {
+        dairyCreamId: 5,
+        brandId: 26,
+        brandName: "Lactaid",
+        brandNameKr: "락테이드",
+        countryId: 2,
+        countryName: "United States",
+        countryNameKr: "미국",
+        dairyCreamName: "Lactose-Free Milk",
+        dairyCreamNameKr: "락토프리 우유",
+        fatContent: 3.5,
+        isDairyFree: false,
+        image: "https://via.placeholder.com/200x200/FFFFFF/000000?text=Lactose+Free",
+        notes: null,
+        shelfLifeDays: 14,
+        storageType: "냉장 보관 (1-4°C)",
+        substituteNotes: null,
+        createdAt: "2024-02-11",
+        updatedAt: "2024-02-16",
+        availableCocktails: []
+      },
+      {
+        dairyCreamId: 6,
+        brandId: 27,
+        brandName: "Oatly",
+        brandNameKr: "오틀리",
+        countryId: 11,
+        countryName: "Sweden",
+        countryNameKr: "스웨덴",
+        dairyCreamName: "Oat Cream",
+        dairyCreamNameKr: "귀리 크림",
+        fatContent: 15.0,
+        isDairyFree: true,
+        image: "https://via.placeholder.com/200x200/F5DEB3/000000?text=Oat+Cream",
+        notes: null,
+        shelfLifeDays: 90,
+        storageType: "상온 보관, 개봉 후 냉장 보관",
+        substituteNotes: null,
+        createdAt: "2024-02-10",
+        updatedAt: "2024-02-15",
+        availableCocktails: []
+      }
+    ];
+
+    let filtered = allDairyCream.filter(item =>
+        item.dairyCreamName.toLowerCase().includes(search) ||
+        item.dairyCreamNameKr.includes(search) ||
+        item.brandName.toLowerCase().includes(search) ||
+        (item.brandNameKr && item.brandNameKr.includes(search))
+    );
+
+    if (sort === 'name') {
+      filtered.sort((a, b) => {
+        const comparison = a.dairyCreamName.localeCompare(b.dairyCreamName);
+        return order === 'asc' ? comparison : -comparison;
+      });
+    } else if (sort === 'recent') {
+      filtered.sort((a, b) => {
+        const comparison = new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+        return order === 'asc' ? -comparison : comparison;
+      });
+    }
+
+    const start = (page - 1) * limit;
+    const end = start + limit;
+    const paginatedData = filtered.slice(start, end);
+
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve([200, { data: paginatedData }]);
+      }, 1000);
+    });
+  });
+
+  // GET /api/dairy-cream/:id - 유제품/크림 상세
+  mock.onGet(/\/api\/dairy-cream\/\d+/).reply((config) => {
+    const dairyCreamId = Number(config.url?.split('/').pop());
+
+    const dairyCreamDataMap: Record<number, any> = {
+      1: {
+        dairyCreamId: 1,
+        brandId: 22,
+        brandName: "Organic Valley",
+        brandNameKr: "오가닉 밸리",
+        countryId: 2,
+        countryName: "United States",
+        countryNameKr: "미국",
+        dairyCreamName: "Heavy Cream",
+        dairyCreamNameKr: "헤비 크림",
+        fatContent: 36.0,
+        isDairyFree: false,
+        image: "https://via.placeholder.com/200x200/FFF8DC/000000?text=Heavy+Cream",
+        notes: "<p>헤비 크림은 36% 이상의 유지방을 함유한 농후한 크림입니다.</p><p>휘핑이 잘 되어 칵테일 토핑으로 사용하기에 적합합니다.</p><p>풀바디한 칵테일에 부드럽고 크리미한 질감을 더해줍니다.</p>",
+        shelfLifeDays: 14,
+        storageType: "냉장 보관 (1-4°C), 개봉 후 7일 이내 사용 권장",
+        substituteNotes: "<p>휘핑 크림(35% 지방)으로 대체 가능하지만 질감이 약간 가벼워집니다.</p><p>하프앤하프로 대체하면 더 가벼운 질감이 됩니다.</p><p>코코넛 크림으로 대체하면 비건 옵션이 됩니다.</p>",
+        createdAt: "2024-02-15",
+        updatedAt: "2024-02-20",
+        availableCocktails: [
+          { id: 68, name: "White Russian", nameKr: "화이트 러시안", image: "https://via.placeholder.com/80x80/F5F5DC/000000?text=White+Russian" },
+          { id: 69, name: "Brandy Alexander", nameKr: "브랜디 알렉산더", image: "https://via.placeholder.com/80x80/D2691E/FFFFFF?text=Brandy+Alexander" },
+          { id: 70, name: "Irish Coffee", nameKr: "아이리시 커피", image: "https://via.placeholder.com/80x80/8B4513/FFFFFF?text=Irish+Coffee" }
+        ]
+      },
+      2: {
+        dairyCreamId: 2,
+        brandId: 23,
+        brandName: "Bailey's",
+        brandNameKr: "베일리스",
+        countryId: 8,
+        countryName: "Ireland",
+        countryNameKr: "아일랜드",
+        dairyCreamName: "Irish Cream Liqueur",
+        dairyCreamNameKr: "아이리시 크림 리큐어",
+        fatContent: 17.0,
+        isDairyFree: false,
+        image: "https://via.placeholder.com/200x200/D2691E/FFFFFF?text=Irish+Cream",
+        notes: "<p>아이리시 위스키와 크림을 기반으로 한 달콤한 리큐어입니다.</p><p>초콜릿과 바닐라 향이 어우러져 디저트 칵테일에 완벽합니다.</p><p>17% ABV로 칵테일에 크리미함과 함께 알코올을 더해줍니다.</p>",
+        shelfLifeDays: 730,
+        storageType: "개봉 전 상온 보관 가능, 개봉 후 냉장 보관하여 6개월 이내 섭취 권장",
+        substituteNotes: "<p>카루아 크림 리큐어로 대체하면 커피 풍미가 강해집니다.</p><p>아마레또와 헤비크림을 섞어 비슷한 효과를 낼 수 있습니다.</p><p>비건 옵션으로는 알몬드 밀크 기반 크림 리큐어를 사용하세요.</p>",
+        createdAt: "2024-02-14",
+        updatedAt: "2024-02-19",
+        availableCocktails: [
+          { id: 71, name: "Mudslide", nameKr: "머드슬라이드", image: "https://via.placeholder.com/80x80/8B4513/FFFFFF?text=Mudslide" },
+          { id: 72, name: "B-52", nameKr: "B-52", image: "https://via.placeholder.com/80x80/D2691E/FFFFFF?text=B-52" },
+          { id: 73, name: "Irish Car Bomb", nameKr: "아이리시 카 밤", image: "https://via.placeholder.com/80x80/654321/FFFFFF?text=Car+Bomb" }
+        ]
+      },
+      3: {
+        dairyCreamId: 3,
+        brandId: 24,
+        brandName: "Coconut Cloud",
+        brandNameKr: "코코넛 클라우드",
+        countryId: 9,
+        countryName: "Thailand",
+        countryNameKr: "태국",
+        dairyCreamName: "Coconut Cream",
+        dairyCreamNameKr: "코코넛 크림",
+        fatContent: 24.0,
+        isDairyFree: true,
+        image: "https://via.placeholder.com/200x200/FFFACD/000000?text=Coconut+Cream",
+        notes: "<p>코코넛 과육에서 추출한 진한 크림으로 트로피컬 칵테일의 필수 재료입니다.</p><p>비건 옵션으로도 훌륭하며 코코넛 향이 칵테일에 이국적인 풍미를 더해줍니다.</p><p>유제품 알레르기가 있는 사람들에게 좋은 대안입니다.</p>",
+        shelfLifeDays: 365,
+        storageType: "상온 보관 가능, 개봉 후 냉장 보관하여 5일 이내 사용",
+        substituteNotes: "<p>헤비 크림으로 대체하면 코코넛 향은 없지만 질감은 유사합니다.</p><p>코코넛 밀크로 대체하면 더 가벼운 질감이 됩니다.</p><p>캐슈 크림으로 대체하면 견과류 풍미가 추가됩니다.</p>",
+        createdAt: "2024-02-13",
+        updatedAt: "2024-02-18",
+        availableCocktails: [
+          { id: 74, name: "Piña Colada", nameKr: "피나 콜라다", image: "https://via.placeholder.com/80x80/FFFACD/000000?text=Pina+Colada" },
+          { id: 75, name: "Painkiller", nameKr: "페인킬러", image: "https://via.placeholder.com/80x80/FFD700/000000?text=Painkiller" },
+          { id: 76, name: "Chi Chi", nameKr: "치치", image: "https://via.placeholder.com/80x80/F0E68C/000000?text=Chi+Chi" }
+        ]
+      },
+      4: {
+        dairyCreamId: 4,
+        brandId: 25,
+        brandName: "Anchor",
+        brandNameKr: "앵커",
+        countryId: 10,
+        countryName: "New Zealand",
+        countryNameKr: "뉴질랜드",
+        dairyCreamName: "Whipping Cream",
+        dairyCreamNameKr: "휘핑 크림",
+        fatContent: 35.0,
+        isDairyFree: false,
+        image: "https://via.placeholder.com/200x200/F5F5DC/000000?text=Whipping+Cream",
+        notes: "<p>35% 유지방을 함유한 크림으로 휘핑하기에 적합합니다.</p><p>칵테일 위에 부드러운 크림 레이어를 만들기에 좋습니다.</p><p>헤비 크림보다 약간 가벼운 질감으로 칵테일의 밸런스를 유지합니다.</p>",
+        shelfLifeDays: 21,
+        storageType: "냉장 보관 (1-4°C), 개봉 후 7일 이내 사용 권장",
+        substituteNotes: "<p>헤비 크림으로 대체하면 더 진한 질감이 됩니다.</p><p>하프앤하프로 대체하면 가벼운 질감이 되지만 휘핑이 어렵습니다.</p><p>소이 크림으로 대체하면 비건 옵션이 됩니다.</p>",
+        createdAt: "2024-02-12",
+        updatedAt: "2024-02-17",
+        availableCocktails: [
+          { id: 77, name: "Ramos Gin Fizz", nameKr: "라모스 진 피즈", image: "https://via.placeholder.com/80x80/F0FFFF/000000?text=Ramos+Fizz" },
+          { id: 78, name: "Whiskey Sour", nameKr: "위스키 사워", image: "https://via.placeholder.com/80x80/FFE4B5/000000?text=Whiskey+Sour" },
+          { id: 79, name: "Clover Club", nameKr: "클로버 클럽", image: "https://via.placeholder.com/80x80/FFB6C1/000000?text=Clover+Club" }
+        ]
+      },
+      5: {
+        dairyCreamId: 5,
+        brandId: 26,
+        brandName: "Lactaid",
+        brandNameKr: "락테이드",
+        countryId: 2,
+        countryName: "United States",
+        countryNameKr: "미국",
+        dairyCreamName: "Lactose-Free Milk",
+        dairyCreamNameKr: "락토프리 우유",
+        fatContent: 3.5,
+        isDairyFree: false,
+        image: "https://via.placeholder.com/200x200/FFFFFF/000000?text=Lactose+Free",
+        notes: "<p>유당불내증이 있는 사람들을 위한 락토오스가 제거된 우유입니다.</p><p>일반 우유와 동일한 맛과 영양을 제공하면서 소화가 잘됩니다.</p><p>크림만큼 진하지 않지만 가벼운 칵테일에 적합합니다.</p>",
+        shelfLifeDays: 14,
+        storageType: "냉장 보관 (1-4°C), 개봉 후 5-7일 이내 사용",
+        substituteNotes: "<p>일반 우유로 1:1 대체 가능합니다.</p><p>알몬드 밀크나 오트 밀크로 대체하면 비건 옵션이 됩니다.</p><p>하프앤하프로 대체하면 더 크리미한 질감이 됩니다.</p>",
+        createdAt: "2024-02-11",
+        updatedAt: "2024-02-16",
+        availableCocktails: [
+          { id: 80, name: "White Russian", nameKr: "화이트 러시안", image: "https://via.placeholder.com/80x80/F5F5DC/000000?text=White+Russian" },
+          { id: 81, name: "Grasshopper", nameKr: "그래스호퍼", image: "https://via.placeholder.com/80x80/98FB98/000000?text=Grasshopper" },
+          { id: 82, name: "Smith & Kearns", nameKr: "스미스 앤 컨스", image: "https://via.placeholder.com/80x80/D2B48C/000000?text=Smith+Kearns" }
+        ]
+      },
+      6: {
+        dairyCreamId: 6,
+        brandId: 27,
+        brandName: "Oatly",
+        brandNameKr: "오틀리",
+        countryId: 11,
+        countryName: "Sweden",
+        countryNameKr: "스웨덴",
+        dairyCreamName: "Oat Cream",
+        dairyCreamNameKr: "귀리 크림",
+        fatContent: 15.0,
+        isDairyFree: true,
+        image: "https://via.placeholder.com/200x200/F5DEB3/000000?text=Oat+Cream",
+        notes: "<p>귀리를 기반으로 만든 식물성 크림으로 부드럽고 고소한 맛이 특징입니다.</p><p>비건 및 유제품 알레르기가 있는 사람들에게 훌륭한 대안입니다.</p><p>거품이 잘 형성되어 커피 칵테일이나 크리미한 칵테일에 적합합니다.</p>",
+        shelfLifeDays: 90,
+        storageType: "상온 보관 가능, 개봉 후 냉장 보관하여 5일 이내 사용",
+        substituteNotes: "<p>소이 크림으로 대체하면 비슷한 질감이지만 맛이 약간 다릅니다.</p><p>알몬드 크림으로 대체하면 견과류 풍미가 더해집니다.</p><p>헤비 크림으로 대체하면 유제품 옵션이 됩니다.</p>",
+        createdAt: "2024-02-10",
+        updatedAt: "2024-02-15",
+        availableCocktails: [
+          { id: 83, name: "Espresso Martini", nameKr: "에스프레소 마티니", image: "https://via.placeholder.com/80x80/654321/FFFFFF?text=Espresso" },
+          { id: 84, name: "Vegan White Russian", nameKr: "비건 화이트 러시안", image: "https://via.placeholder.com/80x80/F5F5DC/000000?text=Vegan+Russian" },
+          { id: 85, name: "Golden Milk Cocktail", nameKr: "골든 밀크 칵테일", image: "https://via.placeholder.com/80x80/FFD700/000000?text=Golden+Milk" }
+        ]
+      }
+    };
+
+    const dairyCreamData = dairyCreamDataMap[dairyCreamId];
+
+    if (!dairyCreamData) {
+      return [404, { error: 'Dairy/Cream not found' }];
+    }
+
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve([200, { data: dairyCreamData }]);
+      }, 1000);
+    });
+  });
 }
