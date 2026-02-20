@@ -3,7 +3,7 @@ import {motion} from "framer-motion";
 import {Box, Card, CardContent, CardMedia, Typography} from "@mui/material";
 import styled from "styled-components";
 import {stripHtmlTags} from "../../../common/utils/CommonUtils.ts";
-import type {UnifiedIngredient} from "../interface/IngredientList.ts";
+import type {UnifiedIngredient} from "../interface/UnifiedIngredient.ts";
 
 interface IngredientListComponentProps {
   data: UnifiedIngredient;
