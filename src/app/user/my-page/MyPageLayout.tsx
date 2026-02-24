@@ -21,7 +21,6 @@ const MyPageLayout: React.FC = () => {
 
               {/* 동적으로 서브 라우트 생성 */}
               {MY_PAGE_SUB_ROUTES.map((route) => {
-                // '/my-page/recipes' -> 'recipes' 추출
                 const subPath = route.path.replace('/my-page/', '');
 
                 return (

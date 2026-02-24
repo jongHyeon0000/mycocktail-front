@@ -13,11 +13,13 @@ interface FetchProps {
   * 정렬
   * */
   sort?: "recent" | "name";
+  order?: "asc" | "desc";   // 정렬 순서 (기본: desc)
 
   /*
   * 검색
   * */
   search?: string;      // 검색어
+  username?: string;      // 유저네임 (해당하는 유저의 글만 검색)
 
   /*
   * 카테고리 필터 (선택사항)

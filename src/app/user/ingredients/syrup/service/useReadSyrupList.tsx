@@ -19,6 +19,7 @@ interface FetchProps {
   * 검색
   * */
   search?: string;      // 검색어
+  username?: string;      // 유저네임 (해당하는 유저의 글만 검색)
 }
 
 const useReadSyrupList = () => {
