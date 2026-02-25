@@ -19,7 +19,7 @@ interface FetchProps {
   * 검색
   * */
   search?: string;      // 검색어
-  username?: string;      // 유저네임 (해당하는 유저의 글만 검색)
+  userId?: number;      // 유저id (해당하는 유저의 글만 검색)
 
   /*
   * 카테고리 필터 (선택사항)
