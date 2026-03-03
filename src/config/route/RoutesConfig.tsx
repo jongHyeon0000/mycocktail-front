@@ -1,19 +1,20 @@
 import * as React from "react";
-import MainPage from "../app/user/main/page/MainPage.tsx";
-import CocktailListPage from "../app/user/cocktail/page/CocktailListPage.tsx";
-import SpiritProductListPage from "../app/user/spirit/page/SpiritProductListPage.tsx";
-import BittersListPage from "../app/user/ingredients/bitters/page/BittersListPage.tsx";
-import CarbonatedListPage from "../app/user/ingredients/carbonated/page/CarbonatedListPage.tsx";
-import DairyCreamListPage from "../app/user/ingredients/dairy_cream/page/DairyCreamListPage.tsx";
-import GarnishesListPage from "../app/user/ingredients/garnishes/page/GarnishesListPage.tsx";
-import JuiceListPage from "../app/user/ingredients/juice/page/JuiceListPage.tsx";
-import OtherListPage from "../app/user/ingredients/other_ingredients/page/OtherListPage.tsx";
-import SyrupListPage from "../app/user/ingredients/syrup/page/SyrupListPage.tsx";
-import IngredientListPage from "../app/user/ingredients/ingredient/page/IngredientListPage.tsx";
-import ToolListPage from "../app/user/tool/page/ToolListPage.tsx";
-import TechniqueListPage from "../app/user/technique/page/TechniqueListPage.tsx";
-import GlasswareListPage from "../app/user/glassware/page/GlasswareListPage.tsx";
-import MyPageLayout from "../app/user/my-page/MyPageLayout.tsx";
+import MainPage from "../../app/user/main/page/MainPage.tsx";
+import CocktailListPage from "../../app/user/cocktail/page/CocktailListPage.tsx";
+import SpiritProductListPage from "../../app/user/spirit/page/SpiritProductListPage.tsx";
+import BittersListPage from "../../app/user/ingredients/bitters/page/BittersListPage.tsx";
+import CarbonatedListPage from "../../app/user/ingredients/carbonated/page/CarbonatedListPage.tsx";
+import DairyCreamListPage from "../../app/user/ingredients/dairy_cream/page/DairyCreamListPage.tsx";
+import GarnishesListPage from "../../app/user/ingredients/garnishes/page/GarnishesListPage.tsx";
+import JuiceListPage from "../../app/user/ingredients/juice/page/JuiceListPage.tsx";
+import OtherListPage from "../../app/user/ingredients/other_ingredients/page/OtherListPage.tsx";
+import SyrupListPage from "../../app/user/ingredients/syrup/page/SyrupListPage.tsx";
+import IngredientListPage from "../../app/user/ingredients/ingredient/page/IngredientListPage.tsx";
+import ToolListPage from "../../app/user/tool/page/ToolListPage.tsx";
+import TechniqueListPage from "../../app/user/technique/page/TechniqueListPage.tsx";
+import GlasswareListPage from "../../app/user/glassware/page/GlasswareListPage.tsx";
+import MyPageLayout from "../../app/user/my-page/MyPageLayout.tsx";
+import LoginPage from "../../app/user/common/page/LoginPage.tsx";
 
 export type RouteType = {
   path: string;
@@ -48,6 +49,11 @@ export const APP_ROUTES: readonly RouteType[] = [
       { path: '/ingredients/juice', name: 'juice list', nameKr: '주스', element: <JuiceListPage/>, type: 'gnb-ingredients'},
       { path: '/ingredients/other', name: 'other-ingredients list', nameKr: '기타', element: <OtherListPage/>, type: 'gnb-ingredients'},
       { path: '/ingredients/syrup', name: 'syrup list', nameKr: '시럽', element: <SyrupListPage/>, type: 'gnb-ingredients'},
+
+  // ══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+  // 인증 관련 페이지
+  // ══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+      { path: '/login', name: 'login page', nameKr: '로그인 페이지', element: <LoginPage/>, type: 'login'},
 
   // ══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
   // 마이페이지 (Nested Routes)

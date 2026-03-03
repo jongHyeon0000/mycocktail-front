@@ -1,6 +1,6 @@
 import {useState} from "react";
 import type {UnifiedIngredient} from "../interface/UnifiedIngredient.ts";
-import {api} from "../../../../../axios/AxiosConfig.ts";
+import {api} from "../../../../../config/axios/AxiosConfig.ts";
 
 interface FetchProps {
   /*

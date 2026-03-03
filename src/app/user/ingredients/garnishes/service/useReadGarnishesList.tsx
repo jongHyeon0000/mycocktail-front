@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {api} from "../../../../../axios/AxiosConfig.ts";
+import {api} from "../../../../../config/axios/AxiosConfig.ts";
 import type {GarnishesDetail} from "../interface/GarnishesDetail.ts";
 
 interface FetchProps {

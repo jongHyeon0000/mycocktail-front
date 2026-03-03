@@ -1,18 +1,18 @@
 import {useState} from "react";
+import type {UserInfo} from "../interface/UserInfo.ts";
 import {api} from "../../../../config/axios/AxiosConfig.ts";
-import type {TechniqueDetail} from "../interface/TechniqueDetail.ts";
 
-const useReadTechnique = () => {
-  const [data, setData] = useState<TechniqueDetail | undefined>(undefined);
+const useReadUserInfo = () => {
+  const [data, setData] = useState<UserInfo | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchReadTechnique = async (id: number) => {
+  const fetchReadUserInfo = async (id: number) => {
     setLoading(true);
     setError(null);
 
     try{
-      const response = await api.get<{data: TechniqueDetail}>(`/api/technique/${id}`);
+      const response = await api.get<{data: UserInfo}>(`/api/userInfo/${id}`);
 
       if (response.status === 200) {
         setData(response.data.data);
@@ -29,11 +29,11 @@ const useReadTechnique = () => {
   }
 
   return {
-    technique: data,
-    techniqueLoading: loading,
-    techniqueError: error,
-    fetchReadTechnique
+    userInfo: data,
+    userInfoLoading: loading,
+    userInfoError: error,
+    fetchReadCocktail: fetchReadUserInfo
   };
 }
 
-export default useReadTechnique;
+export default useReadUserInfo;

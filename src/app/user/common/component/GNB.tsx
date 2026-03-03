@@ -7,9 +7,11 @@ import {
   IconButton,
   Divider, AppBar, Toolbar, Button, Chip,
 } from "@mui/material";
+import { Person } from "@mui/icons-material";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import {APP_ROUTES} from "../../../../route/RoutesConfig.tsx";
+import {APP_ROUTES} from "../../../../config/route/RoutesConfig.tsx";
+import useAuth from "../../auth/service/useAuth.ts";
 import styled from "styled-components";
 
 const GNB: React.FC = () => {
@@ -17,6 +19,17 @@ const GNB: React.FC = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   const navigate = useNavigate();
+  const { user, isAuthenticated } = useAuth();
+
+  /**
+   * 가입일을 "YYYY년 MM월부터 함께해요" 형식으로 변환
+   */
+  const formatJoinDate = (createdAt: string): string => {
+    const date = new Date(createdAt);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    return `${year}년 ${month}월부터 함께해요`;
+  };
 
   return (
     <>
@@ -170,14 +183,27 @@ const GNB: React.FC = () => {
             whileTap={{ scale: 0.95 }}
             sx={{ p: 0 }}
           >
-            <Avatar 
-              src="https://yt3.googleusercontent.com/e3_TBkHSBwuzKRSkG1Uv5uGLiHmLUBMVogjWD35MJL7Fi_iccr8DonU6q_1XSmO4djEY9Cunabo=s900-c-k-c0x00ffffff-no-rj"
-              sx={{ 
-                width: { xs: 36, sm: 40 }, 
-                height: { xs: 36, sm: 40 },
-                border: "2px solid rgba(0, 0, 0, 0.08)",
-              }}
-            />
+            {isAuthenticated && user?.thumbnailImage ? (
+              <Avatar
+                src={user.thumbnailImage}
+                sx={{
+                  width: { xs: 36, sm: 40 },
+                  height: { xs: 36, sm: 40 },
+                  border: "2px solid rgba(0, 0, 0, 0.08)",
+                }}
+              />
+            ) : (
+              <Avatar
+                sx={{
+                  width: { xs: 36, sm: 40 },
+                  height: { xs: 36, sm: 40 },
+                  border: "2px solid rgba(0, 0, 0, 0.08)",
+                  backgroundColor: "#e0e0e0",
+                }}
+              >
+                <Person />
+              </Avatar>
+            )}
           </IconButton>
         </StyledToolbar>
       </StyledAppBar>
@@ -241,50 +267,61 @@ const GNB: React.FC = () => {
               <Box sx={{ p: 3, height: "100vh", display: "flex", flexDirection: "column", boxSizing: "border-box" }}>
                 {/* 프로필 이미지 */}
                 <Box sx={{ display: "flex", justifyContent: "center", mb: 3 }}>
-                  <ProfileImage src="https://yt3.googleusercontent.com/e3_TBkHSBwuzKRSkG1Uv5uGLiHmLUBMVogjWD35MJL7Fi_iccr8DonU6q_1XSmO4djEY9Cunabo=s900-c-k-c0x00ffffff-no-rj" />
+                  {isAuthenticated && user?.thumbnailImage ? (
+                    <ProfileImage src={user.thumbnailImage} />
+                  ) : (
+                    <ProfileImage>
+                      <Person sx={{ fontSize: 40 }} />
+                    </ProfileImage>
+                  )}
                 </Box>
 
                 {/* 사용자명 */}
                 <UserName variant="h6">
-                  아야츠노 유니
+                  {isAuthenticated ? user?.username : "Guest"}
                 </UserName>
 
-                {/* 가입일 */}
-                <JoinDate variant="body2">
-                  2024년 1월부터 함께해요
-                </JoinDate>
+                {/* 가입일 (로그인 시만 표시) */}
+                {isAuthenticated && user?.createdAt && (
+                  <JoinDate variant="body2">
+                    {formatJoinDate(user.createdAt)}
+                  </JoinDate>
+                )}
 
                 <Divider sx={{ mb: 3 }} />
 
-                {/* 자기소개 */}
-                <Box sx={{ mb: 4 }}>
-                  <IntroTitle variant="subtitle2">
-                    자기소개
-                  </IntroTitle>
-                  <IntroText variant="body2">
-                    아야츠노 유니입니다. 🍸
-                    안녕하시지~~~~
-                  </IntroText>
-                </Box>
+                {/* 자기소개 (로그인 시이고 profileNotes가 있을 때만 표시) */}
+                {isAuthenticated && user?.profileNotes && (
+                  <Box sx={{ mb: 4 }}>
+                    <IntroTitle variant="subtitle2">
+                      자기소개
+                    </IntroTitle>
+                    <IntroText variant="body2">
+                      {user.profileNotes}
+                    </IntroText>
+                  </Box>
+                )}
 
-                {/* 하단 영역 - 마이페이지와 활성 상태 */}
+                {/* 하단 영역 - 마이페이지/로그인 버튼과 활성 상태 */}
                 <Box sx={{ mt: "auto" }}>
-                  {/* 마이페이지 버튼 */}
+                  {/* 마이페이지 또는 로그인 버튼 */}
                   <MyPageButton
                       variant="outlined"
                       fullWidth
                       onClick={() => {
-                        navigate('/my-page');
+                        navigate(isAuthenticated ? '/my-page' : '/login');
                         setIsProfileOpen(false);  // drawer 닫기
                       }}
                   >
-                    마이페이지
+                    {isAuthenticated ? '마이페이지' : '로그인'}
                   </MyPageButton>
 
-                  {/* 활성 상태 */}
-                  <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-                    <ActiveChip label="활성 중" size="small" />
-                  </Box>
+                  {/* 활성 상태 (로그인 시이고 isActive가 true일 때만 표시) */}
+                  {isAuthenticated && user?.isActive && (
+                    <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                      <ActiveChip label="활성 중" size="small" />
+                    </Box>
+                  )}
                 </Box>
               </Box>
             </Box>
@@ -336,6 +373,7 @@ const ProfileImage = styled(Avatar)`
     width: 80px;
     height: 80px;
     border: 3px solid rgba(0, 0, 0, 0.08);
+    background-color: #e0e0e0;
   }
 `;
 

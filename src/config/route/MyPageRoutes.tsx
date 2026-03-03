@@ -1,10 +1,10 @@
 import type { RouteType } from "./RoutesConfig.tsx";
-import MyRecipesPage from "../app/user/my-page/my-recipes/MyRecipesPage.tsx";
-import MyCommentsPage from "../app/user/my-page/my-comments/MyCommentsPage.tsx";
-import ProfileViewPage from "../app/user/my-page/profile-view/ProfileViewPage.tsx";
-import ProfileEditPage from "../app/user/my-page/profile-edit/ProfileEditPage.tsx";
-import ReceivedCommentsPage from "../app/user/my-page/received-comments/ReceivedCommentsPage.tsx";
-import ReceivedLikesPage from "../app/user/my-page/received-likes/ReceivedLikesPage.tsx";
+import MyRecipesPage from "../../app/user/my-page/my-recipes/MyRecipesPage.tsx";
+import MyCommentsPage from "../../app/user/my-page/my-comments/MyCommentsPage.tsx";
+import ProfileViewPage from "../../app/user/my-page/profile-view/ProfileViewPage.tsx";
+import ProfileEditPage from "../../app/user/my-page/profile-edit/ProfileEditPage.tsx";
+import ReceivedCommentsPage from "../../app/user/my-page/received-comments/ReceivedCommentsPage.tsx";
+import ReceivedLikesPage from "../../app/user/my-page/received-likes/ReceivedLikesPage.tsx";
 
 /**
  * 마이페이지 서브 라우트 정의

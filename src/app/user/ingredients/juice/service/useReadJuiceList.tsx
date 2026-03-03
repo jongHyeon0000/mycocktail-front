@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {api} from "../../../../../axios/AxiosConfig.ts";
+import {api} from "../../../../../config/axios/AxiosConfig.ts";
 import type {JuiceDetail} from "../interface/JuiceDetail.ts";
 
 interface FetchProps {

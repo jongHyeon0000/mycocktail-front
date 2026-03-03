@@ -1,26 +1,23 @@
-import { RecoilRoot } from "recoil";
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { APP_ROUTES } from "./route/RoutesConfig.tsx";
+import { APP_ROUTES } from "./config/route/RoutesConfig.tsx";
 import { Box } from "@mui/material";
 import GNB from "./app/user/common/component/GNB.tsx";
 
 const App: React.FC = () => {
   return (
-    <RecoilRoot>
-      <BrowserRouter>
+    <BrowserRouter>
+      <Box>
+        <GNB />
         <Box>
-          <GNB />
-          <Box>
-            <Routes>
-              {APP_ROUTES.map((item, index) => (
-                <Route key={index} path={item.path} element={item.element} />
-              ))}
-            </Routes>
-          </Box>
+          <Routes>
+            {APP_ROUTES.map((item, index) => (
+              <Route key={index} path={item.path} element={item.element} />
+            ))}
+          </Routes>
         </Box>
-      </BrowserRouter>
-    </RecoilRoot>
+      </Box>
+    </BrowserRouter>
   );
 };
 

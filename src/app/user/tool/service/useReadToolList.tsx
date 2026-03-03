@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {api} from "../../../../axios/AxiosConfig.ts";
+import {api} from "../../../../config/axios/AxiosConfig.ts";
 import type {ToolDetail} from "../interface/ToolDetail.ts";
 import type {TOOL_CATEGORY_MAP_KEY} from "../common/ToolUtils.ts";
 

@@ -1,6 +1,6 @@
 import {useState} from "react";
 import type {BittersDetail} from "../interface/BittersDetail.ts";
-import {api} from "../../../../../axios/AxiosConfig.ts";
+import {api} from "../../../../../config/axios/AxiosConfig.ts";
 
 interface FetchProps {
   /*

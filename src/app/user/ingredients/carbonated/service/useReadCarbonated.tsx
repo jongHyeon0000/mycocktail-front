@@ -1,6 +1,6 @@
 import {useState} from "react";
 import type {CarbonatedDetail} from "../interface/CarbonatedDetail.ts";
-import {api} from "../../../../../axios/AxiosConfig.ts";
+import {api} from "../../../../../config/axios/AxiosConfig.ts";
 
 const useReadCarbonated = () => {
   const [data, setData] = useState<CarbonatedDetail | undefined>(undefined);

@@ -1,6 +1,6 @@
 import type {SpiritProductDetail} from "../interface/SpiritProductDetail.ts";
 import {useState} from "react";
-import {api} from "../../../../axios/AxiosConfig.ts";
+import {api} from "../../../../config/axios/AxiosConfig.ts";
 
 const useReadSpiritProduct = () => {
   const [data, setData] = useState<SpiritProductDetail | undefined>(undefined);
