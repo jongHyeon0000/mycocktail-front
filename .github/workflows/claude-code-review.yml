@@ -1,57 +1,62 @@
-name: Claude Code Review
+  name: Claude Code Review
 
-on:
-  pull_request:
-    types: [opened, synchronize]
-    # Optional: Only run on specific file changes
-    # paths:
-    #   - "src/**/*.ts"
-    #   - "src/**/*.tsx"
-    #   - "src/**/*.js"
-    #   - "src/**/*.jsx"
+  on:
+    pull_request:
+      types: [opened, synchronize]
+      # Optional: Only run on specific file changes
+      # paths:
+      #   - "src/**/*.ts"
+      #   - "src/**/*.tsx"
+      #   - "src/**/*.js"
+      #   - "src/**/*.jsx"
 
-jobs:
-  claude-review:
-    # Optional: Filter by PR author
-    # if: |
-    #   github.event.pull_request.user.login == 'external-contributor' ||
-    #   github.event.pull_request.user.login == 'new-developer' ||
-    #   github.event.pull_request.author_association == 'FIRST_TIME_CONTRIBUTOR'
+  jobs:
+    claude-review:
+      # Optional: Filter by PR author
+      # if: |
+      #   github.event.pull_request.user.login == 'external-contributor' ||
+      #   github.event.pull_request.user.login == 'new-developer' ||
+      #   github.event.pull_request.author_association == 'FIRST_TIME_CONTRIBUTOR'
 
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: read
-      issues: read
-      id-token: write
+      runs-on: ubuntu-latest
+      permissions:
+        contents: read
+        pull-requests: read
+        issues: read
+        id-token: write
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 1
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
+          with:
+            fetch-depth: 1
 
-      - name: Run Claude Code Review
-        id: claude-review
-        uses: anthropics/claude-code-action@v1
-        with:
-          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          prompt: |
-            REPO: ${{ github.repository }}
-            PR NUMBER: ${{ github.event.pull_request.number }}
+        - name: Run Claude Code Review
+          id: claude-review
+          uses: anthropics/claude-code-action@v1
+          with:
+            claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+            prompt: |
+              REPO: ${{ github.repository }}
+              PR NUMBER: ${{ github.event.pull_request.number }}
 
-            Please review this pull request and provide feedback on:
-            - Code quality and best practices
-            - Potential bugs or issues
-            - Performance considerations
-            - Security concerns
-            - Test coverage
+              **중요: 모든 답변은 한국어(한글)로 작성해주세요.**
 
-            Use the repository's CLAUDE.md for guidance on style and conventions. Be constructive and helpful in your feedback.
+              이 Pull Request를 리뷰하고 다음 내용을 포함하여 피드백을 제공해주세요:
 
-            Use `gh pr comment` with your Bash tool to leave your review as a comment on the PR.
+              1. **커밋 요약**:
+                 - 추가된 코드 및 기능
+                 - 수정된 코드 및 변경사항
+                 - 삭제된 코드 및 제거된 기능
+                 - 전체 작업 내용 요약
 
-          # See https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md
-          # or https://docs.claude.com/en/docs/claude-code/cli-reference for available options
-          claude_args: '--allowed-tools "Bash(gh issue view:*),Bash(gh search:*),Bash(gh issue list:*),Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr list:*)"'
+              2. **코드 리뷰**:
+                 - 간단하게 부탁
 
+              저장소의 CLAUDE.md 파일을 참고하여 스타일과 컨벤션에 맞게 리뷰해주세요.
+
+              `gh pr comment` 명령어를 Bash 도구로 사용하여 PR에 리뷰 코멘트를 남겨주세요.
+
+            # See https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md
+            # or https://docs.claude.com/en/docs/claude-code/cli-reference for available options
+            claude_args: '--allowed-tools "Bash(gh issue view:*),Bash(gh search:*),Bash(gh issue list:*),Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr list:*)"'
