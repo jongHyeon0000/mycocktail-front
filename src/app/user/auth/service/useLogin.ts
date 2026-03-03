@@ -15,8 +15,8 @@ import type {LoginResponseData} from "../interface/LoginResponseData.ts";
  * - 성공 시: Cookie에 토큰 저장 + Zustand Store에 사용자 정보 저장
  */
 const useLogin = () => {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const [isLoginLoading, setIsLoginLoading] = useState<boolean>(false);
+  const [errorCode, setErrorCode] = useState<string | null>(null);
   const setUser = useAuthStore((state) => state.setUser);
 
   /**
@@ -26,8 +26,8 @@ const useLogin = () => {
    * @returns 로그인 성공 시 UserInfo, 실패 시 null
    */
   const login = async (credentials: LoginRequestBody): Promise<UserInfo | null> => {
-    setLoading(true);
-    setError(null);
+    setIsLoginLoading(true);
+    setErrorCode(null);
 
     try {
       const response = await api.post<ApiResponse<LoginResponseData>>('/api/auth/login', credentials);
@@ -46,21 +46,20 @@ const useLogin = () => {
 
       return null;
     } catch (err) {
-      // Axios 에러 처리: 백엔드도 ApiResponse 형식으로 에러를 반환함
       const axiosError = err as AxiosError<ApiResponse<null>>;
       const errorMessage = axiosError.response?.data?.message || 'Login failed';
 
-      setError(errorMessage);
+      setErrorCode(errorMessage);
       return null;
     } finally {
-      setLoading(false);
+      setIsLoginLoading(false);
     }
   };
 
   return {
     login,
-    loading,
-    error,
+    isLoginLoading,
+    errorCode,
   };
 };
 

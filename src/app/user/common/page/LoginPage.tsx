@@ -1,25 +1,50 @@
-import React, { useRef, useState } from "react";
-import { Box, Button, TextField, Typography } from "@mui/material"; // Box는 LoginCard에 사용
+import React, { useEffect, useRef, useState } from "react";
+import { Alert, Box, Button, Snackbar, TextField, Typography } from "@mui/material";
 import { motion } from "framer-motion";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import useAuth from "../../auth/service/useAuth.ts";
 
 const LoginPage: React.FC = () => {
-  const [username, setUsername] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [usernameError, setUsernameError] = useState<string>("");
+  const [emailError, setEmailError] = useState<string>("");
   const [passwordError, setPasswordError] = useState<string>("");
+  const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
+  const [snackbarMessage, setSnackbarMessage] = useState<string>("");
 
-  const usernameRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
-  const handleLogin = () => {
+  const navigate = useNavigate();
+  const { login, isLoginLoading, errorCode } = useAuth();
+
+  // API 에러 발생 시 Snackbar + 해당 필드 focus
+  useEffect(() => {
+    if (!errorCode) {
+      return;
+    }
+
+    setSnackbarMessage(errorCode);
+    setSnackbarOpen(true);
+
+    if (errorCode === "AUTH-ERROR-1") {
+      setEmailError("존재하는 이메일이 없습니다.");
+      setTimeout(() => emailRef.current?.focus(), 0);
+    } else if (errorCode === "AUTH-ERROR-2") {
+      setPasswordError("패스워드가 일치하지 않습니다.");
+      setTimeout(() => passwordRef.current?.focus(), 0);
+    }
+  }, [errorCode]);
+
+  const handleLogin = async () => {
     let hasError = false;
 
-    if (!username.trim()) {
-      setUsernameError("아이디를 입력해 주세요.");
+    if (!email.trim()) {
+      setEmailError("이메일을 입력해 주세요.");
 
       if (!hasError) {
-        usernameRef.current?.focus();
+        emailRef.current?.focus();
         hasError = true;
       }
     }
@@ -30,6 +55,16 @@ const LoginPage: React.FC = () => {
       if (!hasError) {
         passwordRef.current?.focus();
       }
+    }
+
+    if (hasError || !email.trim() || !password.trim()) {
+      return;
+    }
+
+    const result = await login({ email, password });
+
+    if (result) {
+      navigate("/");
     }
   };
 
@@ -57,24 +92,24 @@ const LoginPage: React.FC = () => {
           transition={{ delay: 0.2, duration: 0.5 }}
         >
           <LoginCard>
-            {/* 아이디 입력 */}
+            {/* 이메일 입력 */}
             <StyledTextField
               fullWidth
-              label="아이디"
+              label="이메일"
               variant="outlined"
               size="medium"
               autoComplete="username"
-              inputRef={usernameRef}
-              value={username}
+              inputRef={emailRef}
+              value={email}
               onChange={(e) => {
-                setUsername(e.target.value);
+                setEmail(e.target.value);
 
-                if (usernameError) {
-                  setUsernameError("")
+                if (emailError) {
+                  setEmailError("")
                 }
               }}
-              error={!!usernameError}
-              helperText={usernameError}
+              error={!!emailError}
+              helperText={emailError}
             />
 
             {/* 비밀번호 입력 */}
@@ -91,11 +126,16 @@ const LoginPage: React.FC = () => {
                 setPassword(e.target.value);
 
                 if (passwordError) {
-                  setPasswordError("")
+                  setPasswordError("");
                 }
               }}
               error={!!passwordError}
               helperText={passwordError}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleLogin()
+                }
+              }}
             />
 
             {/* 로그인 버튼 */}
@@ -107,12 +147,30 @@ const LoginPage: React.FC = () => {
               variant="contained"
               disableElevation
               onClick={handleLogin}
+              disabled={isLoginLoading}
             >
-              로그인
+              {isLoginLoading ? "로그인 중..." : "로그인"}
             </LoginButton>
           </LoginCard>
         </CardMotionWrapper>
       </LoginContainer>
+
+      {/* 에러 Snackbar */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={() => setSnackbarOpen(false)}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert
+          onClose={() => setSnackbarOpen(false)}
+          severity="error"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </PageContainer>
   );
 };
@@ -233,6 +291,11 @@ const LoginButton = styled(Button)`
 
     &:hover {
       background-color: #222;
+    }
+
+    &.Mui-disabled {
+      background-color: #999;
+      color: #fff;
     }
   }
 ` as typeof Button;

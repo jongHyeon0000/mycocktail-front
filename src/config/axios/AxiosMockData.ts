@@ -15,7 +15,8 @@ export function setupMock(api: AxiosInstance): void {
     const userDataMap: { [key: number]: any } = {
       1: {
         userId: 1,
-        email: "AyatsunoUni@example.com",
+        email: "AyatsunoUni@stellive.com",
+        password: "1111",
         isActive: true,
         isDeleted: false,
         createdAt: "2024-01-15T09:30:00Z",
@@ -30,7 +31,8 @@ export function setupMock(api: AxiosInstance): void {
       },
       2: {
         userId: 2,
-        email: "tabitayo@example.com",
+        email: "tabidayo@stellive.com",
+        password: "1111",
         isActive: true,
         isDeleted: false,
         createdAt: "2024-03-22T10:15:00Z",
@@ -45,7 +47,8 @@ export function setupMock(api: AxiosInstance): void {
       },
       3: {
         userId: 3,
-        email: "aokumoRin@example.com",
+        email: "aokumoRin@stellive.com",
+        password: "1111",
         isActive: false,
         isDeleted: false,
         createdAt: "2024-02-10T08:00:00Z",
@@ -62,30 +65,38 @@ export function setupMock(api: AxiosInstance): void {
 
     const { email, password } = JSON.parse(config.data);
 
-    // email로 사용자 찾기 (password는 Mock이므로 검증하지 않음)
+    // 1단계: email로 사용자 찾기
     const user = Object.values(userDataMap).find(u => u.email === email);
 
-    if (user) {
-      // Mock JWT 토큰 생성
-      const accessToken = `mock.jwt.token.${user.userId}.${Date.now()}`;
-
-      // ApiResponse 형식으로 반환
-      return [200, {
-        code: 'OK',
-        message: '로그인에 성공했습니다.',
-        data: {
-          accessToken,
-          user
-        }
-      }];
-    } else {
-      // ApiResponse 형식으로 에러 반환
-      return [401, {
-        code: 'UNAUTHORIZED',
-        message: 'Invalid email or password',
+    if (!user) {
+      return ["AUTH-ERROR-1", {
+        code: 'USER_NOT_FOUND',
+        message: '존재하는 아이디가 없습니다.',
         data: null
       }];
     }
+
+    // 2단계: 비밀번호 검증
+    if (user.password !== password) {
+      return ["AUTH-ERROR-2", {
+        code: 'UNAUTHORIZED',
+        message: '비밀번호가 일치하지 않습니다.',
+        data: null
+      }];
+    }
+
+    // 성공: Mock JWT 토큰 생성
+    const { password: _pw, ...userWithoutPassword } = user;
+    const accessToken = `mock.jwt.token.${user.userId}.${Date.now()}`;
+
+    return [200, {
+      code: 'OK',
+      message: '로그인에 성공했습니다.',
+      data: {
+        accessToken,
+        user: userWithoutPassword
+      }
+    }];
   });
 
   /*
@@ -96,7 +107,7 @@ export function setupMock(api: AxiosInstance): void {
     const userDataMap: { [key: number]: any } = {
       1: {
         userId: 1,
-        email: "AyatsunoUni@example.com",
+        email: "AyatsunoUni@stellive.com",
         isActive: true,
         isDeleted: false,
         createdAt: "2024-01-15T09:30:00Z",
@@ -111,7 +122,7 @@ export function setupMock(api: AxiosInstance): void {
       },
       2: {
         userId: 2,
-        email: "tabitayo@example.com",
+        email: "tabidayo@stellive.com",
         isActive: true,
         isDeleted: false,
         createdAt: "2024-03-22T10:15:00Z",
@@ -126,7 +137,7 @@ export function setupMock(api: AxiosInstance): void {
       },
       3: {
         userId: 3,
-        email: "aokumoRin@example.com",
+        email: "aokumoRin@stellive.com",
         isActive: false,
         isDeleted: false,
         createdAt: "2024-02-10T08:00:00Z",

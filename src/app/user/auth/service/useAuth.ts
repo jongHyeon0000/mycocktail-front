@@ -11,7 +11,7 @@ import useLogout from "./useLogout.ts";
  */
 const useAuth = () => {
   const user = useAuthStore((state) => state.user);
-  const { login, loading, error } = useLogin();
+  const { login, isLoginLoading, errorCode } = useLogin();
   const { logout } = useLogout();
 
   // user 상태 변경 시에만 재계산
@@ -27,9 +27,9 @@ const useAuth = () => {
     /** 로그아웃 함수 */
     logout,
     /** 로그인 중 여부 */
-    loading,
+    isLoginLoading,
     /** 로그인 에러 메시지 */
-    error,
+    errorCode,
   };
 };
 
