@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { AxiosError } from "axios";
 import { api } from "../../../../config/axios/AxiosConfig.ts";
-import type { ApiResponse } from "../../../../config/axios/ApiResponse.ts";
+import type { ApiResponse } from "../../../../config/axios/interface/ApiResponse.ts";
 import { useAuthStore } from "../../../../store/authStore.ts";
 import { setAccessToken } from "../../../../utils/cookieUtils.ts";
 import type { UserInfo } from "../interface/UserInfo.ts";
