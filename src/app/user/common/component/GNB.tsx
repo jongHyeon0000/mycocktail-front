@@ -19,7 +19,7 @@ const GNB: React.FC = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   const navigate = useNavigate();
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, logout } = useAuth();
 
   /**
    * 가입일을 "YYYY년 MM월부터 함께해요" 형식으로 변환
@@ -316,10 +316,20 @@ const GNB: React.FC = () => {
                     {isAuthenticated ? '마이페이지' : '로그인'}
                   </MyPageButton>
 
-                  {/* 활성 상태 (로그인 시이고 isActive가 true일 때만 표시) */}
-                  {isAuthenticated && user?.isActive && (
-                    <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-                      <ActiveChip label="활성 중" size="small" />
+                  {/* 로그아웃 + 활성 상태 (로그인 시만 표시) */}
+                  {isAuthenticated && (
+                    <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                      <LogoutButton
+                        variant="text"
+                        size="small"
+                        onClick={() => {
+                          logout();
+                          setIsProfileOpen(false);
+                        }}
+                      >
+                        로그아웃
+                      </LogoutButton>
+                      {user?.isActive && <ActiveChip label="활성 중" size="small" />}
                     </Box>
                   )}
                 </Box>
@@ -427,5 +437,22 @@ const ActiveChip = styled(Chip)`
     background-color: #4caf50;
     color: white;
     font-weight: 500;
+  }
+`;
+
+const LogoutButton = styled(Button)`
+  && {
+    color: #bbb;
+    font-size: 0.8rem;
+    font-weight: 400;
+    text-transform: none;
+    padding: 4px 0;
+    min-width: 0;
+    letter-spacing: 0;
+
+    &:hover {
+      color: #e57373;
+      background-color: transparent;
+    }
   }
 `;
