@@ -9,8 +9,14 @@ interface AuthStore {
   /** 현재 로그인한 사용자 정보 (null이면 미인증) */
   user: UserInfo | null;
 
+  /** 앱 초기화 완료 여부 (Cookie → /api/auth/me 검증 후 true) */
+  isInitialized: boolean;
+
   /** 사용자 정보 설정 (로그인 시 호출) */
   setUser: (user: UserInfo | null) => void;
+
+  /** 앱 초기화 완료 처리 */
+  setInitialized: () => void;
 
   /** 로그아웃 (사용자 정보 초기화) */
   logout: () => void;
@@ -21,8 +27,11 @@ interface AuthStore {
  */
 export const useAuthStore = create<AuthStore>((set) => ({
   user: null,
+  isInitialized: false,
 
   setUser: (user) => set({ user }),
+
+  setInitialized: () => set({ isInitialized: true }),
 
   logout: () => set({ user: null }),
 }));

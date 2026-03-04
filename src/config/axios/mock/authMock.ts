@@ -96,6 +96,74 @@ export function setupAuthMock(mock: MockAdapter): void {
   });
 
   /*
+  * 현재 로그인한 유저 정보 조회 (토큰 기반)
+  * */
+  mock.onGet('/api/auth/me').reply((config) => {
+    const userDataMap: { [key: number]: any } = {
+      1: {
+        userId: 1,
+        email: "AyatsunoUni@stellive.com",
+        password: "1111",
+        isActive: true,
+        isDeleted: false,
+        createdAt: "2024-01-15T09:30:00Z",
+        updatedAt: "2024-12-20T14:22:00Z",
+        deactivatedAt: undefined,
+        deletedAt: undefined,
+        username: "아야츠노 유니",
+        gender: "F",
+        birthDate: "1990-05-12",
+        profileNotes: "안녕하시지~~~~",
+        thumbnailImage: "https://yt3.googleusercontent.com/e3_TBkHSBwuzKRSkG1Uv5uGLiHmLUBMVogjWD35MJL7Fi_iccr8DonU6q_1XSmO4djEY9Cunabo=s900-c-k-c0x00ffffff-no-rj"
+      },
+      2: {
+        userId: 2,
+        email: "tabidayo@stellive.com",
+        password: "1111",
+        isActive: true,
+        isDeleted: false,
+        createdAt: "2024-03-22T10:15:00Z",
+        updatedAt: "2024-12-18T11:40:00Z",
+        deactivatedAt: undefined,
+        deletedAt: undefined,
+        username: "아라하시 타비",
+        gender: "F",
+        birthDate: "1995-08-30",
+        profileNotes: "뿡빵",
+        thumbnailImage: "https://image.genie.co.kr/Y/IMAGE/IMG_ARTIST/082/459/727/82459727_1714360862118_1_600x600.JPG"
+      },
+      3: {
+        userId: 3,
+        email: "aokumoRin@stellive.com",
+        password: "1111",
+        isActive: false,
+        isDeleted: false,
+        createdAt: "2024-02-10T08:00:00Z",
+        updatedAt: "2024-11-05T16:30:00Z",
+        deactivatedAt: "2024-11-05T16:30:00Z",
+        deletedAt: undefined,
+        username: "아오쿠모 린",
+        gender: "F",
+        birthDate: "1988-12-25",
+        profileNotes: "끼요옷",
+        thumbnailImage: "https://i.namu.wiki/i/2q4XJfx3uT9A-CxXVEkXjT4YwhXVAWIwYnFUmB3fmjkAZTEo78qOgRZldT-KAjwFW-30KDl4kdXLEGmmcCmBjg.webp"
+      }
+    };
+
+    const token = config.headers?.Authorization?.replace('Bearer ', '');
+    // mock 토큰 형식: "mock.jwt.token.{userId}.{timestamp}"
+    const userId = parseInt(token?.split('.')[3]);
+    const userData = userDataMap[userId];
+
+    if (!userData) {
+      return [401, { code: 'UNAUTHORIZED', message: '유효하지 않은 토큰입니다.', data: null }];
+    }
+
+    const { password: _pw, ...userWithoutPassword } = userData;
+    return [200, { code: 'OK', message: '성공', data: userWithoutPassword }];
+  });
+
+  /*
   * 유저 정보 (개별 조회)
   * */
   mock.onGet(/\/api\/userInfo\/\d+/).reply((config) => {

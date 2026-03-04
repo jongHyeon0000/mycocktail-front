@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Alert, Box, Button, Snackbar, TextField, Typography } from "@mui/material";
 import { motion } from "framer-motion";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import useAuth from "../../auth/service/useAuth.ts";
 
 const LoginPage: React.FC = () => {
@@ -17,7 +17,7 @@ const LoginPage: React.FC = () => {
   const passwordRef = useRef<HTMLInputElement>(null);
 
   const navigate = useNavigate();
-  const { login, isLoginLoading, errorResponse } = useAuth();
+  const { login, isLoginLoading, errorResponse, isAuthenticated } = useAuth();
 
   // API 에러 발생 시 Snackbar + 해당 필드 focus
   useEffect(() => {
@@ -67,6 +67,12 @@ const LoginPage: React.FC = () => {
       navigate("/");
     }
   };
+
+  if (isAuthenticated) {
+    return (
+        <Navigate to="/" replace />
+    );
+  }
 
   return (
     <PageContainer>
