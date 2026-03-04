@@ -1,13 +1,12 @@
 import axios, {type AxiosInstance} from "axios";
 import { getAccessToken, removeAccessToken } from '../../utils/cookieUtils';
 import { useAuthStore } from '../../store/authStore';
-import { setupMock } from './AxiosMockData';
 
 export const BASE_URL = import.meta.env.MODE === 'development'
     /*
-    * local path
+    * MSW가 현재 origin을 인터셉트하므로 빈 문자열 사용
     * */
-    ? 'http://localhost:3002'
+    ? ''
     /*
     * 실서버
     * */
@@ -55,13 +54,3 @@ api.interceptors.response.use((response) => response, (error) => {
     }
 );
 
-/*
-* Axios mock 사용 여부
-*
-* development 환경에서만 mock 사용 (npm run dev)
-*/
-const USE_MOCK: boolean = import.meta.env.DEV;
-
-if (USE_MOCK) {
-  setupMock(api);
-}
