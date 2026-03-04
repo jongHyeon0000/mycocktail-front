@@ -69,7 +69,7 @@ export function setupMock(api: AxiosInstance): void {
     const user = Object.values(userDataMap).find(u => u.email === email);
 
     if (!user) {
-      return ["AUTH-ERROR-1", {
+      return [401, {
         code: 'USER_NOT_FOUND',
         message: '존재하는 아이디가 없습니다.',
         data: null
@@ -78,7 +78,7 @@ export function setupMock(api: AxiosInstance): void {
 
     // 2단계: 비밀번호 검증
     if (user.password !== password) {
-      return ["AUTH-ERROR-2", {
+      return [402, {
         code: 'UNAUTHORIZED',
         message: '비밀번호가 일치하지 않습니다.',
         data: null
