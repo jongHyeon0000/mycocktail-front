@@ -442,7 +442,7 @@ const ActiveChip = styled(Chip)`
 
 const LogoutButton = styled(Button)`
   && {
-    color: #bbb;
+    color: #888;
     font-size: 0.8rem;
     font-weight: 400;
     text-transform: none;

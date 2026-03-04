@@ -22,38 +22,40 @@ export type RouteType = {
   nameKr: string;
   element: React.ReactNode;
   type: string;
+  /** true 시 로그인 된 유저만 이용 가능 */
+  requireAuth: boolean;
 };
 
 export const APP_ROUTES: readonly RouteType[] = [
   // ══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
   // 메인 페이지
   // ══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
-      { path: '/', name: 'main', nameKr:'홈', element: <MainPage/>, type: 'root'},
+      { path: '/', name: 'main', nameKr:'홈', element: <MainPage/>, type: 'root', requireAuth: false},
 
   // ══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
   // GNB 탭
   // ══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
       // GNB 재료 탭
-      { path: '/cocktail', name: 'cocktail list', nameKr: '레시피', element: <CocktailListPage/>, type: 'gnb'},
-      { path: '/spirit', name: 'spirit list', nameKr: '기주', element: <SpiritProductListPage/>, type: 'gnb'},
-      { path: '/ingredients', name: 'ingredients list', nameKr: '재료', element: <IngredientListPage/>, type: 'gnb'},
-      { path: '/tool', name: 'tool list', nameKr: '도구', element: <ToolListPage/>, type: 'gnb'},
-      { path: '/technique', name: 'technique list', nameKr: '기법', element: <TechniqueListPage/>, type: 'gnb'},
-      { path: '/glassware', name: 'glassware list', nameKr: '잔', element: <GlasswareListPage/>, type: 'gnb'},
+      { path: '/cocktail', name: 'cocktail list', nameKr: '레시피', element: <CocktailListPage/>, type: 'gnb', requireAuth: false},
+      { path: '/spirit', name: 'spirit list', nameKr: '기주', element: <SpiritProductListPage/>, type: 'gnb', requireAuth: false},
+      { path: '/ingredients', name: 'ingredients list', nameKr: '재료', element: <IngredientListPage/>, type: 'gnb', requireAuth: false},
+      { path: '/tool', name: 'tool list', nameKr: '도구', element: <ToolListPage/>, type: 'gnb', requireAuth: false},
+      { path: '/technique', name: 'technique list', nameKr: '기법', element: <TechniqueListPage/>, type: 'gnb', requireAuth: false},
+      { path: '/glassware', name: 'glassware list', nameKr: '잔', element: <GlasswareListPage/>, type: 'gnb', requireAuth: false},
 
       // GNB 재료 탭 - 하위
-      { path: '/ingredients/bitters', name: 'bitters list', nameKr: '비터스', element: <BittersListPage/>, type: 'gnb-ingredients'},
-      { path: '/ingredients/carbonated', name: 'carbonated list', nameKr: '탄산/소다', element: <CarbonatedListPage/>, type: 'gnb-ingredients'},
-      { path: '/ingredients/dairy-cream', name: 'dairy-cream list', nameKr: '유제품/크림', element: <DairyCreamListPage/>, type: 'gnb-ingredients'},
-      { path: '/ingredients/garnishes', name: 'garnishes list', nameKr: '가니쉬', element: <GarnishesListPage/>, type: 'gnb-ingredients'},
-      { path: '/ingredients/juice', name: 'juice list', nameKr: '주스', element: <JuiceListPage/>, type: 'gnb-ingredients'},
-      { path: '/ingredients/other', name: 'other-ingredients list', nameKr: '기타', element: <OtherListPage/>, type: 'gnb-ingredients'},
-      { path: '/ingredients/syrup', name: 'syrup list', nameKr: '시럽', element: <SyrupListPage/>, type: 'gnb-ingredients'},
+      { path: '/ingredients/bitters', name: 'bitters list', nameKr: '비터스', element: <BittersListPage/>, type: 'gnb-ingredients', requireAuth: false},
+      { path: '/ingredients/carbonated', name: 'carbonated list', nameKr: '탄산/소다', element: <CarbonatedListPage/>, type: 'gnb-ingredients', requireAuth: false},
+      { path: '/ingredients/dairy-cream', name: 'dairy-cream list', nameKr: '유제품/크림', element: <DairyCreamListPage/>, type: 'gnb-ingredients', requireAuth: false},
+      { path: '/ingredients/garnishes', name: 'garnishes list', nameKr: '가니쉬', element: <GarnishesListPage/>, type: 'gnb-ingredients', requireAuth: false},
+      { path: '/ingredients/juice', name: 'juice list', nameKr: '주스', element: <JuiceListPage/>, type: 'gnb-ingredients', requireAuth: false},
+      { path: '/ingredients/other', name: 'other-ingredients list', nameKr: '기타', element: <OtherListPage/>, type: 'gnb-ingredients', requireAuth: false},
+      { path: '/ingredients/syrup', name: 'syrup list', nameKr: '시럽', element: <SyrupListPage/>, type: 'gnb-ingredients', requireAuth: false},
 
   // ══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
   // 인증 관련 페이지
   // ══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
-      { path: '/login', name: 'login page', nameKr: '로그인 페이지', element: <LoginPage/>, type: 'login'},
+      { path: '/login', name: 'login page', nameKr: '로그인 페이지', element: <LoginPage/>, type: 'login', requireAuth: false},
 
   // ══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
   // 마이페이지 (Nested Routes)
@@ -81,6 +83,6 @@ export const APP_ROUTES: readonly RouteType[] = [
        * - 서브 라우트는 MyPageLayout 내부에서만 관리됩니다
        * - 여기에 추가하면 중복 라우팅으로 중첩 라우트가 동작하지 않습니다
        */
-      { path: '/my-page/*', name: 'my page', nameKr: '마이페이지', element: <MyPageLayout/>, type: 'my-page'},
+      { path: '/my-page/*', name: 'my page', nameKr: '마이페이지', element: <MyPageLayout/>, type: 'my-page', requireAuth: true},
 
 ] as const;

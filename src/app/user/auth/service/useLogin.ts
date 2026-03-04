@@ -16,7 +16,7 @@ import type {LoginResponseData} from "../interface/LoginResponseData.ts";
  */
 const useLogin = () => {
   const [isLoginLoading, setIsLoginLoading] = useState<boolean>(false);
-  const [errorCode, setErrorCode] = useState<string | null>(null);
+  const [errorResponse, setErrorResponse] = useState<ApiResponse<null> | null>(null);
   const setUser = useAuthStore((state) => state.setUser);
 
   /**
@@ -27,7 +27,7 @@ const useLogin = () => {
    */
   const login = async (credentials: LoginRequestBody): Promise<UserInfo | null> => {
     setIsLoginLoading(true);
-    setErrorCode(null);
+    setErrorResponse(null);
 
     try {
       const response = await api.post<ApiResponse<LoginResponseData>>('/api/auth/login', credentials);
@@ -47,9 +47,7 @@ const useLogin = () => {
       return null;
     } catch (err) {
       const axiosError = err as AxiosError<ApiResponse<null>>;
-      const errorMessage = axiosError.response?.data?.message || 'Login failed';
-
-      setErrorCode(errorMessage);
+      setErrorResponse(axiosError.response?.data ?? null);
       return null;
     } finally {
       setIsLoginLoading(false);
@@ -59,7 +57,7 @@ const useLogin = () => {
   return {
     login,
     isLoginLoading,
-    errorCode,
+    errorResponse,
   };
 };
 

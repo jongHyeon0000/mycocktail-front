@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Alert, Box, Button, Snackbar, TextField, Typography } from "@mui/material";
 import { motion } from "framer-motion";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import useAuth from "../../auth/service/useAuth.ts";
 
 const LoginPage: React.FC = () => {
@@ -17,25 +17,25 @@ const LoginPage: React.FC = () => {
   const passwordRef = useRef<HTMLInputElement>(null);
 
   const navigate = useNavigate();
-  const { login, isLoginLoading, errorCode } = useAuth();
+  const { login, isLoginLoading, errorResponse, isAuthenticated } = useAuth();
 
   // API 에러 발생 시 Snackbar + 해당 필드 focus
   useEffect(() => {
-    if (!errorCode) {
+    if (!errorResponse) {
       return;
     }
 
-    setSnackbarMessage(errorCode);
+    setSnackbarMessage(errorResponse.message);
     setSnackbarOpen(true);
 
-    if (errorCode === "AUTH-ERROR-1") {
+    if (errorResponse.code === "USER_NOT_FOUND") {
       setEmailError("존재하는 이메일이 없습니다.");
       setTimeout(() => emailRef.current?.focus(), 0);
-    } else if (errorCode === "AUTH-ERROR-2") {
+    } else if (errorResponse.code === "UNAUTHORIZED") {
       setPasswordError("패스워드가 일치하지 않습니다.");
       setTimeout(() => passwordRef.current?.focus(), 0);
     }
-  }, [errorCode]);
+  }, [errorResponse]);
 
   const handleLogin = async () => {
     let hasError = false;
@@ -67,6 +67,12 @@ const LoginPage: React.FC = () => {
       navigate("/");
     }
   };
+
+  if (isAuthenticated) {
+    return (
+        <Navigate to="/" replace />
+    );
+  }
 
   return (
     <PageContainer>
