@@ -111,18 +111,37 @@ export const authHandlers = [
   }),
 
   /*
-   * 유저 정보 (개별 조회)
+   * 유저 정보 수정
    */
-  http.get('/api/userInfo/:id', async ({ params }) => {
-    await delay(1000)
-    const userId = parseInt(params.id as string)
+  http.post('/api/userInfo', async ({ request }) => {
+    await delay(800)
+    const token = request.headers.get('Authorization')?.replace('Bearer ', '')
+    const userId = parseInt(token?.split('.')[3] ?? '')
     const userData = userDataMap[userId]
 
-    if (userData) {
-      const { password: _pw, ...userWithoutPassword } = userData
-      return HttpResponse.json({ code: 'OK', message: '성공', data: userWithoutPassword })
-    } else {
-      return HttpResponse.json({ code: 'NOT_FOUND', message: '유저를 찾을 수 없습니다.', data: null }, { status: 404 })
+    if (!userData) {
+      return HttpResponse.json(
+        { code: 'UNAUTHORIZED', message: '유효하지 않은 토큰입니다.', data: null },
+        { status: 401 }
+      )
     }
+
+    const body = await request.json() as Record<string, unknown>
+
+    userDataMap[userId] = {
+      ...userData,
+      ...body,
+      userId: userData.userId,
+      email: userData.email,
+      isActive: userData.isActive,
+      isDeleted: userData.isDeleted,
+      createdAt: userData.createdAt,
+      deactivatedAt: userData.deactivatedAt,
+      deletedAt: userData.deletedAt,
+      updatedAt: new Date().toISOString(),
+    }
+
+    const { password: _pw, ...userWithoutPassword } = userDataMap[userId]
+    return HttpResponse.json({ code: 'OK', message: '회원정보가 수정되었습니다.', data: userWithoutPassword })
   }),
 ]
