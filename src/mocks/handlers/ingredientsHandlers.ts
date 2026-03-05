@@ -1,10 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { http, HttpResponse, delay } from 'msw'
 
 // ─── Bitters ────────────────────────────────────────────────────────────────
 
 const bittersData = [
   {
-    bittersId: 1, brandId: 1, brandName: "Angostura", countryId: 1, countryName: "Trinidad and Tobago",
+    bittersId: 1, brandId: 1, brandName: "Angostura", brandNameKr: "앙고스투라", countryId: 1, countryName: "Trinidad and Tobago",
     bittersName: "Angostura Aromatic Bitters", bittersNameKr: "앙고스투라 아로마틱 비터스", abv: 44.7,
     image: "https://via.placeholder.com/200x200/8B4513/FFFFFF?text=Angostura",
     notes: "<p>1824년부터 생산된 세계에서 가장 유명한 비터스입니다.</p><p>겐티안 뿌리, 허브, 스파이스의 복합적인 향미가 특징입니다.</p>",
@@ -19,7 +21,7 @@ const bittersData = [
     ]
   },
   {
-    bittersId: 2, brandId: 2, brandName: "Peychaud's", countryId: 2, countryName: "United States",
+    bittersId: 2, brandId: 2, brandName: "Peychaud's", brandNameKr: "페이쇼즈", countryId: 2, countryName: "United States",
     bittersName: "Peychaud's Bitters", bittersNameKr: "페이쇼즈 비터스", abv: 35.0,
     image: "https://via.placeholder.com/200x200/DC143C/FFFFFF?text=Peychauds",
     notes: "<p>1830년대 뉴올리언스에서 탄생한 아니스 향의 비터스입니다.</p>",
@@ -33,7 +35,7 @@ const bittersData = [
     ]
   },
   {
-    bittersId: 3, brandId: 3, brandName: "The Bitter Truth", countryId: 3, countryName: "Germany",
+    bittersId: 3, brandId: 3, brandName: "The Bitter Truth", brandNameKr: "더 비터 트루스", countryId: 3, countryName: "Germany",
     bittersName: "The Bitter Truth Orange Bitters", bittersNameKr: "더 비터 트루스 오렌지 비터스", abv: 39.0,
     image: "https://via.placeholder.com/200x200/FF8C00/000000?text=Orange+Bitters",
     notes: "<p>독일의 크래프트 비터스 브랜드에서 만든 오렌지 비터스입니다.</p>",
@@ -47,7 +49,7 @@ const bittersData = [
     ]
   },
   {
-    bittersId: 4, brandId: 4, brandName: "Fee Brothers", countryId: 2, countryName: "United States",
+    bittersId: 4, brandId: 4, brandName: "Fee Brothers", brandNameKr: "피 브라더스", countryId: 2, countryName: "United States",
     bittersName: "Fee Brothers Chocolate Bitters", bittersNameKr: "피 브라더스 초콜릿 비터스", abv: 2.7,
     image: "https://via.placeholder.com/200x200/654321/FFFFFF?text=Chocolate+Bitters",
     notes: "<p>1864년부터 이어온 전통의 비터스 브랜드에서 만든 초콜릿 비터스입니다.</p>",
@@ -60,7 +62,7 @@ const bittersData = [
     ]
   },
   {
-    bittersId: 5, brandId: 5, brandName: "Scrappy's", countryId: 2, countryName: "United States",
+    bittersId: 5, brandId: 5, brandName: "Scrappy's", brandNameKr: "스크래피스", countryId: 2, countryName: "United States",
     bittersName: "Scrappy's Lavender Bitters", bittersNameKr: "스크래피스 라벤더 비터스", abv: 52.5,
     image: "https://via.placeholder.com/200x200/E6E6FA/000000?text=Lavender+Bitters",
     notes: "<p>시애틀 기반의 크래프트 비터스 브랜드입니다.</p>",
@@ -79,7 +81,7 @@ const bittersData = [
 
 const carbonatedData = [
   {
-    carbonatedId: 1, brandId: 1, brandName: "Fever-Tree", countryId: 1, countryName: "United Kingdom",
+    carbonatedId: 1, brandId: 1, brandName: "Fever-Tree", brandNameKr: "피버트리", countryId: 1, countryName: "United Kingdom",
     carbonatedName: "Fever-Tree Indian Tonic Water", carbonatedNameKr: "피버트리 인디언 토닉워터", sugarLevel: 3,
     image: "https://via.placeholder.com/200x200/87CEEB/000000?text=Tonic+Water",
     notes: "<p>천연 퀴닌을 사용한 프리미엄 토닉워터입니다.</p>",
@@ -93,7 +95,7 @@ const carbonatedData = [
     ]
   },
   {
-    carbonatedId: 2, brandId: 2, brandName: "Fever-Tree", countryId: 1, countryName: "United Kingdom",
+    carbonatedId: 2, brandId: 2, brandName: "Fever-Tree", brandNameKr: "피버트리", countryId: 1, countryName: "United Kingdom",
     carbonatedName: "Fever-Tree Ginger Beer", carbonatedNameKr: "피버트리 진저비어", sugarLevel: 4,
     image: "https://via.placeholder.com/200x200/FFD700/000000?text=Ginger+Beer",
     notes: "<p>나이지리아산 생강을 사용한 강렬한 진저비어입니다.</p>",
@@ -107,7 +109,7 @@ const carbonatedData = [
     ]
   },
   {
-    carbonatedId: 3, brandId: 3, brandName: "Schweppes", countryId: 1, countryName: "United Kingdom",
+    carbonatedId: 3, brandId: 3, brandName: "Schweppes", brandNameKr: "슈웹스", countryId: 1, countryName: "United Kingdom",
     carbonatedName: "Schweppes Ginger Ale", carbonatedNameKr: "슈웹스 진저에일", sugarLevel: 3,
     image: "https://via.placeholder.com/200x200/F0E68C/000000?text=Ginger+Ale",
     notes: "<p>1870년부터 이어온 클래식 진저에일입니다.</p>",
@@ -120,7 +122,7 @@ const carbonatedData = [
     ]
   },
   {
-    carbonatedId: 4, brandId: 4, brandName: "Coca-Cola", countryId: 2, countryName: "United States",
+    carbonatedId: 4, brandId: 4, brandName: "Coca-Cola", brandNameKr: "코카콜라", countryId: 2, countryName: "United States",
     carbonatedName: "Coca-Cola Classic", carbonatedNameKr: "코카콜라 클래식", sugarLevel: 5,
     image: "https://via.placeholder.com/200x200/8B0000/FFFFFF?text=Coca+Cola",
     notes: "<p>세계에서 가장 유명한 콜라 음료입니다.</p>",
@@ -133,7 +135,7 @@ const carbonatedData = [
     ]
   },
   {
-    carbonatedId: 5, brandId: 5, brandName: "San Pellegrino", countryId: 3, countryName: "Italy",
+    carbonatedId: 5, brandId: 5, brandName: "San Pellegrino", brandNameKr: "산펠레그리노", countryId: 3, countryName: "Italy",
     carbonatedName: "San Pellegrino Sparkling Water", carbonatedNameKr: "산펠레그리노 탄산수", sugarLevel: 1,
     image: "https://via.placeholder.com/200x200/E0E0E0/000000?text=Sparkling+Water",
     notes: "<p>이탈리아 알프스에서 나오는 천연 미네랄 탄산수입니다.</p>",
@@ -146,7 +148,7 @@ const carbonatedData = [
     ]
   },
   {
-    carbonatedId: 6, brandId: 6, brandName: "Fentimans", countryId: 1, countryName: "United Kingdom",
+    carbonatedId: 6, brandId: 6, brandName: "Fentimans", brandNameKr: "펜티먼스", countryId: 1, countryName: "United Kingdom",
     carbonatedName: "Fentimans Victorian Lemonade", carbonatedNameKr: "펜티먼스 빅토리안 레모네이드", sugarLevel: 3,
     image: "https://via.placeholder.com/200x200/FFFACD/000000?text=Lemonade",
     notes: "<p>전통 보타니컬 발효 방식으로 만든 프리미엄 레모네이드입니다.</p>",
