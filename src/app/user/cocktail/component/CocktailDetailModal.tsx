@@ -261,7 +261,7 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                   transition={{ delay: 0.6 }}
                 >
                   <SectionTitle>제조 팁</SectionTitle>
-                  <TextContent dangerouslySetInnerHTML={{ __html: data.tip_note || '' }} />
+                  <TextContent dangerouslySetInnerHTML={{ __html: data.tipNote || '' }} />
                 </motion.div>
 
                 {/* 개인적인 정보들 */}
@@ -278,7 +278,7 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                   </motion.div>
                 )}
 
-                {data.MakerTips && (
+                {data.makerTips && (
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -286,7 +286,7 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                   >
                     <PersonalSection>
                       <PersonalTitle>개인적인 팁</PersonalTitle>
-                      <PersonalContent>{data.MakerTips}</PersonalContent>
+                      <PersonalContent>{data.makerTips}</PersonalContent>
                     </PersonalSection>
                   </motion.div>
                 )}
@@ -388,7 +388,7 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                 </ActionButtons>
 
                 <DateInfo>
-                  <DateText>등록일: {data.createAt}</DateText>
+                  <DateText>등록일: {data.createdAt}</DateText>
                   <DateText>최종 업데이트: {data.updatedAt}</DateText>
                 </DateInfo>
               </BottomSection>

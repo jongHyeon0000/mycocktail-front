@@ -1,5 +1,7 @@
 import type {CommonSlideElement} from "../../common/interface/CommonSlideElement.ts";
 
+export type CocktailCategory = 'classic' | 'contemporary' | 'signature' | 'mocktail' | 'other';
+
 export interface CocktailDetail {
 
   /** 칵테일 ID */
@@ -14,11 +16,17 @@ export interface CocktailDetail {
   /** 칵테일명 (한글) */
   cocktailNameKr: string;
 
+  /** URL 슬러그 */
+  urlSlug?: string;
+
   /** 카테고리 */
-  category: string;
+  category: CocktailCategory;
 
   /** 예상 도수 */
   absPercentage: number;
+
+  /** 표준 제공량 (ml) */
+  servingSizeMl: number;
 
   /** 난이도 (1~5) */
   difficulty: number;
@@ -26,11 +34,14 @@ export interface CocktailDetail {
   /** 변형 레시피 여부 */
   isVariation: boolean;
 
-  /** 프로필 설명 */
-  profileNote?: string;
+  /** 활성 여부 */
+  isActive: boolean;
 
   /** 신규 여부 */
   isNew: boolean;
+
+  /** 프로필 설명 */
+  profileNote?: string;
 
   /** 역사 설명 */
   historyNote?: string;
@@ -39,7 +50,7 @@ export interface CocktailDetail {
   note?: string;
 
   /** 제조 팁 */
-  tip_note?: string;
+  tipNote?: string;
 
   /** 재료 정보 */
   ingredients: {
@@ -74,7 +85,7 @@ export interface CocktailDetail {
   personalNotes?: string;
 
   /** 개인적인 팁 */
-  MakerTips?: string;
+  makerTips?: string;
 
   /** 개인적인 후기 */
   personalReview?: string;
@@ -84,6 +95,9 @@ export interface CocktailDetail {
     cocktailHashtagId: number,
     cocktailHashtag: string
   };
+
+  /** 조회수 */
+  viewCount: number;
 
   /** 좋아요 수 */
   likeCount: number;
@@ -106,7 +120,7 @@ export interface CocktailDetail {
   }>;
 
   /** 등록일 */
-  createAt: string;
+  createdAt: string;
 
   /** 최종 업데이트일 */
   updatedAt: string;
