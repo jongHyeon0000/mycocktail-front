@@ -85,7 +85,12 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                     <InfoLabel>예상 도수</InfoLabel>
                     <InfoValue>{data.absPercentage}%</InfoValue>
                   </InfoCard>
-                  
+
+                  <InfoCard>
+                    <InfoLabel>제공량</InfoLabel>
+                    <InfoValue>{data.servingSizeMl}ml</InfoValue>
+                  </InfoCard>
+
                   <InfoCard>
                     <InfoLabel>난이도</InfoLabel>
                     <DifficultyChip 

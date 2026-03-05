@@ -190,6 +190,18 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
                 </InfoCard>
 
                 <InfoCard>
+                  <InfoLabel>표준 제공량</InfoLabel>
+                  <StyledTextField
+                    placeholder="0"
+                    variant="outlined"
+                    size="small"
+                    type="number"
+                    fullWidth
+                    InputProps={{ endAdornment: <span>ml</span> }}
+                  />
+                </InfoCard>
+
+                <InfoCard>
                   <InfoLabel>난이도</InfoLabel>
                   <StyledSelect size="small" defaultValue="" displayEmpty fullWidth>
                     <MenuItem value="" disabled>선택</MenuItem>
