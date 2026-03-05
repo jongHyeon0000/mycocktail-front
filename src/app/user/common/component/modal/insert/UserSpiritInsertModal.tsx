@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CloseOutlined, SearchOutlined } from "@mui/icons-material";
+import { CloseOutlined, LocalBarRounded, SearchOutlined } from "@mui/icons-material";
 import {
   Box,
   CircularProgress,
@@ -15,7 +15,6 @@ import styled from "styled-components";
 import { COMMON_MODAL_STYLE } from "../../../style/CommonModal.style.ts";
 import type { CommonSlideElement } from "../../../interface/CommonSlideElement.ts";
 import useReadSpiritProductList from "../../../../spirit/service/useReadSpiritProductList.tsx";
-import { CategorySlide } from "../../CategorySlide.tsx";
 
 interface UserSpiritInsertModalProps {
   open: boolean;
@@ -35,7 +34,6 @@ const UserSpiritInsertModal: React.FC<UserSpiritInsertModalProps> = ({ open, onC
 
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
-  const slideRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (open) {
@@ -124,14 +122,29 @@ const UserSpiritInsertModal: React.FC<UserSpiritInsertModalProps> = ({ open, onC
                   </Typography>
                 </EmptyBox>
               ) : (
-                <SlideArea>
-                  <CategorySlide
-                    title="기주"
-                    items={slideItems}
-                    slideRef={slideRef}
-                    onItemClick={handleSelect}
-                  />
-                </SlideArea>
+                <GridArea>
+                  {slideItems.map((item) => (
+                    <GridItem
+                      key={item.id}
+                      as={motion.div}
+                      whileHover={{ scale: 1.04, y: -2 }}
+                      whileTap={{ scale: 0.96 }}
+                      onClick={() => handleSelect(item)}
+                    >
+                      <GridItemImage>
+                        {item.image ? (
+                          <img src={item.image} alt={item.name} />
+                        ) : (
+                          <GridItemPlaceholder>
+                            <LocalBarRounded fontSize="inherit" />
+                          </GridItemPlaceholder>
+                        )}
+                      </GridItemImage>
+                      <GridItemName>{item.name}</GridItemName>
+                      <GridItemNameKr>{item.nameKr}</GridItemNameKr>
+                    </GridItem>
+                  ))}
+                </GridArea>
               )}
             </ModalContent>
 
@@ -206,20 +219,86 @@ const SearchArea = styled(Box)`
 
 const ModalContent = styled(Box)`
   && {
-    padding: 8px 0 8px;
+    padding: 16px 24px;
     flex: 1;
     overflow-y: auto;
-    min-height: 160px;
+    min-height: 200px;
   }
 `;
 
-const SlideArea = styled(Box)`
+const GridArea = styled(Box)`
   && {
-    background: linear-gradient(135deg, #e8f5e8 0%, #f0f8f0 100%);
-    border-radius: 16px;
-    margin: 12px 24px;
-    padding: 16px 0;
-    border: 1px solid rgba(76, 175, 80, 0.2);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+`;
+
+const GridItem = styled(Box)`
+  && {
+    background: #fafafa;
+    border: 1px solid #f0f0f0;
+    border-radius: 12px;
+    padding: 12px 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.15s;
+
+    &:hover {
+      border-color: #8b4513;
+      background: #fff8f5;
+    }
+  }
+`;
+
+const GridItemImage = styled(Box)`
+  && {
+    width: 64px;
+    height: 64px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #f0f0f0 0%, #e8e8e8 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 8px;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+  }
+`;
+
+const GridItemPlaceholder = styled(Box)`
+  && {
+    font-size: 1.8rem;
+    color: #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+`;
+
+const GridItemName = styled(Typography)`
+  && {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #333;
+    line-height: 1.3;
+    margin-bottom: 2px;
+    word-break: break-word;
+  }
+`;
+
+const GridItemNameKr = styled(Typography)`
+  && {
+    font-size: 0.7rem;
+    color: #888;
+    line-height: 1.3;
+    word-break: break-word;
   }
 `;
 
@@ -228,7 +307,7 @@ const LoadingBox = styled(Box)`
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 160px;
+    height: 200px;
   }
 `;
 
@@ -237,7 +316,7 @@ const EmptyBox = styled(Box)`
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 160px;
+    height: 200px;
   }
 `;
 
