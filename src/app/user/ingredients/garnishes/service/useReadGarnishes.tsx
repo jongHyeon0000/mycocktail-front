@@ -1,6 +1,7 @@
 import {useState} from "react";
 import {api} from "../../../../../config/axios/AxiosConfig.ts";
 import type {GarnishesDetail} from "../interface/GarnishesDetail.ts";
+import type {ApiResponse} from "../../../../../config/axios/interface/ApiResponse.ts";
 
 const useReadGarnishes = () => {
   const [data, setData] = useState<GarnishesDetail | undefined>(undefined);
@@ -12,12 +13,12 @@ const useReadGarnishes = () => {
     setError(null);
 
     try{
-      const response = await api.get<{data: GarnishesDetail}>(`/api/garnishes/${id}`);
+      const response = await api.get<ApiResponse<GarnishesDetail>>(`/api/garnishes/${id}`);
 
-      if (response.status === 200) {
+      if (response.status === 200 && response.data.code === 'OK') {
         setData(response.data.data);
       } else {
-        console.error('Unexpected response status:', response.status);
+        console.error('Unexpected response:', response.status, response.data.code, response.data.message);
       }
 
     } catch (err) {

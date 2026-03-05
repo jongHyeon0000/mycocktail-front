@@ -1,6 +1,7 @@
 import {useState} from "react";
 import {api} from "../../../../config/axios/AxiosConfig.ts";
 import type {SpiritProductDetail} from "../interface/SpiritProductDetail.ts";
+import type {ApiResponse} from "../../../../config/axios/interface/ApiResponse.ts";
 
 interface FetchProps {
   /*
@@ -42,9 +43,9 @@ const useReadSpriteProductList = () => {
     setError(null);
 
     try{
-      const response = await api.get<{data: SpiritProductDetail[]}>(`/api/spirit-product`, { params });
+      const response = await api.get<ApiResponse<SpiritProductDetail[]>>(`/api/spirit-product`, { params });
 
-      if (response.status === 200) {
+      if (response.status === 200 && response.data.code === 'OK') {
         const newData = response.data.data;
         const limit = params?.limit || 6;
         
@@ -57,7 +58,7 @@ const useReadSpriteProductList = () => {
           setData(newData);
         }
       } else {
-        console.error('Unexpected response status:', response.status);
+        console.error('Unexpected response:', response.status, response.data.code, response.data.message);
       }
 
     } catch (err) {

@@ -318,7 +318,7 @@ export const ingredientsHandlers = [
     let result = [...bittersData]
     if (sort === 'name') result.sort((a, b) => a.bittersName.localeCompare(b.bittersName))
     if (search) result = result.filter(d => d.bittersName.toLowerCase().includes(search.toLowerCase()) || d.bittersNameKr.includes(search) || d.brandName.toLowerCase().includes(search.toLowerCase()))
-    return HttpResponse.json({ data: paginate(result, page, limit) })
+    return HttpResponse.json({ code: 'OK', message: '성공', data: paginate(result, page, limit) })
   }),
 
   // Bitters Detail
@@ -326,8 +326,8 @@ export const ingredientsHandlers = [
     await delay(1000)
     const id = parseInt(params.id as string)
     const item = bittersData.find(d => d.bittersId === id)
-    if (!item) return HttpResponse.json({ error: 'Bitters not found' }, { status: 404 })
-    return HttpResponse.json({ data: item })
+    if (!item) return HttpResponse.json({ code: 'NOT_FOUND', message: '비터스를 찾을 수 없습니다.', data: null }, { status: 404 })
+    return HttpResponse.json({ code: 'OK', message: '성공', data: item })
   }),
 
   // Carbonated List
@@ -342,7 +342,7 @@ export const ingredientsHandlers = [
     let result = [...carbonatedData]
     if (sort === 'name') result.sort((a, b) => a.carbonatedName.localeCompare(b.carbonatedName))
     if (search) result = result.filter(d => d.carbonatedName.toLowerCase().includes(search.toLowerCase()) || d.carbonatedNameKr.includes(search) || d.brandName.toLowerCase().includes(search.toLowerCase()))
-    return HttpResponse.json({ data: paginate(result, page, limit) })
+    return HttpResponse.json({ code: 'OK', message: '성공', data: paginate(result, page, limit) })
   }),
 
   // Carbonated Detail
@@ -350,8 +350,8 @@ export const ingredientsHandlers = [
     await delay(1000)
     const id = parseInt(params.id as string)
     const item = carbonatedData.find(d => d.carbonatedId === id)
-    if (!item) return HttpResponse.json({ error: 'Carbonated not found' }, { status: 404 })
-    return HttpResponse.json({ data: item })
+    if (!item) return HttpResponse.json({ code: 'NOT_FOUND', message: '탄산음료를 찾을 수 없습니다.', data: null }, { status: 404 })
+    return HttpResponse.json({ code: 'OK', message: '성공', data: item })
   }),
 
   // Juice List
@@ -366,7 +366,7 @@ export const ingredientsHandlers = [
     let result = [...juiceData]
     if (sort === 'name') result.sort((a, b) => a.juiceName.localeCompare(b.juiceName))
     if (search) result = result.filter(d => d.juiceName.toLowerCase().includes(search.toLowerCase()) || d.juiceNameKr.includes(search) || d.brandName.toLowerCase().includes(search.toLowerCase()))
-    return HttpResponse.json({ data: paginate(result, page, limit) })
+    return HttpResponse.json({ code: 'OK', message: '성공', data: paginate(result, page, limit) })
   }),
 
   // Juice Detail
@@ -374,8 +374,8 @@ export const ingredientsHandlers = [
     await delay(1000)
     const id = parseInt(params.id as string)
     const item = juiceData.find(d => d.juiceId === id)
-    if (!item) return HttpResponse.json({ error: 'Juice not found' }, { status: 404 })
-    return HttpResponse.json({ data: item })
+    if (!item) return HttpResponse.json({ code: 'NOT_FOUND', message: '주스를 찾을 수 없습니다.', data: null }, { status: 404 })
+    return HttpResponse.json({ code: 'OK', message: '성공', data: item })
   }),
 
   // Syrup List
@@ -390,7 +390,7 @@ export const ingredientsHandlers = [
     let result = [...syrupData]
     if (sort === 'name') result.sort((a, b) => a.syrupName.localeCompare(b.syrupName))
     if (search) result = result.filter(d => d.syrupName.toLowerCase().includes(search.toLowerCase()) || d.syrupNameKr.includes(search) || d.brandName.toLowerCase().includes(search.toLowerCase()))
-    return HttpResponse.json({ data: paginate(result, page, limit) })
+    return HttpResponse.json({ code: 'OK', message: '성공', data: paginate(result, page, limit) })
   }),
 
   // Syrup Detail
@@ -398,8 +398,8 @@ export const ingredientsHandlers = [
     await delay(1000)
     const id = parseInt(params.id as string)
     const item = syrupData.find(d => d.syrupId === id)
-    if (!item) return HttpResponse.json({ error: 'Syrup not found' }, { status: 404 })
-    return HttpResponse.json({ data: item })
+    if (!item) return HttpResponse.json({ code: 'NOT_FOUND', message: '시럽을 찾을 수 없습니다.', data: null }, { status: 404 })
+    return HttpResponse.json({ code: 'OK', message: '성공', data: item })
   }),
 
   // Garnishes List
@@ -414,7 +414,7 @@ export const ingredientsHandlers = [
     let result = [...garnishesData]
     if (sort === 'name') result.sort((a, b) => a.garnishName.localeCompare(b.garnishName))
     if (search) result = result.filter(d => d.garnishName.toLowerCase().includes(search.toLowerCase()) || d.garnishNameKr.includes(search) || d.brandName.toLowerCase().includes(search.toLowerCase()))
-    return HttpResponse.json({ data: paginate(result, page, limit) })
+    return HttpResponse.json({ code: 'OK', message: '성공', data: paginate(result, page, limit) })
   }),
 
   // Garnishes Detail
@@ -422,8 +422,8 @@ export const ingredientsHandlers = [
     await delay(1000)
     const id = parseInt(params.id as string)
     const item = garnishesData.find(d => d.garnishId === id)
-    if (!item) return HttpResponse.json({ error: 'Garnish not found' }, { status: 404 })
-    return HttpResponse.json({ data: item })
+    if (!item) return HttpResponse.json({ code: 'NOT_FOUND', message: '가니쉬를 찾을 수 없습니다.', data: null }, { status: 404 })
+    return HttpResponse.json({ code: 'OK', message: '성공', data: item })
   }),
 
   // Dairy & Cream List
@@ -438,7 +438,7 @@ export const ingredientsHandlers = [
     let result = [...dairyCreamData]
     if (sort === 'name') result.sort((a, b) => a.dairyCreamName.localeCompare(b.dairyCreamName))
     if (search) result = result.filter(d => d.dairyCreamName.toLowerCase().includes(search.toLowerCase()) || d.dairyCreamNameKr.includes(search) || d.brandName.toLowerCase().includes(search.toLowerCase()))
-    return HttpResponse.json({ data: paginate(result, page, limit) })
+    return HttpResponse.json({ code: 'OK', message: '성공', data: paginate(result, page, limit) })
   }),
 
   // Dairy & Cream Detail
@@ -446,8 +446,8 @@ export const ingredientsHandlers = [
     await delay(1000)
     const id = parseInt(params.id as string)
     const item = dairyCreamData.find(d => d.dairyCreamId === id)
-    if (!item) return HttpResponse.json({ error: 'Dairy/Cream not found' }, { status: 404 })
-    return HttpResponse.json({ data: item })
+    if (!item) return HttpResponse.json({ code: 'NOT_FOUND', message: '유제품/크림을 찾을 수 없습니다.', data: null }, { status: 404 })
+    return HttpResponse.json({ code: 'OK', message: '성공', data: item })
   }),
 
   // Other Ingredients List
@@ -462,7 +462,7 @@ export const ingredientsHandlers = [
     let result = [...otherIngredientsData]
     if (sort === 'name') result.sort((a, b) => a.otherIngredientName.localeCompare(b.otherIngredientName))
     if (search) result = result.filter(d => d.otherIngredientName.toLowerCase().includes(search.toLowerCase()) || d.otherIngredientNameKr.includes(search) || d.brandName.toLowerCase().includes(search.toLowerCase()))
-    return HttpResponse.json({ data: paginate(result, page, limit) })
+    return HttpResponse.json({ code: 'OK', message: '성공', data: paginate(result, page, limit) })
   }),
 
   // Other Ingredients Detail
@@ -470,8 +470,8 @@ export const ingredientsHandlers = [
     await delay(1000)
     const id = parseInt(params.id as string)
     const item = otherIngredientsData.find(d => d.otherIngredientId === id)
-    if (!item) return HttpResponse.json({ error: 'Other ingredient not found' }, { status: 404 })
-    return HttpResponse.json({ data: item })
+    if (!item) return HttpResponse.json({ code: 'NOT_FOUND', message: '기타 재료를 찾을 수 없습니다.', data: null }, { status: 404 })
+    return HttpResponse.json({ code: 'OK', message: '성공', data: item })
   }),
 
   // Unified Ingredients List
@@ -502,6 +502,6 @@ export const ingredientsHandlers = [
       result.reverse()
     }
 
-    return HttpResponse.json({ data: paginate(result, page, limit) })
+    return HttpResponse.json({ code: 'OK', message: '성공', data: paginate(result, page, limit) })
   }),
 ]

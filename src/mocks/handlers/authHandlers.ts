@@ -120,9 +120,9 @@ export const authHandlers = [
 
     if (userData) {
       const { password: _pw, ...userWithoutPassword } = userData
-      return HttpResponse.json({ data: userWithoutPassword })
+      return HttpResponse.json({ code: 'OK', message: '성공', data: userWithoutPassword })
     } else {
-      return HttpResponse.json({ message: 'User not found' }, { status: 404 })
+      return HttpResponse.json({ code: 'NOT_FOUND', message: '유저를 찾을 수 없습니다.', data: null }, { status: 404 })
     }
   }),
 ]

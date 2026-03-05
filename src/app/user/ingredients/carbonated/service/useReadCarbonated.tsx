@@ -1,6 +1,7 @@
 import {useState} from "react";
 import type {CarbonatedDetail} from "../interface/CarbonatedDetail.ts";
 import {api} from "../../../../../config/axios/AxiosConfig.ts";
+import type {ApiResponse} from "../../../../../config/axios/interface/ApiResponse.ts";
 
 const useReadCarbonated = () => {
   const [data, setData] = useState<CarbonatedDetail | undefined>(undefined);
@@ -12,12 +13,12 @@ const useReadCarbonated = () => {
     setError(null);
 
     try{
-      const response = await api.get<{data: CarbonatedDetail}>(`/api/carbonated/${id}`);
+      const response = await api.get<ApiResponse<CarbonatedDetail>>(`/api/carbonated/${id}`);
 
-      if (response.status === 200) {
+      if (response.status === 200 && response.data.code === 'OK') {
         setData(response.data.data);
       } else {
-        console.error('Unexpected response status:', response.status);
+        console.error('Unexpected response:', response.status, response.data.code, response.data.message);
       }
 
     } catch (err) {

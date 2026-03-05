@@ -190,7 +190,7 @@ export const spiritHandlers = [
     const startIndex = (page - 1) * limit
     const paginatedData = sortedData.slice(startIndex, startIndex + limit)
 
-    return HttpResponse.json({ data: paginatedData })
+    return HttpResponse.json({ code: 'OK', message: '성공', data: paginatedData })
   }),
 
   /*
@@ -202,9 +202,9 @@ export const spiritHandlers = [
     const spiritData = spiritFullData.find(s => s.spiritProductId === spiritProductId)
 
     if (!spiritData) {
-      return HttpResponse.json({ error: 'Spirit product not found' }, { status: 404 })
+      return HttpResponse.json({ code: 'NOT_FOUND', message: '스피릿 상품을 찾을 수 없습니다.', data: null }, { status: 404 })
     }
 
-    return HttpResponse.json({ data: spiritData })
+    return HttpResponse.json({ code: 'OK', message: '성공', data: spiritData })
   }),
 ]

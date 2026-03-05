@@ -258,7 +258,7 @@ export const cocktailHandlers = [
     const startIndex = (page - 1) * limit
     const paginatedData = sortedData.slice(startIndex, startIndex + limit)
 
-    return HttpResponse.json({ data: paginatedData })
+    return HttpResponse.json({ code: 'OK', message: '성공', data: paginatedData })
   }),
 
   /*
@@ -270,9 +270,9 @@ export const cocktailHandlers = [
     const cocktailData = cocktailFullData.find(c => c.cocktailId === cocktailId)
 
     if (!cocktailData) {
-      return HttpResponse.json({ error: 'Cocktail not found' }, { status: 404 })
+      return HttpResponse.json({ code: 'NOT_FOUND', message: '칵테일을 찾을 수 없습니다.', data: null }, { status: 404 })
     }
 
-    return HttpResponse.json({ data: cocktailData })
+    return HttpResponse.json({ code: 'OK', message: '성공', data: cocktailData })
   }),
 ]
