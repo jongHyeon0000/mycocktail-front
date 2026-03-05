@@ -1,6 +1,7 @@
 import React, {type SetStateAction, useEffect, useState, useCallback} from "react";
 import {
   Box,
+  Button,
   Container,
   InputAdornment,
   MenuItem,
@@ -9,7 +10,9 @@ import {
   Typography, Select, TextField
 } from "@mui/material";
 import CocktailDetailModal from "../component/CocktailDetailModal";
+import CocktailInsertModal from "../component/CocktailInsertModal";
 import useReadCocktail from "../service/useReadCocktail.tsx";
+import useAuth from "../../auth/service/useAuth.ts";
 import LoadingOverlay from "../../common/component/loading/LoadingOverlay.tsx";
 import { showErrorAlert } from "../../common/utils/AlertUtils";
 import useReadCocktailList from "../service/useReadCocktailList.tsx";
@@ -31,10 +34,12 @@ const CocktailListPage: React.FC = () => {
   const [ currentPage, setCurrentPage ] = useState<number>(1);
   const [ sortOrder, setSortOrder ] = useState<SortOrderType>("recent");
   const [ modalOpen, setModalOpen ] = useState<boolean>(false);
+  const [ insertModalOpen, setInsertModalOpen ] = useState<boolean>(false);
   const [ searchKeyword, setSearchKeyword ] = useState<string>("");
   const [ searchDebounceTimer, setSearchDebounceTimer ] = useState<number | null>(null);
   const [ isSearching, setIsSearching ] = useState<boolean>(false);
 
+  const { isAuthenticated } = useAuth();
   const { cocktailList, cocktailListLoading, cocktailListLoadingMore, cocktailListError, cocktailListHasMore, fetchReadCocktailList } = useReadCocktailList();
   const { cocktail, cocktailLoading, cocktailError, fetchReadCocktail } = useReadCocktail();
 
@@ -192,35 +197,46 @@ const CocktailListPage: React.FC = () => {
             </SortSelect>
           </FormControl>
 
-          {/* 검색창 */}
-          <SearchField
-            placeholder="칵테일 검색..."
-            variant="outlined"
-            size="small"
-            value={searchKeyword}
-            onChange={handleSearchChange}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <span style={{ fontSize: "18px" }}>🔍</span>
-                </InputAdornment>
-              ),
-              endAdornment: searchKeyword && (
-                <InputAdornment position="end">
-                  <span 
-                    style={{ 
-                      fontSize: "16px", 
-                      cursor: "pointer",
-                      padding: "4px"
-                    }}
-                    onClick={handleSearchClear}
-                  >
-                    ✕
-                  </span>
-                </InputAdornment>
-              ),
-            }}
-          />
+          {/* 검색창 + 등록 버튼 그룹 */}
+          <RightControls>
+            <SearchField
+              placeholder="칵테일 검색..."
+              variant="outlined"
+              size="small"
+              value={searchKeyword}
+              onChange={handleSearchChange}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <span style={{ fontSize: "18px" }}>🔍</span>
+                  </InputAdornment>
+                ),
+                endAdornment: searchKeyword && (
+                  <InputAdornment position="end">
+                    <span
+                      style={{
+                        fontSize: "16px",
+                        cursor: "pointer",
+                        padding: "4px"
+                      }}
+                      onClick={handleSearchClear}
+                    >
+                      ✕
+                    </span>
+                  </InputAdornment>
+                ),
+              }}
+            />
+            {isAuthenticated && (
+              <RegisterButton
+                variant="contained"
+                disableElevation
+                onClick={() => setInsertModalOpen(true)}
+              >
+                칵테일 등록
+              </RegisterButton>
+            )}
+          </RightControls>
         </ControlsContainer>
 
         {/* 칵테일 리스트 */}
@@ -260,6 +276,12 @@ const CocktailListPage: React.FC = () => {
           onClose={() => setModalOpen(false)}
           data={cocktail}
       />}
+
+      {/* 칵테일 등록 모달 */}
+      <CocktailInsertModal
+          open={insertModalOpen}
+          onClose={() => setInsertModalOpen(false)}
+      />
     </PageContainer>
   );
 };
@@ -337,5 +359,39 @@ const CocktailList = styled(Box)`
     display: flex;
     flex-direction: column;
     gap: 24px;
+  }
+`;
+
+const RightControls = styled(Box)`
+  && {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    @media (max-width: 600px) {
+      width: 100%;
+      flex-wrap: wrap;
+    }
+  }
+`;
+
+const RegisterButton = styled(Button)`
+  && {
+    background-color: #ff4757;
+    color: #fff;
+    border-radius: 16px;
+    padding: 7px 20px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    white-space: nowrap;
+    text-transform: none;
+
+    &:hover {
+      background-color: #e8404f;
+    }
+
+    @media (max-width: 600px) {
+      width: 100%;
+    }
   }
 `;
