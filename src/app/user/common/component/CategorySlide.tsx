@@ -12,6 +12,7 @@ interface CategorySlideProps {
   items: CommonSlideElement[];
   slideRef: RefObject<HTMLDivElement | null>;
   onItemClick?: (item: CommonSlideElement) => void;
+  onItemRemove?: (item: CommonSlideElement) => void;
   className?: string;
 }
 
@@ -20,6 +21,7 @@ export const CategorySlide = ({
       items,
       slideRef,
       onItemClick,
+      onItemRemove,
       className,
     }: CategorySlideProps) => {
   const controls = useAnimation();
@@ -87,6 +89,16 @@ export const CategorySlide = ({
                         onClick={() => onItemClick?.(item)}
                         style={{ cursor: onItemClick ? 'pointer' : 'default' }}
                     >
+                      {onItemRemove && (
+                        <RemoveButton
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onItemRemove(item);
+                          }}
+                        >
+                          ×
+                        </RemoveButton>
+                      )}
                       <SlideItemImage>
                         {item?.image ? (
                             <img src={item?.image} alt={item.name} />
@@ -191,6 +203,7 @@ const SlideTrack = styled(Box)`
 const SlideItem = styled(Box)`
   && {
     min-width: 140px;
+    position: relative;
     background: rgba(255, 255, 255, 0.9);
     border-radius: 12px;
     padding: 16px;
@@ -208,6 +221,31 @@ const SlideItem = styled(Box)`
       min-width: 120px;
       padding: 12px;
     }
+  }
+`;
+
+const RemoveButton = styled.button`
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.35);
+  color: #fff;
+  font-size: 0.85rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.15s;
+  z-index: 1;
+
+  &:hover {
+    background: #e74c3c;
   }
 `;
 

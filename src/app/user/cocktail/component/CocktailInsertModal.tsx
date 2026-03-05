@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { LocalBarOutlined, AddOutlined, CloseOutlined } from "@mui/icons-material";
 import { COMMON_MODAL_STYLE } from "../../common/style/CommonModal.style.ts";
 import styled from "styled-components";
 import { Box, Button, Chip, Divider, InputAdornment, MenuItem, Modal, Paper, Select, TextField, Typography } from "@mui/material";
+import { CategorySlide } from "../../common/component/CategorySlide.tsx";
 import TipTapEditor from "../../common/component/editor/TipTapEditor.tsx";
 import type { CommonSlideElement } from "../../common/interface/CommonSlideElement.ts";
 import UserSpiritInsertModal from "../../common/component/modal/insert/UserSpiritInsertModal.tsx";
@@ -58,6 +59,27 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
   });
 
   const [openModal, setOpenModal] = useState<ModalKey | null>(null);
+
+  const spiritsRef = useRef<HTMLDivElement>(null);
+  const juicesRef = useRef<HTMLDivElement>(null);
+  const bittersRef = useRef<HTMLDivElement>(null);
+  const syrupsRef = useRef<HTMLDivElement>(null);
+  const carbonatedRef = useRef<HTMLDivElement>(null);
+  const dairyRef = useRef<HTMLDivElement>(null);
+  const garnishesRef = useRef<HTMLDivElement>(null);
+  const othersRef = useRef<HTMLDivElement>(null);
+  const toolsRef = useRef<HTMLDivElement>(null);
+  const glasswareRef = useRef<HTMLDivElement>(null);
+  const techniquesRef = useRef<HTMLDivElement>(null);
+
+  const INGREDIENT_REFS: Record<IngredientKey, React.RefObject<HTMLDivElement | null>> = {
+    spirits: spiritsRef, juices: juicesRef, bitters: bittersRef, syrups: syrupsRef,
+    carbonated: carbonatedRef, dairy: dairyRef, garnishes: garnishesRef, others: othersRef,
+  };
+
+  const TECHNIQUE_REFS: Record<TechniqueKey, React.RefObject<HTMLDivElement | null>> = {
+    tools: toolsRef, glassware: glasswareRef, techniques: techniquesRef,
+  };
 
   const handleSelectIngredient = (key: IngredientKey) => (item: CommonSlideElement) => {
     setSelectedIngredients((prev) => {
@@ -235,17 +257,12 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
                         </CategoryAddButton>
                       </CategoryRowHeader>
                       {selectedIngredients[key].length > 0 ? (
-                        <CategoryChips>
-                          {selectedIngredients[key].map((item) => (
-                            <SelectedChip
-                              key={item.id}
-                              label={item.nameKr}
-                              avatar={item.image ? <img src={item.image} alt="" /> : undefined}
-                              onDelete={() => handleRemoveIngredient(key, item.id)}
-                              deleteIcon={<CloseOutlined style={{ fontSize: 13 }} />}
-                            />
-                          ))}
-                        </CategoryChips>
+                        <CategorySlide
+                          title={INGREDIENT_LABELS[key]}
+                          items={selectedIngredients[key]}
+                          slideRef={INGREDIENT_REFS[key]}
+                          onItemRemove={(item) => handleRemoveIngredient(key, item.id)}
+                        />
                       ) : (
                         <EmptyHint>선택된 항목이 없습니다.</EmptyHint>
                       )}
@@ -276,18 +293,13 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
                         </CategoryAddButton>
                       </CategoryRowHeader>
                       {selectedTechniques[key].length > 0 ? (
-                        <CategoryChips>
-                          {selectedTechniques[key].map((item) => (
-                            <SelectedChip
-                              key={item.id}
-                              label={item.nameKr}
-                              avatar={item.image ? <img src={item.image} alt="" /> : undefined}
-                              onDelete={() => handleRemoveTechnique(key, item.id)}
-                              deleteIcon={<CloseOutlined style={{ fontSize: 13 }} />}
-                              className="technique"
-                            />
-                          ))}
-                        </CategoryChips>
+                        <CategorySlide
+                          title={TECHNIQUE_LABELS[key]}
+                          items={selectedTechniques[key]}
+                          slideRef={TECHNIQUE_REFS[key]}
+                          onItemRemove={(item) => handleRemoveTechnique(key, item.id)}
+                          className="technique"
+                        />
                       ) : (
                         <EmptyHint>선택된 항목이 없습니다.</EmptyHint>
                       )}
@@ -741,47 +753,6 @@ const CategoryAddButton = styled(Button)`
   }
 `;
 
-const CategoryChips = styled(Box)`
-  && {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-`;
-
-const SelectedChip = styled(Chip)`
-  && {
-    height: 28px;
-    font-size: 0.78rem;
-    font-weight: 500;
-    background-color: rgba(255, 255, 255, 0.85);
-    border: 1px solid rgba(76, 175, 80, 0.35);
-    color: #2d3436;
-    border-radius: 8px;
-
-    .MuiChip-avatar {
-      width: 20px;
-      height: 20px;
-      border-radius: 4px;
-
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border-radius: 4px;
-      }
-    }
-
-    .MuiChip-deleteIcon {
-      color: #999;
-      &:hover { color: #e74c3c; }
-    }
-
-    &.technique {
-      border-color: rgba(33, 150, 243, 0.35);
-    }
-  }
-`;
 
 const EmptyHint = styled(Typography)`
   && {
