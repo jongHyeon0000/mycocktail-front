@@ -40,7 +40,7 @@ const userDataMap: { [key: number]: any } = {
     userId: 3,
     email: "aokumoRin@stellive.com",
     password: "1111",
-    isActive: false,
+    isActive: true,
     isDeleted: false,
     createdAt: "2024-02-10T08:00:00Z",
     updatedAt: "2024-11-05T16:30:00Z",

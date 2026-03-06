@@ -4,8 +4,12 @@ import {
   FavoriteOutlined,
   ShareOutlined,
   LocalBarOutlined,
+  SendOutlined,
+  SubdirectoryArrowRightOutlined,
+  CloseOutlined,
 } from "@mui/icons-material";
 import {COMMON_MODAL_STYLE} from "../../common/style/CommonModal.style.ts";
+import useAuth from "../../auth/service/useAuth.ts";
 import type {CocktailDetail} from "../interface/CocktailDetail.ts";
 import styled from "styled-components";
 import {Box, Chip, IconButton, Typography} from "@mui/material";
@@ -32,6 +36,8 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
 }) => {
   const [activeSection, setActiveSection] = useState<'ingredients' | 'techniques'>('ingredients');
   const [slideDirection, setSlideDirection] = useState(1);
+  const [replyingTo, setReplyingTo] = useState<number | null>(null);
+  const { user, isAuthenticated } = useAuth();
 
   useEffect(() => {
     if (open) {
@@ -236,7 +242,10 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                   <TextContent dangerouslySetInnerHTML={{ __html: data.tipNote || '' }} />
                 </motion.div>
 
-                {/* 개인적인 정보들 */}
+                {/* 사용자 의견 */}
+                {(data.personalNotes || data.makerTips || data.personalReview) && (
+                  <SectionTitle>사용자 의견</SectionTitle>
+                )}
                 {data.personalNotes && (
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -283,8 +292,8 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 1.0 }}
                   >
+                    <SectionTitle>태그</SectionTitle>
                     <HashtagSection>
-                      <HashtagTitle>태그</HashtagTitle>
                       <HashtagContainer>
                         <HashtagChip label={`#${data.hashtags.cocktailHashtag}`} size="small" />
                       </HashtagContainer>
@@ -292,67 +301,138 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                   </motion.div>
                 )}
 
-                {/* 댓글 섹션 */}
-                {data.comments.length > 0 && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 1.1 }}
-                  >
-                    <CommentsSection>
-                      <CommentsTitle>댓글 ({data.comments.length})</CommentsTitle>
-                      {data.comments.map((comment) => (
-                        <CommentItem key={comment.id}>
-                          <CommentHeader>
-                            <CommentAuthor>{comment.username}</CommentAuthor>
-                            <CommentDate>{comment.createdDate}</CommentDate>
-                          </CommentHeader>
-                          <CommentContent>{comment.content}</CommentContent>
-                          
-                          {comment.replies && comment.replies.length > 0 && (
-                            <RepliesContainer>
-                              {comment.replies.map((reply) => (
-                                <ReplyItem key={reply.id}>
-                                  <CommentHeader>
-                                    <CommentAuthor>{reply.username}</CommentAuthor>
-                                    <CommentDate>{reply.createdDate}</CommentDate>
-                                  </CommentHeader>
-                                  <CommentContent>{reply.content}</CommentContent>
-                                </ReplyItem>
-                              ))}
-                            </RepliesContainer>
-                          )}
-                        </CommentItem>
-                      ))}
-                    </CommentsSection>
-                  </motion.div>
-                )}
               </ContentSection>
+
+              {/* 댓글 섹션 (회색 밖) */}
+              <CommentsWrapper>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  <SectionTitle>댓글 ({data.comments.length})</SectionTitle>
+
+                  <CommentsSection>
+                    {/* 댓글 목록 */}
+                    {data.comments.map((comment) => (
+                      <CommentItem key={comment.commentId}>
+                        <CommentAuthorRow>
+                          <CommentAvatar>
+                            {comment.author.thumbnailImage
+                              ? <img src={comment.author.thumbnailImage} alt={comment.author.username} />
+                              : <CommentAvatarFallback>{comment.author.username.charAt(0)}</CommentAvatarFallback>
+                            }
+                          </CommentAvatar>
+                          <CommentMeta>
+                            <CommentAuthorName>{comment.author.username}</CommentAuthorName>
+                            <CommentDate>{new Date(comment.createdAt).toLocaleDateString('ko-KR')}</CommentDate>
+                          </CommentMeta>
+                        </CommentAuthorRow>
+                        <CommentContent>{comment.content}</CommentContent>
+
+                        {isAuthenticated && (
+                          <ReplyButton onClick={() => setReplyingTo(replyingTo === comment.commentId ? null : comment.commentId)}>
+                            <SubdirectoryArrowRightOutlined sx={{ fontSize: 14 }} />
+                            답글
+                          </ReplyButton>
+                        )}
+
+                        {/* 답글 작성 폼 */}
+                        <AnimatePresence>
+                          {replyingTo === comment.commentId && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: 'auto' }}
+                              exit={{ opacity: 0, height: 0 }}
+                              transition={{ duration: 0.2 }}
+                            >
+                              <ReplyInputArea>
+                                <CommentAvatar small>
+                                  {user?.thumbnailImage
+                                    ? <img src={user.thumbnailImage} alt={user.username} />
+                                    : <CommentAvatarFallback>{user?.username.charAt(0)}</CommentAvatarFallback>
+                                  }
+                                </CommentAvatar>
+                                <ReplyInputBox>
+                                  <CommentTextarea placeholder="답글을 입력하세요..." rows={2} />
+                                  <ReplyInputActions>
+                                    <CancelButton onClick={() => setReplyingTo(null)}>
+                                      <CloseOutlined sx={{ fontSize: 14 }} />
+                                      취소
+                                    </CancelButton>
+                                    <SubmitButton>
+                                      <SendOutlined sx={{ fontSize: 14 }} />
+                                      등록
+                                    </SubmitButton>
+                                  </ReplyInputActions>
+                                </ReplyInputBox>
+                              </ReplyInputArea>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+
+                        {/* 기존 답글 목록 */}
+                        {comment.replies && comment.replies.length > 0 && (
+                          <RepliesContainer>
+                            {comment.replies.map((reply) => (
+                              <ReplyItem key={reply.commentId}>
+                                <CommentAuthorRow>
+                                  <CommentAvatar small>
+                                    {reply.author.thumbnailImage
+                                      ? <img src={reply.author.thumbnailImage} alt={reply.author.username} />
+                                      : <CommentAvatarFallback>{reply.author.username.charAt(0)}</CommentAvatarFallback>
+                                    }
+                                  </CommentAvatar>
+                                  <CommentMeta>
+                                    <CommentAuthorName>{reply.author.username}</CommentAuthorName>
+                                    <CommentDate>{new Date(reply.createdAt).toLocaleDateString('ko-KR')}</CommentDate>
+                                  </CommentMeta>
+                                </CommentAuthorRow>
+                                <CommentContent reply>{reply.content}</CommentContent>
+                              </ReplyItem>
+                            ))}
+                          </RepliesContainer>
+                        )}
+                      </CommentItem>
+                    ))}
+
+                    {/* 새 댓글 작성 - 로그인 시에만 노출 */}
+                    {isAuthenticated && (
+                      <NewCommentInputArea>
+                        <CommentAvatar>
+                          {user?.thumbnailImage
+                            ? <img src={user.thumbnailImage} alt={user.username} />
+                            : <CommentAvatarFallback>{user?.username.charAt(0)}</CommentAvatarFallback>
+                          }
+                        </CommentAvatar>
+                        <CommentInputBox>
+                          <CommentTextarea placeholder="댓글을 입력하세요..." rows={3} />
+                          <CommentInputActions>
+                            <SubmitButton>
+                              <SendOutlined sx={{ fontSize: 14 }} />
+                              댓글 등록
+                            </SubmitButton>
+                          </CommentInputActions>
+                        </CommentInputBox>
+                      </NewCommentInputArea>
+                    )}
+                  </CommentsSection>
+                </motion.div>
+              </CommentsWrapper>
 
               {/* 하단 섹션 */}
               <BottomSection>
                 <ActionButtons>
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
+                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                     <ActionButton onClick={handleLikeClick}>
-                      <ActionIcon actionType="like">
-                        <FavoriteOutlined />
-                      </ActionIcon>
+                      <ActionIcon actionType="like"><FavoriteOutlined /></ActionIcon>
                       <ActionText>좋아요</ActionText>
                       <ActionCount>{data.likeCount}</ActionCount>
                     </ActionButton>
                   </motion.div>
-
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
+                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                     <ActionButton onClick={handleShareClick}>
-                      <ActionIcon actionType="share">
-                        <ShareOutlined />
-                      </ActionIcon>
+                      <ActionIcon actionType="share"><ShareOutlined /></ActionIcon>
                       <ActionText>공유</ActionText>
                       <ActionCount>{data.shareCount}</ActionCount>
                     </ActionButton>
@@ -525,8 +605,8 @@ const ActionButtons = styled(Box)`
     display: flex;
     justify-content: center;
     gap: 24px;
-    margin-bottom: 24px;
-    
+    margin-bottom: 20px;
+
     @media (max-width: 600px) {
       gap: 16px;
     }
@@ -643,7 +723,6 @@ const HashtagContainer = styled(Box)`
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    margin-top: 12px;
   }
 `;
 
@@ -661,23 +740,13 @@ const HashtagChip = styled(Chip)`
   }
 `;
 
-const HashtagTitle = styled(Typography)`
+const CommentsWrapper = styled(Box)`
   && {
-    font-size: 1rem;
-    font-weight: 700;
-    color: #9ca3af;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    padding: 28px 32px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
 
-    &::before {
-      content: '';
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #d1d5db;
+    @media (max-width: 600px) {
+      padding: 20px 24px;
     }
   }
 `;
@@ -685,99 +754,266 @@ const HashtagTitle = styled(Typography)`
 // 댓글 스타일들
 const CommentsSection = styled(Box)`
   && {
-    background: linear-gradient(135deg, #f3e5f5 0%, #faf7fb 100%);
+    background: #edf0f7;
     border-radius: 16px;
     padding: 24px;
-    margin-bottom: 24px;
-    border: 1px solid rgba(156, 39, 176, 0.2);
+    margin-bottom: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+    border: 1px solid #d8dde8;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
   }
 `;
 
 const CommentItem = styled(Box)`
   && {
-    background: rgba(255, 255, 255, 0.8);
+    background: #ffffff;
     border-radius: 12px;
     padding: 16px;
-    margin-bottom: 12px;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    
-    &:last-child {
-      margin-bottom: 0;
-    }
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
   }
 `;
 
-const CommentHeader = styled(Box)`
+const CommentAuthorRow = styled(Box)`
   && {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    gap: 10px;
     margin-bottom: 8px;
   }
 `;
 
-const CommentAuthor = styled(Typography)`
+const CommentAvatar = styled(Box).withConfig({
+  shouldForwardProp: (prop) => prop !== 'small',
+})<{ small?: boolean }>`
+  && {
+    width: ${({ small }) => small ? '30px' : '36px'};
+    height: ${({ small }) => small ? '30px' : '36px'};
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+`;
+
+const CommentAvatarFallback = styled(Typography)`
+  && {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: white;
+    line-height: 1;
+  }
+`;
+
+const CommentMeta = styled(Box)`
+  && {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    flex: 1;
+  }
+`;
+
+const CommentAuthorName = styled(Typography)`
   && {
     font-size: 0.9rem;
-    font-weight: 600;
-    color: #7b1fa2;
+    font-weight: 700;
+    color: #2c3e50;
   }
 `;
 
 const CommentDate = styled(Typography)`
   && {
-    font-size: 0.8rem;
-    color: #9e9e9e;
+    font-size: 0.75rem;
+    color: #adb5bd;
+    font-weight: 400;
   }
 `;
 
-const CommentContent = styled(Typography)`
+const CommentContent = styled(Typography).withConfig({
+  shouldForwardProp: (prop) => prop !== 'reply',
+})<{ reply?: boolean }>`
   && {
     font-size: 0.9rem;
-    color: #424242;
-    line-height: 1.5;
+    color: #374151;
+    line-height: 1.65;
+    padding-left: ${({ reply }) => reply ? '0' : '46px'};
   }
 `;
 
 const RepliesContainer = styled(Box)`
   && {
     margin-top: 12px;
-    margin-left: 16px;
-    border-left: 2px solid #e1bee7;
-    padding-left: 16px;
+    margin-left: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
   }
 `;
 
 const ReplyItem = styled(Box)`
   && {
-    background: rgba(255, 255, 255, 0.6);
-    border-radius: 8px;
-    padding: 12px;
-    margin-bottom: 8px;
-    
-    &:last-child {
-      margin-bottom: 0;
+    background: #dde2ef;
+    border-radius: 10px;
+    padding: 12px 14px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+`;
+
+const ReplyButton = styled(Box)`
+  && {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 8px;
+    margin-left: 46px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #9ca3af;
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.15s ease;
+
+    &:hover {
+      color: #667eea;
     }
   }
 `;
 
-const CommentsTitle = styled(Typography)`
+const NewCommentInputArea = styled(Box)`
   && {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #7b1fa2;
-    margin-bottom: 16px;
     display: flex;
-    align-items: center;
+    gap: 12px;
+    align-items: flex-start;
+    padding-top: 16px;
+    border-top: 1px solid #d8dde8;
+    margin-top: 4px;
+  }
+`;
+
+const ReplyInputArea = styled(Box)`
+  && {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    margin-top: 10px;
+    margin-left: 46px;
+    overflow: hidden;
+  }
+`;
+
+const CommentInputBox = styled(Box)`
+  && {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
     gap: 8px;
-    
-    &::before {
-      content: '';
-      width: 3px;
-      height: 20px;
-      background-color: #9c27b0;
-      border-radius: 2px;
+  }
+`;
+
+const ReplyInputBox = styled(Box)`
+  && {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+`;
+
+const CommentTextarea = styled.textarea`
+  width: 100%;
+  resize: none;
+  border: 1.5px solid #e2e6ea;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: #2c3e50;
+  background: #f8f9fa;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box;
+
+  &::placeholder {
+    color: #adb5bd;
+  }
+
+  &:focus {
+    border-color: #667eea;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.12);
+  }
+`;
+
+const CommentInputActions = styled(Box)`
+  && {
+    display: flex;
+    justify-content: flex-end;
+  }
+`;
+
+const ReplyInputActions = styled(Box)`
+  && {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+`;
+
+const SubmitButton = styled(Box)`
+  && {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 18px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #ffffff;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    user-select: none;
+    transition: opacity 0.2s ease, transform 0.15s ease;
+
+    &:hover {
+      opacity: 0.88;
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+`;
+
+const CancelButton = styled(Box)`
+  && {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 14px;
+    border-radius: 20px;
+    background: #e9ecef;
+    color: #6c757d;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s ease;
+
+    &:hover {
+      background: #dee2e6;
     }
   }
 `;

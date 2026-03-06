@@ -1,5 +1,6 @@
 import type {CommonSlideElement} from "../../common/interface/CommonSlideElement.ts";
 import type {SpiritCategoryKey} from "../constant/spiritCategories.ts";
+import type {CocktailComment} from "./CocktailComment.ts";
 
 export type CocktailCategory = 'classic' | 'contemporary' | 'signature' | 'mocktail' | 'other';
 
@@ -117,20 +118,7 @@ export interface CocktailDetail {
   shareCount: number;
 
   /** 댓글 및 답글 */
-  comments: Array<{
-    id: number;
-    userUuid: string;
-    username: string;
-    content: string;
-    createdDate: string;
-    replies?: Array<{
-      id: number;
-      userUuid: string;
-      username: string;
-      content: string;
-      createdDate: string;
-    }>;
-  }>;
+  comments: Array<CocktailComment>;
 
   /** 등록일 */
   createdAt: string;

@@ -1,6 +1,5 @@
 import React, { useRef, useState } from "react";
 import {
-  Alert,
   Avatar,
   Box,
   Button,
@@ -9,10 +8,11 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  Snackbar,
   TextField,
   Typography,
 } from "@mui/material";
+import CommonSuccessSnackbar from "../../common/component/snackbar/CommonSuccessSnackbar.tsx";
+import CommonErrorSnackbar from "../../common/component/snackbar/CommonErrorSnackbar.tsx";
 import { motion } from "framer-motion";
 import styled from "styled-components";
 import {
@@ -211,21 +211,19 @@ const ProfileEditPage: React.FC = () => {
       </ButtonRow>
 
       {/* 성공 / 실패 Snackbar */}
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={3000}
-        onClose={() => setSnackbarOpen(false)}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      >
-        <Alert
+      {snackbarSeverity === "success" ? (
+        <CommonSuccessSnackbar
+          open={snackbarOpen}
+          message={snackbarMessage}
           onClose={() => setSnackbarOpen(false)}
-          severity={snackbarSeverity}
-          variant="filled"
-          sx={{ width: "100%" }}
-        >
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
+        />
+      ) : (
+        <CommonErrorSnackbar
+          open={snackbarOpen}
+          message={snackbarMessage}
+          onClose={() => setSnackbarOpen(false)}
+        />
+      )}
     </motion.div>
   );
 };

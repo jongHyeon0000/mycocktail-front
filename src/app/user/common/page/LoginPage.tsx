@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Alert, Box, Button, Snackbar, TextField, Typography } from "@mui/material";
+import { Box, Button, TextField, Typography } from "@mui/material";
+import CommonErrorSnackbar from "../component/snackbar/CommonErrorSnackbar.tsx";
 import { motion } from "framer-motion";
 import styled from "styled-components";
 import { Navigate, useNavigate } from "react-router-dom";
@@ -162,21 +163,11 @@ const LoginPage: React.FC = () => {
       </LoginContainer>
 
       {/* 에러 Snackbar */}
-      <Snackbar
+      <CommonErrorSnackbar
         open={snackbarOpen}
-        autoHideDuration={3000}
+        message={snackbarMessage}
         onClose={() => setSnackbarOpen(false)}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      >
-        <Alert
-          onClose={() => setSnackbarOpen(false)}
-          severity="error"
-          variant="filled"
-          sx={{ width: "100%" }}
-        >
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
+      />
     </PageContainer>
   );
 };

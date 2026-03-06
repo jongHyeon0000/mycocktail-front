@@ -52,7 +52,79 @@ const cocktailFullData = [
     viewCount: 542,
     likeCount: 127,
     shareCount: 45,
-    comments: [],
+    comments: [
+      {
+        commentId: 1,
+        author: {
+          userId: 2,
+          userUuid: 'b2c3d4e5-f6a7-8901-bcde-f01234567891',
+          username: '아라하시 타비',
+          thumbnailImage: 'https://image.genie.co.kr/Y/IMAGE/IMG_ARTIST/082/459/727/82459727_1714360862118_1_600x600.JPG'
+        },
+        cocktailId: 1,
+        parentCommentId: undefined,
+        content: '민트를 너무 세게 으깼다가 망했어;; 살살 눌러줘야대',
+        depth: 0,
+        isChildComment: false,
+        sortOrder: 0,
+        replies: [
+          {
+            commentId: 3,
+            author: {
+              userId: 1,
+              userUuid: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+              username: '아야츠노 유니',
+              thumbnailImage: 'https://yt3.googleusercontent.com/e3_TBkHSBwuzKRSkG1Uv5uGLiHmLUBMVogjWD35MJL7Fi_iccr8DonU6q_1XSmO4djEY9Cunabo=s900-c-k-c0x00ffffff-no-rj'
+            },
+            cocktailId: 1,
+            parentCommentId: 1,
+            content: 'ㅇㅈㅇㅈ',
+            depth: 1,
+            isChildComment: true,
+            sortOrder: 1,
+            createdAt: '2024-11-16T10:30:00',
+            updatedAt: '2024-11-16T10:30:00'
+          },
+          {
+            commentId: 4,
+            author: {
+              userId: 1,
+              userUuid: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+              username: '아야츠노 유니',
+              thumbnailImage: 'https://yt3.googleusercontent.com/e3_TBkHSBwuzKRSkG1Uv5uGLiHmLUBMVogjWD35MJL7Fi_iccr8DonU6q_1XSmO4djEY9Cunabo=s900-c-k-c0x00ffffff-no-rj'
+            },
+            cocktailId: 1,
+            parentCommentId: 1,
+            content: '나두 처음엔 너무 세게 눌렀다가 실패했어ㅎㅎ',
+            depth: 1,
+            isChildComment: true,
+            sortOrder: 2,
+            createdAt: '2024-11-16T12:00:00',
+            updatedAt: '2024-11-16T12:00:00'
+          }
+        ],
+        createdAt: '2024-11-16T09:00:00',
+        updatedAt: '2024-11-16T09:00:00'
+      },
+      {
+        commentId: 2,
+        author: {
+          userId: 3,
+          userUuid: 'c3d4e5f6-a7b8-9012-cdef-012345678902',
+          username: '아오쿠모 린',
+          thumbnailImage: 'https://i.namu.wiki/i/2q4XJfx3uT9A-CxXVEkXjT4YwhXVAWIwYnFUmB3fmjkAZTEo78qOgRZldT-KAjwFW-30KDl4kdXLEGmmcCmBjg.webp'
+        },
+        cocktailId: 1,
+        parentCommentId: undefined,
+        content: '설탕 대신 아가베 시럽 써봤는데 훨씬 자연스러운 단맛이 나더라고요. 엣헴',
+        depth: 0,
+        isChildComment: false,
+        sortOrder: 0,
+        replies: [],
+        createdAt: '2024-11-17T14:20:00',
+        updatedAt: '2024-11-17T14:20:00'
+      }
+    ],
     createdAt: '2024-11-15',
     updatedAt: '2024-11-15'
   },
