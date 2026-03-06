@@ -5,6 +5,7 @@ import {
 } from "@mui/icons-material";
 import {COMMON_MODAL_STYLE} from "../../common/style/CommonModal.style.ts";
 import type {SpiritProductDetail} from "../interface/SpiritProductDetail.ts";
+import {SPIRIT_CATEGORY_MAP} from "../../cocktail/constant/spiritCategories.ts";
 import styled from "styled-components";
 import {Box, Chip, Modal, Paper, Typography} from "@mui/material";
 import {CategorySlide} from "../../common/component/CategorySlide.tsx";
@@ -58,7 +59,7 @@ const SpiritProductDetailModal: React.FC<SpiritDetailModalProps> = ({
                 <InfoGrid>
                   <InfoCard>
                     <InfoLabel>카테고리</InfoLabel>
-                    <CategoryChip label={data.spirit.spiritName} size="small" />
+                    <CategoryChip label={SPIRIT_CATEGORY_MAP[data.spiritCategory].nameKr} size="small" />
                   </InfoCard>
                   
                   <InfoCard>

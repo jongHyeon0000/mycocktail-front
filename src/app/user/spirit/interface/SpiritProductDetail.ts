@@ -1,4 +1,5 @@
 import type {CommonSlideElement} from "../../common/interface/CommonSlideElement.ts";
+import type {SpiritCategoryKey} from "../../cocktail/constant/spiritCategories.ts";
 
 export interface SpiritProductDetail {
 
@@ -39,11 +40,7 @@ export interface SpiritProductDetail {
   spicy: number;
 
   /** 기주 카테고리 */
-  spirit: {
-    spiritId: string;
-    spiritName: string;
-    spiritNameKr: string;
-  }
+  spiritCategory: SpiritCategoryKey;
 
   /** 브랜드 */
   brand: {

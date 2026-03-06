@@ -2,6 +2,7 @@ import { http, HttpResponse, delay } from 'msw'
 
 const userDataMap: { [key: number]: any } = {
   1: {
+    userUuid: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
     userId: 1,
     email: "AyatsunoUni@stellive.com",
     password: "1111",
@@ -18,6 +19,7 @@ const userDataMap: { [key: number]: any } = {
     thumbnailImage: "https://yt3.googleusercontent.com/e3_TBkHSBwuzKRSkG1Uv5uGLiHmLUBMVogjWD35MJL7Fi_iccr8DonU6q_1XSmO4djEY9Cunabo=s900-c-k-c0x00ffffff-no-rj"
   },
   2: {
+    userUuid: 'b2c3d4e5-f6a7-8901-bcde-f01234567891',
     userId: 2,
     email: "tabidayo@stellive.com",
     password: "1111",
@@ -34,6 +36,7 @@ const userDataMap: { [key: number]: any } = {
     thumbnailImage: "https://image.genie.co.kr/Y/IMAGE/IMG_ARTIST/082/459/727/82459727_1714360862118_1_600x600.JPG"
   },
   3: {
+    userUuid: 'c3d4e5f6-a7b8-9012-cdef-012345678902',
     userId: 3,
     email: "aokumoRin@stellive.com",
     password: "1111",
@@ -131,6 +134,7 @@ export const authHandlers = [
     userDataMap[userId] = {
       ...userData,
       ...body,
+      userUuid: userData.userUuid,
       userId: userData.userId,
       email: userData.email,
       isActive: userData.isActive,

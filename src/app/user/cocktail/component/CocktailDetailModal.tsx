@@ -1,15 +1,17 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FavoriteOutlined,
   ShareOutlined,
   LocalBarOutlined,
+  ExpandMoreOutlined,
 } from "@mui/icons-material";
 import {COMMON_MODAL_STYLE} from "../../common/style/CommonModal.style.ts";
 import type {CocktailDetail} from "../interface/CocktailDetail.ts";
 import styled from "styled-components";
 import {Box, Chip, IconButton, Modal, Paper, Typography} from "@mui/material";
 import {CategorySlide} from "../../common/component/CategorySlide.tsx";
+import {SPIRIT_CATEGORY_MAP} from "../constant/spiritCategories.ts";
 
 interface CocktailDetailModalProps {
   open: boolean;
@@ -22,6 +24,12 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
   onClose,
   data
 }) => {
+  const [spiritExpanded, setSpiritExpanded] = useState(false);
+
+  useEffect(() => {
+    if (open) setSpiritExpanded(false);
+  }, [open]);
+
   // 각 슬라이드 섹션마다 별도의 ref 생성
   const spiritsRef = useRef<HTMLDivElement>(null);
   const juicesRef = useRef<HTMLDivElement>(null);
@@ -67,6 +75,23 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                     <PlaceholderIcon>
                       <LocalBarOutlined fontSize="inherit" />
                     </PlaceholderIcon>
+                  )}
+                  {data.author && (
+                    <AuthorSection>
+                      <AuthorAvatar>
+                        {data.author.thumbnailImage ? (
+                          <img src={data.author.thumbnailImage} alt={data.author.username} />
+                        ) : (
+                          <AuthorAvatarFallback>
+                            {data.author.username.charAt(0)}
+                          </AuthorAvatarFallback>
+                        )}
+                      </AuthorAvatar>
+                      <AuthorInfo>
+                        <AuthorLabel>등록자</AuthorLabel>
+                        <AuthorName>{data.author.username}</AuthorName>
+                      </AuthorInfo>
+                    </AuthorSection>
                   )}
                 </CocktailImage>
 
@@ -136,12 +161,45 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                   <SectionTitle>사용 재료</SectionTitle>
                   <IngredientsSection>
                     {/* 기주 */}
-                    {data.ingredients.spirits.length > 0 && (
-                      <CategorySlide
-                        title="기주"
-                        items={data.ingredients.spirits}
-                        slideRef={spiritsRef}
-                      />
+                    {data.spiritCategory && (
+                      <SpiritCategorySection>
+                        <SpiritCategoryCard
+                          onClick={() => setSpiritExpanded(prev => !prev)}
+                          expanded={spiritExpanded}
+                        >
+                          <SpiritCategoryInfo>
+                            <SpiritCategoryNameKr style={{ color: spiritExpanded ? '#ffffff' : '#2c3e50' }}>
+                              {SPIRIT_CATEGORY_MAP[data.spiritCategory].nameKr}
+                            </SpiritCategoryNameKr>
+                            <SpiritCategoryName style={{ color: spiritExpanded ? 'rgba(255,255,255,0.75)' : '#7f8c8d' }}>
+                              {SPIRIT_CATEGORY_MAP[data.spiritCategory].name}
+                            </SpiritCategoryName>
+                          </SpiritCategoryInfo>
+                          <SpiritExpandIcon expanded={spiritExpanded}>
+                            <ExpandMoreOutlined />
+                          </SpiritExpandIcon>
+                        </SpiritCategoryCard>
+
+                        <AnimatePresence>
+                          {spiritExpanded && data.ingredients.spirits.length > 0 && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: 'auto' }}
+                              exit={{ opacity: 0, height: 0 }}
+                              transition={{ duration: 0.25 }}
+                              style={{ overflow: 'hidden' }}
+                            >
+                              <SpiritDetailPanel>
+                                <CategorySlide
+                                  title="세부 제품"
+                                  items={data.ingredients.spirits}
+                                  slideRef={spiritsRef}
+                                />
+                              </SpiritDetailPanel>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </SpiritCategorySection>
                     )}
 
                     {/* 주스 */}
@@ -452,8 +510,9 @@ const HeaderSection = styled(Box)`
 
 const CocktailImage = styled(Box)`
   && {
-    width: 440px;
-    height: 440px;
+    position: relative;
+    width: 480px;
+    height: 480px;
     border-radius: 20px;
     background: linear-gradient(135deg, #ff6b6b, #ffa726);
     display: flex;
@@ -461,14 +520,14 @@ const CocktailImage = styled(Box)`
     justify-content: center;
     margin: 0 auto 24px;
     box-shadow: 0 8px 32px rgba(255, 107, 107, 0.3);
-    
+
     img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       border-radius: 20px;
     }
-    
+
     @media (max-width: 600px) {
       width: 220px;
       height: 220px;
@@ -519,6 +578,86 @@ const KoreanTitle = styled(Typography)`
     @media (max-width: 600px) {
       font-size: 1.125rem;
     }
+  }
+`;
+
+const AuthorSection = styled(Box)`
+  && {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 20px 5px 6px;
+    background: rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 40px;
+    z-index: 1;
+    transition: background 0.2s ease;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.4);
+    }
+  }
+`;
+
+const AuthorAvatar = styled(Box)`
+  && {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+`;
+
+const AuthorAvatarFallback = styled(Typography)`
+  && {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: white;
+    line-height: 1;
+  }
+`;
+
+const AuthorInfo = styled(Box)`
+  && {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+`;
+
+const AuthorLabel = styled(Typography)`
+  && {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.65);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    line-height: 1;
+  }
+`;
+
+const AuthorName = styled(Typography)`
+  && {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #ffffff;
+    line-height: 1.2;
   }
 `;
 
@@ -826,6 +965,95 @@ const DateText = styled(Typography)`
     font-size: 0.875rem;
     color: #7f8c8d;
     font-weight: 500;
+  }
+`;
+
+// 기주 카테고리 섹션 스타일들
+const SpiritCategorySection = styled(Box)`
+  && {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+  }
+`;
+
+const SpiritCategoryCard = styled(Box).withConfig({
+  shouldForwardProp: (prop) => prop !== 'expanded'
+})<{ expanded: boolean }>`
+  && {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    background: ${({ expanded }) =>
+      expanded
+        ? 'linear-gradient(135deg, #43a047 0%, #2e7d32 100%)'
+        : 'rgba(255, 255, 255, 0.9)'};
+    border: 1.5px solid ${({ expanded }) => expanded ? 'transparent' : 'rgba(76, 175, 80, 0.3)'};
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    user-select: none;
+
+    &:hover {
+      background: ${({ expanded }) =>
+        expanded
+          ? 'linear-gradient(135deg, #388e3c 0%, #1b5e20 100%)'
+          : 'rgba(76, 175, 80, 0.08)'};
+      box-shadow: 0 4px 16px rgba(76, 175, 80, 0.2);
+    }
+  }
+`;
+
+
+const SpiritCategoryInfo = styled(Box)`
+  && {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+`;
+
+const SpiritCategoryNameKr = styled(Typography)`
+  && {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #2c3e50;
+    line-height: 1.2;
+    transition: color 0.25s ease;
+  }
+`;
+
+const SpiritCategoryName = styled(Typography)`
+  && {
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: #7f8c8d;
+    line-height: 1.2;
+    transition: color 0.25s ease;
+  }
+`;
+
+const SpiritExpandIcon = styled(Box).withConfig({
+  shouldForwardProp: (prop) => prop !== 'expanded'
+})<{ expanded: boolean }>`
+  && {
+    display: flex;
+    align-items: center;
+    color: ${({ expanded }) => expanded ? 'rgba(255,255,255,0.8)' : 'rgba(76, 175, 80, 0.6)'};
+    transform: ${({ expanded }) => expanded ? 'rotate(180deg)' : 'rotate(0deg)'};
+    transition: transform 0.25s ease, color 0.25s ease;
+    flex-shrink: 0;
+  }
+`;
+
+const SpiritDetailPanel = styled(Box)`
+  && {
+    margin-top: 10px;
+    margin-left: 14px;
+    padding-left: 14px;
+    border-left: 2px solid rgba(76, 175, 80, 0.25);
   }
 `;
 

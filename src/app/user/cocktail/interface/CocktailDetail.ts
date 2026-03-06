@@ -1,4 +1,5 @@
 import type {CommonSlideElement} from "../../common/interface/CommonSlideElement.ts";
+import type {SpiritCategoryKey} from "../constant/spiritCategories.ts";
 
 export type CocktailCategory = 'classic' | 'contemporary' | 'signature' | 'mocktail' | 'other';
 
@@ -6,6 +7,13 @@ export interface CocktailDetail {
 
   /** 칵테일 ID */
   cocktailId: number;
+
+  /** 등록자 정보 */
+  author: {
+    userUuid: string;
+    username: string;
+    thumbnailImage?: string;
+  };
 
   /** 썸네일 이미지 */
   image?: string;
@@ -21,6 +29,9 @@ export interface CocktailDetail {
 
   /** 카테고리 */
   category: CocktailCategory;
+
+  /** 기주 카테고리 */
+  spiritCategory: SpiritCategoryKey | null;
 
   /** 예상 도수 */
   absPercentage: number;
@@ -108,11 +119,13 @@ export interface CocktailDetail {
   /** 댓글 및 답글 */
   comments: Array<{
     id: number;
+    userUuid: string;
     username: string;
     content: string;
     createdDate: string;
     replies?: Array<{
       id: number;
+      userUuid: string;
       username: string;
       content: string;
       createdDate: string;

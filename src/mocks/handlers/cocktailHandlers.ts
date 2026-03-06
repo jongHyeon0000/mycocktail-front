@@ -3,6 +3,11 @@ import { http, HttpResponse, delay } from 'msw'
 const cocktailFullData = [
   {
     cocktailId: 1,
+    author: {
+      userUuid: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+      username: '아야츠노 유니',
+      thumbnailImage: 'https://yt3.googleusercontent.com/e3_TBkHSBwuzKRSkG1Uv5uGLiHmLUBMVogjWD35MJL7Fi_iccr8DonU6q_1XSmO4djEY9Cunabo=s900-c-k-c0x00ffffff-no-rj'
+    },
     isNew: true,
     isActive: true,
     image: "https://images.unsplash.com/photo-1551538827-9c037cb4f32a?w=500&h=500&fit=crop",
@@ -10,6 +15,7 @@ const cocktailFullData = [
     cocktailNameKr: "모히토",
     urlSlug: "mojito",
     category: "classic",
+    spiritCategory: "rum",
     absPercentage: 10,
     servingSizeMl: 240,
     difficulty: 1,
@@ -52,6 +58,11 @@ const cocktailFullData = [
   },
   {
     cocktailId: 2,
+    author: {
+      userUuid: 'b2c3d4e5-f6a7-8901-bcde-f01234567891',
+      username: '아라하시 타비',
+      thumbnailImage: 'https://image.genie.co.kr/Y/IMAGE/IMG_ARTIST/082/459/727/82459727_1714360862118_1_600x600.JPG'
+    },
     isNew: false,
     isActive: true,
     image: "https://images.unsplash.com/photo-1551538827-9c037cb4f32a?w=500&h=500&fit=crop",
@@ -59,6 +70,7 @@ const cocktailFullData = [
     cocktailNameKr: "마가리타",
     urlSlug: "margarita",
     category: "classic",
+    spiritCategory: "tequila",
     absPercentage: 15,
     servingSizeMl: 150,
     difficulty: 2,
@@ -93,6 +105,11 @@ const cocktailFullData = [
   },
   {
     cocktailId: 3,
+    author: {
+      userUuid: 'c3d4e5f6-a7b8-9012-cdef-012345678902',
+      username: '아오쿠모 린',
+      thumbnailImage: 'https://i.namu.wiki/i/2q4XJfx3uT9A-CxXVEkXjT4YwhXVAWIwYnFUmB3fmjkAZTEo78qOgRZldT-KAjwFW-30KDl4kdXLEGmmcCmBjg.webp'
+    },
     isNew: false,
     isActive: true,
     image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=500&h=500&fit=crop",
@@ -100,6 +117,7 @@ const cocktailFullData = [
     cocktailNameKr: "올드 패션드",
     urlSlug: "old-fashioned",
     category: "classic",
+    spiritCategory: "whiskey",
     absPercentage: 35,
     servingSizeMl: 90,
     difficulty: 3,
@@ -134,6 +152,11 @@ const cocktailFullData = [
   },
   {
     cocktailId: 4,
+    author: {
+      userUuid: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+      username: '아야츠노 유니',
+      thumbnailImage: 'https://yt3.googleusercontent.com/e3_TBkHSBwuzKRSkG1Uv5uGLiHmLUBMVogjWD35MJL7Fi_iccr8DonU6q_1XSmO4djEY9Cunabo=s900-c-k-c0x00ffffff-no-rj'
+    },
     isNew: false,
     isActive: true,
     image: "https://images.unsplash.com/photo-1551538827-9c037cb4f32a?w=500&h=500&fit=crop",
@@ -141,6 +164,7 @@ const cocktailFullData = [
     cocktailNameKr: "네그로니",
     urlSlug: "negroni",
     category: "classic",
+    spiritCategory: "gin",
     absPercentage: 24,
     servingSizeMl: 90,
     difficulty: 2,
@@ -175,6 +199,11 @@ const cocktailFullData = [
   },
   {
     cocktailId: 5,
+    author: {
+      userUuid: 'b2c3d4e5-f6a7-8901-bcde-f01234567891',
+      username: '아라하시 타비',
+      thumbnailImage: 'https://image.genie.co.kr/Y/IMAGE/IMG_ARTIST/082/459/727/82459727_1714360862118_1_600x600.JPG'
+    },
     isNew: false,
     isActive: true,
     image: "https://images.unsplash.com/photo-1551538827-9c037cb4f32a?w=500&h=500&fit=crop",
@@ -182,6 +211,7 @@ const cocktailFullData = [
     cocktailNameKr: "위스키 사워",
     urlSlug: "whiskey-sour",
     category: "classic",
+    spiritCategory: "whiskey",
     absPercentage: 20,
     servingSizeMl: 120,
     difficulty: 2,
@@ -216,6 +246,11 @@ const cocktailFullData = [
   },
   {
     cocktailId: 6,
+    author: {
+      userUuid: 'c3d4e5f6-a7b8-9012-cdef-012345678902',
+      username: '아오쿠모 린',
+      thumbnailImage: 'https://i.namu.wiki/i/2q4XJfx3uT9A-CxXVEkXjT4YwhXVAWIwYnFUmB3fmjkAZTEo78qOgRZldT-KAjwFW-30KDl4kdXLEGmmcCmBjg.webp'
+    },
     isNew: false,
     isActive: true,
     image: "https://images.unsplash.com/photo-1551538827-9c037cb4f32a?w=500&h=500&fit=crop",
@@ -223,6 +258,7 @@ const cocktailFullData = [
     cocktailNameKr: "에스프레소 마티니",
     urlSlug: "espresso-martini",
     category: "contemporary",
+    spiritCategory: "vodka",
     absPercentage: 18.1,
     servingSizeMl: 120,
     difficulty: 3,
