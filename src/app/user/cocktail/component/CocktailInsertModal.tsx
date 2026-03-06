@@ -31,6 +31,7 @@ interface CocktailInsertModalProps {
 type IngredientKey = "spirits" | "juices" | "bitters" | "syrups" | "carbonated" | "dairy" | "garnishes" | "others";
 type TechniqueKey = "tools" | "glassware" | "techniques";
 type ModalKey = IngredientKey | TechniqueKey;
+type FocusableField = "cocktailName" | "cocktailNameKr" | "absPercentage" | "servingSizeMl";
 
 const INGREDIENT_LABELS: Record<IngredientKey, string> = {
   spirits: "기주",
@@ -57,6 +58,37 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
   const [tagInput, setTagInput] = useState<string>("");
 
   /*
+  * Modal State 제어
+  * */
+  const [openModal, setOpenModal] = useState<ModalKey | null>(null);
+
+  /*
+  * validation 에러 state 제어
+  * */
+  const [validationError, setValidationError] = useState<Record<string, string>>({});
+
+  /*
+  * form 필드 state (NOT NULL 필드)
+  * */
+  const [cocktailName, setCocktailName] = useState("");
+  const [cocktailNameKr, setCocktailNameKr] = useState("");
+  const [category, setCategory] = useState<CocktailCategory | "">("");
+  const [absPercentage, setAbsPercentage] = useState("");
+  const [servingSizeMl, setServingSizeMl] = useState("");
+  const [difficulty, setDifficulty] = useState<number | "">("");
+  const [source, setSource] = useState<"official" | "community" | "">("");
+
+  /*
+  * 포커스 제어 refs
+  * */
+  const FORM_REFS: Record<FocusableField, React.RefObject<HTMLInputElement | null>> = {
+    cocktailName: useRef<HTMLInputElement>(null),
+    cocktailNameKr: useRef<HTMLInputElement>(null),
+    absPercentage: useRef<HTMLInputElement>(null),
+    servingSizeMl: useRef<HTMLInputElement>(null),
+  };
+
+  /*
   * 재료 선택 state
   * */
   const [selectedIngredients, setSelectedIngredients] = useState<Record<IngredientKey, CommonSlideElement[]>>({
@@ -78,35 +110,6 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
     glassware: [],
     techniques: [],
   });
-
-  /*
-  * Modal State 제어
-  * */
-  const [openModal, setOpenModal] = useState<ModalKey | null>(null);
-
-  /*
-  * form 필드 state (NOT NULL 필드)
-  * */
-  const [cocktailName, setCocktailName] = useState("");
-  const [cocktailNameKr, setCocktailNameKr] = useState("");
-  const [category, setCategory] = useState<CocktailCategory | "">("");
-  const [absPercentage, setAbsPercentage] = useState("");
-  const [servingSizeMl, setServingSizeMl] = useState("");
-  const [difficulty, setDifficulty] = useState<number | "">("");
-  const [source, setSource] = useState<"official" | "community" | "">("");
-
-  /*
-  * 에러 state 제어
-  * */
-  const [errors, setErrors] = useState<Record<string, string>>({});
-
-  /*
-  * 포커스 제어 refs
-  * */
-  const cocktailNameRef = useRef<HTMLInputElement>(null);
-  const cocktailNameKrRef = useRef<HTMLInputElement>(null);
-  const absPercentageRef = useRef<HTMLInputElement>(null);
-  const servingSizeMlRef = useRef<HTMLInputElement>(null);
 
   /*
   * 재료 슬라이드 제어 refs
@@ -190,7 +193,7 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
   };
 
   const clearError = (field: string) => {
-    setErrors((prev) => {
+    setValidationError((prev) => {
       if (!prev[field]) {
         return prev
       }
@@ -213,19 +216,12 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
     if (!difficulty) newErrors.difficulty = "난이도를 선택해 주세요.";
     if (!source) newErrors.source = "출처를 선택해 주세요.";
 
-    setErrors(newErrors);
+    setValidationError(newErrors);
 
     if (Object.keys(newErrors).length > 0) {
-      // 첫 번째 에러 필드로 포커스
-      if (newErrors.cocktailName) {
-        cocktailNameRef.current?.focus();
-      } else if (newErrors.cocktailNameKr) {
-        cocktailNameKrRef.current?.focus();
-      } else if (newErrors.absPercentage) {
-        absPercentageRef.current?.focus();
-      } else if (newErrors.servingSizeMl) {
-        servingSizeMlRef.current?.focus();
-      }
+      const firstFocusable = (["cocktailName", "cocktailNameKr", "absPercentage", "servingSizeMl"] as FocusableField[])
+        .find((key) => newErrors[key]);
+      if (firstFocusable) FORM_REFS[firstFocusable].current?.focus();
       return;
     }
 
@@ -260,33 +256,33 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
 
               <TitleSection>
                 <StyledTextField
-                  inputRef={cocktailNameRef}
+                  inputRef={FORM_REFS.cocktailName}
                   placeholder="칵테일 이름 (영문)"
                   variant="outlined"
                   size="small"
                   fullWidth
                   value={cocktailName}
                   onChange={(e) => { setCocktailName(e.target.value); clearError("cocktailName"); }}
-                  error={!!errors.cocktailName}
-                  helperText={errors.cocktailName}
+                  error={!!validationError.cocktailName}
+                  helperText={validationError.cocktailName}
                 />
                 <StyledTextField
-                  inputRef={cocktailNameKrRef}
+                  inputRef={FORM_REFS.cocktailNameKr}
                   placeholder="칵테일 이름 (한글)"
                   variant="outlined"
                   size="small"
                   fullWidth
                   value={cocktailNameKr}
                   onChange={(e) => { setCocktailNameKr(e.target.value); clearError("cocktailNameKr"); }}
-                  error={!!errors.cocktailNameKr}
-                  helperText={errors.cocktailNameKr}
+                  error={!!validationError.cocktailNameKr}
+                  helperText={validationError.cocktailNameKr}
                 />
               </TitleSection>
 
               <InfoGrid>
                 <InfoCard>
                   <InfoLabel>카테고리</InfoLabel>
-                  <FormControl error={!!errors.category} size="small" fullWidth>
+                  <FormControl error={!!validationError.category} size="small" fullWidth>
                     <StyledSelect
                       value={category}
                       onChange={(e) => { setCategory(e.target.value as CocktailCategory); clearError("category"); }}
@@ -299,14 +295,14 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
                       <MenuItem value="mocktail">목테일</MenuItem>
                       <MenuItem value="other">기타</MenuItem>
                     </StyledSelect>
-                    {errors.category && <FormHelperText>{errors.category}</FormHelperText>}
+                    {validationError.category && <FormHelperText>{validationError.category}</FormHelperText>}
                   </FormControl>
                 </InfoCard>
 
                 <InfoCard>
                   <InfoLabel>예상 도수</InfoLabel>
                   <StyledTextField
-                    inputRef={absPercentageRef}
+                    inputRef={FORM_REFS.absPercentage}
                     placeholder="0"
                     variant="outlined"
                     size="small"
@@ -314,8 +310,8 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
                     fullWidth
                     value={absPercentage}
                     onChange={(e) => { setAbsPercentage(e.target.value); clearError("absPercentage"); }}
-                    error={!!errors.absPercentage}
-                    helperText={errors.absPercentage}
+                    error={!!validationError.absPercentage}
+                    helperText={validationError.absPercentage}
                     InputProps={{ endAdornment: <span>%</span> }}
                   />
                 </InfoCard>
@@ -323,7 +319,7 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
                 <InfoCard>
                   <InfoLabel>표준 제공량</InfoLabel>
                   <StyledTextField
-                    inputRef={servingSizeMlRef}
+                    inputRef={FORM_REFS.servingSizeMl}
                     placeholder="0"
                     variant="outlined"
                     size="small"
@@ -331,15 +327,15 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
                     fullWidth
                     value={servingSizeMl}
                     onChange={(e) => { setServingSizeMl(e.target.value); clearError("servingSizeMl"); }}
-                    error={!!errors.servingSizeMl}
-                    helperText={errors.servingSizeMl}
+                    error={!!validationError.servingSizeMl}
+                    helperText={validationError.servingSizeMl}
                     InputProps={{ endAdornment: <span>ml</span> }}
                   />
                 </InfoCard>
 
                 <InfoCard>
                   <InfoLabel>난이도</InfoLabel>
-                  <FormControl error={!!errors.difficulty} size="small" fullWidth>
+                  <FormControl error={!!validationError.difficulty} size="small" fullWidth>
                     <StyledSelect
                       value={difficulty}
                       onChange={(e) => { setDifficulty(e.target.value as number); clearError("difficulty"); }}
@@ -352,13 +348,13 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
                       <MenuItem value={4}>4 - 어려움</MenuItem>
                       <MenuItem value={5}>5 - 매우 어려움</MenuItem>
                     </StyledSelect>
-                    {errors.difficulty && <FormHelperText>{errors.difficulty}</FormHelperText>}
+                    {validationError.difficulty && <FormHelperText>{validationError.difficulty}</FormHelperText>}
                   </FormControl>
                 </InfoCard>
 
                 <InfoCard>
                   <InfoLabel>출처</InfoLabel>
-                  <FormControl error={!!errors.source} size="small" fullWidth>
+                  <FormControl error={!!validationError.source} size="small" fullWidth>
                     <StyledSelect
                       value={source}
                       onChange={(e) => { setSource(e.target.value as "official" | "community"); clearError("source"); }}
@@ -368,7 +364,7 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
                       <MenuItem value="official">공식</MenuItem>
                       <MenuItem value="community">커뮤니티 레시피</MenuItem>
                     </StyledSelect>
-                    {errors.source && <FormHelperText>{errors.source}</FormHelperText>}
+                    {validationError.source && <FormHelperText>{validationError.source}</FormHelperText>}
                   </FormControl>
                 </InfoCard>
               </InfoGrid>
