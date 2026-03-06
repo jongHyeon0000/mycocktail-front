@@ -173,11 +173,16 @@ export const spiritHandlers = [
     const limit = parseInt(url.searchParams.get('limit') ?? '6')
     const sort = url.searchParams.get('sort') ?? 'recent'
     const search = url.searchParams.get('search') ?? ''
+    const spiritCategory = url.searchParams.get('spiritCategory') ?? ''
 
     let sortedData = [...spiritFullData]
 
     if (sort === 'name') {
       sortedData.sort((a, b) => a.spiritName.localeCompare(b.spiritName))
+    }
+
+    if (spiritCategory) {
+      sortedData = sortedData.filter(spirit => spirit.spiritCategory === spiritCategory)
     }
 
     if (search) {

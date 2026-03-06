@@ -30,8 +30,8 @@ export interface CocktailDetail {
   /** 카테고리 */
   category: CocktailCategory;
 
-  /** 기주 카테고리 */
-  spiritCategory: SpiritCategoryKey | null;
+  /** 기주 카테고리 (복수 가능 - 롱아일랜드 등) */
+  spiritCategories: SpiritCategoryKey[];
 
   /** 예상 도수 */
   absPercentage: number;

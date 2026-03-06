@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CloseOutlined, LocalBarRounded, SearchOutlined } from "@mui/icons-material";
+import { CheckOutlined, CloseOutlined, LocalBarRounded, SearchOutlined } from "@mui/icons-material";
 import {
   Box,
+  Button,
   CircularProgress,
   IconButton,
   InputAdornment,
+  MenuItem,
   Modal,
   Paper,
+  Select,
   TextField,
   Typography,
 } from "@mui/material";
@@ -15,11 +18,12 @@ import styled from "styled-components";
 import { COMMON_MODAL_STYLE } from "../../../style/CommonModal.style.ts";
 import type { CommonSlideElement } from "../../../interface/CommonSlideElement.ts";
 import useReadSpiritProductList from "../../../../spirit/service/useReadSpiritProductList.tsx";
+import { SPIRIT_CATEGORY_MAP, type SpiritCategoryKey } from "../../../../cocktail/constant/spiritCategories.ts";
 
 interface UserSpiritInsertModalProps {
   open: boolean;
   onClose: () => void;
-  onSelect: (item: CommonSlideElement) => void;
+  onSelect: (items: CommonSlideElement[]) => void;
 }
 
 const PAGE_SIZE = 9;
@@ -34,11 +38,15 @@ const UserSpiritInsertModal: React.FC<UserSpiritInsertModalProps> = ({ open, onC
 
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState<SpiritCategoryKey | "">("");
+  const [selectedItems, setSelectedItems] = useState<CommonSlideElement[]>([]);
 
   useEffect(() => {
     if (open) {
       setPage(1);
       setSearch("");
+      setCategoryFilter("");
+      setSelectedItems([]);
       fetchReadSpiritProductList({ page: 1, limit: PAGE_SIZE });
     }
   }, [open]);
@@ -46,16 +54,31 @@ const UserSpiritInsertModal: React.FC<UserSpiritInsertModalProps> = ({ open, onC
   const handleSearch = (value: string) => {
     setSearch(value);
     setPage(1);
-    fetchReadSpiritProductList({ page: 1, limit: PAGE_SIZE, search: value });
+    fetchReadSpiritProductList({ page: 1, limit: PAGE_SIZE, search: value, spiritCategory: categoryFilter || undefined });
+  };
+
+  const handleCategoryChange = (value: SpiritCategoryKey | "") => {
+    setCategoryFilter(value);
+    setPage(1);
+    fetchReadSpiritProductList({ page: 1, limit: PAGE_SIZE, search, spiritCategory: value || undefined });
   };
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
-    fetchReadSpiritProductList({ page: newPage, limit: PAGE_SIZE, search });
+    fetchReadSpiritProductList({ page: newPage, limit: PAGE_SIZE, search, spiritCategory: categoryFilter || undefined });
   };
 
-  const handleSelect = (item: CommonSlideElement) => {
-    onSelect(item);
+  const handleToggleItem = (item: CommonSlideElement) => {
+    setSelectedItems(prev => {
+      if (prev.some(i => i.id === item.id)) {
+        return prev.filter(i => i.id !== item.id);
+      }
+      return [...prev, item];
+    });
+  };
+
+  const handleConfirm = () => {
+    onSelect(selectedItems);
     onClose();
   };
 
@@ -85,6 +108,19 @@ const UserSpiritInsertModal: React.FC<UserSpiritInsertModalProps> = ({ open, onC
             </ModalHeader>
 
             <SearchArea>
+              <CategorySelect
+                size="small"
+                value={categoryFilter}
+                onChange={(e) => handleCategoryChange(e.target.value as SpiritCategoryKey | "")}
+                displayEmpty
+              >
+                <MenuItem value="">전체 카테고리</MenuItem>
+                {(Object.keys(SPIRIT_CATEGORY_MAP) as SpiritCategoryKey[]).map(key => (
+                  <MenuItem key={key} value={key}>
+                    {SPIRIT_CATEGORY_MAP[key].nameKr} ({SPIRIT_CATEGORY_MAP[key].name})
+                  </MenuItem>
+                ))}
+              </CategorySelect>
               <TextField
                 fullWidth
                 size="small"
@@ -123,46 +159,65 @@ const UserSpiritInsertModal: React.FC<UserSpiritInsertModalProps> = ({ open, onC
                 </EmptyBox>
               ) : (
                 <GridArea>
-                  {slideItems.map((item) => (
-                    <GridItem
-                      key={item.id}
-                      as={motion.div}
-                      whileHover={{ scale: 1.04, y: -2 }}
-                      whileTap={{ scale: 0.96 }}
-                      onClick={() => handleSelect(item)}
-                    >
-                      <GridItemImage>
-                        {item.image ? (
-                          <img src={item.image} alt={item.name} />
-                        ) : (
-                          <GridItemPlaceholder>
-                            <LocalBarRounded fontSize="inherit" />
-                          </GridItemPlaceholder>
+                  {slideItems.map((item) => {
+                    const isSelected = selectedItems.some(s => s.id === item.id);
+                    return (
+                      <GridItem
+                        key={item.id}
+                        as={motion.div}
+                        whileHover={{ scale: 1.04, y: -2 }}
+                        whileTap={{ scale: 0.96 }}
+                        onClick={() => handleToggleItem(item)}
+                        $selected={isSelected}
+                      >
+                        {isSelected && (
+                          <SelectedBadge>
+                            <CheckOutlined style={{ fontSize: 14 }} />
+                          </SelectedBadge>
                         )}
-                      </GridItemImage>
-                      <GridItemName>{item.name}</GridItemName>
-                      <GridItemNameKr>{item.nameKr}</GridItemNameKr>
-                    </GridItem>
-                  ))}
+                        <GridItemImage>
+                          {item.image ? (
+                            <img src={item.image} alt={item.name} />
+                          ) : (
+                            <GridItemPlaceholder>
+                              <LocalBarRounded fontSize="inherit" />
+                            </GridItemPlaceholder>
+                          )}
+                        </GridItemImage>
+                        <GridItemName>{item.name}</GridItemName>
+                        <GridItemNameKr>{item.nameKr}</GridItemNameKr>
+                      </GridItem>
+                    );
+                  })}
                 </GridArea>
               )}
             </ModalContent>
 
-            <PaginationArea>
-              <PageArrowBtn
-                onClick={() => handlePageChange(page - 1)}
-                disabled={page === 1}
+            <BottomArea>
+              <PaginationArea>
+                <PageArrowBtn
+                  onClick={() => handlePageChange(page - 1)}
+                  disabled={page === 1}
+                >
+                  ‹
+                </PageArrowBtn>
+                <PageLabel>{page}</PageLabel>
+                <PageArrowBtn
+                  onClick={() => handlePageChange(page + 1)}
+                  disabled={!spiritProductListHasMore}
+                >
+                  ›
+                </PageArrowBtn>
+              </PaginationArea>
+              <ConfirmButton
+                variant="contained"
+                disableElevation
+                disabled={selectedItems.length === 0}
+                onClick={handleConfirm}
               >
-                ‹
-              </PageArrowBtn>
-              <PageLabel>{page}</PageLabel>
-              <PageArrowBtn
-                onClick={() => handlePageChange(page + 1)}
-                disabled={!spiritProductListHasMore}
-              >
-                ›
-              </PageArrowBtn>
-            </PaginationArea>
+                {selectedItems.length > 0 ? `${selectedItems.length}개 추가` : "추가"}
+              </ConfirmButton>
+            </BottomArea>
           </ModalContainer>
         </StyledModal>
       )}
@@ -212,8 +267,30 @@ const ModalHeader = styled(Box)`
 
 const SearchArea = styled(Box)`
   && {
-    padding: 16px 24px 0;
+    padding: 12px 24px 0;
     flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+`;
+
+const CategorySelect = styled(Select)`
+  && {
+    width: 100%;
+    border-radius: 10px;
+    background-color: #f8f8f8;
+    font-size: 0.875rem;
+
+    .MuiOutlinedInput-notchedOutline {
+      border-color: #eee;
+    }
+    &:hover .MuiOutlinedInput-notchedOutline {
+      border-color: #ccc;
+    }
+    &.Mui-focused .MuiOutlinedInput-notchedOutline {
+      border-color: #8B4513;
+    }
   }
 `;
 
@@ -234,10 +311,13 @@ const GridArea = styled(Box)`
   }
 `;
 
-const GridItem = styled(Box)`
+const GridItem = styled(Box).withConfig({
+  shouldForwardProp: (prop) => prop !== '$selected'
+})<{ $selected?: boolean }>`
   && {
-    background: #fafafa;
-    border: 1px solid #f0f0f0;
+    position: relative;
+    background: ${({ $selected }) => $selected ? '#fff8f2' : '#fafafa'};
+    border: 1.5px solid ${({ $selected }) => $selected ? '#8b4513' : '#f0f0f0'};
     border-radius: 12px;
     padding: 12px 8px;
     text-align: center;
@@ -248,6 +328,22 @@ const GridItem = styled(Box)`
       border-color: #8b4513;
       background: #fff8f5;
     }
+  }
+`;
+
+const SelectedBadge = styled(Box)`
+  && {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #8b4513;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 `;
 
@@ -320,15 +416,45 @@ const EmptyBox = styled(Box)`
   }
 `;
 
+const BottomArea = styled(Box)`
+  && {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 24px 20px;
+    border-top: 1px solid #f0f0f0;
+    flex-shrink: 0;
+    gap: 12px;
+  }
+`;
+
 const PaginationArea = styled(Box)`
   && {
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 12px;
-    padding: 12px 24px 20px;
-    border-top: 1px solid #f0f0f0;
+  }
+`;
+
+const ConfirmButton = styled(Button)`
+  && {
+    background-color: #8b4513;
+    color: #fff;
+    border-radius: 10px;
+    padding: 6px 20px;
+    font-weight: 600;
+    text-transform: none;
+    white-space: nowrap;
     flex-shrink: 0;
+
+    &:hover {
+      background-color: #6d3410;
+    }
+
+    &.Mui-disabled {
+      background-color: #e0e0e0;
+      color: #9e9e9e;
+    }
   }
 `;
 

@@ -111,33 +111,24 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
   /*
   * 재료 슬라이드 제어 refs
   * */
-  const spiritsRef = useRef<HTMLDivElement>(null);
-  const juicesRef = useRef<HTMLDivElement>(null);
-  const bittersRef = useRef<HTMLDivElement>(null);
-  const syrupsRef = useRef<HTMLDivElement>(null);
-  const carbonatedRef = useRef<HTMLDivElement>(null);
-  const dairyRef = useRef<HTMLDivElement>(null);
-  const garnishesRef = useRef<HTMLDivElement>(null);
-  const othersRef = useRef<HTMLDivElement>(null);
-  const toolsRef = useRef<HTMLDivElement>(null);
-  const glasswareRef = useRef<HTMLDivElement>(null);
-  const techniquesRef = useRef<HTMLDivElement>(null);
-
   const INGREDIENT_REFS: Record<IngredientKey, React.RefObject<HTMLDivElement | null>> = {
-    spirits: spiritsRef,
-    juices: juicesRef,
-    bitters: bittersRef,
-    syrups: syrupsRef,
-    carbonated: carbonatedRef,
-    dairy: dairyRef,
-    garnishes: garnishesRef,
-    others: othersRef,
+    spirits: useRef<HTMLDivElement>(null),
+    juices: useRef<HTMLDivElement>(null),
+    bitters: useRef<HTMLDivElement>(null),
+    syrups: useRef<HTMLDivElement>(null),
+    carbonated: useRef<HTMLDivElement>(null),
+    dairy: useRef<HTMLDivElement>(null),
+    garnishes: useRef<HTMLDivElement>(null),
+    others: useRef<HTMLDivElement>(null),
   };
 
+  /*
+  * 제조 기법 슬라이드 제어 refs
+  * */
   const TECHNIQUE_REFS: Record<TechniqueKey, React.RefObject<HTMLDivElement | null>> = {
-    tools: toolsRef,
-    glassware: glasswareRef,
-    techniques: techniquesRef,
+    tools: useRef<HTMLDivElement>(null),
+    glassware: useRef<HTMLDivElement>(null),
+    techniques: useRef<HTMLDivElement>(null),
   };
 
   const handleSelectIngredient = (key: IngredientKey) => (item: CommonSlideElement) => {
@@ -147,6 +138,14 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
       }
 
       return { ...prev, [key]: [...prev[key], item] };
+    });
+    setOpenModal(null);
+  };
+
+  const handleSelectSpirits = (items: CommonSlideElement[]) => {
+    setSelectedIngredients((prev) => {
+      const newItems = items.filter(i => !prev.spirits.some(e => e.id === i.id));
+      return { ...prev, spirits: [...prev.spirits, ...newItems] };
     });
     setOpenModal(null);
   };
@@ -637,7 +636,7 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
     </AnimatePresence>
 
       {/* 재료 sub-modals */}
-      <UserSpiritInsertModal open={openModal === "spirits"} onClose={() => setOpenModal(null)} onSelect={handleSelectIngredient("spirits")} />
+      <UserSpiritInsertModal open={openModal === "spirits"} onClose={() => setOpenModal(null)} onSelect={handleSelectSpirits} />
       <UserJuiceInsertModal open={openModal === "juices"} onClose={() => setOpenModal(null)} onSelect={handleSelectIngredient("juices")} />
       <UserBittersInsertModal open={openModal === "bitters"} onClose={() => setOpenModal(null)} onSelect={handleSelectIngredient("bitters")} />
       <UserSyrupInsertModal open={openModal === "syrups"} onClose={() => setOpenModal(null)} onSelect={handleSelectIngredient("syrups")} />

@@ -161,20 +161,19 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                   <SectionTitle>사용 재료</SectionTitle>
                   <IngredientsSection>
                     {/* 기주 */}
-                    {data.spiritCategory && (
+                    {data.spiritCategories.length > 0 && (
                       <SpiritCategorySection>
                         <SpiritCategoryCard
                           onClick={() => setSpiritExpanded(prev => !prev)}
                           expanded={spiritExpanded}
                         >
-                          <SpiritCategoryInfo>
-                            <SpiritCategoryNameKr style={{ color: spiritExpanded ? '#ffffff' : '#2c3e50' }}>
-                              {SPIRIT_CATEGORY_MAP[data.spiritCategory].nameKr}
-                            </SpiritCategoryNameKr>
-                            <SpiritCategoryName style={{ color: spiritExpanded ? 'rgba(255,255,255,0.75)' : '#7f8c8d' }}>
-                              {SPIRIT_CATEGORY_MAP[data.spiritCategory].name}
-                            </SpiritCategoryName>
-                          </SpiritCategoryInfo>
+                          <SpiritCategoryChips>
+                            {data.spiritCategories.map(cat => (
+                              <SpiritCatTag key={cat} $expanded={spiritExpanded}>
+                                {SPIRIT_CATEGORY_MAP[cat].nameKr}
+                              </SpiritCatTag>
+                            ))}
+                          </SpiritCategoryChips>
                           <SpiritExpandIcon expanded={spiritExpanded}>
                             <ExpandMoreOutlined />
                           </SpiritExpandIcon>
@@ -1006,33 +1005,29 @@ const SpiritCategoryCard = styled(Box).withConfig({
 `;
 
 
-const SpiritCategoryInfo = styled(Box)`
+const SpiritCategoryChips = styled(Box)`
   && {
     flex: 1;
     display: flex;
-    flex-direction: column;
-    gap: 2px;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
   }
 `;
 
-const SpiritCategoryNameKr = styled(Typography)`
-  && {
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: #2c3e50;
-    line-height: 1.2;
-    transition: color 0.25s ease;
-  }
-`;
-
-const SpiritCategoryName = styled(Typography)`
-  && {
-    font-size: 0.8rem;
-    font-weight: 400;
-    color: #7f8c8d;
-    line-height: 1.2;
-    transition: color 0.25s ease;
-  }
+const SpiritCatTag = styled.span.withConfig({
+  shouldForwardProp: (prop) => prop !== '$expanded'
+})<{ $expanded: boolean }>`
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.5;
+  background: ${({ $expanded }) => $expanded ? 'rgba(255,255,255,0.18)' : 'rgba(76,175,80,0.1)'};
+  color: ${({ $expanded }) => $expanded ? '#ffffff' : '#2e7d32'};
+  border: 1px solid ${({ $expanded }) => $expanded ? 'rgba(255,255,255,0.3)' : 'rgba(76,175,80,0.3)'};
+  transition: all 0.25s ease;
 `;
 
 const SpiritExpandIcon = styled(Box).withConfig({

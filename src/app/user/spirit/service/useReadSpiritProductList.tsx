@@ -2,6 +2,7 @@ import {useState} from "react";
 import {api} from "../../../../config/axios/AxiosConfig.ts";
 import type {SpiritProductDetail} from "../interface/SpiritProductDetail.ts";
 import type {ApiResponse} from "../../../../config/axios/interface/ApiResponse.ts";
+import type {SpiritCategoryKey} from "../../cocktail/constant/spiritCategories.ts";
 
 interface FetchProps {
   /*
@@ -19,8 +20,9 @@ interface FetchProps {
   /*
   * 검색
   * */
-  search?: string;      // 검색어
-  userId?: number;      // 유저id (해당하는 유저의 글만 검색)
+  search?: string;          // 검색어
+  spiritCategory?: SpiritCategoryKey; // 기주 카테고리 필터
+  userId?: number;           // 유저id (해당하는 유저의 글만 검색)
 }
 
 const useReadSpriteProductList = () => {
