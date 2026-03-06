@@ -10,12 +10,17 @@ import {
   FormControl,
   InputAdornment,
   MenuItem,
-  Select,
-  TextField,
   Typography
 } from "@mui/material";
 import SearchLoadingOverlay from "../../../common/component/loading/SearchLoadingOverlay.tsx";
-import styled from "styled-components";
+import {
+  ControlsContainer,
+  ItemList,
+  PageContainer,
+  SearchField,
+  SortContainer,
+  SortSelect,
+} from "../../../common/style/CommonListPage.style.tsx";
 import GarnishesListComponent from "../component/GarnishesListComponent.tsx";
 import GarnishesDetailModal from "../component/GarnishesDetailModal.tsx";
 
@@ -37,8 +42,8 @@ const GarnishesListPage: React.FC = () => {
   const [ searchDebounceTimer, setSearchDebounceTimer ] = useState<number | null>(null);
   const [ isSearching, setIsSearching ] = useState<boolean>(false);
 
-  const { garnishes, garnishesError, garnishesLoading, fetchReadGarnishes } = useReadGarnishes();
-  const { garnishesList, garnishesListError, garnishesListLoading, garnishesListLoadingMore, garnishesListHasMore, fetchReadGarnishesList } = useReadGarnishesList();
+  const { garnishes, garnishesLoading, fetchReadGarnishes } = useReadGarnishes();
+  const { garnishesList, garnishesListLoading, garnishesListLoadingMore, garnishesListHasMore, fetchReadGarnishesList } = useReadGarnishesList();
 
   /*
   * 초기 데이터 로드 및 정렬 변경 시 로드
@@ -143,7 +148,7 @@ const GarnishesListPage: React.FC = () => {
   * Modal State 제어
   * */
   useEffect(() => {
-    if (garnishes) {
+    if (garnishes?.data) {
       setModalOpen(true);
     }
   }, [garnishes]);
@@ -152,20 +157,16 @@ const GarnishesListPage: React.FC = () => {
   * Axios Error 제어
   * */
   useEffect(() => {
-    if (garnishesListError) {
-      showErrorAlert(
-          '가니쉬 리스트 로드 실패',
-          garnishesListError
-      ).then();
+    if (garnishesList && garnishesList.code !== 'OK') {
+      showErrorAlert('가니쉬 리스트 로드 실패', garnishesList.message).then();
     }
+  }, [garnishesList]);
 
-    if (garnishesError) {
-      showErrorAlert(
-          '가니쉬 로드 실패',
-          garnishesError
-      ).then();
+  useEffect(() => {
+    if (garnishes && garnishes.code !== 'OK') {
+      showErrorAlert('가니쉬 로드 실패', garnishes.message).then();
     }
-  }, [garnishesListError, garnishesError]);
+  }, [garnishes]);
 
   return (
       <PageContainer>
@@ -227,14 +228,14 @@ const GarnishesListPage: React.FC = () => {
           </ControlsContainer>
 
           {/* 가니쉬 리스트 */}
-          <GarnishesList>
+          <ItemList>
             {isSearching ? (
                 <SearchLoadingOverlay
                     open={isSearching}
                     message="검색 중..."
                 />
             ) : (
-                garnishesList && garnishesList.map((garnish, index) => (
+                garnishesList?.data && garnishesList.data.map((garnish, index) => (
                     <GarnishesListComponent
                         key={`${garnish.garnishId}-${index}`}
                         data={garnish}
@@ -243,7 +244,7 @@ const GarnishesListPage: React.FC = () => {
                     />
                 ))
             )}
-          </GarnishesList>
+          </ItemList>
 
           {/* 추가 로딩 중 (무한 스크롤) */}
           {garnishesListLoadingMore && (
@@ -263,11 +264,11 @@ const GarnishesListPage: React.FC = () => {
         </Container>
 
         {/* 가니쉬 상세 모달 */}
-        {garnishes && (
+        {garnishes?.data && (
             <GarnishesDetailModal
                 open={modalOpen}
                 onClose={() => setModalOpen(false)}
-                data={garnishes}
+                data={garnishes.data}
             />
         )}
       </PageContainer>
@@ -276,84 +277,3 @@ const GarnishesListPage: React.FC = () => {
 
 export default GarnishesListPage;
 
-const PageContainer = styled(Box)`
-    && {
-        min-height: 100vh;
-        background-color: #f5f5f5;
-        padding-top: 96px;
-    }
-`;
-
-const ControlsContainer = styled(Box)`
-  && {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 32px;
-    gap: 16px;
-
-    @media (max-width: 600px) {
-      flex-wrap: wrap;
-    }
-  }
-`;
-
-const SortContainer = styled(Box)`
-  && {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-  }
-`;
-
-const SortSelect = styled(Select)`
-  && {
-    background-color: #fff;
-    border-radius: 16px;
-    min-width: 150px;
-
-    .MuiOutlinedInput-notchedOutline {
-      border-color: #eee;
-    }
-
-    &:hover .MuiOutlinedInput-notchedOutline {
-      border-color: #ddd;
-    }
-  }
-`;
-
-const SearchField = styled(TextField)`
-  && {
-    width: 300px;
-    background-color: #fff;
-
-    .MuiOutlinedInput-root {
-      border-radius: 16px;
-
-      &:hover fieldset {
-        border-color: #ddd;
-      }
-
-      &.Mui-focused fieldset {
-        border-color: #888;
-      }
-    }
-
-    & fieldset {
-      border-color: #eee;
-    }
-
-    @media (max-width: 600px) {
-      width: 100%;
-    }
-  }
-`;
-
-const GarnishesList = styled(Box)`
-  && {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-  }
-`;

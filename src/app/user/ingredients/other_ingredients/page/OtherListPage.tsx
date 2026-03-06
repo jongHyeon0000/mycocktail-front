@@ -10,12 +10,17 @@ import {
   FormControl,
   InputAdornment,
   MenuItem,
-  Select,
-  TextField,
   Typography
 } from "@mui/material";
 import SearchLoadingOverlay from "../../../common/component/loading/SearchLoadingOverlay.tsx";
-import styled from "styled-components";
+import {
+  ControlsContainer,
+  ItemList,
+  PageContainer,
+  SearchField,
+  SortContainer,
+  SortSelect,
+} from "../../../common/style/CommonListPage.style.tsx";
 import OtherIngredientsListComponent from "../component/OtherIngredientsListComponent.tsx";
 import OtherIngredientsDetailModal from "../component/OtherIngredientsDetailModal.tsx";
 
@@ -37,8 +42,8 @@ const OtherListPage: React.FC = () => {
   const [ searchDebounceTimer, setSearchDebounceTimer ] = useState<number | null>(null);
   const [ isSearching, setIsSearching ] = useState<boolean>(false);
 
-  const { otherIngredients, otherIngredientsError, otherIngredientsLoading, fetchReadOtherIngredients } = useReadOtherIngredients();
-  const { otherIngredientsListError, otherIngredientsListHasMore, otherIngredientsListLoading, otherIngredientsListLoadingMore, otherIngredientsList, fetchReadOtherIngredientsList } = useReadOtherIngredientsList();
+  const { otherIngredients, otherIngredientsLoading, fetchReadOtherIngredients } = useReadOtherIngredients();
+  const { otherIngredientsListHasMore, otherIngredientsListLoading, otherIngredientsListLoadingMore, otherIngredientsList, fetchReadOtherIngredientsList } = useReadOtherIngredientsList();
 
   /*
   * 초기 데이터 로드 및 정렬 변경 시 로드
@@ -143,7 +148,7 @@ const OtherListPage: React.FC = () => {
   * Modal State 제어
   * */
   useEffect(() => {
-    if (otherIngredients) {
+    if (otherIngredients?.data) {
       setModalOpen(true);
     }
   }, [otherIngredients]);
@@ -152,20 +157,16 @@ const OtherListPage: React.FC = () => {
   * Axios Error 제어
   * */
   useEffect(() => {
-    if (otherIngredientsListError) {
-      showErrorAlert(
-          '기타 첨가물 리스트 로드 실패',
-          otherIngredientsListError
-      ).then();
+    if (otherIngredientsList && otherIngredientsList.code !== 'OK') {
+      showErrorAlert('기타 첨가물 리스트 로드 실패', otherIngredientsList.message).then();
     }
+  }, [otherIngredientsList]);
 
-    if (otherIngredientsError) {
-      showErrorAlert(
-          '기타 첨가물 로드 실패',
-          otherIngredientsError
-      ).then();
+  useEffect(() => {
+    if (otherIngredients && otherIngredients.code !== 'OK') {
+      showErrorAlert('기타 첨가물 로드 실패', otherIngredients.message).then();
     }
-  }, [otherIngredientsListError, otherIngredientsError]);
+  }, [otherIngredients]);
 
   return (
       <PageContainer>
@@ -227,14 +228,14 @@ const OtherListPage: React.FC = () => {
           </ControlsContainer>
 
           {/* 기타 첨가물 리스트 */}
-          <OtherIngredientsList>
+          <ItemList>
             {isSearching ? (
                 <SearchLoadingOverlay
                     open={isSearching}
                     message="검색 중..."
                 />
             ) : (
-                otherIngredientsList && otherIngredientsList.map((otherIngredient, index) => (
+                otherIngredientsList?.data && otherIngredientsList.data.map((otherIngredient, index) => (
                     <OtherIngredientsListComponent
                         key={`${otherIngredient.otherIngredientId}-${index}`}
                         data={otherIngredient}
@@ -243,7 +244,7 @@ const OtherListPage: React.FC = () => {
                     />
                 ))
             )}
-          </OtherIngredientsList>
+          </ItemList>
 
           {/* 추가 로딩 중 (무한 스크롤) */}
           {otherIngredientsListLoadingMore && (
@@ -263,97 +264,15 @@ const OtherListPage: React.FC = () => {
         </Container>
 
         {/* 기타 첨가물 상세 모달 */}
-        {otherIngredients && (
+        {otherIngredients?.data && (
             <OtherIngredientsDetailModal
                 open={modalOpen}
                 onClose={() => setModalOpen(false)}
-                data={otherIngredients}
+                data={otherIngredients.data}
             />
         )}
       </PageContainer>
   );
 }
-
-const PageContainer = styled(Box)`
-    && {
-        min-height: 100vh;
-        background-color: #f5f5f5;
-        padding-top: 96px;
-    }
-`;
-
-const ControlsContainer = styled(Box)`
-  && {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 32px;
-    gap: 16px;
-
-    @media (max-width: 600px) {
-      flex-wrap: wrap;
-    }
-  }
-`;
-
-const SortContainer = styled(Box)`
-  && {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-  }
-`;
-
-const SortSelect = styled(Select)`
-  && {
-    background-color: #fff;
-    border-radius: 16px;
-    min-width: 150px;
-
-    .MuiOutlinedInput-notchedOutline {
-      border-color: #eee;
-    }
-
-    &:hover .MuiOutlinedInput-notchedOutline {
-      border-color: #ddd;
-    }
-  }
-`;
-
-const SearchField = styled(TextField)`
-  && {
-    width: 300px;
-    background-color: #fff;
-
-    .MuiOutlinedInput-root {
-      border-radius: 16px;
-
-      &:hover fieldset {
-        border-color: #ddd;
-      }
-
-      &.Mui-focused fieldset {
-        border-color: #888;
-      }
-    }
-
-    & fieldset {
-      border-color: #eee;
-    }
-
-    @media (max-width: 600px) {
-      width: 100%;
-    }
-  }
-`;
-
-const OtherIngredientsList = styled(Box)`
-  && {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-  }
-`;
 
 export default OtherListPage;

@@ -10,12 +10,17 @@ import {
   FormControl,
   InputAdornment,
   MenuItem,
-  Select,
-  TextField,
   Typography
 } from "@mui/material";
 import SearchLoadingOverlay from "../../../common/component/loading/SearchLoadingOverlay.tsx";
-import styled from "styled-components";
+import {
+  ControlsContainer,
+  ItemList,
+  PageContainer,
+  SearchField,
+  SortContainer,
+  SortSelect,
+} from "../../../common/style/CommonListPage.style.tsx";
 import BittersListComponent from "../component/BittersListComponent.tsx";
 import BittersDetailModal from "../component/BittersDetailModal.tsx";
 
@@ -37,8 +42,8 @@ const BittersListPage: React.FC = () => {
   const [ searchDebounceTimer, setSearchDebounceTimer ] = useState<number | null>(null);
   const [ isSearching, setIsSearching ] = useState<boolean>(false);
 
-  const { bitters, bittersLoading, fetchReadBitters, bittersError } = useReadBitters();
-  const { bittersListError, bittersListLoading, bittersListLoadingMore, bittersListHasMore, bittersList, fetchReadBittersList } = useReadBittersList();
+  const { bitters, bittersLoading, fetchReadBitters } = useReadBitters();
+  const { bittersListLoading, bittersListLoadingMore, bittersListHasMore, bittersList, fetchReadBittersList } = useReadBittersList();
 
   /*
   * 초기 데이터 로드 및 정렬 변경 시 로드
@@ -143,7 +148,7 @@ const BittersListPage: React.FC = () => {
   * Modal State 제어
   * */
   useEffect(() => {
-    if (bitters) {
+    if (bitters?.data) {
       setModalOpen(true);
     }
   }, [bitters]);
@@ -152,20 +157,16 @@ const BittersListPage: React.FC = () => {
   * Axios Error 제어
   * */
   useEffect(() => {
-    if (bittersListError) {
-      showErrorAlert(
-          '비터스 리스트 로드 실패',
-          bittersListError
-      ).then();
+    if (bittersList && bittersList.code !== 'OK') {
+      showErrorAlert('비터스 리스트 로드 실패', bittersList.message).then();
     }
+  }, [bittersList]);
 
-    if (bittersError) {
-      showErrorAlert(
-          '비터스 로드 실패',
-          bittersError
-      ).then();
+  useEffect(() => {
+    if (bitters && bitters.code !== 'OK') {
+      showErrorAlert('비터스 로드 실패', bitters.message).then();
     }
-  }, [bittersListError, bittersError]);
+  }, [bitters]);
 
   return (
       <PageContainer>
@@ -227,14 +228,14 @@ const BittersListPage: React.FC = () => {
           </ControlsContainer>
 
           {/* 기법 리스트 */}
-          <BittersList>
+          <ItemList>
             {isSearching ? (
                 <SearchLoadingOverlay
                     open={isSearching}
                     message="검색 중..."
                 />
             ) : (
-                bittersList && bittersList.map((bitters, index) => (
+                bittersList?.data && bittersList.data.map((bitters, index) => (
                     <BittersListComponent
                         key={`${bitters.bittersId}-${index}`}
                         data={bitters}
@@ -243,7 +244,7 @@ const BittersListPage: React.FC = () => {
                     />
                 ))
             )}
-          </BittersList>
+          </ItemList>
 
           {/* 추가 로딩 중 (무한 스크롤) */}
           {bittersListLoadingMore && (
@@ -263,11 +264,11 @@ const BittersListPage: React.FC = () => {
         </Container>
 
         {/* 기법 상세 모달 */}
-        {bitters && (
+        {bitters?.data && (
             <BittersDetailModal
                 open={modalOpen}
                 onClose={() => setModalOpen(false)}
-                data={bitters}
+                data={bitters.data}
             />
         )}
       </PageContainer>
@@ -276,84 +277,3 @@ const BittersListPage: React.FC = () => {
 
 export default BittersListPage;
 
-const PageContainer = styled(Box)`
-    && {
-        min-height: 100vh;
-        background-color: #f5f5f5;
-        padding-top: 96px;
-    }
-`;
-
-const ControlsContainer = styled(Box)`
-  && {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 32px;
-    gap: 16px;
-    
-    @media (max-width: 600px) {
-      flex-wrap: wrap;
-    }
-  }
-`;
-
-const SortContainer = styled(Box)`
-  && {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-  }
-`;
-
-const SortSelect = styled(Select)`
-  && {
-    background-color: #fff;
-    border-radius: 16px;
-    min-width: 150px;
-    
-    .MuiOutlinedInput-notchedOutline {
-      border-color: #eee;
-    }
-    
-    &:hover .MuiOutlinedInput-notchedOutline {
-      border-color: #ddd;
-    }
-  }
-`;
-
-const SearchField = styled(TextField)`
-  && {
-    width: 300px;
-    background-color: #fff;
-    
-    .MuiOutlinedInput-root {
-      border-radius: 16px;
-      
-      &:hover fieldset {
-        border-color: #ddd;
-      }
-      
-      &.Mui-focused fieldset {
-        border-color: #888;
-      }
-    }
-    
-    & fieldset {
-      border-color: #eee;
-    }
-    
-    @media (max-width: 600px) {
-      width: 100%;
-    }
-  }
-`;
-
-const BittersList = styled(Box)`
-  && {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-  }
-`;

@@ -3,6 +3,9 @@ export interface UserInfo {
   /** 유저 ID */
   userId: number;
 
+  /** 유저 UUID (외부 노출용) */
+  userUuid: string;
+
   /** 이메일 */
   email: string;
 

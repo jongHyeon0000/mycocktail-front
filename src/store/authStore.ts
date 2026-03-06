@@ -28,11 +28,8 @@ interface AuthStore {
 export const useAuthStore = create<AuthStore>((set) => ({
   user: null,
   isInitialized: false,
-
   setUser: (user) => set({ user }),
-
   setInitialized: () => set({ isInitialized: true }),
-
   logout: () => set({ user: null }),
 }));
 

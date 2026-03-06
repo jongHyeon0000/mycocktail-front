@@ -6,16 +6,26 @@ import {
   MenuItem,
   FormControl,
   CircularProgress,
-  Typography, Select, TextField
+  Typography
 } from "@mui/material";
 import CocktailDetailModal from "../component/CocktailDetailModal";
+import CocktailInsertModal from "../component/CocktailInsertModal";
 import useReadCocktail from "../service/useReadCocktail.tsx";
+import useAuth from "../../auth/service/useAuth.ts";
 import LoadingOverlay from "../../common/component/loading/LoadingOverlay.tsx";
 import { showErrorAlert } from "../../common/utils/AlertUtils";
 import useReadCocktailList from "../service/useReadCocktailList.tsx";
 import CocktailListComponent from "../component/CocktailListComponent.tsx";
 import SearchLoadingOverlay from "../../common/component/loading/SearchLoadingOverlay.tsx";
-import styled from "styled-components";
+import {
+  ControlsContainer,
+  ItemList,
+  PageContainer,
+  RegisterButton,
+  RightControls,
+  SearchField,
+  SortSelect,
+} from "../../common/style/CommonListPage.style.tsx";
 
 const CocktailListPage: React.FC = () => {
   /*
@@ -31,12 +41,14 @@ const CocktailListPage: React.FC = () => {
   const [ currentPage, setCurrentPage ] = useState<number>(1);
   const [ sortOrder, setSortOrder ] = useState<SortOrderType>("recent");
   const [ modalOpen, setModalOpen ] = useState<boolean>(false);
+  const [ insertModalOpen, setInsertModalOpen ] = useState<boolean>(false);
   const [ searchKeyword, setSearchKeyword ] = useState<string>("");
   const [ searchDebounceTimer, setSearchDebounceTimer ] = useState<number | null>(null);
   const [ isSearching, setIsSearching ] = useState<boolean>(false);
 
-  const { cocktailList, cocktailListLoading, cocktailListLoadingMore, cocktailListError, cocktailListHasMore, fetchReadCocktailList } = useReadCocktailList();
-  const { cocktail, cocktailLoading, cocktailError, fetchReadCocktail } = useReadCocktail();
+  const { isAuthenticated } = useAuth();
+  const { cocktailList, cocktailListLoading, cocktailListLoadingMore, cocktailListHasMore, fetchReadCocktailList } = useReadCocktailList();
+  const { cocktail, cocktailLoading, fetchReadCocktail } = useReadCocktail();
 
   /*
   * 초기 데이터 로드 및 정렬 변경 시 로드
@@ -141,7 +153,7 @@ const CocktailListPage: React.FC = () => {
   * Modal State 제어
   * */
   useEffect(() => {
-    if (cocktail) {
+    if (cocktail?.data) {
       setModalOpen(true);
     }
   }, [cocktail]);
@@ -150,20 +162,16 @@ const CocktailListPage: React.FC = () => {
   * Axios Error 제어
   * */
   useEffect(() => {
-    if (cocktailListError) {
-      showErrorAlert(
-          '세부 칵테일 리스트 로드 실패',
-          cocktailListError
-      ).then();
+    if (cocktailList && cocktailList.code !== 'OK') {
+      showErrorAlert('세부 칵테일 리스트 로드 실패', cocktailList.message).then();
     }
+  }, [cocktailList]);
 
-    if (cocktailError) {
-      showErrorAlert(
-          '세부 칵테일 로드 실패',
-          cocktailError
-      ).then();
+  useEffect(() => {
+    if (cocktail && cocktail.code !== 'OK') {
+      showErrorAlert('세부 칵테일 로드 실패', cocktail.message).then();
     }
-  }, [cocktailListError, cocktailError]);
+  }, [cocktail]);
 
   return (
     <PageContainer>
@@ -192,53 +200,64 @@ const CocktailListPage: React.FC = () => {
             </SortSelect>
           </FormControl>
 
-          {/* 검색창 */}
-          <SearchField
-            placeholder="칵테일 검색..."
-            variant="outlined"
-            size="small"
-            value={searchKeyword}
-            onChange={handleSearchChange}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <span style={{ fontSize: "18px" }}>🔍</span>
-                </InputAdornment>
-              ),
-              endAdornment: searchKeyword && (
-                <InputAdornment position="end">
-                  <span 
-                    style={{ 
-                      fontSize: "16px", 
-                      cursor: "pointer",
-                      padding: "4px"
-                    }}
-                    onClick={handleSearchClear}
-                  >
-                    ✕
-                  </span>
-                </InputAdornment>
-              ),
-            }}
-          />
+          {/* 검색창 + 등록 버튼 그룹 */}
+          <RightControls>
+            <SearchField
+              placeholder="칵테일 검색..."
+              variant="outlined"
+              size="small"
+              value={searchKeyword}
+              onChange={handleSearchChange}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <span style={{ fontSize: "18px" }}>🔍</span>
+                  </InputAdornment>
+                ),
+                endAdornment: searchKeyword && (
+                  <InputAdornment position="end">
+                    <span
+                      style={{
+                        fontSize: "16px",
+                        cursor: "pointer",
+                        padding: "4px"
+                      }}
+                      onClick={handleSearchClear}
+                    >
+                      ✕
+                    </span>
+                  </InputAdornment>
+                ),
+              }}
+            />
+            {isAuthenticated && (
+              <RegisterButton
+                variant="contained"
+                disableElevation
+                onClick={() => setInsertModalOpen(true)}
+              >
+                칵테일 등록
+              </RegisterButton>
+            )}
+          </RightControls>
         </ControlsContainer>
 
         {/* 칵테일 리스트 */}
-        <CocktailList>
+        <ItemList>
           {isSearching ? (
             <SearchLoadingOverlay
               open={isSearching}
               message="검색 중..."
             />
           ) : (
-            cocktailList && cocktailList.map((cocktail, index) => (
+            cocktailList?.data && cocktailList.data.map((cocktail, index) => (
               <CocktailListComponent cocktail={cocktail} index={index} onClickEvent={() => fetchReadCocktail(cocktail.cocktailId)} />
             ))
           )}
-        </CocktailList>
+        </ItemList>
 
         {/* 추가 로딩 중 (무한 스크롤) */}
-        {cocktailListLoading && (
+        {cocktailListLoadingMore && (
             <Box display="flex" justifyContent="center" alignItems="center" py={4}>
               <CircularProgress size={48} />
             </Box>
@@ -255,87 +274,20 @@ const CocktailListPage: React.FC = () => {
       </Container>
 
       {/* 칵테일 상세 모달 */}
-      {cocktail && <CocktailDetailModal
+      {cocktail?.data && <CocktailDetailModal
           open={modalOpen}
           onClose={() => setModalOpen(false)}
-          data={cocktail}
+          data={cocktail.data}
       />}
+
+      {/* 칵테일 등록 모달 */}
+      <CocktailInsertModal
+          open={insertModalOpen}
+          onClose={() => setInsertModalOpen(false)}
+      />
     </PageContainer>
   );
 };
 
 export default CocktailListPage;
 
-const PageContainer = styled(Box)`
-  && {
-    min-height: 100vh;
-    background-color: #f5f5f5;
-    padding-top: 96px;
-  }
-`;
-
-const ControlsContainer = styled(Box)`
-  && {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 32px;
-    gap: 16px;
-    
-    @media (max-width: 600px) {
-      flex-wrap: wrap;
-    }
-  }
-`;
-
-const SortSelect = styled(Select)`
-  && {
-    background-color: #fff;
-    border-radius: 16px;
-    min-width: 150px;
-    
-    .MuiOutlinedInput-notchedOutline {
-      border-color: #eee;
-    }
-    
-    &:hover .MuiOutlinedInput-notchedOutline {
-      border-color: #ddd;
-    }
-  }
-`;
-
-const SearchField = styled(TextField)`
-  && {
-    width: 300px;
-    background-color: #fff;
-    
-    .MuiOutlinedInput-root {
-      border-radius: 16px;
-      
-      &:hover fieldset {
-        border-color: #ddd;
-      }
-      
-      &.Mui-focused fieldset {
-        border-color: #888;
-      }
-    }
-    
-    & fieldset {
-      border-color: #eee;
-    }
-    
-    @media (max-width: 600px) {
-      width: 100%;
-    }
-  }
-`;
-
-const CocktailList = styled(Box)`
-  && {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-  }
-`;

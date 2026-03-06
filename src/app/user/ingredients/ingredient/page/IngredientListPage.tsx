@@ -16,12 +16,17 @@ import {
   FormControl,
   InputAdornment,
   MenuItem,
-  Select,
-  TextField,
   Typography
 } from "@mui/material";
 import SearchLoadingOverlay from "../../../common/component/loading/SearchLoadingOverlay.tsx";
-import styled from "styled-components";
+import {
+  ControlsContainer,
+  ItemList,
+  PageContainer,
+  SearchField,
+  SortContainer,
+  SortSelect,
+} from "../../../common/style/CommonListPage.style.tsx";
 import IngredientListComponent from "../component/IngredientListComponent.tsx";
 import JuiceDetailModal from "../../juice/component/JuiceDetailModal.tsx";
 import BittersDetailModal from "../../bitters/component/BittersDetailModal.tsx";
@@ -52,16 +57,16 @@ const IngredientListPage: React.FC = () => {
   const [ isSearching, setIsSearching ] = useState<boolean>(false);
 
   // 통합 재료 리스트 hook
-  const { ingredientList, ingredientListError, ingredientListLoading, ingredientListLoadingMore, ingredientListHasMore, fetchReadIngredientList } = useReadIngredientList();
+  const { ingredientList, ingredientListLoading, ingredientListLoadingMore, ingredientListHasMore, fetchReadIngredientList } = useReadIngredientList();
 
   // 각 타입별 detail hook
-  const { juice, juiceError, juiceLoading, fetchReadJuice } = useReadJuice();
-  const { bitters, bittersError, bittersLoading, fetchReadBitters } = useReadBitters();
-  const { carbonated, carbonatedError, carbonatedLoading, fetchReadCarbonated } = useReadCarbonated();
-  const { dairyCream, dairyCreamError, dairyCreamLoading, fetchReadDairyCream } = useReadDairyCream();
-  const { garnishes, garnishesError, garnishesLoading, fetchReadGarnishes } = useReadGarnishes();
-  const { syrup, syrupError, syrupLoading, fetchReadSyrup } = useReadSyrup();
-  const { otherIngredients, otherIngredientsError, otherIngredientsLoading, fetchReadOtherIngredients } = useReadOtherIngredients();
+  const { juice, juiceLoading, fetchReadJuice } = useReadJuice();
+  const { bitters, bittersLoading, fetchReadBitters } = useReadBitters();
+  const { carbonated, carbonatedLoading, fetchReadCarbonated } = useReadCarbonated();
+  const { dairyCream, dairyCreamLoading, fetchReadDairyCream } = useReadDairyCream();
+  const { garnishes, garnishesLoading, fetchReadGarnishes } = useReadGarnishes();
+  const { syrup, syrupLoading, fetchReadSyrup } = useReadSyrup();
+  const { otherIngredients, otherIngredientsLoading, fetchReadOtherIngredients } = useReadOtherIngredients();
 
   /*
   * 초기 데이터 로드 및 정렬 변경 시 로드
@@ -193,7 +198,7 @@ const IngredientListPage: React.FC = () => {
   * Modal State 제어
   * */
   useEffect(() => {
-    if (juice || bitters || carbonated || dairyCream || garnishes || syrup || otherIngredients) {
+    if (juice?.data || bitters?.data || carbonated?.data || dairyCream?.data || garnishes?.data || syrup?.data || otherIngredients?.data) {
       setModalOpen(true);
     }
   }, [juice, bitters, carbonated, dairyCream, garnishes, syrup, otherIngredients]);
@@ -202,31 +207,36 @@ const IngredientListPage: React.FC = () => {
   * Axios Error 제어
   * */
   useEffect(() => {
-    if (ingredientListError) {
-      showErrorAlert('재료 리스트 로드 실패', ingredientListError).then();
-    }
-    if (juiceError) {
-      showErrorAlert('주스 로드 실패', juiceError).then();
-    }
-    if (bittersError) {
-      showErrorAlert('비터스 로드 실패', bittersError).then();
-    }
-    if (carbonatedError) {
-      showErrorAlert('탄산류 로드 실패', carbonatedError).then();
-    }
-    if (dairyCreamError) {
-      showErrorAlert('유제품 로드 실패', dairyCreamError).then();
-    }
-    if (garnishesError) {
-      showErrorAlert('가니쉬 로드 실패', garnishesError).then();
-    }
-    if (syrupError) {
-      showErrorAlert('시럽 로드 실패', syrupError).then();
-    }
-    if (otherIngredientsError) {
-      showErrorAlert('기타 첨가물 로드 실패', otherIngredientsError).then();
-    }
-  }, [ingredientListError, juiceError, bittersError, carbonatedError, dairyCreamError, garnishesError, syrupError, otherIngredientsError]);
+    if (ingredientList && ingredientList.code !== 'OK') showErrorAlert('재료 리스트 로드 실패', ingredientList.message).then();
+  }, [ingredientList]);
+
+  useEffect(() => {
+    if (juice && juice.code !== 'OK') showErrorAlert('주스 로드 실패', juice.message).then();
+  }, [juice]);
+
+  useEffect(() => {
+    if (bitters && bitters.code !== 'OK') showErrorAlert('비터스 로드 실패', bitters.message).then();
+  }, [bitters]);
+
+  useEffect(() => {
+    if (carbonated && carbonated.code !== 'OK') showErrorAlert('탄산류 로드 실패', carbonated.message).then();
+  }, [carbonated]);
+
+  useEffect(() => {
+    if (dairyCream && dairyCream.code !== 'OK') showErrorAlert('유제품 로드 실패', dairyCream.message).then();
+  }, [dairyCream]);
+
+  useEffect(() => {
+    if (garnishes && garnishes.code !== 'OK') showErrorAlert('가니쉬 로드 실패', garnishes.message).then();
+  }, [garnishes]);
+
+  useEffect(() => {
+    if (syrup && syrup.code !== 'OK') showErrorAlert('시럽 로드 실패', syrup.message).then();
+  }, [syrup]);
+
+  useEffect(() => {
+    if (otherIngredients && otherIngredients.code !== 'OK') showErrorAlert('기타 첨가물 로드 실패', otherIngredients.message).then();
+  }, [otherIngredients]);
 
   return (
       <PageContainer>
@@ -288,14 +298,14 @@ const IngredientListPage: React.FC = () => {
           </ControlsContainer>
 
           {/* 재료 리스트 */}
-          <IngredientList>
+          <ItemList>
             {isSearching ? (
                 <SearchLoadingOverlay
                     open={isSearching}
                     message="검색 중..."
                 />
             ) : (
-                ingredientList && ingredientList.map((ingredient, index) => (
+                ingredientList?.data && ingredientList.data.map((ingredient, index) => (
                     <IngredientListComponent
                         key={`${ingredient.type}-${index}`}
                         data={ingredient}
@@ -304,7 +314,7 @@ const IngredientListPage: React.FC = () => {
                     />
                 ))
             )}
-          </IngredientList>
+          </ItemList>
 
           {/* 추가 로딩 중 (무한 스크롤) */}
           {ingredientListLoadingMore && (
@@ -324,53 +334,53 @@ const IngredientListPage: React.FC = () => {
         </Container>
 
         {/* type별 DetailModal 렌더링 */}
-        {juice && selectedType === 'juice' && (
+        {juice?.data && selectedType === 'juice' && (
             <JuiceDetailModal
                 open={modalOpen}
                 onClose={() => setModalOpen(false)}
-                data={juice}
+                data={juice.data}
             />
         )}
-        {bitters && selectedType === 'bitters' && (
+        {bitters?.data && selectedType === 'bitters' && (
             <BittersDetailModal
                 open={modalOpen}
                 onClose={() => setModalOpen(false)}
-                data={bitters}
+                data={bitters.data}
             />
         )}
-        {carbonated && selectedType === 'carbonated' && (
+        {carbonated?.data && selectedType === 'carbonated' && (
             <CarbonatedDetailModal
                 open={modalOpen}
                 onClose={() => setModalOpen(false)}
-                data={carbonated}
+                data={carbonated.data}
             />
         )}
-        {dairyCream && selectedType === 'dairyCream' && (
+        {dairyCream?.data && selectedType === 'dairyCream' && (
             <DairyCreamDetailModal
                 open={modalOpen}
                 onClose={() => setModalOpen(false)}
-                data={dairyCream}
+                data={dairyCream.data}
             />
         )}
-        {garnishes && selectedType === 'garnishes' && (
+        {garnishes?.data && selectedType === 'garnishes' && (
             <GarnishesDetailModal
                 open={modalOpen}
                 onClose={() => setModalOpen(false)}
-                data={garnishes}
+                data={garnishes.data}
             />
         )}
-        {syrup && selectedType === 'syrup' && (
+        {syrup?.data && selectedType === 'syrup' && (
             <SyrupDetailModal
                 open={modalOpen}
                 onClose={() => setModalOpen(false)}
-                data={syrup}
+                data={syrup.data}
             />
         )}
-        {otherIngredients && selectedType === 'other' && (
+        {otherIngredients?.data && selectedType === 'other' && (
             <OtherIngredientsDetailModal
                 open={modalOpen}
                 onClose={() => setModalOpen(false)}
-                data={otherIngredients}
+                data={otherIngredients.data}
             />
         )}
       </PageContainer>
@@ -379,84 +389,3 @@ const IngredientListPage: React.FC = () => {
 
 export default IngredientListPage;
 
-const PageContainer = styled(Box)`
-    && {
-        min-height: 100vh;
-        background-color: #f5f5f5;
-        padding-top: 96px;
-    }
-`;
-
-const ControlsContainer = styled(Box)`
-  && {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 32px;
-    gap: 16px;
-
-    @media (max-width: 600px) {
-      flex-wrap: wrap;
-    }
-  }
-`;
-
-const SortContainer = styled(Box)`
-  && {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-  }
-`;
-
-const SortSelect = styled(Select)`
-  && {
-    background-color: #fff;
-    border-radius: 16px;
-    min-width: 150px;
-
-    .MuiOutlinedInput-notchedOutline {
-      border-color: #eee;
-    }
-
-    &:hover .MuiOutlinedInput-notchedOutline {
-      border-color: #ddd;
-    }
-  }
-`;
-
-const SearchField = styled(TextField)`
-  && {
-    width: 300px;
-    background-color: #fff;
-
-    .MuiOutlinedInput-root {
-      border-radius: 16px;
-
-      &:hover fieldset {
-        border-color: #ddd;
-      }
-
-      &.Mui-focused fieldset {
-        border-color: #888;
-      }
-    }
-
-    & fieldset {
-      border-color: #eee;
-    }
-
-    @media (max-width: 600px) {
-      width: 100%;
-    }
-  }
-`;
-
-const IngredientList = styled(Box)`
-  && {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-  }
-`;

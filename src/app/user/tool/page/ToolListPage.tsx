@@ -5,7 +5,7 @@ import {
   InputAdornment,
   MenuItem,
   FormControl,
-  Typography, Select, TextField, CircularProgress
+  Typography, CircularProgress
 } from "@mui/material";
 import ToolListComponent from "../component/ToolListComponent.tsx";
 import ToolDetailModal from "../component/ToolDetailModal.tsx";
@@ -15,7 +15,14 @@ import {showErrorAlert} from "../../common/utils/AlertUtils.ts";
 import LoadingOverlay from "../../common/component/loading/LoadingOverlay.tsx";
 import type {TOOL_CATEGORY_MAP_KEY} from "../common/ToolUtils.ts";
 import SearchLoadingOverlay from "../../common/component/loading/SearchLoadingOverlay.tsx";
-import styled from "styled-components";
+import {
+  ControlsContainer,
+  ItemList,
+  PageContainer,
+  SearchField,
+  SortContainer,
+  SortSelect,
+} from "../../common/style/CommonListPage.style.tsx";
 
 const ToolListPage: React.FC = () => {
   /*
@@ -36,8 +43,8 @@ const ToolListPage: React.FC = () => {
   const [ searchDebounceTimer, setSearchDebounceTimer ] = useState<number | null>(null);
   const [ isSearching, setIsSearching ] = useState<boolean>(false);
 
-  const { toolList, toolListLoading, toolListError, toolListHasMore, toolListLoadingMore, fetchReadToolList } = useReadToolList();
-  const { tool, toolLoading, toolError, fetchReadTool } = useReadTool();
+  const { toolList, toolListLoading, toolListHasMore, toolListLoadingMore, fetchReadToolList } = useReadToolList();
+  const { tool, toolLoading, fetchReadTool } = useReadTool();
 
   /*
   * 초기 데이터 로드 및 정렬 변경 시 로드
@@ -146,7 +153,7 @@ const ToolListPage: React.FC = () => {
   * Modal State 제어
   * */
   useEffect(() => {
-    if (tool) {
+    if (tool?.data) {
       setModalOpen(true);
     }
   }, [tool]);
@@ -155,20 +162,16 @@ const ToolListPage: React.FC = () => {
   * Axios Error 제어
   * */
   useEffect(() => {
-    if (toolListError) {
-      showErrorAlert(
-          '세부 도구 리스트 로드 실패',
-          toolListError
-      ).then();
+    if (toolList && toolList.code !== 'OK') {
+      showErrorAlert('세부 도구 리스트 로드 실패', toolList.message).then();
     }
+  }, [toolList]);
 
-    if (toolError) {
-      showErrorAlert(
-          '세부 도구 로드 실패',
-          toolError
-      ).then();
+  useEffect(() => {
+    if (tool && tool.code !== 'OK') {
+      showErrorAlert('세부 도구 로드 실패', tool.message).then();
     }
-  }, [toolListError, toolError]);
+  }, [tool]);
 
   return (
     <PageContainer>
@@ -246,14 +249,14 @@ const ToolListPage: React.FC = () => {
         </ControlsContainer>
 
         {/* 도구 리스트 */}
-        <ToolList>
+        <ItemList>
           {isSearching ? (
             <SearchLoadingOverlay
               open={isSearching}
               message="검색 중..."
             />
           ) : (
-            toolList && toolList.map((tool, index) => (
+            toolList?.data && toolList.data.map((tool, index) => (
               <ToolListComponent
                 key={`${tool.toolId}-${index}`}
                 tool={tool}
@@ -262,10 +265,10 @@ const ToolListPage: React.FC = () => {
               />
             ))
           )}
-        </ToolList>
+        </ItemList>
 
         {/* 추가 로딩 중 (무한 스크롤) */}
-        {toolListLoading && (
+        {toolListLoadingMore && (
             <Box display="flex" justifyContent="center" alignItems="center" py={4}>
               <CircularProgress size={48} />
             </Box>
@@ -282,11 +285,11 @@ const ToolListPage: React.FC = () => {
       </Container>
 
       {/* 도구 상세 모달 */}
-      {tool && (
+      {tool?.data && (
         <ToolDetailModal
           open={modalOpen}
           onClose={() => setModalOpen(false)}
-          data={tool}
+          data={tool.data}
         />
       )}
     </PageContainer>
@@ -295,84 +298,3 @@ const ToolListPage: React.FC = () => {
 
 export default ToolListPage;
 
-const PageContainer = styled(Box)`
-  && {
-    min-height: 100vh;
-    background-color: #f5f5f5;
-    padding-top: 96px;
-  }
-`;
-
-const ControlsContainer = styled(Box)`
-  && {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 32px;
-    gap: 16px;
-    
-    @media (max-width: 600px) {
-      flex-wrap: wrap;
-    }
-  }
-`;
-
-const SortContainer = styled(Box)`
-  && {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-  }
-`;
-
-const SortSelect = styled(Select)`
-  && {
-    background-color: #fff;
-    border-radius: 16px;
-    min-width: 150px;
-    
-    .MuiOutlinedInput-notchedOutline {
-      border-color: #eee;
-    }
-    
-    &:hover .MuiOutlinedInput-notchedOutline {
-      border-color: #ddd;
-    }
-  }
-`;
-
-const SearchField = styled(TextField)`
-  && {
-    width: 300px;
-    background-color: #fff;
-    
-    .MuiOutlinedInput-root {
-      border-radius: 16px;
-      
-      &:hover fieldset {
-        border-color: #ddd;
-      }
-      
-      &.Mui-focused fieldset {
-        border-color: #888;
-      }
-    }
-    
-    & fieldset {
-      border-color: #eee;
-    }
-    
-    @media (max-width: 600px) {
-      width: 100%;
-    }
-  }
-`;
-
-const ToolList = styled(Box)`
-  && {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-  }
-`;

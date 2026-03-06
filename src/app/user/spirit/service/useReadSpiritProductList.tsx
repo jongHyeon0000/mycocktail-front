@@ -1,6 +1,9 @@
 import {useState} from "react";
 import {api} from "../../../../config/axios/AxiosConfig.ts";
 import type {SpiritProductDetail} from "../interface/SpiritProductDetail.ts";
+import type {ApiResponse} from "../../../../config/axios/interface/ApiResponse.ts";
+import type {SpiritCategoryKey} from "../../cocktail/constant/spiritCategories.ts";
+import {toApiResponse} from "../../../../config/axios/utils/toApiResponse.ts";
 
 interface FetchProps {
   /*
@@ -18,51 +21,37 @@ interface FetchProps {
   /*
   * 검색
   * */
-  search?: string;      // 검색어
-  userId?: number;      // 유저id (해당하는 유저의 글만 검색)
+  search?: string;          // 검색어
+  spiritCategory?: SpiritCategoryKey; // 기주 카테고리 필터
+  userId?: number;           // 유저id (해당하는 유저의 글만 검색)
 }
 
 const useReadSpriteProductList = () => {
-  const [data, setData] = useState<SpiritProductDetail[] | undefined>(undefined);
+  const [response, setResponse] = useState<ApiResponse<SpiritProductDetail[] | null> | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingMore, setLoadingMore] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState<boolean>(true);
 
   const fetchReadSpiritProductList = async (params?: FetchProps, appendData = false) => {
-    // 첫 페이지 요청이거나 appendData가 false인 경우 데이터 리셋
     if (appendData) {
       setLoadingMore(true);
     } else {
-      setData(undefined);
+      setResponse(undefined);
       setHasMore(true);
       setLoading(true);
     }
 
-    setError(null);
-
-    try{
-      const response = await api.get<{data: SpiritProductDetail[]}>(`/api/spirit-product`, { params });
-
-      if (response.status === 200) {
-        const newData = response.data.data;
-        const limit = params?.limit || 6;
-        
-        // 받은 데이터가 limit보다 적으면 더 이상 없음
-        setHasMore(newData.length >= limit);
-        
-        if (appendData && params?.page !== 1 && data) {
-          setData([...data, ...newData]);
-        } else {
-          setData(newData);
-        }
-      } else {
-        console.error('Unexpected response status:', response.status);
-      }
-
+    try {
+      const res = await api.get<ApiResponse<SpiritProductDetail[]>>(`/api/spirit-product`, { params });
+      const newApiResponse = res.data;
+      const limit = params?.limit || 6;
+      setHasMore((newApiResponse.data?.length ?? 0) >= limit);
+      setResponse(prev => ({
+        ...newApiResponse,
+        data: appendData && prev?.data && newApiResponse.data ? [...prev.data, ...newApiResponse.data] : newApiResponse.data,
+      }));
     } catch (err) {
-      setError('Error fetching data');
-      console.error(err);
+      setResponse(toApiResponse(err));
     } finally {
       setLoading(false);
       setLoadingMore(false);
@@ -70,10 +59,9 @@ const useReadSpriteProductList = () => {
   }
 
   return {
-    spiritProductList: data,
+    spiritProductList: response,
     spiritProductListLoading: loading,
     spiritProductListLoadingMore: loadingMore,
-    spiritProductListError: error,
     spiritProductListHasMore: hasMore,
     fetchReadSpiritProductList
   };
