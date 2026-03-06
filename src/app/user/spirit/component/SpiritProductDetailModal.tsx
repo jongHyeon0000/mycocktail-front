@@ -165,7 +165,7 @@ const SpiritProductDetailModal: React.FC<SpiritDetailModalProps> = ({
                     {/* 칵테일 */}
                     {data.availableCocktails.length > 0 && (
                       <CategorySlide
-                        title="이 술로 만들 수 있는 칵테일"
+                        title="만들 수 있는 칵테일"
                         items={data.availableCocktails}
                         slideRef={cocktailsRef}
                       />

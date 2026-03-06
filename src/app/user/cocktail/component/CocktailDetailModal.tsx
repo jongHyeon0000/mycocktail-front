@@ -1,17 +1,16 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FavoriteOutlined,
   ShareOutlined,
   LocalBarOutlined,
-  ExpandMoreOutlined,
 } from "@mui/icons-material";
 import {COMMON_MODAL_STYLE} from "../../common/style/CommonModal.style.ts";
 import type {CocktailDetail} from "../interface/CocktailDetail.ts";
 import styled from "styled-components";
 import {Box, Chip, IconButton, Modal, Paper, Typography} from "@mui/material";
-import {CategorySlide} from "../../common/component/CategorySlide.tsx";
-import {SPIRIT_CATEGORY_MAP} from "../constant/spiritCategories.ts";
+import CocktailIngredientsSection from "./CocktailIngredientsSection.tsx";
+import CocktailTechniquesSection from "./CocktailTechniquesSection.tsx";
 
 interface CocktailDetailModalProps {
   open: boolean;
@@ -24,24 +23,20 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
   onClose,
   data
 }) => {
-  const [spiritExpanded, setSpiritExpanded] = useState(false);
+  const [activeSection, setActiveSection] = useState<'ingredients' | 'techniques'>('ingredients');
+  const [slideDirection, setSlideDirection] = useState(1);
 
   useEffect(() => {
-    if (open) setSpiritExpanded(false);
+    if (open) {
+      setActiveSection('ingredients');
+    }
   }, [open]);
 
-  // 각 슬라이드 섹션마다 별도의 ref 생성
-  const spiritsRef = useRef<HTMLDivElement>(null);
-  const juicesRef = useRef<HTMLDivElement>(null);
-  const bittersRef = useRef<HTMLDivElement>(null);
-  const syrupsRef = useRef<HTMLDivElement>(null);
-  const carbonatedRef = useRef<HTMLDivElement>(null);
-  const dairyRef = useRef<HTMLDivElement>(null);
-  const garnishesRef = useRef<HTMLDivElement>(null);
-  const othersRef = useRef<HTMLDivElement>(null);
-  const toolsRef = useRef<HTMLDivElement>(null);
-  const glasswareRef = useRef<HTMLDivElement>(null);
-  const methodsRef = useRef<HTMLDivElement>(null);
+  const handleSectionSwitch = (target: 'ingredients' | 'techniques') => {
+    if (target === activeSection) return;
+    setSlideDirection(target === 'techniques' ? 1 : -1);
+    setActiveSection(target);
+  };
 
   const handleLikeClick = () => {
     console.log('좋아요 클릭');
@@ -152,158 +147,66 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                   <TextContent dangerouslySetInnerHTML={{ __html: data.historyNote || '' }} />
                 </motion.div>
 
-                {/* 재료 정보 섹션 - 드래그 스크롤 슬라이드 */}
+                {/* 재료 / 제조 기법 토글 섹션 */}
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.4 }}
                 >
-                  <SectionTitle>사용 재료</SectionTitle>
-                  <IngredientsSection>
-                    {/* 기주 */}
-                    {data.spiritCategories.length > 0 && (
-                      <SpiritCategorySection>
-                        <SpiritCategoryCard
-                          onClick={() => setSpiritExpanded(prev => !prev)}
-                          expanded={spiritExpanded}
+                  <SectionHeaderRow>
+                    <SectionTitle style={{ marginBottom: 0 }}>
+                      {activeSection === 'ingredients' ? '사용 재료' : '제조 기법'}
+                    </SectionTitle>
+                    <SectionSegmentedControl>
+                      <SegmentOption
+                        active={activeSection === 'ingredients'}
+                        onClick={() => handleSectionSwitch('ingredients')}
+                      >
+                        재료
+                      </SegmentOption>
+                      <SegmentOption
+                        active={activeSection === 'techniques'}
+                        onClick={() => handleSectionSwitch('techniques')}
+                      >
+                        기법
+                      </SegmentOption>
+                    </SectionSegmentedControl>
+                  </SectionHeaderRow>
+
+                  <div style={{ overflow: 'hidden' }}>
+                    <AnimatePresence mode="wait" custom={slideDirection}>
+                      {activeSection === 'ingredients' ? (
+                        <motion.div
+                          key="ingredients"
+                          custom={slideDirection}
+                          initial={{ opacity: 0, x: slideDirection * 60 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: -slideDirection * 60 }}
+                          transition={{ duration: 0.32, ease: [0.4, 0, 0.2, 1] }}
                         >
-                          <SpiritCategoryChips>
-                            {data.spiritCategories.map(cat => (
-                              <SpiritCatTag key={cat} $expanded={spiritExpanded}>
-                                {SPIRIT_CATEGORY_MAP[cat].nameKr}
-                              </SpiritCatTag>
-                            ))}
-                          </SpiritCategoryChips>
-                          <SpiritExpandIcon expanded={spiritExpanded}>
-                            <ExpandMoreOutlined />
-                          </SpiritExpandIcon>
-                        </SpiritCategoryCard>
-
-                        <AnimatePresence>
-                          {spiritExpanded && data.ingredients.spirits.length > 0 && (
-                            <motion.div
-                              initial={{ opacity: 0, height: 0 }}
-                              animate={{ opacity: 1, height: 'auto' }}
-                              exit={{ opacity: 0, height: 0 }}
-                              transition={{ duration: 0.25 }}
-                              style={{ overflow: 'hidden' }}
-                            >
-                              <SpiritDetailPanel>
-                                <CategorySlide
-                                  title="세부 제품"
-                                  items={data.ingredients.spirits}
-                                  slideRef={spiritsRef}
-                                />
-                              </SpiritDetailPanel>
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </SpiritCategorySection>
-                    )}
-
-                    {/* 주스 */}
-                    {data.ingredients.juices.length > 0 && (
-                      <CategorySlide
-                        title="주스"
-                        items={data.ingredients.juices}
-                        slideRef={juicesRef}
-                      />
-                    )}
-
-                    {/* 비터스 */}
-                    {data.ingredients.bitters.length > 0 && (
-                      <CategorySlide
-                        title="비터스"
-                        items={data.ingredients.bitters}
-                        slideRef={bittersRef}
-                      />
-                    )}
-
-                    {/* 시럽 */}
-                    {data.ingredients.syrups.length > 0 && (
-                      <CategorySlide
-                        title="시럽"
-                        items={data.ingredients.syrups}
-                        slideRef={syrupsRef}
-                      />
-                    )}
-
-                    {/* 탄산/소다 */}
-                    {data.ingredients.carbonated.length > 0 && (
-                      <CategorySlide
-                        title="탄산/소다"
-                        items={data.ingredients.carbonated}
-                        slideRef={carbonatedRef}
-                      />
-                    )}
-
-                    {/* 유제품/크림 */}
-                    {data.ingredients.dairy.length > 0 && (
-                      <CategorySlide
-                        title="유제품/크림"
-                        items={data.ingredients.dairy}
-                        slideRef={dairyRef}
-                      />
-                    )}
-
-                    {/* 가니쉬 */}
-                    {data.ingredients.garnishes.length > 0 && (
-                      <CategorySlide
-                        title="가니쉬"
-                        items={data.ingredients.garnishes}
-                        slideRef={garnishesRef}
-                      />
-                    )}
-
-                    {/* 기타 */}
-                    {data.ingredients.others.length > 0 && (
-                      <CategorySlide
-                        title="기타"
-                        items={data.ingredients.others}
-                        slideRef={othersRef}
-                      />
-                    )}
-                  </IngredientsSection>
-                </motion.div>
-
-                {/* 제조 기법 섹션 - 드래그 스크롤 슬라이드 */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 }}
-                >
-                  <SectionTitle>제조 기법</SectionTitle>
-                  <TechniquesSection>
-                    {/* 도구/기물 */}
-                    {data.tools.length > 0 && (
-                      <CategorySlide
-                        title="도구/기물"
-                        items={data.tools}
-                        slideRef={toolsRef}
-                        className="technique"
-                      />
-                    )}
-
-                    {/* 사용 잔 */}
-                    {data.glassware.length > 0 && (
-                      <CategorySlide
-                        title="사용 잔"
-                        items={data.glassware}
-                        slideRef={glasswareRef}
-                        className="technique"
-                      />
-                    )}
-
-                    {/* 제조 기법 */}
-                    {data.techniques.length > 0 && (
-                      <CategorySlide
-                        title="제조 기법"
-                        items={data.techniques}
-                        slideRef={methodsRef}
-                        className="technique"
-                      />
-                    )}
-                  </TechniquesSection>
+                          <CocktailIngredientsSection
+                            spiritCategories={data.spiritCategories}
+                            ingredients={data.ingredients}
+                          />
+                        </motion.div>
+                      ) : (
+                        <motion.div
+                          key="techniques"
+                          custom={slideDirection}
+                          initial={{ opacity: 0, x: slideDirection * 60 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: -slideDirection * 60 }}
+                          transition={{ duration: 0.32, ease: [0.4, 0, 0.2, 1] }}
+                        >
+                          <CocktailTechniquesSection
+                            tools={data.tools}
+                            glassware={data.glassware}
+                            techniques={data.techniques}
+                          />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
                 </motion.div>
 
                 {/* 제조법 */}
@@ -761,10 +664,11 @@ const ProfileDescription = styled(Typography)`
 
 const ContentSection = styled(Box)`
   && {
-    padding: 0 32px 32px;
-    
+    padding: 24px 32px 32px;
+    background: #f2f4f7;
+
     @media (max-width: 600px) {
-      padding: 0 24px 24px;
+      padding: 20px 24px 24px;
     }
   }
 `;
@@ -791,12 +695,11 @@ const SectionTitle = styled(Typography)`
 
 const TextContent = styled(Box)`
   && {
-    background: rgba(255, 255, 255, 0.7);
+    background: #ffffff;
     border-radius: 16px;
     padding: 24px;
-    margin-bottom: 24px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    backdrop-filter: blur(10px);
+    margin-bottom: 20px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
     
     p {
       line-height: 1.7;
@@ -827,38 +730,30 @@ const TextContent = styled(Box)`
 
 const PersonalSection = styled(Box)`
   && {
-    background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
+    background: #ffffff;
     border-radius: 16px;
-    padding: 24px;
-    margin-bottom: 24px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    border-left: 4px solid #818cf8;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
   }
 `;
 
 const PersonalTitle = styled(Typography)`
   && {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #2d3436;
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    
-    &::before {
-      content: '';
-      width: 3px;
-      height: 20px;
-      background-color: #e17055;
-      border-radius: 2px;
-    }
+    font-size: 1rem;
+    font-weight: 700;
+    color: #818cf8;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
   }
 `;
 
 const PersonalContent = styled(Typography)`
   && {
-    line-height: 1.6;
-    color: #2d3436;
+    line-height: 1.7;
+    color: #374151;
     font-size: 0.95rem;
   }
 `;
@@ -967,120 +862,51 @@ const DateText = styled(Typography)`
   }
 `;
 
-// 기주 카테고리 섹션 스타일들
-const SpiritCategorySection = styled(Box)`
-  && {
-    margin-bottom: 20px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
-  }
-`;
-
-const SpiritCategoryCard = styled(Box).withConfig({
-  shouldForwardProp: (prop) => prop !== 'expanded'
-})<{ expanded: boolean }>`
+// 섹션 토글 헤더
+const SectionHeaderRow = styled(Box)`
   && {
     display: flex;
     align-items: center;
-    gap: 14px;
-    padding: 16px 20px;
-    background: ${({ expanded }) =>
-      expanded
-        ? 'linear-gradient(135deg, #43a047 0%, #2e7d32 100%)'
-        : 'rgba(255, 255, 255, 0.9)'};
-    border: 1.5px solid ${({ expanded }) => expanded ? 'transparent' : 'rgba(76, 175, 80, 0.3)'};
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+`;
+
+const SectionSegmentedControl = styled(Box)`
+  && {
+    display: flex;
+    background: #e2e6ea;
     border-radius: 12px;
+    padding: 3px;
+    gap: 2px;
+  }
+`;
+
+const SegmentOption = styled(Box).withConfig({
+  shouldForwardProp: (prop) => prop !== 'active',
+})<{ active: boolean }>`
+  && {
+    padding: 6px 18px;
+    border-radius: 9px;
+    font-size: 0.85rem;
+    font-weight: 600;
     cursor: pointer;
-    transition: all 0.25s ease;
     user-select: none;
-
-    &:hover {
-      background: ${({ expanded }) =>
-        expanded
-          ? 'linear-gradient(135deg, #388e3c 0%, #1b5e20 100%)'
-          : 'rgba(76, 175, 80, 0.08)'};
-      box-shadow: 0 4px 16px rgba(76, 175, 80, 0.2);
-    }
-  }
-`;
-
-
-const SpiritCategoryChips = styled(Box)`
-  && {
-    flex: 1;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    align-items: center;
-  }
-`;
-
-const SpiritCatTag = styled.span.withConfig({
-  shouldForwardProp: (prop) => prop !== '$expanded'
-})<{ $expanded: boolean }>`
-  display: inline-block;
-  padding: 3px 10px;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  line-height: 1.5;
-  background: ${({ $expanded }) => $expanded ? 'rgba(255,255,255,0.18)' : 'rgba(76,175,80,0.1)'};
-  color: ${({ $expanded }) => $expanded ? '#ffffff' : '#2e7d32'};
-  border: 1px solid ${({ $expanded }) => $expanded ? 'rgba(255,255,255,0.3)' : 'rgba(76,175,80,0.3)'};
-  transition: all 0.25s ease;
-`;
-
-const SpiritExpandIcon = styled(Box).withConfig({
-  shouldForwardProp: (prop) => prop !== 'expanded'
-})<{ expanded: boolean }>`
-  && {
-    display: flex;
-    align-items: center;
-    color: ${({ expanded }) => expanded ? 'rgba(255,255,255,0.8)' : 'rgba(76, 175, 80, 0.6)'};
-    transform: ${({ expanded }) => expanded ? 'rotate(180deg)' : 'rotate(0deg)'};
-    transition: transform 0.25s ease, color 0.25s ease;
-    flex-shrink: 0;
-  }
-`;
-
-const SpiritDetailPanel = styled(Box)`
-  && {
-    margin-top: 10px;
-    margin-left: 14px;
-    padding-left: 14px;
-    border-left: 2px solid rgba(76, 175, 80, 0.25);
-  }
-`;
-
-// 새로운 슬라이드 재료/기법 섹션 스타일들
-const IngredientsSection = styled(Box)`
-  && {
-    background: linear-gradient(135deg, #e8f5e8 0%, #f0f8f0 100%);
-    border-radius: 16px;
-    padding: 24px;
-    margin-bottom: 24px;
-    border: 1px solid rgba(76, 175, 80, 0.2);
-  }
-`;
-
-const TechniquesSection = styled(Box)`
-  && {
-    background: linear-gradient(135deg, #e3f2fd 0%, #f1f8ff 100%);
-    border-radius: 16px;
-    padding: 24px;
-    margin-bottom: 24px;
-    border: 1px solid rgba(33, 150, 243, 0.2);
+    transition: all 0.2s ease;
+    background: ${({ active }) => active ? '#ffffff' : 'transparent'};
+    color: ${({ active }) => active ? '#2c3e50' : '#9ca3af'};
+    box-shadow: ${({ active }) => active ? '0 1px 6px rgba(0,0,0,0.12)' : 'none'};
   }
 `;
 
 // 해시태그 스타일들
 const HashtagSection = styled(Box)`
   && {
-    background: linear-gradient(135deg, #fff3e0 0%, #fffbf5 100%);
+    background: #ffffff;
     border-radius: 16px;
-    padding: 20px;
-    margin-bottom: 24px;
-    border: 1px solid rgba(255, 152, 0, 0.2);
+    padding: 20px 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
   }
 `;
 
@@ -1095,33 +921,35 @@ const HashtagContainer = styled(Box)`
 
 const HashtagChip = styled(Chip)`
   && {
-    background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
-    color: white;
+    background: #1e293b;
+    color: #f1f5f9;
     font-weight: 500;
     font-size: 0.8rem;
-    border-radius: 16px;
-    
+    border-radius: 20px;
+
     &:hover {
-      background: linear-gradient(135deg, #f57c00 0%, #ef6c00 100%);
+      background: #334155;
     }
   }
 `;
 
 const HashtagTitle = styled(Typography)`
   && {
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: #e65100;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #9ca3af;
     display: flex;
     align-items: center;
-    gap: 8px;
-    
+    gap: 6px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+
     &::before {
       content: '';
-      width: 3px;
-      height: 18px;
-      background-color: #ff9800;
-      border-radius: 2px;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #d1d5db;
     }
   }
 `;
