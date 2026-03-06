@@ -254,7 +254,7 @@ const CocktailListPage: React.FC = () => {
         </CocktailList>
 
         {/* 추가 로딩 중 (무한 스크롤) */}
-        {cocktailListLoading && (
+        {cocktailListLoadingMore && (
             <Box display="flex" justifyContent="center" alignItems="center" py={4}>
               <CircularProgress size={48} />
             </Box>

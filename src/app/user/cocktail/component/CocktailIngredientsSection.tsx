@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ExpandMoreOutlined } from "@mui/icons-material";
 import type { CocktailDetail } from "../interface/CocktailDetail.ts";
 import styled from "styled-components";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { CategorySlide } from "../../common/component/CategorySlide.tsx";
 import { SPIRIT_CATEGORY_MAP } from "../constant/spiritCategories.ts";
 
@@ -31,6 +31,7 @@ const CocktailIngredientsSection: React.FC<CocktailIngredientsSectionProps> = ({
     <IngredientsSection>
       {spiritCategories.length > 0 && (
         <SpiritCategorySection>
+          <SpiritSectionTitle>기주</SpiritSectionTitle>
           <SpiritCategoryCard
             onClick={() => setSpiritExpanded(prev => !prev)}
             expanded={spiritExpanded}
@@ -103,6 +104,29 @@ const IngredientsSection = styled(Box)`
     padding: 24px;
     margin-bottom: 20px;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  }
+`;
+
+const SpiritSectionTitle = styled(Typography)`
+  && {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #2e7d32;
+    margin-bottom: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+
+    &::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #4caf50;
+      flex-shrink: 0;
+    }
   }
 `;
 

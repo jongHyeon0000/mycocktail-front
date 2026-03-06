@@ -265,7 +265,7 @@ const ToolListPage: React.FC = () => {
         </ToolList>
 
         {/* 추가 로딩 중 (무한 스크롤) */}
-        {toolListLoading && (
+        {toolListLoadingMore && (
             <Box display="flex" justifyContent="center" alignItems="center" py={4}>
               <CircularProgress size={48} />
             </Box>

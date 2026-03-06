@@ -241,7 +241,7 @@ const SpiritProductListPage: React.FC = () => {
         </SpiritList>
 
         {/* 추가 로딩 중 (무한 스크롤) */}
-        {spiritProductListLoading && (
+        {spiritProductListLoadingMore && (
             <Box display="flex" justifyContent="center" alignItems="center" py={4}>
               <CircularProgress size={48} />
             </Box>

@@ -8,7 +8,7 @@ import {
 import {COMMON_MODAL_STYLE} from "../../common/style/CommonModal.style.ts";
 import type {CocktailDetail} from "../interface/CocktailDetail.ts";
 import styled from "styled-components";
-import {Box, Chip, IconButton, Modal, Paper, Typography} from "@mui/material";
+import {Box, Chip, IconButton, Typography} from "@mui/material";
 import CocktailIngredientsSection from "./CocktailIngredientsSection.tsx";
 import CocktailTechniquesSection from "./CocktailTechniquesSection.tsx";
 import {
