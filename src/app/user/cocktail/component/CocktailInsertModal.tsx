@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { LocalBarOutlined, AddOutlined, CloseOutlined } from "@mui/icons-material";
 import { COMMON_MODAL_STYLE } from "../../common/style/CommonModal.style.ts";
+import useAuth from "../../auth/service/useAuth.ts";
 import styled from "styled-components";
 import {
   Box, Button, Chip, Divider, FormControl, FormHelperText,
@@ -51,6 +52,8 @@ const TECHNIQUE_LABELS: Record<TechniqueKey, string> = {
 };
 
 const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose }) => {
+  const { user } = useAuth();
+
   /*
   * 태그 state 제어
   * */
@@ -495,7 +498,7 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
                 transition={{ delay: 0.7 }}
               >
                 <PersonalSection>
-                  <PersonalTitle>개인적인 설명</PersonalTitle>
+                  <PersonalTitle>{user?.username ?? '나'}님의 설명</PersonalTitle>
                   <StyledTextField
                     placeholder="개인적인 설명을 입력하세요..."
                     variant="outlined"
@@ -513,7 +516,7 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
                 transition={{ delay: 0.8 }}
               >
                 <PersonalSection>
-                  <PersonalTitle>개인적인 팁</PersonalTitle>
+                  <PersonalTitle>{user?.username ?? '나'}님의 팁</PersonalTitle>
                   <StyledTextField
                     placeholder="개인적인 팁을 입력하세요..."
                     variant="outlined"
@@ -531,7 +534,7 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
                 transition={{ delay: 0.9 }}
               >
                 <PersonalSection>
-                  <PersonalTitle>개인적인 후기</PersonalTitle>
+                  <PersonalTitle>{user?.username ?? '나'}님의 후기</PersonalTitle>
                   <StyledTextField
                     placeholder="개인적인 후기를 입력하세요..."
                     variant="outlined"

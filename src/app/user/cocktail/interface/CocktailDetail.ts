@@ -93,13 +93,13 @@ export interface CocktailDetail {
   /** 제조 기법 */
   techniques: Array<CommonSlideElement>;
 
-  /** 개인적인 설명 */
+  /** 작성자의 설명 */
   personalNotes?: string;
 
-  /** 개인적인 팁 */
+  /** 작성자의 팁 */
   makerTips?: string;
 
-  /** 개인적인 후기 */
+  /** 작성자의 후기 */
   personalReview?: string;
 
   /** 해시태그 */

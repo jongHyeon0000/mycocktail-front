@@ -263,7 +263,7 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                     transition={{ delay: 0.7 }}
                   >
                     <PersonalSection>
-                      <PersonalTitle>개인적인 설명</PersonalTitle>
+                      <PersonalTitle>{data.author?.username ?? '작성자'}님의 설명</PersonalTitle>
                       <PersonalContent>{data.personalNotes}</PersonalContent>
                     </PersonalSection>
                   </motion.div>
@@ -276,7 +276,7 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                     transition={{ delay: 0.8 }}
                   >
                     <PersonalSection>
-                      <PersonalTitle>개인적인 팁</PersonalTitle>
+                      <PersonalTitle>{data.author?.username ?? '작성자'}님의 팁</PersonalTitle>
                       <PersonalContent>{data.makerTips}</PersonalContent>
                     </PersonalSection>
                   </motion.div>
@@ -289,7 +289,7 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                     transition={{ delay: 0.9 }}
                   >
                     <PersonalSection>
-                      <PersonalTitle>개인적인 후기</PersonalTitle>
+                      <PersonalTitle>{data.author?.username ?? '작성자'}님의 후기</PersonalTitle>
                       <PersonalContent>{data.personalReview}</PersonalContent>
                     </PersonalSection>
                   </motion.div>
