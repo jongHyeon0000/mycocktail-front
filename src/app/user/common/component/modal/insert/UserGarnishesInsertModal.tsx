@@ -59,7 +59,7 @@ const UserGarnishesInsertModal: React.FC<UserGarnishesInsertModalProps> = ({ ope
     onClose();
   };
 
-  const slideItems: CommonSlideElement[] = (garnishesList ?? []).map((garnish) => ({
+  const slideItems: CommonSlideElement[] = (garnishesList?.data ?? []).map((garnish) => ({
     id: garnish.garnishId,
     name: garnish.garnishName,
     nameKr: garnish.garnishNameKr,

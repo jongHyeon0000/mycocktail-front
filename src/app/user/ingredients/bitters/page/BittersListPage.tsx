@@ -42,8 +42,8 @@ const BittersListPage: React.FC = () => {
   const [ searchDebounceTimer, setSearchDebounceTimer ] = useState<number | null>(null);
   const [ isSearching, setIsSearching ] = useState<boolean>(false);
 
-  const { bitters, bittersLoading, fetchReadBitters, bittersError } = useReadBitters();
-  const { bittersListError, bittersListLoading, bittersListLoadingMore, bittersListHasMore, bittersList, fetchReadBittersList } = useReadBittersList();
+  const { bitters, bittersLoading, fetchReadBitters } = useReadBitters();
+  const { bittersListLoading, bittersListLoadingMore, bittersListHasMore, bittersList, fetchReadBittersList } = useReadBittersList();
 
   /*
   * 초기 데이터 로드 및 정렬 변경 시 로드
@@ -148,7 +148,7 @@ const BittersListPage: React.FC = () => {
   * Modal State 제어
   * */
   useEffect(() => {
-    if (bitters) {
+    if (bitters?.data) {
       setModalOpen(true);
     }
   }, [bitters]);
@@ -157,20 +157,16 @@ const BittersListPage: React.FC = () => {
   * Axios Error 제어
   * */
   useEffect(() => {
-    if (bittersListError) {
-      showErrorAlert(
-          '비터스 리스트 로드 실패',
-          bittersListError
-      ).then();
+    if (bittersList && bittersList.code !== 'OK') {
+      showErrorAlert('비터스 리스트 로드 실패', bittersList.message).then();
     }
+  }, [bittersList]);
 
-    if (bittersError) {
-      showErrorAlert(
-          '비터스 로드 실패',
-          bittersError
-      ).then();
+  useEffect(() => {
+    if (bitters && bitters.code !== 'OK') {
+      showErrorAlert('비터스 로드 실패', bitters.message).then();
     }
-  }, [bittersListError, bittersError]);
+  }, [bitters]);
 
   return (
       <PageContainer>
@@ -239,7 +235,7 @@ const BittersListPage: React.FC = () => {
                     message="검색 중..."
                 />
             ) : (
-                bittersList && bittersList.map((bitters, index) => (
+                bittersList?.data && bittersList.data.map((bitters, index) => (
                     <BittersListComponent
                         key={`${bitters.bittersId}-${index}`}
                         data={bitters}
@@ -268,11 +264,11 @@ const BittersListPage: React.FC = () => {
         </Container>
 
         {/* 기법 상세 모달 */}
-        {bitters && (
+        {bitters?.data && (
             <BittersDetailModal
                 open={modalOpen}
                 onClose={() => setModalOpen(false)}
-                data={bitters}
+                data={bitters.data}
             />
         )}
       </PageContainer>

@@ -59,7 +59,7 @@ const UserDairyCreamInsertModal: React.FC<UserDairyCreamInsertModalProps> = ({ o
     onClose();
   };
 
-  const slideItems: CommonSlideElement[] = (dairyCreamList ?? []).map((dairyCream) => ({
+  const slideItems: CommonSlideElement[] = (dairyCreamList?.data ?? []).map((dairyCream) => ({
     id: dairyCream.dairyCreamId,
     name: dairyCream.dairyCreamName,
     nameKr: dairyCream.dairyCreamNameKr,

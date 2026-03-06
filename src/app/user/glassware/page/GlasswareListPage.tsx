@@ -42,8 +42,8 @@ const GlasswareListPage: React.FC = () => {
   const [ searchDebounceTimer, setSearchDebounceTimer ] = useState<number | null>(null);
   const [ isSearching, setIsSearching ] = useState<boolean>(false);
 
-  const { glassware, glasswareLoading, glasswareError, fetchReadGlassware} = useReadGlassware();
-  const { glasswareList, glasswareListError, glasswareListLoading, glasswareListLoadingMore, glasswareListHasMore, fetchReadGlasswareList } = useReadGlasswareList();
+  const { glassware, glasswareLoading, fetchReadGlassware} = useReadGlassware();
+  const { glasswareList, glasswareListLoading, glasswareListLoadingMore, glasswareListHasMore, fetchReadGlasswareList } = useReadGlasswareList();
 
   /*
   * 초기 데이터 로드 및 정렬 변경 시 로드
@@ -148,7 +148,7 @@ const GlasswareListPage: React.FC = () => {
   * Modal State 제어
   * */
   useEffect(() => {
-    if (glassware) {
+    if (glassware?.data) {
       setModalOpen(true);
     }
   }, [glassware]);
@@ -157,20 +157,16 @@ const GlasswareListPage: React.FC = () => {
   * Axios Error 제어
   * */
   useEffect(() => {
-    if (glasswareListError) {
-      showErrorAlert(
-          '세부 기법 리스트 로드 실패',
-          glasswareListError
-      ).then();
+    if (glasswareList && glasswareList.code !== 'OK') {
+      showErrorAlert('세부 잔 리스트 로드 실패', glasswareList.message).then();
     }
+  }, [glasswareList]);
 
-    if (glasswareError) {
-      showErrorAlert(
-          '세부 기법 로드 실패',
-          glasswareError
-      ).then();
+  useEffect(() => {
+    if (glassware && glassware.code !== 'OK') {
+      showErrorAlert('세부 잔 로드 실패', glassware.message).then();
     }
-  }, [glasswareListError, glasswareError]);
+  }, [glassware]);
 
   return (
       <PageContainer>
@@ -239,7 +235,7 @@ const GlasswareListPage: React.FC = () => {
                     message="검색 중..."
                 />
             ) : (
-                glasswareList && glasswareList.map((glassware, index) => (
+                glasswareList?.data && glasswareList.data.map((glassware, index) => (
                     <GlasswareListComponent
                         key={`${glassware.glassId}-${index}`}
                         glassware={glassware}
@@ -268,11 +264,11 @@ const GlasswareListPage: React.FC = () => {
         </Container>
 
         {/* 기법 상세 모달 */}
-        {glassware && (
+        {glassware?.data && (
             <GlasswareDetailModal
                 open={modalOpen}
                 onClose={() => setModalOpen(false)}
-                data={glassware}
+                data={glassware.data}
             />
         )}
       </PageContainer>

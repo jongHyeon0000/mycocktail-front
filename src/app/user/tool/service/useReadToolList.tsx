@@ -3,6 +3,7 @@ import {api} from "../../../../config/axios/AxiosConfig.ts";
 import type {ToolDetail} from "../interface/ToolDetail.ts";
 import type {ApiResponse} from "../../../../config/axios/interface/ApiResponse.ts";
 import type {TOOL_CATEGORY_MAP_KEY} from "../common/ToolUtils.ts";
+import {toApiResponse} from "../../../../config/axios/utils/toApiResponse.ts";
 
 interface FetchProps {
   /*
@@ -26,46 +27,31 @@ interface FetchProps {
 }
 
 const useReadToolList = () => {
-  const [data, setData] = useState<ToolDetail[] | undefined>(undefined);
+  const [response, setResponse] = useState<ApiResponse<ToolDetail[] | null> | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingMore, setLoadingMore] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState<boolean>(true);
 
   const fetchReadToolList = async (params?: FetchProps, appendData = false) => {
-    // 첫 페이지 요청이거나 appendData가 false인 경우 데이터 리셋
     if (appendData) {
       setLoadingMore(true);
     } else {
-      setData(undefined);
+      setResponse(undefined);
       setHasMore(true);
       setLoading(true);
     }
 
-    setError(null);
-
-    try{
-      const response = await api.get<ApiResponse<ToolDetail[]>>(`/api/tool`, { params });
-
-      if (response.status === 200 && response.data.code === 'OK') {
-        const newData = response.data.data;
-        const limit = params?.limit || 6;
-        
-        // 받은 데이터가 limit보다 적으면 더 이상 없음
-        setHasMore(newData.length >= limit);
-        
-        if (appendData && params?.page !== 1 && data) {
-          setData([...data, ...newData]);
-        } else {
-          setData(newData);
-        }
-      } else {
-        console.error('Unexpected response:', response.status, response.data.code, response.data.message);
-      }
-
+    try {
+      const res = await api.get<ApiResponse<ToolDetail[]>>(`/api/tool`, { params });
+      const newApiResponse = res.data;
+      const limit = params?.limit || 6;
+      setHasMore((newApiResponse.data?.length ?? 0) >= limit);
+      setResponse(prev => ({
+        ...newApiResponse,
+        data: appendData && prev?.data && newApiResponse.data ? [...prev.data, ...newApiResponse.data] : newApiResponse.data,
+      }));
     } catch (err) {
-      setError('Error fetching data');
-      console.error(err);
+      setResponse(toApiResponse(err));
     } finally {
       setLoading(false);
       setLoadingMore(false);
@@ -73,10 +59,9 @@ const useReadToolList = () => {
   }
 
   return {
-    toolList: data,
+    toolList: response,
     toolListLoading: loading,
     toolListLoadingMore: loadingMore,
-    toolListError: error,
     toolListHasMore: hasMore,
     fetchReadToolList
   };

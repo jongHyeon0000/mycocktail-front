@@ -59,7 +59,7 @@ const UserTechniqueInsertModal: React.FC<UserTechniqueInsertModalProps> = ({ ope
     onClose();
   };
 
-  const slideItems: CommonSlideElement[] = (techniqueList ?? []).map((technique) => ({
+  const slideItems: CommonSlideElement[] = (techniqueList?.data ?? []).map((technique) => ({
     id: technique.techniqueId,
     name: technique.techniqueName,
     nameKr: technique.techniqueNameKr,

@@ -42,8 +42,8 @@ const GarnishesListPage: React.FC = () => {
   const [ searchDebounceTimer, setSearchDebounceTimer ] = useState<number | null>(null);
   const [ isSearching, setIsSearching ] = useState<boolean>(false);
 
-  const { garnishes, garnishesError, garnishesLoading, fetchReadGarnishes } = useReadGarnishes();
-  const { garnishesList, garnishesListError, garnishesListLoading, garnishesListLoadingMore, garnishesListHasMore, fetchReadGarnishesList } = useReadGarnishesList();
+  const { garnishes, garnishesLoading, fetchReadGarnishes } = useReadGarnishes();
+  const { garnishesList, garnishesListLoading, garnishesListLoadingMore, garnishesListHasMore, fetchReadGarnishesList } = useReadGarnishesList();
 
   /*
   * 초기 데이터 로드 및 정렬 변경 시 로드
@@ -148,7 +148,7 @@ const GarnishesListPage: React.FC = () => {
   * Modal State 제어
   * */
   useEffect(() => {
-    if (garnishes) {
+    if (garnishes?.data) {
       setModalOpen(true);
     }
   }, [garnishes]);
@@ -157,20 +157,16 @@ const GarnishesListPage: React.FC = () => {
   * Axios Error 제어
   * */
   useEffect(() => {
-    if (garnishesListError) {
-      showErrorAlert(
-          '가니쉬 리스트 로드 실패',
-          garnishesListError
-      ).then();
+    if (garnishesList && garnishesList.code !== 'OK') {
+      showErrorAlert('가니쉬 리스트 로드 실패', garnishesList.message).then();
     }
+  }, [garnishesList]);
 
-    if (garnishesError) {
-      showErrorAlert(
-          '가니쉬 로드 실패',
-          garnishesError
-      ).then();
+  useEffect(() => {
+    if (garnishes && garnishes.code !== 'OK') {
+      showErrorAlert('가니쉬 로드 실패', garnishes.message).then();
     }
-  }, [garnishesListError, garnishesError]);
+  }, [garnishes]);
 
   return (
       <PageContainer>
@@ -239,7 +235,7 @@ const GarnishesListPage: React.FC = () => {
                     message="검색 중..."
                 />
             ) : (
-                garnishesList && garnishesList.map((garnish, index) => (
+                garnishesList?.data && garnishesList.data.map((garnish, index) => (
                     <GarnishesListComponent
                         key={`${garnish.garnishId}-${index}`}
                         data={garnish}
@@ -268,11 +264,11 @@ const GarnishesListPage: React.FC = () => {
         </Container>
 
         {/* 가니쉬 상세 모달 */}
-        {garnishes && (
+        {garnishes?.data && (
             <GarnishesDetailModal
                 open={modalOpen}
                 onClose={() => setModalOpen(false)}
-                data={garnishes}
+                data={garnishes.data}
             />
         )}
       </PageContainer>

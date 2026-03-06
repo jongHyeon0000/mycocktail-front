@@ -47,8 +47,8 @@ const CocktailListPage: React.FC = () => {
   const [ isSearching, setIsSearching ] = useState<boolean>(false);
 
   const { isAuthenticated } = useAuth();
-  const { cocktailList, cocktailListLoading, cocktailListLoadingMore, cocktailListError, cocktailListHasMore, fetchReadCocktailList } = useReadCocktailList();
-  const { cocktail, cocktailLoading, cocktailError, fetchReadCocktail } = useReadCocktail();
+  const { cocktailList, cocktailListLoading, cocktailListLoadingMore, cocktailListHasMore, fetchReadCocktailList } = useReadCocktailList();
+  const { cocktail, cocktailLoading, fetchReadCocktail } = useReadCocktail();
 
   /*
   * 초기 데이터 로드 및 정렬 변경 시 로드
@@ -153,7 +153,7 @@ const CocktailListPage: React.FC = () => {
   * Modal State 제어
   * */
   useEffect(() => {
-    if (cocktail) {
+    if (cocktail?.data) {
       setModalOpen(true);
     }
   }, [cocktail]);
@@ -162,20 +162,16 @@ const CocktailListPage: React.FC = () => {
   * Axios Error 제어
   * */
   useEffect(() => {
-    if (cocktailListError) {
-      showErrorAlert(
-          '세부 칵테일 리스트 로드 실패',
-          cocktailListError
-      ).then();
+    if (cocktailList && cocktailList.code !== 'OK') {
+      showErrorAlert('세부 칵테일 리스트 로드 실패', cocktailList.message).then();
     }
+  }, [cocktailList]);
 
-    if (cocktailError) {
-      showErrorAlert(
-          '세부 칵테일 로드 실패',
-          cocktailError
-      ).then();
+  useEffect(() => {
+    if (cocktail && cocktail.code !== 'OK') {
+      showErrorAlert('세부 칵테일 로드 실패', cocktail.message).then();
     }
-  }, [cocktailListError, cocktailError]);
+  }, [cocktail]);
 
   return (
     <PageContainer>
@@ -254,7 +250,7 @@ const CocktailListPage: React.FC = () => {
               message="검색 중..."
             />
           ) : (
-            cocktailList && cocktailList.map((cocktail, index) => (
+            cocktailList?.data && cocktailList.data.map((cocktail, index) => (
               <CocktailListComponent cocktail={cocktail} index={index} onClickEvent={() => fetchReadCocktail(cocktail.cocktailId)} />
             ))
           )}
@@ -278,10 +274,10 @@ const CocktailListPage: React.FC = () => {
       </Container>
 
       {/* 칵테일 상세 모달 */}
-      {cocktail && <CocktailDetailModal
+      {cocktail?.data && <CocktailDetailModal
           open={modalOpen}
           onClose={() => setModalOpen(false)}
-          data={cocktail}
+          data={cocktail.data}
       />}
 
       {/* 칵테일 등록 모달 */}

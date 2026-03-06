@@ -42,8 +42,8 @@ const TechniqueListPage: React.FC = () => {
   const [ searchDebounceTimer, setSearchDebounceTimer ] = useState<number | null>(null);
   const [ isSearching, setIsSearching ] = useState<boolean>(false);
 
-  const { techniqueList, techniqueListError, techniqueListLoading, techniqueListLoadingMore, techniqueListHasMore, fetchReadTechniqueList } = useReadTechniqueList();
-  const { technique, techniqueLoading, techniqueError, fetchReadTechnique } = useReadTechnique();
+  const { techniqueList, techniqueListLoading, techniqueListLoadingMore, techniqueListHasMore, fetchReadTechniqueList } = useReadTechniqueList();
+  const { technique, techniqueLoading, fetchReadTechnique } = useReadTechnique();
 
   /*
   * 초기 데이터 로드 및 정렬 변경 시 로드
@@ -148,7 +148,7 @@ const TechniqueListPage: React.FC = () => {
   * Modal State 제어
   * */
   useEffect(() => {
-    if (technique) {
+    if (technique?.data) {
       setModalOpen(true);
     }
   }, [technique]);
@@ -157,20 +157,16 @@ const TechniqueListPage: React.FC = () => {
   * Axios Error 제어
   * */
   useEffect(() => {
-    if (techniqueListError) {
-      showErrorAlert(
-        '세부 기법 리스트 로드 실패',
-        techniqueListError
-      ).then();
+    if (techniqueList && techniqueList.code !== 'OK') {
+      showErrorAlert('세부 기법 리스트 로드 실패', techniqueList.message).then();
     }
+  }, [techniqueList]);
 
-    if (techniqueError) {
-      showErrorAlert(
-        '세부 기법 로드 실패',
-        techniqueError
-      ).then();
+  useEffect(() => {
+    if (technique && technique.code !== 'OK') {
+      showErrorAlert('세부 기법 로드 실패', technique.message).then();
     }
-  }, [techniqueListError, techniqueError]);
+  }, [technique]);
 
   return (
     <PageContainer>
@@ -239,7 +235,7 @@ const TechniqueListPage: React.FC = () => {
               message="검색 중..."
             />
           ) : (
-            techniqueList && techniqueList.map((technique, index) => (
+            techniqueList?.data && techniqueList.data.map((technique, index) => (
               <TechniqueListComponent
                 key={`${technique.techniqueId}-${index}`}
                 technique={technique}
@@ -268,11 +264,11 @@ const TechniqueListPage: React.FC = () => {
       </Container>
 
       {/* 기법 상세 모달 */}
-      {technique && (
+      {technique?.data && (
         <TechniqueDetailModal
           open={modalOpen}
           onClose={() => setModalOpen(false)}
-          data={technique}
+          data={technique.data}
         />
       )}
     </PageContainer>

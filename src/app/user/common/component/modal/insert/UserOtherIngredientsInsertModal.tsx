@@ -59,7 +59,7 @@ const UserOtherIngredientsInsertModal: React.FC<UserOtherIngredientsInsertModalP
     onClose();
   };
 
-  const slideItems: CommonSlideElement[] = (otherIngredientsList ?? []).map((other) => ({
+  const slideItems: CommonSlideElement[] = (otherIngredientsList?.data ?? []).map((other) => ({
     id: other.otherIngredientId,
     name: other.otherIngredientName,
     nameKr: other.otherIngredientNameKr,

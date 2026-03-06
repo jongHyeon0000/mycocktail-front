@@ -371,6 +371,9 @@ const cocktailFullData = [
   },
 ]
 
+// 좋아요 상태 in-memory 저장: key = `${userId}-${cocktailId}`
+const likedSet = new Set<string>()
+
 export const cocktailHandlers = [
   /*
    * 칵테일 List
@@ -405,6 +408,42 @@ export const cocktailHandlers = [
   }),
 
   /*
+   * 칵테일 좋아요
+   */
+  http.post('/api/cocktail/:id/like', async ({ request, params }) => {
+    await delay(300)
+
+    const authHeader = request.headers.get('Authorization')
+    if (!authHeader?.startsWith('Bearer ')) {
+      return HttpResponse.json({ code: 'UNAUTHORIZED', message: '로그인이 필요합니다.', data: null }, { status: 401 })
+    }
+
+    // 토큰 형식: mock.jwt.token.{userId}.{timestamp}
+    const token = authHeader.slice(7)
+    const parts = token.split('.')
+    const userId = parts[3]
+    if (!userId) {
+      return HttpResponse.json({ code: 'UNAUTHORIZED', message: '유효하지 않은 토큰입니다.', data: null }, { status: 401 })
+    }
+
+    const cocktailId = parseInt(params.id as string)
+    const cocktail = cocktailFullData.find(c => c.cocktailId === cocktailId)
+    if (!cocktail) {
+      return HttpResponse.json({ code: 'NOT_FOUND', message: '칵테일을 찾을 수 없습니다.', data: null }, { status: 404 })
+    }
+
+    const likeKey = `${userId}-${cocktailId}`
+    if (likedSet.has(likeKey)) {
+      return HttpResponse.json({ code: 'COCKTAIL_LIKE_CONFLICT', message: '이미 좋아요한 칵테일입니다.', data: null }, { status: 409 })
+    }
+
+    likedSet.add(likeKey)
+    cocktail.likeCount += 1
+
+    return HttpResponse.json({ code: 'OK', message: '성공', data: { likeCount: cocktail.likeCount } })
+  }),
+
+  /*
    * 칵테일 Detail (개별 조회)
    */
   http.get('/api/cocktail/:id', async ({ params }) => {
@@ -413,7 +452,7 @@ export const cocktailHandlers = [
     const cocktailData = cocktailFullData.find(c => c.cocktailId === cocktailId)
 
     if (!cocktailData) {
-      return HttpResponse.json({ code: 'NOT_FOUND', message: '칵테일을 찾을 수 없습니다.', data: null }, { status: 404 })
+      return HttpResponse.json({ code: 'COCKTAIL_NOT_FOUND', message: '칵테일을 찾을 수 없습니다.', data: null }, { status: 404 })
     }
 
     return HttpResponse.json({ code: 'OK', message: '성공', data: cocktailData })

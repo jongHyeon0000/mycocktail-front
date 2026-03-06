@@ -1,12 +1,11 @@
 import { useState } from "react";
-import type { AxiosError } from "axios";
 import { api } from "../../../../config/axios/AxiosConfig.ts";
 import type { ApiResponse } from "../../../../config/axios/interface/ApiResponse.ts";
 import { useAuthStore } from "../../../../store/authStore.ts";
 import { setAccessToken } from "../../../../utils/cookieUtils.ts";
-import type { UserInfo } from "../interface/UserInfo.ts";
 import type {LoginRequestBody} from "../interface/LoginRequestBody.ts";
 import type {LoginResponseData} from "../interface/LoginResponseData.ts";
+import { toApiResponse } from "../../../../config/axios/utils/toApiResponse.ts";
 
 /**
  * 로그인 커스텀 훅
@@ -16,23 +15,21 @@ import type {LoginResponseData} from "../interface/LoginResponseData.ts";
  */
 const useLogin = () => {
   const [isLoginLoading, setIsLoginLoading] = useState<boolean>(false);
-  const [errorResponse, setErrorResponse] = useState<ApiResponse<null> | null>(null);
   const setUser = useAuthStore((state) => state.setUser);
 
   /**
    * 로그인 함수
    *
    * @param credentials - 이메일과 비밀번호
-   * @returns 로그인 성공 시 UserInfo, 실패 시 null
+   * @returns ApiResponse (code === 'OK'이면 성공)
    */
-  const login = async (credentials: LoginRequestBody): Promise<UserInfo | null> => {
+  const login = async (credentials: LoginRequestBody): Promise<ApiResponse<LoginResponseData | null>> => {
     setIsLoginLoading(true);
-    setErrorResponse(null);
 
     try {
       const response = await api.post<ApiResponse<LoginResponseData>>('/api/auth/login', credentials);
 
-      if (response.status === 200 && response.data.code === 'OK') {
+      if (response.data.code === 'OK') {
         const { accessToken, user } = response.data.data;
 
         // 1. Cookie에 토큰 저장 (1시간 만료)
@@ -40,15 +37,11 @@ const useLogin = () => {
 
         // 2. Zustand Store에 사용자 정보 저장
         setUser(user);
-
-        return user;
       }
 
-      return null;
+      return response.data;
     } catch (err) {
-      const axiosError = err as AxiosError<ApiResponse<null>>;
-      setErrorResponse(axiosError.response?.data ?? null);
-      return null;
+      return toApiResponse<LoginResponseData>(err);
     } finally {
       setIsLoginLoading(false);
     }
@@ -57,7 +50,6 @@ const useLogin = () => {
   return {
     login,
     isLoginLoading,
-    errorResponse,
   };
 };
 

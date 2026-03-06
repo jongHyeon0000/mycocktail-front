@@ -42,8 +42,8 @@ const CarbonatedListPage: React.FC = () => {
   const [ searchDebounceTimer, setSearchDebounceTimer ] = useState<number | null>(null);
   const [ isSearching, setIsSearching ] = useState<boolean>(false);
 
-  const { carbonated, carbonatedLoading, carbonatedError, fetchReadCarbonated } = useReadCarbonated()
-  const { fetchReadCarbonatedList, carbonatedListError, carbonatedList, carbonatedListLoading, carbonatedListLoadingMore, carbonatedListHasMore } = useReadCarbonatedList();
+  const { carbonated, carbonatedLoading, fetchReadCarbonated } = useReadCarbonated()
+  const { fetchReadCarbonatedList, carbonatedList, carbonatedListLoading, carbonatedListLoadingMore, carbonatedListHasMore } = useReadCarbonatedList();
 
   /*
   * 초기 데이터 로드 및 정렬 변경 시 로드
@@ -148,7 +148,7 @@ const CarbonatedListPage: React.FC = () => {
   * Modal State 제어
   * */
   useEffect(() => {
-    if (carbonated) {
+    if (carbonated?.data) {
       setModalOpen(true);
     }
   }, [carbonated]);
@@ -157,20 +157,16 @@ const CarbonatedListPage: React.FC = () => {
   * Axios Error 제어
   * */
   useEffect(() => {
-    if (carbonatedListError) {
-      showErrorAlert(
-          '비터스 리스트 로드 실패',
-          carbonatedListError
-      ).then();
+    if (carbonatedList && carbonatedList.code !== 'OK') {
+      showErrorAlert('탄산 리스트 로드 실패', carbonatedList.message).then();
     }
+  }, [carbonatedList]);
 
-    if (carbonatedError) {
-      showErrorAlert(
-          '비터스 로드 실패',
-          carbonatedError
-      ).then();
+  useEffect(() => {
+    if (carbonated && carbonated.code !== 'OK') {
+      showErrorAlert('탄산 로드 실패', carbonated.message).then();
     }
-  }, [carbonatedListError, carbonatedError]);
+  }, [carbonated]);
 
   return (
       <PageContainer>
@@ -239,7 +235,7 @@ const CarbonatedListPage: React.FC = () => {
                     message="검색 중..."
                 />
             ) : (
-                carbonatedList && carbonatedList.map((carbonated, index) => (
+                carbonatedList?.data && carbonatedList.data.map((carbonated, index) => (
                     <CarbonatedListComponent
                         key={`${carbonated.carbonatedId}-${index}`}
                         data={carbonated}
@@ -268,11 +264,11 @@ const CarbonatedListPage: React.FC = () => {
         </Container>
 
         {/* 탄산 상세 모달 */}
-        {carbonated && (
+        {carbonated?.data && (
             <CarbonatedDetailModal
                 open={modalOpen}
                 onClose={() => setModalOpen(false)}
-                data={carbonated}
+                data={carbonated.data}
             />
         )}
       </PageContainer>

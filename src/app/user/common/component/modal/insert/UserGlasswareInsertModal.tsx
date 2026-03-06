@@ -59,7 +59,7 @@ const UserGlasswareInsertModal: React.FC<UserGlasswareInsertModalProps> = ({ ope
     onClose();
   };
 
-  const slideItems: CommonSlideElement[] = (glasswareList ?? []).map((glass) => ({
+  const slideItems: CommonSlideElement[] = (glasswareList?.data ?? []).map((glass) => ({
     id: glass.glassId,
     name: glass.glassName,
     nameKr: glass.glassNameKr,

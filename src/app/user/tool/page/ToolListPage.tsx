@@ -43,8 +43,8 @@ const ToolListPage: React.FC = () => {
   const [ searchDebounceTimer, setSearchDebounceTimer ] = useState<number | null>(null);
   const [ isSearching, setIsSearching ] = useState<boolean>(false);
 
-  const { toolList, toolListLoading, toolListError, toolListHasMore, toolListLoadingMore, fetchReadToolList } = useReadToolList();
-  const { tool, toolLoading, toolError, fetchReadTool } = useReadTool();
+  const { toolList, toolListLoading, toolListHasMore, toolListLoadingMore, fetchReadToolList } = useReadToolList();
+  const { tool, toolLoading, fetchReadTool } = useReadTool();
 
   /*
   * 초기 데이터 로드 및 정렬 변경 시 로드
@@ -153,7 +153,7 @@ const ToolListPage: React.FC = () => {
   * Modal State 제어
   * */
   useEffect(() => {
-    if (tool) {
+    if (tool?.data) {
       setModalOpen(true);
     }
   }, [tool]);
@@ -162,20 +162,16 @@ const ToolListPage: React.FC = () => {
   * Axios Error 제어
   * */
   useEffect(() => {
-    if (toolListError) {
-      showErrorAlert(
-          '세부 도구 리스트 로드 실패',
-          toolListError
-      ).then();
+    if (toolList && toolList.code !== 'OK') {
+      showErrorAlert('세부 도구 리스트 로드 실패', toolList.message).then();
     }
+  }, [toolList]);
 
-    if (toolError) {
-      showErrorAlert(
-          '세부 도구 로드 실패',
-          toolError
-      ).then();
+  useEffect(() => {
+    if (tool && tool.code !== 'OK') {
+      showErrorAlert('세부 도구 로드 실패', tool.message).then();
     }
-  }, [toolListError, toolError]);
+  }, [tool]);
 
   return (
     <PageContainer>
@@ -260,7 +256,7 @@ const ToolListPage: React.FC = () => {
               message="검색 중..."
             />
           ) : (
-            toolList && toolList.map((tool, index) => (
+            toolList?.data && toolList.data.map((tool, index) => (
               <ToolListComponent
                 key={`${tool.toolId}-${index}`}
                 tool={tool}
@@ -289,11 +285,11 @@ const ToolListPage: React.FC = () => {
       </Container>
 
       {/* 도구 상세 모달 */}
-      {tool && (
+      {tool?.data && (
         <ToolDetailModal
           open={modalOpen}
           onClose={() => setModalOpen(false)}
-          data={tool}
+          data={tool.data}
         />
       )}
     </PageContainer>

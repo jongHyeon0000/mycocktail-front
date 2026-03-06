@@ -59,7 +59,7 @@ const UserBittersInsertModal: React.FC<UserBittersInsertModalProps> = ({ open, o
     onClose();
   };
 
-  const slideItems: CommonSlideElement[] = (bittersList ?? []).map((bitters) => ({
+  const slideItems: CommonSlideElement[] = (bittersList?.data ?? []).map((bitters) => ({
     id: bitters.bittersId,
     name: bitters.bittersName,
     nameKr: bitters.bittersNameKr,

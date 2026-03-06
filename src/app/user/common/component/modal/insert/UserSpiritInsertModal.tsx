@@ -82,7 +82,7 @@ const UserSpiritInsertModal: React.FC<UserSpiritInsertModalProps> = ({ open, onC
     onClose();
   };
 
-  const slideItems: CommonSlideElement[] = (spiritProductList ?? []).map((spirit) => ({
+  const slideItems: CommonSlideElement[] = (spiritProductList?.data ?? []).map((spirit) => ({
     id: spirit.spiritProductId,
     name: spirit.spiritName,
     nameKr: spirit.spiritNameKr,

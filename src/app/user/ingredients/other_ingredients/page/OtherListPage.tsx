@@ -42,8 +42,8 @@ const OtherListPage: React.FC = () => {
   const [ searchDebounceTimer, setSearchDebounceTimer ] = useState<number | null>(null);
   const [ isSearching, setIsSearching ] = useState<boolean>(false);
 
-  const { otherIngredients, otherIngredientsError, otherIngredientsLoading, fetchReadOtherIngredients } = useReadOtherIngredients();
-  const { otherIngredientsListError, otherIngredientsListHasMore, otherIngredientsListLoading, otherIngredientsListLoadingMore, otherIngredientsList, fetchReadOtherIngredientsList } = useReadOtherIngredientsList();
+  const { otherIngredients, otherIngredientsLoading, fetchReadOtherIngredients } = useReadOtherIngredients();
+  const { otherIngredientsListHasMore, otherIngredientsListLoading, otherIngredientsListLoadingMore, otherIngredientsList, fetchReadOtherIngredientsList } = useReadOtherIngredientsList();
 
   /*
   * 초기 데이터 로드 및 정렬 변경 시 로드
@@ -148,7 +148,7 @@ const OtherListPage: React.FC = () => {
   * Modal State 제어
   * */
   useEffect(() => {
-    if (otherIngredients) {
+    if (otherIngredients?.data) {
       setModalOpen(true);
     }
   }, [otherIngredients]);
@@ -157,20 +157,16 @@ const OtherListPage: React.FC = () => {
   * Axios Error 제어
   * */
   useEffect(() => {
-    if (otherIngredientsListError) {
-      showErrorAlert(
-          '기타 첨가물 리스트 로드 실패',
-          otherIngredientsListError
-      ).then();
+    if (otherIngredientsList && otherIngredientsList.code !== 'OK') {
+      showErrorAlert('기타 첨가물 리스트 로드 실패', otherIngredientsList.message).then();
     }
+  }, [otherIngredientsList]);
 
-    if (otherIngredientsError) {
-      showErrorAlert(
-          '기타 첨가물 로드 실패',
-          otherIngredientsError
-      ).then();
+  useEffect(() => {
+    if (otherIngredients && otherIngredients.code !== 'OK') {
+      showErrorAlert('기타 첨가물 로드 실패', otherIngredients.message).then();
     }
-  }, [otherIngredientsListError, otherIngredientsError]);
+  }, [otherIngredients]);
 
   return (
       <PageContainer>
@@ -239,7 +235,7 @@ const OtherListPage: React.FC = () => {
                     message="검색 중..."
                 />
             ) : (
-                otherIngredientsList && otherIngredientsList.map((otherIngredient, index) => (
+                otherIngredientsList?.data && otherIngredientsList.data.map((otherIngredient, index) => (
                     <OtherIngredientsListComponent
                         key={`${otherIngredient.otherIngredientId}-${index}`}
                         data={otherIngredient}
@@ -268,11 +264,11 @@ const OtherListPage: React.FC = () => {
         </Container>
 
         {/* 기타 첨가물 상세 모달 */}
-        {otherIngredients && (
+        {otherIngredients?.data && (
             <OtherIngredientsDetailModal
                 open={modalOpen}
                 onClose={() => setModalOpen(false)}
-                data={otherIngredients}
+                data={otherIngredients.data}
             />
         )}
       </PageContainer>

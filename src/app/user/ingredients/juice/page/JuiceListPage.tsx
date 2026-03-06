@@ -42,8 +42,8 @@ const JuiceListPage: React.FC = () => {
   const [ searchDebounceTimer, setSearchDebounceTimer ] = useState<number | null>(null);
   const [ isSearching, setIsSearching ] = useState<boolean>(false);
 
-  const { juice, juiceError, juiceLoading, fetchReadJuice } = useReadJuice();
-  const { juiceList, juiceListError, juiceListLoading, juiceListLoadingMore, juiceListHasMore, fetchReadJuiceList } = useReadJuiceList();
+  const { juice, juiceLoading, fetchReadJuice } = useReadJuice();
+  const { juiceList, juiceListLoading, juiceListLoadingMore, juiceListHasMore, fetchReadJuiceList } = useReadJuiceList();
 
   /*
   * 초기 데이터 로드 및 정렬 변경 시 로드
@@ -148,7 +148,7 @@ const JuiceListPage: React.FC = () => {
   * Modal State 제어
   * */
   useEffect(() => {
-    if (juice) {
+    if (juice?.data) {
       setModalOpen(true);
     }
   }, [juice]);
@@ -157,20 +157,16 @@ const JuiceListPage: React.FC = () => {
   * Axios Error 제어
   * */
   useEffect(() => {
-    if (juiceListError) {
-      showErrorAlert(
-          '주스 리스트 로드 실패',
-          juiceListError
-      ).then();
+    if (juiceList && juiceList.code !== 'OK') {
+      showErrorAlert('주스 리스트 로드 실패', juiceList.message).then();
     }
+  }, [juiceList]);
 
-    if (juiceError) {
-      showErrorAlert(
-          '주스 로드 실패',
-          juiceError
-      ).then();
+  useEffect(() => {
+    if (juice && juice.code !== 'OK') {
+      showErrorAlert('주스 로드 실패', juice.message).then();
     }
-  }, [juiceListError, juiceError]);
+  }, [juice]);
 
   return (
       <PageContainer>
@@ -239,7 +235,7 @@ const JuiceListPage: React.FC = () => {
                     message="검색 중..."
                 />
             ) : (
-                juiceList && juiceList.map((juice, index) => (
+                juiceList?.data && juiceList.data.map((juice, index) => (
                     <JuiceListComponent
                         key={`${juice.juiceId}-${index}`}
                         data={juice}
@@ -268,11 +264,11 @@ const JuiceListPage: React.FC = () => {
         </Container>
 
         {/* 기법 상세 모달 */}
-        {juice && (
+        {juice?.data && (
             <JuiceDetailModal
                 open={modalOpen}
                 onClose={() => setModalOpen(false)}
-                data={juice}
+                data={juice.data}
             />
         )}
       </PageContainer>

@@ -59,7 +59,7 @@ const UserSyrupInsertModal: React.FC<UserSyrupInsertModalProps> = ({ open, onClo
     onClose();
   };
 
-  const slideItems: CommonSlideElement[] = (syrupList ?? []).map((syrup) => ({
+  const slideItems: CommonSlideElement[] = (syrupList?.data ?? []).map((syrup) => ({
     id: syrup.syrupId,
     name: syrup.syrupName,
     nameKr: syrup.syrupNameKr,

@@ -40,8 +40,8 @@ const SpiritProductListPage: React.FC = () => {
   const [ searchDebounceTimer, setSearchDebounceTimer ] = useState<number | null>(null);
   const [ isSearching, setIsSearching ] = useState<boolean>(false);
 
-  const { spiritProduct, spiritProductLoading, spiritProductError, fetchReadSpiritProduct } = useReadSpiritProduct();
-  const { spiritProductList, spiritProductListLoading, spiritProductListError, spiritProductListHasMore, spiritProductListLoadingMore, fetchReadSpiritProductList } = useReadSpiritProductList();
+  const { spiritProduct, spiritProductLoading, fetchReadSpiritProduct } = useReadSpiritProduct();
+  const { spiritProductList, spiritProductListLoading, spiritProductListHasMore, spiritProductListLoadingMore, fetchReadSpiritProductList } = useReadSpiritProductList();
 
   /*
   * 초기 데이터 로드 및 정렬 변경 시 로드
@@ -145,7 +145,7 @@ const SpiritProductListPage: React.FC = () => {
   * Modal State 제어
   * */
   useEffect(() => {
-    if (spiritProduct) {
+    if (spiritProduct?.data) {
       setModalOpen(true);
     }
   }, [spiritProduct]);
@@ -154,20 +154,16 @@ const SpiritProductListPage: React.FC = () => {
   * Axios Error 제어
   * */
   useEffect(() => {
-    if (spiritProductListError) {
-      showErrorAlert(
-          '세부 기주 리스트 로드 실패',
-          spiritProductListError
-      ).then();
+    if (spiritProductList && spiritProductList.code !== 'OK') {
+      showErrorAlert('세부 기주 리스트 로드 실패', spiritProductList.message).then();
     }
+  }, [spiritProductList]);
 
-    if (spiritProductError) {
-      showErrorAlert(
-          '세부 기주 로드 실패',
-          spiritProductError
-      ).then();
+  useEffect(() => {
+    if (spiritProduct && spiritProduct.code !== 'OK') {
+      showErrorAlert('세부 기주 로드 실패', spiritProduct.message).then();
     }
-  }, [spiritProductListError, spiritProductError]);
+  }, [spiritProduct]);
 
   return (
     <PageContainer>
@@ -235,11 +231,11 @@ const SpiritProductListPage: React.FC = () => {
               message="검색 중..."
             />
           ) : (
-            spiritProductList && spiritProductList.map((spirit, index) => (
+            spiritProductList?.data && spiritProductList.data.map((spirit, index) => (
               <SpiritProductListComponent
                 key={`${spirit.spiritProductId}-${index}`}
-                spirit={spirit} 
-                index={index} 
+                spirit={spirit}
+                index={index}
                 onClickEvent={() => fetchReadSpiritProduct(spirit.spiritProductId)}
               />
             ))
@@ -264,11 +260,11 @@ const SpiritProductListPage: React.FC = () => {
       </Container>
 
       {/* 술 상세 모달 */}
-      {spiritProduct && (
+      {spiritProduct?.data && (
         <SpiritProductDetailModal
           open={modalOpen}
           onClose={() => setModalOpen(false)}
-          data={spiritProduct}
+          data={spiritProduct.data}
         />
       )}
     </PageContainer>

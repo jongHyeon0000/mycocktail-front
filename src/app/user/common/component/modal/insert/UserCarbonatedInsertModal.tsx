@@ -59,7 +59,7 @@ const UserCarbonatedInsertModal: React.FC<UserCarbonatedInsertModalProps> = ({ o
     onClose();
   };
 
-  const slideItems: CommonSlideElement[] = (carbonatedList ?? []).map((carbonated) => ({
+  const slideItems: CommonSlideElement[] = (carbonatedList?.data ?? []).map((carbonated) => ({
     id: carbonated.carbonatedId,
     name: carbonated.carbonatedName,
     nameKr: carbonated.carbonatedNameKr,

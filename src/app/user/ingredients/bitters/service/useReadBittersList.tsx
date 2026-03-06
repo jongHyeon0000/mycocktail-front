@@ -2,6 +2,7 @@ import {useState} from "react";
 import type {BittersDetail} from "../interface/BittersDetail.ts";
 import {api} from "../../../../../config/axios/AxiosConfig.ts";
 import type {ApiResponse} from "../../../../../config/axios/interface/ApiResponse.ts";
+import {toApiResponse} from "../../../../../config/axios/utils/toApiResponse.ts";
 
 interface FetchProps {
   /*
@@ -23,46 +24,31 @@ interface FetchProps {
 }
 
 const useReadBittersList = () => {
-  const [data, setData] = useState<BittersDetail[] | undefined>(undefined);
+  const [response, setResponse] = useState<ApiResponse<BittersDetail[] | null> | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingMore, setLoadingMore] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState<boolean>(true);
 
   const fetchReadBittersList = async (params?: FetchProps, appendData = false) => {
-    // 첫 페이지 요청이거나 appendData가 false인 경우 데이터 리셋
     if (appendData) {
       setLoadingMore(true);
     } else {
-      setData(undefined);
+      setResponse(undefined);
       setHasMore(true);
       setLoading(true);
     }
 
-    setError(null);
-
-    try{
-      const response = await api.get<ApiResponse<BittersDetail[]>>(`/api/bitters`, { params });
-
-      if (response.status === 200 && response.data.code === 'OK') {
-        const newData = response.data.data;
-        const limit = params?.limit || 6;
-        
-        // 받은 데이터가 limit보다 적으면 더 이상 없음
-        setHasMore(newData.length >= limit);
-        
-        if (appendData && params?.page !== 1 && data) {
-          setData([...data, ...newData]);
-        } else {
-          setData(newData);
-        }
-      } else {
-        console.error('Unexpected response:', response.status, response.data.code, response.data.message);
-      }
-
+    try {
+      const res = await api.get<ApiResponse<BittersDetail[]>>(`/api/bitters`, { params });
+      const newApiResponse = res.data;
+      const limit = params?.limit || 6;
+      setHasMore((newApiResponse.data?.length ?? 0) >= limit);
+      setResponse(prev => ({
+        ...newApiResponse,
+        data: appendData && prev?.data && newApiResponse.data ? [...prev.data, ...newApiResponse.data] : newApiResponse.data,
+      }));
     } catch (err) {
-      setError('Error fetching data');
-      console.error(err);
+      setResponse(toApiResponse(err));
     } finally {
       setLoading(false);
       setLoadingMore(false);
@@ -70,10 +56,9 @@ const useReadBittersList = () => {
   }
 
   return {
-    bittersList: data,
+    bittersList: response,
     bittersListLoading: loading,
     bittersListLoadingMore: loadingMore,
-    bittersListError: error,
     bittersListHasMore: hasMore,
     fetchReadBittersList
   };

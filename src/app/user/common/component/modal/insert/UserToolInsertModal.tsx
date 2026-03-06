@@ -59,7 +59,7 @@ const UserToolInsertModal: React.FC<UserToolInsertModalProps> = ({ open, onClose
     onClose();
   };
 
-  const slideItems: CommonSlideElement[] = (toolList ?? []).map((tool) => ({
+  const slideItems: CommonSlideElement[] = (toolList?.data ?? []).map((tool) => ({
     id: tool.toolId,
     name: tool.toolName,
     nameKr: tool.toolNameKr,

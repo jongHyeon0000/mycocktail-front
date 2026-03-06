@@ -59,7 +59,7 @@ const UserJuiceInsertModal: React.FC<UserJuiceInsertModalProps> = ({ open, onClo
     onClose();
   };
 
-  const slideItems: CommonSlideElement[] = (juiceList ?? []).map((juice) => ({
+  const slideItems: CommonSlideElement[] = (juiceList?.data ?? []).map((juice) => ({
     id: juice.juiceId,
     name: juice.juiceName,
     nameKr: juice.juiceNameKr,

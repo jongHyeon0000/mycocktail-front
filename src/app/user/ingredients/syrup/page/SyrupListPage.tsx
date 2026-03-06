@@ -42,8 +42,8 @@ const SyrupListPage: React.FC = () => {
   const [ searchDebounceTimer, setSearchDebounceTimer ] = useState<number | null>(null);
   const [ isSearching, setIsSearching ] = useState<boolean>(false);
 
-  const { syrup, syrupError, syrupLoading, fetchReadSyrup } = useReadSyrup();
-  const { syrupListError, syrupListHasMore, syrupListLoading, syrupListLoadingMore, syrupList, fetchReadSyrupList } = useReadSyrupList();
+  const { syrup, syrupLoading, fetchReadSyrup } = useReadSyrup();
+  const { syrupListHasMore, syrupListLoading, syrupListLoadingMore, syrupList, fetchReadSyrupList } = useReadSyrupList();
 
   /*
   * 초기 데이터 로드 및 정렬 변경 시 로드
@@ -148,7 +148,7 @@ const SyrupListPage: React.FC = () => {
   * Modal State 제어
   * */
   useEffect(() => {
-    if (syrup) {
+    if (syrup?.data) {
       setModalOpen(true);
     }
   }, [syrup]);
@@ -157,20 +157,16 @@ const SyrupListPage: React.FC = () => {
   * Axios Error 제어
   * */
   useEffect(() => {
-    if (syrupListError) {
-      showErrorAlert(
-          '시럽 리스트 로드 실패',
-          syrupListError
-      ).then();
+    if (syrupList && syrupList.code !== 'OK') {
+      showErrorAlert('시럽 리스트 로드 실패', syrupList.message).then();
     }
+  }, [syrupList]);
 
-    if (syrupError) {
-      showErrorAlert(
-          '시럽 로드 실패',
-          syrupError
-      ).then();
+  useEffect(() => {
+    if (syrup && syrup.code !== 'OK') {
+      showErrorAlert('시럽 로드 실패', syrup.message).then();
     }
-  }, [syrupListError, syrupError]);
+  }, [syrup]);
 
   return (
       <PageContainer>
@@ -239,7 +235,7 @@ const SyrupListPage: React.FC = () => {
                     message="검색 중..."
                 />
             ) : (
-                syrupList && syrupList.map((syrup, index) => (
+                syrupList?.data && syrupList.data.map((syrup, index) => (
                     <SyrupListComponent
                         key={`${syrup.syrupId}-${index}`}
                         data={syrup}
@@ -268,11 +264,11 @@ const SyrupListPage: React.FC = () => {
         )}
 
         {/* 시럽 상세 모달 */}
-        {syrup && (
+        {syrup?.data && (
             <SyrupDetailModal
                 open={modalOpen}
                 onClose={() => setModalOpen(false)}
-                data={syrup}
+                data={syrup.data}
             />
         )}
       </PageContainer>

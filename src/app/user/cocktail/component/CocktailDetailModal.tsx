@@ -10,6 +10,9 @@ import {
 } from "@mui/icons-material";
 import {COMMON_MODAL_STYLE} from "../../common/style/CommonModal.style.ts";
 import useAuth from "../../auth/service/useAuth.ts";
+import useIncrementLike from "../service/useIncrementLike.tsx";
+import CommonSuccessSnackbar from "../../common/component/snackbar/CommonSuccessSnackbar.tsx";
+import CommonErrorSnackbar from "../../common/component/snackbar/CommonErrorSnackbar.tsx";
 import type {CocktailDetail} from "../interface/CocktailDetail.ts";
 import styled from "styled-components";
 import {Box, Chip, IconButton, Typography} from "@mui/material";
@@ -38,6 +41,10 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
   const [slideDirection, setSlideDirection] = useState(1);
   const [replyingTo, setReplyingTo] = useState<number | null>(null);
   const { user, isAuthenticated } = useAuth();
+  const { incrementLikeResponse, fetchIncrementLike } = useIncrementLike();
+  const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
+  const [snackbarMessage, setSnackbarMessage] = useState<string>("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success");
 
   useEffect(() => {
     if (open) {
@@ -45,14 +52,17 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
     }
   }, [open]);
 
+  useEffect(() => {
+    if (!incrementLikeResponse) return;
+    setSnackbarMessage(incrementLikeResponse.message);
+    setSnackbarSeverity(incrementLikeResponse.code === 'OK' ? 'success' : 'error');
+    setSnackbarOpen(true);
+  }, [incrementLikeResponse]);
+
   const handleSectionSwitch = (target: 'ingredients' | 'techniques') => {
     if (target === activeSection) return;
     setSlideDirection(target === 'techniques' ? 1 : -1);
     setActiveSection(target);
-  };
-
-  const handleLikeClick = () => {
-    console.log('좋아요 클릭');
   };
 
   const handleShareClick = () => {
@@ -424,7 +434,7 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
               <BottomSection>
                 <ActionButtons>
                   <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                    <ActionButton onClick={handleLikeClick}>
+                    <ActionButton onClick={() => fetchIncrementLike(data.cocktailId)}>
                       <ActionIcon actionType="like"><FavoriteOutlined /></ActionIcon>
                       <ActionText>좋아요</ActionText>
                       <ActionCount>{data.likeCount}</ActionCount>
@@ -446,6 +456,19 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
               </BottomSection>
             </ModalContainerWide>
         </StyledModal>
+      )}
+      {snackbarSeverity === "success" ? (
+        <CommonSuccessSnackbar
+          open={snackbarOpen}
+          message={snackbarMessage}
+          onClose={() => setSnackbarOpen(false)}
+        />
+      ) : (
+        <CommonErrorSnackbar
+          open={snackbarOpen}
+          message={snackbarMessage}
+          onClose={() => setSnackbarOpen(false)}
+        />
       )}
     </AnimatePresence>
   );

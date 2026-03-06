@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Avatar,
   Box,
@@ -30,7 +30,7 @@ import { useAuthStore } from "../../../../store/authStore.ts";
 
 const ProfileEditPage: React.FC = () => {
   const { user } = useAuth();
-  const { fetchUpdateUserInfo, updateUserInfoLoading } = useUpdateUserInfo();
+  const { updateUserInfoResponse, fetchUpdateUserInfo, updateUserInfoLoading } = useUpdateUserInfo();
   const setUser = useAuthStore((state) => state.setUser);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -43,6 +43,19 @@ const ProfileEditPage: React.FC = () => {
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
   const [snackbarMessage, setSnackbarMessage] = useState<string>("");
   const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success");
+
+  useEffect(() => {
+    if (!updateUserInfoResponse) return;
+    if (updateUserInfoResponse.code === 'OK') {
+      if (updateUserInfoResponse.data) setUser(updateUserInfoResponse.data);
+      setSnackbarSeverity("success");
+      setSnackbarMessage("회원정보가 수정되었습니다.");
+    } else {
+      setSnackbarSeverity("error");
+      setSnackbarMessage(updateUserInfoResponse.message);
+    }
+    setSnackbarOpen(true);
+  }, [updateUserInfoResponse]);
 
   if (!user) return null;
 
@@ -57,8 +70,8 @@ const ProfileEditPage: React.FC = () => {
     setPreviewImage(objectUrl);
   };
 
-  const handleSubmit = async () => {
-    const result = await fetchUpdateUserInfo({
+  const handleSubmit = () => {
+    fetchUpdateUserInfo({
       ...user,
       username,
       gender,
@@ -66,17 +79,6 @@ const ProfileEditPage: React.FC = () => {
       profileNotes,
       thumbnailImage: previewImage,
     });
-
-    if (result) {
-      setUser(result);
-      setSnackbarSeverity("success");
-      setSnackbarMessage("회원정보가 수정되었습니다.");
-    } else {
-      setSnackbarSeverity("error");
-      setSnackbarMessage("회원정보 수정에 실패했습니다.");
-    }
-
-    setSnackbarOpen(true);
   };
 
   return (

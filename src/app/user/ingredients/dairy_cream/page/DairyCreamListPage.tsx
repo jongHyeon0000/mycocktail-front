@@ -42,8 +42,8 @@ const DairyCreamListPage: React.FC = () => {
   const [ searchDebounceTimer, setSearchDebounceTimer ] = useState<number | null>(null);
   const [ isSearching, setIsSearching ] = useState<boolean>(false);
 
-  const { dairyCream, dairyCreamError, dairyCreamLoading, fetchReadDairyCream } = useReadDairyCream();
-  const { dairyCreamList, dairyCreamListError, dairyCreamListLoading, dairyCreamListLoadingMore, dairyCreamListHasMore, fetchReadDairyCreamList } = useReadDairyCreamList();
+  const { dairyCream, dairyCreamLoading, fetchReadDairyCream } = useReadDairyCream();
+  const { dairyCreamList, dairyCreamListLoading, dairyCreamListLoadingMore, dairyCreamListHasMore, fetchReadDairyCreamList } = useReadDairyCreamList();
 
   /*
   * 초기 데이터 로드 및 정렬 변경 시 로드
@@ -148,7 +148,7 @@ const DairyCreamListPage: React.FC = () => {
   * Modal State 제어
   * */
   useEffect(() => {
-    if (dairyCream) {
+    if (dairyCream?.data) {
       setModalOpen(true);
     }
   }, [dairyCream]);
@@ -157,20 +157,16 @@ const DairyCreamListPage: React.FC = () => {
   * Axios Error 제어
   * */
   useEffect(() => {
-    if (dairyCreamListError) {
-      showErrorAlert(
-          '유제품/크림 리스트 로드 실패',
-          dairyCreamListError
-      ).then();
+    if (dairyCreamList && dairyCreamList.code !== 'OK') {
+      showErrorAlert('유제품/크림 리스트 로드 실패', dairyCreamList.message).then();
     }
+  }, [dairyCreamList]);
 
-    if (dairyCreamError) {
-      showErrorAlert(
-          '유제품/크림 로드 실패',
-          dairyCreamError
-      ).then();
+  useEffect(() => {
+    if (dairyCream && dairyCream.code !== 'OK') {
+      showErrorAlert('유제품/크림 로드 실패', dairyCream.message).then();
     }
-  }, [dairyCreamListError, dairyCreamError]);
+  }, [dairyCream]);
 
   return (
       <PageContainer>
@@ -239,7 +235,7 @@ const DairyCreamListPage: React.FC = () => {
                     message="검색 중..."
                 />
             ) : (
-                dairyCreamList && dairyCreamList.map((dairyCream, index) => (
+                dairyCreamList?.data && dairyCreamList.data.map((dairyCream, index) => (
                     <DairyCreamListComponent
                         key={`${dairyCream.dairyCreamId}-${index}`}
                         data={dairyCream}
@@ -268,11 +264,11 @@ const DairyCreamListPage: React.FC = () => {
         </Container>
 
         {/* 유제품/크림 상세 모달 */}
-        {dairyCream && (
+        {dairyCream?.data && (
             <DairyCreamDetailModal
                 open={modalOpen}
                 onClose={() => setModalOpen(false)}
-                data={dairyCream}
+                data={dairyCream.data}
             />
         )}
       </PageContainer>
