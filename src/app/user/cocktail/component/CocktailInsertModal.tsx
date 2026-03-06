@@ -254,129 +254,131 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
                 <ImageUploadText>이미지 업로드</ImageUploadText>
               </ImageUploadArea>
 
-              <TitleSection>
+              <TitleInfoGroup>
+                <TitleSection>
+                  <StyledTextField
+                    inputRef={FORM_REFS.cocktailName}
+                    placeholder="칵테일 이름 (영문)"
+                    variant="outlined"
+                    size="small"
+                    fullWidth
+                    value={cocktailName}
+                    onChange={(e) => { setCocktailName(e.target.value); clearError("cocktailName"); }}
+                    error={!!validationError.cocktailName}
+                    helperText={validationError.cocktailName}
+                  />
+                  <StyledTextField
+                    inputRef={FORM_REFS.cocktailNameKr}
+                    placeholder="칵테일 이름 (한글)"
+                    variant="outlined"
+                    size="small"
+                    fullWidth
+                    value={cocktailNameKr}
+                    onChange={(e) => { setCocktailNameKr(e.target.value); clearError("cocktailNameKr"); }}
+                    error={!!validationError.cocktailNameKr}
+                    helperText={validationError.cocktailNameKr}
+                  />
+                </TitleSection>
+
+                <InfoGrid>
+                  <InfoCard>
+                    <InfoLabel>카테고리</InfoLabel>
+                    <FormControl error={!!validationError.category} size="small" fullWidth>
+                      <StyledSelect
+                        value={category}
+                        onChange={(e) => { setCategory(e.target.value as CocktailCategory); clearError("category"); }}
+                        displayEmpty
+                      >
+                        <MenuItem value="" disabled>선택</MenuItem>
+                        <MenuItem value="classic">클래식</MenuItem>
+                        <MenuItem value="contemporary">컨템포러리</MenuItem>
+                        <MenuItem value="signature">시그니처</MenuItem>
+                        <MenuItem value="mocktail">목테일</MenuItem>
+                        <MenuItem value="other">기타</MenuItem>
+                      </StyledSelect>
+                      {validationError.category && <FormHelperText>{validationError.category}</FormHelperText>}
+                    </FormControl>
+                  </InfoCard>
+
+                  <InfoCard>
+                    <InfoLabel>예상 도수</InfoLabel>
+                    <StyledTextField
+                      inputRef={FORM_REFS.absPercentage}
+                      placeholder="0"
+                      variant="outlined"
+                      size="small"
+                      type="number"
+                      fullWidth
+                      value={absPercentage}
+                      onChange={(e) => { setAbsPercentage(e.target.value); clearError("absPercentage"); }}
+                      error={!!validationError.absPercentage}
+                      helperText={validationError.absPercentage}
+                      InputProps={{ endAdornment: <span>%</span> }}
+                    />
+                  </InfoCard>
+
+                  <InfoCard>
+                    <InfoLabel>표준 제공량</InfoLabel>
+                    <StyledTextField
+                      inputRef={FORM_REFS.servingSizeMl}
+                      placeholder="0"
+                      variant="outlined"
+                      size="small"
+                      type="number"
+                      fullWidth
+                      value={servingSizeMl}
+                      onChange={(e) => { setServingSizeMl(e.target.value); clearError("servingSizeMl"); }}
+                      error={!!validationError.servingSizeMl}
+                      helperText={validationError.servingSizeMl}
+                      InputProps={{ endAdornment: <span>ml</span> }}
+                    />
+                  </InfoCard>
+
+                  <InfoCard>
+                    <InfoLabel>난이도</InfoLabel>
+                    <FormControl error={!!validationError.difficulty} size="small" fullWidth>
+                      <StyledSelect
+                        value={difficulty}
+                        onChange={(e) => { setDifficulty(e.target.value as number); clearError("difficulty"); }}
+                        displayEmpty
+                      >
+                        <MenuItem value="" disabled>선택</MenuItem>
+                        <MenuItem value={1}>1 - 매우 쉬움</MenuItem>
+                        <MenuItem value={2}>2 - 쉬움</MenuItem>
+                        <MenuItem value={3}>3 - 보통</MenuItem>
+                        <MenuItem value={4}>4 - 어려움</MenuItem>
+                        <MenuItem value={5}>5 - 매우 어려움</MenuItem>
+                      </StyledSelect>
+                      {validationError.difficulty && <FormHelperText>{validationError.difficulty}</FormHelperText>}
+                    </FormControl>
+                  </InfoCard>
+
+                  <InfoCard>
+                    <InfoLabel>출처</InfoLabel>
+                    <FormControl error={!!validationError.source} size="small" fullWidth>
+                      <StyledSelect
+                        value={source}
+                        onChange={(e) => { setSource(e.target.value as "official" | "community"); clearError("source"); }}
+                        displayEmpty
+                      >
+                        <MenuItem value="" disabled>선택</MenuItem>
+                        <MenuItem value="official">공식</MenuItem>
+                        <MenuItem value="community">커뮤니티 레시피</MenuItem>
+                      </StyledSelect>
+                      {validationError.source && <FormHelperText>{validationError.source}</FormHelperText>}
+                    </FormControl>
+                  </InfoCard>
+                </InfoGrid>
+
                 <StyledTextField
-                  inputRef={FORM_REFS.cocktailName}
-                  placeholder="칵테일 이름 (영문)"
+                  placeholder="한 줄 소개..."
                   variant="outlined"
                   size="small"
                   fullWidth
-                  value={cocktailName}
-                  onChange={(e) => { setCocktailName(e.target.value); clearError("cocktailName"); }}
-                  error={!!validationError.cocktailName}
-                  helperText={validationError.cocktailName}
+                  multiline
+                  rows={2}
                 />
-                <StyledTextField
-                  inputRef={FORM_REFS.cocktailNameKr}
-                  placeholder="칵테일 이름 (한글)"
-                  variant="outlined"
-                  size="small"
-                  fullWidth
-                  value={cocktailNameKr}
-                  onChange={(e) => { setCocktailNameKr(e.target.value); clearError("cocktailNameKr"); }}
-                  error={!!validationError.cocktailNameKr}
-                  helperText={validationError.cocktailNameKr}
-                />
-              </TitleSection>
-
-              <InfoGrid>
-                <InfoCard>
-                  <InfoLabel>카테고리</InfoLabel>
-                  <FormControl error={!!validationError.category} size="small" fullWidth>
-                    <StyledSelect
-                      value={category}
-                      onChange={(e) => { setCategory(e.target.value as CocktailCategory); clearError("category"); }}
-                      displayEmpty
-                    >
-                      <MenuItem value="" disabled>선택</MenuItem>
-                      <MenuItem value="classic">클래식</MenuItem>
-                      <MenuItem value="contemporary">컨템포러리</MenuItem>
-                      <MenuItem value="signature">시그니처</MenuItem>
-                      <MenuItem value="mocktail">목테일</MenuItem>
-                      <MenuItem value="other">기타</MenuItem>
-                    </StyledSelect>
-                    {validationError.category && <FormHelperText>{validationError.category}</FormHelperText>}
-                  </FormControl>
-                </InfoCard>
-
-                <InfoCard>
-                  <InfoLabel>예상 도수</InfoLabel>
-                  <StyledTextField
-                    inputRef={FORM_REFS.absPercentage}
-                    placeholder="0"
-                    variant="outlined"
-                    size="small"
-                    type="number"
-                    fullWidth
-                    value={absPercentage}
-                    onChange={(e) => { setAbsPercentage(e.target.value); clearError("absPercentage"); }}
-                    error={!!validationError.absPercentage}
-                    helperText={validationError.absPercentage}
-                    InputProps={{ endAdornment: <span>%</span> }}
-                  />
-                </InfoCard>
-
-                <InfoCard>
-                  <InfoLabel>표준 제공량</InfoLabel>
-                  <StyledTextField
-                    inputRef={FORM_REFS.servingSizeMl}
-                    placeholder="0"
-                    variant="outlined"
-                    size="small"
-                    type="number"
-                    fullWidth
-                    value={servingSizeMl}
-                    onChange={(e) => { setServingSizeMl(e.target.value); clearError("servingSizeMl"); }}
-                    error={!!validationError.servingSizeMl}
-                    helperText={validationError.servingSizeMl}
-                    InputProps={{ endAdornment: <span>ml</span> }}
-                  />
-                </InfoCard>
-
-                <InfoCard>
-                  <InfoLabel>난이도</InfoLabel>
-                  <FormControl error={!!validationError.difficulty} size="small" fullWidth>
-                    <StyledSelect
-                      value={difficulty}
-                      onChange={(e) => { setDifficulty(e.target.value as number); clearError("difficulty"); }}
-                      displayEmpty
-                    >
-                      <MenuItem value="" disabled>선택</MenuItem>
-                      <MenuItem value={1}>1 - 매우 쉬움</MenuItem>
-                      <MenuItem value={2}>2 - 쉬움</MenuItem>
-                      <MenuItem value={3}>3 - 보통</MenuItem>
-                      <MenuItem value={4}>4 - 어려움</MenuItem>
-                      <MenuItem value={5}>5 - 매우 어려움</MenuItem>
-                    </StyledSelect>
-                    {validationError.difficulty && <FormHelperText>{validationError.difficulty}</FormHelperText>}
-                  </FormControl>
-                </InfoCard>
-
-                <InfoCard>
-                  <InfoLabel>출처</InfoLabel>
-                  <FormControl error={!!validationError.source} size="small" fullWidth>
-                    <StyledSelect
-                      value={source}
-                      onChange={(e) => { setSource(e.target.value as "official" | "community"); clearError("source"); }}
-                      displayEmpty
-                    >
-                      <MenuItem value="" disabled>선택</MenuItem>
-                      <MenuItem value="official">공식</MenuItem>
-                      <MenuItem value="community">커뮤니티 레시피</MenuItem>
-                    </StyledSelect>
-                    {validationError.source && <FormHelperText>{validationError.source}</FormHelperText>}
-                  </FormControl>
-                </InfoCard>
-              </InfoGrid>
-
-              <StyledTextField
-                placeholder="한 줄 소개..."
-                variant="outlined"
-                size="small"
-                fullWidth
-                multiline
-                rows={2}
-              />
+              </TitleInfoGroup>
             </HeaderSection>
 
             {/* 콘텐츠 섹션 */}
@@ -581,22 +583,11 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
                   {tags.length > 0 && (
                     <TagChipContainer>
                       {tags.map((tag) => (
-                        <Chip
+                        <TagChip
                           key={tag}
                           label={`#${tag}`}
                           onDelete={() => handleRemoveTag(tag)}
                           deleteIcon={<CloseOutlined style={{ fontSize: 14 }} />}
-                          sx={{
-                            background: "linear-gradient(135deg, #ff9800 0%, #f57c00 100%)",
-                            color: "white",
-                            fontWeight: 500,
-                            fontSize: "0.8rem",
-                            borderRadius: "16px",
-                            "& .MuiChip-deleteIcon": {
-                              color: "rgba(255,255,255,0.8)",
-                              "&:hover": { color: "white" },
-                            },
-                          }}
                         />
                       ))}
                     </TagChipContainer>
@@ -732,6 +723,19 @@ const ImageUploadText = styled(Typography)`
     font-size: 0.875rem;
     font-weight: 600;
     color: white;
+  }
+`;
+
+const TitleInfoGroup = styled(Box)`
+  && {
+    background: rgba(240, 242, 248, 0.85);
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    border: 1px solid rgba(103, 126, 234, 0.15);
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.1);
   }
 `;
 
@@ -935,11 +939,12 @@ const EmptyHint = styled(Typography)`
 
 const PersonalSection = styled(Box)`
   && {
-    background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
+    background: #ffffff;
     border-radius: 16px;
-    padding: 20px;
-    margin-bottom: 24px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    border-left: 4px solid #818cf8;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -948,20 +953,11 @@ const PersonalSection = styled(Box)`
 
 const PersonalTitle = styled(Typography)`
   && {
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: #2d3436;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-
-    &::before {
-      content: '';
-      width: 3px;
-      height: 18px;
-      background-color: #e17055;
-      border-radius: 2px;
-    }
+    font-size: 1rem;
+    font-weight: 700;
+    color: #818cf8;
+    text-transform: uppercase;
+    letter-spacing: 1px;
   }
 `;
 
@@ -975,11 +971,11 @@ const SectionDivider = styled(Divider)`
 
 const TagSection = styled(Box)`
   && {
-    background: linear-gradient(135deg, #fff3e0 0%, #fffbf5 100%);
+    background: #ffffff;
     border-radius: 16px;
-    padding: 20px;
+    padding: 20px 24px;
     margin-bottom: 8px;
-    border: 1px solid rgba(255, 152, 0, 0.2);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
     display: flex;
     flex-direction: column;
     gap: 14px;
@@ -996,20 +992,21 @@ const TagSectionHeader = styled(Box)`
 
 const TagSectionTitle = styled(Typography)`
   && {
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: #e65100;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #9ca3af;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 
     &::before {
       content: '';
-      width: 3px;
-      height: 18px;
-      background-color: #ff9800;
-      border-radius: 2px;
-      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #d1d5db;
     }
   }
 `;
@@ -1031,13 +1028,13 @@ const TagInputRow = styled(Box)`
 
 const TagHash = styled.span`
   font-weight: 700;
-  color: #ff9800;
+  color: #9ca3af;
   font-size: 1rem;
 `;
 
 const TagAddButton = styled(Button)`
   && {
-    background-color: #ff9800;
+    background-color: #1e293b;
     color: #fff;
     border-radius: 12px;
     padding: 7px 20px;
@@ -1047,7 +1044,7 @@ const TagAddButton = styled(Button)`
     flex-shrink: 0;
 
     &:hover {
-      background-color: #f57c00;
+      background-color: #334155;
     }
   }
 `;
@@ -1057,6 +1054,28 @@ const TagChipContainer = styled(Box)`
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
+  }
+`;
+
+const TagChip = styled(Chip)`
+  && {
+    background: #1e293b;
+    color: #f1f5f9;
+    font-weight: 500;
+    font-size: 0.8rem;
+    border-radius: 20px;
+
+    & .MuiChip-deleteIcon {
+      color: rgba(241, 245, 249, 0.6);
+
+      &:hover {
+        color: #f1f5f9;
+      }
+    }
+
+    &:hover {
+      background: #334155;
+    }
   }
 `;
 
