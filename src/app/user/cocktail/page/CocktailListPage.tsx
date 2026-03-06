@@ -1,13 +1,12 @@
 import React, {type SetStateAction, useEffect, useState, useCallback} from "react";
 import {
   Box,
-  Button,
   Container,
   InputAdornment,
   MenuItem,
   FormControl,
   CircularProgress,
-  Typography, Select, TextField
+  Typography
 } from "@mui/material";
 import CocktailDetailModal from "../component/CocktailDetailModal";
 import CocktailInsertModal from "../component/CocktailInsertModal";
@@ -18,7 +17,15 @@ import { showErrorAlert } from "../../common/utils/AlertUtils";
 import useReadCocktailList from "../service/useReadCocktailList.tsx";
 import CocktailListComponent from "../component/CocktailListComponent.tsx";
 import SearchLoadingOverlay from "../../common/component/loading/SearchLoadingOverlay.tsx";
-import styled from "styled-components";
+import {
+  ControlsContainer,
+  ItemList,
+  PageContainer,
+  RegisterButton,
+  RightControls,
+  SearchField,
+  SortSelect,
+} from "../../common/style/CommonListPage.style.tsx";
 
 const CocktailListPage: React.FC = () => {
   /*
@@ -240,7 +247,7 @@ const CocktailListPage: React.FC = () => {
         </ControlsContainer>
 
         {/* 칵테일 리스트 */}
-        <CocktailList>
+        <ItemList>
           {isSearching ? (
             <SearchLoadingOverlay
               open={isSearching}
@@ -251,7 +258,7 @@ const CocktailListPage: React.FC = () => {
               <CocktailListComponent cocktail={cocktail} index={index} onClickEvent={() => fetchReadCocktail(cocktail.cocktailId)} />
             ))
           )}
-        </CocktailList>
+        </ItemList>
 
         {/* 추가 로딩 중 (무한 스크롤) */}
         {cocktailListLoadingMore && (
@@ -288,110 +295,3 @@ const CocktailListPage: React.FC = () => {
 
 export default CocktailListPage;
 
-const PageContainer = styled(Box)`
-  && {
-    min-height: 100vh;
-    background-color: #f5f5f5;
-    padding-top: 96px;
-  }
-`;
-
-const ControlsContainer = styled(Box)`
-  && {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 32px;
-    gap: 16px;
-    
-    @media (max-width: 600px) {
-      flex-wrap: wrap;
-    }
-  }
-`;
-
-const SortSelect = styled(Select)`
-  && {
-    background-color: #fff;
-    border-radius: 16px;
-    min-width: 150px;
-    
-    .MuiOutlinedInput-notchedOutline {
-      border-color: #eee;
-    }
-    
-    &:hover .MuiOutlinedInput-notchedOutline {
-      border-color: #ddd;
-    }
-  }
-`;
-
-const SearchField = styled(TextField)`
-  && {
-    width: 300px;
-    background-color: #fff;
-    
-    .MuiOutlinedInput-root {
-      border-radius: 16px;
-      
-      &:hover fieldset {
-        border-color: #ddd;
-      }
-      
-      &.Mui-focused fieldset {
-        border-color: #888;
-      }
-    }
-    
-    & fieldset {
-      border-color: #eee;
-    }
-    
-    @media (max-width: 600px) {
-      width: 100%;
-    }
-  }
-`;
-
-const CocktailList = styled(Box)`
-  && {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-  }
-`;
-
-const RightControls = styled(Box)`
-  && {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-
-    @media (max-width: 600px) {
-      width: 100%;
-      flex-wrap: wrap;
-    }
-  }
-`;
-
-const RegisterButton = styled(Button)`
-  && {
-    background-color: #ff4757;
-    color: #fff;
-    border-radius: 16px;
-    padding: 7px 20px;
-    font-weight: 600;
-    font-size: 0.875rem;
-    white-space: nowrap;
-    text-transform: none;
-
-    &:hover {
-      background-color: #e8404f;
-    }
-
-    @media (max-width: 600px) {
-      width: 100%;
-    }
-  }
-`;

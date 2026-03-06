@@ -1,8 +1,15 @@
 import React from "react";
 import {motion} from "framer-motion";
-import {Box, Card, CardContent, CardMedia, Typography} from "@mui/material";
+import {Box, Card, CardMedia, Typography} from "@mui/material";
 import type {SpiritProductDetail} from "../interface/SpiritProductDetail.ts";
 import styled from "styled-components";
+import {
+  CardContentArea,
+  ContentSection,
+  ImageSection,
+  ItemDescription,
+  ItemTitle,
+} from "../../common/style/CommonListComponent.style.tsx";
 
 interface SpiritListComponentProps {
   spirit: SpiritProductDetail;
@@ -41,12 +48,7 @@ const SpiritProductListComponent: React.FC<SpiritListComponentProps> = ({ spirit
       >
         <CardContentArea>
           {/* 이미지 섹션 */}
-          <Box sx={{
-            flex: "0 0 200px",
-            "@media (max-width: 600px)": {
-              flex: "0 0 120px"
-            }
-          }}>
+          <ImageSection>
             <CardMedia
                 component="img"
                 height="200"
@@ -58,18 +60,18 @@ const SpiritProductListComponent: React.FC<SpiritListComponentProps> = ({ spirit
                   height: "100%"
                 }}
             />
-          </Box>
+          </ImageSection>
 
           {/* 콘텐츠 섹션 */}
           <ContentSection>
             <Box>
-              <SpiritTitle variant="h6">
+              <ItemTitle variant="h6">
                 {spirit.spiritNameKr} ({spirit.spiritName})
-              </SpiritTitle>
+              </ItemTitle>
 
-              <SpiritDescription variant="body2">
+              <ItemDescription variant="body2">
                 {spirit.profileNote}
-              </SpiritDescription>
+              </ItemDescription>
             </Box>
 
             <BottomInfo>
@@ -96,57 +98,6 @@ const SpiritProductListComponent: React.FC<SpiritListComponentProps> = ({ spirit
 
 export default SpiritProductListComponent;
 
-const CardContentArea = styled(CardContent)`
-  && {
-    padding: 0;
-    display: flex;
-    height: 200px;
-    
-    &:last-child {
-      padding-bottom: 0;
-    }
-    
-    @media (max-width: 600px) {
-      height: 180px;
-    }
-  }
-`;
-
-const ContentSection = styled(Box)`
-  && {
-    flex: 1;
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    
-    @media (max-width: 600px) {
-      padding: 16px;
-    }
-  }
-`;
-
-const SpiritTitle = styled(Typography)`
-  && {
-    font-weight: 600;
-    font-size: 1.5rem;
-    color: #333;
-    margin-bottom: 8px;
-    
-    @media (max-width: 600px) {
-      font-size: 1.25rem;
-    }
-  }
-`;
-
-const SpiritDescription = styled(Typography)`
-  && {
-    color: #666;
-    font-size: 0.95rem;
-    line-height: 1.5;
-    margin-bottom: 16px;
-  }
-`;
 
 const SpiritAlcohol = styled(Typography)`
   && {
