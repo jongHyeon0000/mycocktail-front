@@ -11,6 +11,13 @@ import styled from "styled-components";
 import {Box, Chip, IconButton, Modal, Paper, Typography} from "@mui/material";
 import CocktailIngredientsSection from "./CocktailIngredientsSection.tsx";
 import CocktailTechniquesSection from "./CocktailTechniquesSection.tsx";
+import {
+  StyledModal, ModalContainerWide, HeaderSection, PlaceholderIcon,
+  TitleSection, EnglishTitle, KoreanTitle, InfoGrid, InfoCard, InfoLabel, InfoValue,
+  ProfileDescription, ContentSection, SectionTitle, TextContent,
+  PersonalSection, PersonalTitle, PersonalContent,
+  BottomSection, DateInfo, DateText,
+} from "../../common/style/CommonDetailModal.style.tsx";
 
 interface CocktailDetailModalProps {
   open: boolean;
@@ -54,7 +61,7 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
           onClose={onClose}
           closeAfterTransition
         >
-          <ModalContainer
+          <ModalContainerWide
             as={motion.div}
             variants={COMMON_MODAL_STYLE}
             initial="hidden"
@@ -357,7 +364,7 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                   <DateText>최종 업데이트: {data.updatedAt}</DateText>
                 </DateInfo>
               </BottomSection>
-            </ModalContainer>
+            </ModalContainerWide>
         </StyledModal>
       )}
     </AnimatePresence>
@@ -365,50 +372,6 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
 };
 
 export default CocktailDetailModal;
-
-const StyledModal = styled(Modal)`
-  && {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 16px;
-  }
-`;
-
-const ModalContainer = styled(Paper)`
-  && {
-    max-width: 1000px;
-    width: 100%;
-    max-height: 90vh;
-    overflow-y: auto;
-    border-radius: 20px;
-    position: relative;
-    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-    margin: auto; /* 중앙 정렬을 위해 추가 */
-    
-    &:focus {
-      outline: none;
-    }
-    
-    @media (max-width: 600px) {
-      margin: 16px;
-      max-height: 95vh;
-      border-radius: 16px;
-    }
-  }
-`;
-
-const HeaderSection = styled(Box)`
-  && {
-    position: relative;
-    padding: 32px;
-    
-    @media (max-width: 600px) {
-      padding: 24px;
-    }
-  }
-`;
 
 const CocktailImage = styled(Box)`
   && {
@@ -434,51 +397,6 @@ const CocktailImage = styled(Box)`
       width: 220px;
       height: 220px;
       margin-bottom: 20px;
-    }
-  }
-`;
-
-const PlaceholderIcon = styled(Box)`
-  && {
-    font-size: 64px;
-    color: white;
-    
-    @media (max-width: 600px) {
-      font-size: 48px;
-    }
-  }
-`;
-
-const TitleSection = styled(Box)`
-  && {
-    text-align: center;
-    margin-bottom: 24px;
-  }
-`;
-
-const EnglishTitle = styled(Typography)`
-  && {
-    font-size: 2.25rem;
-    font-weight: 700;
-    color: #2c3e50;
-    margin-bottom: 8px;
-    font-family: 'Playfair Display', serif;
-    
-    @media (max-width: 600px) {
-      font-size: 1.875rem;
-    }
-  }
-`;
-
-const KoreanTitle = styled(Typography)`
-  && {
-    font-size: 1.25rem;
-    font-weight: 500;
-    color: #7f8c8d;
-    margin-bottom: 16px;
-    
-    @media (max-width: 600px) {
-      font-size: 1.125rem;
     }
   }
 `;
@@ -563,51 +481,6 @@ const AuthorName = styled(Typography)`
   }
 `;
 
-const InfoGrid = styled(Box)`
-  && {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 16px;
-    margin-bottom: 24px;
-  }
-`;
-
-const InfoCard = styled(Box)`
-  && {
-    background: rgba(255, 255, 255, 0.8);
-    border-radius: 12px;
-    padding: 16px;
-    text-align: center;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
-    
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-    }
-  }
-`;
-
-const InfoLabel = styled(Typography)`
-  && {
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: #7f8c8d;
-    margin-bottom: 4px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-`;
-
-const InfoValue = styled(Typography)`
-  && {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #2c3e50;
-  }
-`;
-
 const CategoryChip = styled(Chip)`
   && {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -644,129 +517,6 @@ const VariantChip = styled(Chip)`
     color: ${props => props.color === 'success' ? 'white' : '#8B4513'};
     font-weight: 600;
     border-radius: 20px;
-  }
-`;
-
-const ProfileDescription = styled(Typography)`
-  && {
-    font-size: 1.125rem;
-    line-height: 1.6;
-    color: #34495e;
-    text-align: center;
-    font-style: italic;
-    background: rgba(255, 255, 255, 0.6);
-    padding: 20px;
-    border-radius: 16px;
-    border-left: 4px solid #3498db;
-    margin-bottom: 32px;
-  }
-`;
-
-const ContentSection = styled(Box)`
-  && {
-    padding: 24px 32px 32px;
-    background: #f2f4f7;
-
-    @media (max-width: 600px) {
-      padding: 20px 24px 24px;
-    }
-  }
-`;
-
-const SectionTitle = styled(Typography)`
-  && {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #2c3e50;
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    
-    &::before {
-      content: '';
-      width: 4px;
-      height: 24px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      border-radius: 2px;
-    }
-  }
-`;
-
-const TextContent = styled(Box)`
-  && {
-    background: #ffffff;
-    border-radius: 16px;
-    padding: 24px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-    
-    p {
-      line-height: 1.7;
-      color: #2c3e50;
-      margin-bottom: 16px;
-      
-      &:last-child {
-        margin-bottom: 0;
-      }
-    }
-    
-    ul, ol {
-      padding-left: 20px;
-      color: #2c3e50;
-      
-      li {
-        margin-bottom: 8px;
-        line-height: 1.6;
-      }
-    }
-    
-    strong {
-      color: #2c3e50;
-      font-weight: 700;
-    }
-  }
-`;
-
-const PersonalSection = styled(Box)`
-  && {
-    background: #ffffff;
-    border-radius: 16px;
-    padding: 20px 24px;
-    margin-bottom: 16px;
-    border-left: 4px solid #818cf8;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-  }
-`;
-
-const PersonalTitle = styled(Typography)`
-  && {
-    font-size: 1rem;
-    font-weight: 700;
-    color: #818cf8;
-    margin-bottom: 8px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-`;
-
-const PersonalContent = styled(Typography)`
-  && {
-    line-height: 1.7;
-    color: #374151;
-    font-size: 0.95rem;
-  }
-`;
-
-const BottomSection = styled(Box)`
-  && {
-    padding: 24px 32px 32px;
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
-    background: rgba(248, 249, 250, 0.8);
-    
-    @media (max-width: 600px) {
-      padding: 20px 24px 24px;
-    }
   }
 `;
 
@@ -837,28 +587,6 @@ const ActionCount = styled(Typography)`
   && {
     font-size: 0.75rem;
     color: #7f8c8d;
-  }
-`;
-
-const DateInfo = styled(Box)`
-  && {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    
-    @media (max-width: 600px) {
-      flex-direction: column;
-      gap: 8px;
-      align-items: flex-start;
-    }
-  }
-`;
-
-const DateText = styled(Typography)`
-  && {
-    font-size: 0.875rem;
-    color: #7f8c8d;
-    font-weight: 500;
   }
 `;
 
