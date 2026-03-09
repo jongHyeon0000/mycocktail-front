@@ -13,7 +13,7 @@ import CocktailInsertModal from "../component/CocktailInsertModal";
 import useReadCocktail from "../service/useReadCocktail.tsx";
 import useAuth from "../../auth/service/useAuth.ts";
 import LoadingOverlay from "../../common/component/loading/LoadingOverlay.tsx";
-import { showErrorAlert } from "../../common/utils/AlertUtils";
+import CommonErrorSnackbar from "../../common/component/snackbar/CommonErrorSnackbar";
 import useReadCocktailList from "../service/useReadCocktailList.tsx";
 import CocktailListComponent from "../component/CocktailListComponent.tsx";
 import SearchLoadingOverlay from "../../common/component/loading/SearchLoadingOverlay.tsx";
@@ -45,6 +45,8 @@ const CocktailListPage: React.FC = () => {
   const [ searchKeyword, setSearchKeyword ] = useState<string>("");
   const [ searchDebounceTimer, setSearchDebounceTimer ] = useState<number | null>(null);
   const [ isSearching, setIsSearching ] = useState<boolean>(false);
+  const [ snackbarOpen, setSnackbarOpen ] = useState<boolean>(false);
+  const [ snackbarMessage, setSnackbarMessage ] = useState<string>("");
 
   const { isAuthenticated } = useAuth();
   const { cocktailList, cocktailListLoading, cocktailListLoadingMore, cocktailListHasMore, fetchReadCocktailList } = useReadCocktailList();
@@ -163,13 +165,15 @@ const CocktailListPage: React.FC = () => {
   * */
   useEffect(() => {
     if (cocktailList && cocktailList.code !== 'OK') {
-      showErrorAlert('세부 칵테일 리스트 로드 실패', cocktailList.message).then();
+      setSnackbarMessage(cocktailList.message);
+      setSnackbarOpen(true);
     }
   }, [cocktailList]);
 
   useEffect(() => {
     if (cocktail && cocktail.code !== 'OK') {
-      showErrorAlert('세부 칵테일 로드 실패', cocktail.message).then();
+      setSnackbarMessage(cocktail.message);
+      setSnackbarOpen(true);
     }
   }, [cocktail]);
 
@@ -284,6 +288,12 @@ const CocktailListPage: React.FC = () => {
       <CocktailInsertModal
           open={insertModalOpen}
           onClose={() => setInsertModalOpen(false)}
+      />
+
+      <CommonErrorSnackbar
+        open={snackbarOpen}
+        message={snackbarMessage}
+        onClose={() => setSnackbarOpen(false)}
       />
     </PageContainer>
   );

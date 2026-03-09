@@ -1,7 +1,7 @@
 import React, {type SetStateAction, useCallback, useEffect, useState} from "react";
 import useReadOtherIngredientsList from "../service/useReadOtherIngredientsList.tsx";
 import useReadOtherIngredients from "../service/useReadOtherIngredients.tsx";
-import {showErrorAlert} from "../../../common/utils/AlertUtils.ts";
+import CommonErrorSnackbar from "../../../common/component/snackbar/CommonErrorSnackbar";
 import LoadingOverlay from "../../../common/component/loading/LoadingOverlay.tsx";
 import {
   Box,
@@ -41,6 +41,8 @@ const OtherListPage: React.FC = () => {
   const [ searchKeyword, setSearchKeyword ] = useState<string>("");
   const [ searchDebounceTimer, setSearchDebounceTimer ] = useState<number | null>(null);
   const [ isSearching, setIsSearching ] = useState<boolean>(false);
+  const [ snackbarOpen, setSnackbarOpen ] = useState<boolean>(false);
+  const [ snackbarMessage, setSnackbarMessage ] = useState<string>("");
 
   const { otherIngredients, otherIngredientsLoading, fetchReadOtherIngredients } = useReadOtherIngredients();
   const { otherIngredientsListHasMore, otherIngredientsListLoading, otherIngredientsListLoadingMore, otherIngredientsList, fetchReadOtherIngredientsList } = useReadOtherIngredientsList();
@@ -158,13 +160,15 @@ const OtherListPage: React.FC = () => {
   * */
   useEffect(() => {
     if (otherIngredientsList && otherIngredientsList.code !== 'OK') {
-      showErrorAlert('기타 첨가물 리스트 로드 실패', otherIngredientsList.message).then();
+      setSnackbarMessage(otherIngredientsList.message);
+      setSnackbarOpen(true);
     }
   }, [otherIngredientsList]);
 
   useEffect(() => {
     if (otherIngredients && otherIngredients.code !== 'OK') {
-      showErrorAlert('기타 첨가물 로드 실패', otherIngredients.message).then();
+      setSnackbarMessage(otherIngredients.message);
+      setSnackbarOpen(true);
     }
   }, [otherIngredients]);
 
@@ -271,6 +275,12 @@ const OtherListPage: React.FC = () => {
                 data={otherIngredients.data}
             />
         )}
+
+        <CommonErrorSnackbar
+          open={snackbarOpen}
+          message={snackbarMessage}
+          onClose={() => setSnackbarOpen(false)}
+        />
       </PageContainer>
   );
 }

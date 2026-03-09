@@ -11,7 +11,7 @@ import SpiritProductListComponent from "../component/SpiritProductListComponent.
 import SpiritProductDetailModal from "../component/SpiritProductDetailModal.tsx";
 import useReadSpiritProductList from "../service/useReadSpiritProductList.tsx";
 import useReadSpiritProduct from "../service/useReadSpiritProduct.tsx";
-import {showErrorAlert} from "../../common/utils/AlertUtils.ts";
+import CommonErrorSnackbar from "../../common/component/snackbar/CommonErrorSnackbar";
 import LoadingOverlay from "../../common/component/loading/LoadingOverlay.tsx";
 import SearchLoadingOverlay from "../../common/component/loading/SearchLoadingOverlay.tsx";
 import {
@@ -39,6 +39,8 @@ const SpiritProductListPage: React.FC = () => {
   const [ searchKeyword, setSearchKeyword ] = useState<string>("");
   const [ searchDebounceTimer, setSearchDebounceTimer ] = useState<number | null>(null);
   const [ isSearching, setIsSearching ] = useState<boolean>(false);
+  const [ snackbarOpen, setSnackbarOpen ] = useState<boolean>(false);
+  const [ snackbarMessage, setSnackbarMessage ] = useState<string>("");
 
   const { spiritProduct, spiritProductLoading, fetchReadSpiritProduct } = useReadSpiritProduct();
   const { spiritProductList, spiritProductListLoading, spiritProductListHasMore, spiritProductListLoadingMore, fetchReadSpiritProductList } = useReadSpiritProductList();
@@ -155,13 +157,15 @@ const SpiritProductListPage: React.FC = () => {
   * */
   useEffect(() => {
     if (spiritProductList && spiritProductList.code !== 'OK') {
-      showErrorAlert('세부 기주 리스트 로드 실패', spiritProductList.message).then();
+      setSnackbarMessage(spiritProductList.message);
+      setSnackbarOpen(true);
     }
   }, [spiritProductList]);
 
   useEffect(() => {
     if (spiritProduct && spiritProduct.code !== 'OK') {
-      showErrorAlert('세부 기주 로드 실패', spiritProduct.message).then();
+      setSnackbarMessage(spiritProduct.message);
+      setSnackbarOpen(true);
     }
   }, [spiritProduct]);
 
@@ -267,6 +271,12 @@ const SpiritProductListPage: React.FC = () => {
           data={spiritProduct.data}
         />
       )}
+
+      <CommonErrorSnackbar
+        open={snackbarOpen}
+        message={snackbarMessage}
+        onClose={() => setSnackbarOpen(false)}
+      />
     </PageContainer>
   );
 };

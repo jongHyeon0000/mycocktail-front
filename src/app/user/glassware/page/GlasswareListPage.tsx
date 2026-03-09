@@ -18,7 +18,7 @@ import {
 } from "@mui/material";
 import useReadGlassware from "../service/useReadGlassware.tsx";
 import useReadGlasswareList from "../service/useReadGlasswareList.tsx";
-import {showErrorAlert} from "../../common/utils/AlertUtils.ts";
+import CommonErrorSnackbar from "../../common/component/snackbar/CommonErrorSnackbar";
 import LoadingOverlay from "../../common/component/loading/LoadingOverlay.tsx";
 import SearchLoadingOverlay from "../../common/component/loading/SearchLoadingOverlay.tsx";
 import GlasswareListComponent from "../component/GlasswareListComponent.tsx";
@@ -41,6 +41,8 @@ const GlasswareListPage: React.FC = () => {
   const [ searchKeyword, setSearchKeyword ] = useState<string>("");
   const [ searchDebounceTimer, setSearchDebounceTimer ] = useState<number | null>(null);
   const [ isSearching, setIsSearching ] = useState<boolean>(false);
+  const [ snackbarOpen, setSnackbarOpen ] = useState<boolean>(false);
+  const [ snackbarMessage, setSnackbarMessage ] = useState<string>("");
 
   const { glassware, glasswareLoading, fetchReadGlassware} = useReadGlassware();
   const { glasswareList, glasswareListLoading, glasswareListLoadingMore, glasswareListHasMore, fetchReadGlasswareList } = useReadGlasswareList();
@@ -158,13 +160,15 @@ const GlasswareListPage: React.FC = () => {
   * */
   useEffect(() => {
     if (glasswareList && glasswareList.code !== 'OK') {
-      showErrorAlert('세부 잔 리스트 로드 실패', glasswareList.message).then();
+      setSnackbarMessage(glasswareList.message);
+      setSnackbarOpen(true);
     }
   }, [glasswareList]);
 
   useEffect(() => {
     if (glassware && glassware.code !== 'OK') {
-      showErrorAlert('세부 잔 로드 실패', glassware.message).then();
+      setSnackbarMessage(glassware.message);
+      setSnackbarOpen(true);
     }
   }, [glassware]);
 
@@ -271,6 +275,12 @@ const GlasswareListPage: React.FC = () => {
                 data={glassware.data}
             />
         )}
+
+        <CommonErrorSnackbar
+          open={snackbarOpen}
+          message={snackbarMessage}
+          onClose={() => setSnackbarOpen(false)}
+        />
       </PageContainer>
   );
 

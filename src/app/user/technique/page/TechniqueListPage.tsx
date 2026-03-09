@@ -1,7 +1,7 @@
 import React, {type SetStateAction, useCallback, useEffect, useState} from "react";
 import useReadTechniqueList from "../service/useReadTechniqueList.tsx";
 import useReadTechnique from "../service/useReadTechnique.tsx";
-import {showErrorAlert} from "../../common/utils/AlertUtils.ts";
+import CommonErrorSnackbar from "../../common/component/snackbar/CommonErrorSnackbar";
 import LoadingOverlay from "../../common/component/loading/LoadingOverlay.tsx";
 import {
   ControlsContainer,
@@ -41,6 +41,8 @@ const TechniqueListPage: React.FC = () => {
   const [ searchKeyword, setSearchKeyword ] = useState<string>("");
   const [ searchDebounceTimer, setSearchDebounceTimer ] = useState<number | null>(null);
   const [ isSearching, setIsSearching ] = useState<boolean>(false);
+  const [ snackbarOpen, setSnackbarOpen ] = useState<boolean>(false);
+  const [ snackbarMessage, setSnackbarMessage ] = useState<string>("");
 
   const { techniqueList, techniqueListLoading, techniqueListLoadingMore, techniqueListHasMore, fetchReadTechniqueList } = useReadTechniqueList();
   const { technique, techniqueLoading, fetchReadTechnique } = useReadTechnique();
@@ -158,13 +160,15 @@ const TechniqueListPage: React.FC = () => {
   * */
   useEffect(() => {
     if (techniqueList && techniqueList.code !== 'OK') {
-      showErrorAlert('세부 기법 리스트 로드 실패', techniqueList.message).then();
+      setSnackbarMessage(techniqueList.message);
+      setSnackbarOpen(true);
     }
   }, [techniqueList]);
 
   useEffect(() => {
     if (technique && technique.code !== 'OK') {
-      showErrorAlert('세부 기법 로드 실패', technique.message).then();
+      setSnackbarMessage(technique.message);
+      setSnackbarOpen(true);
     }
   }, [technique]);
 
@@ -271,6 +275,12 @@ const TechniqueListPage: React.FC = () => {
           data={technique.data}
         />
       )}
+
+      <CommonErrorSnackbar
+        open={snackbarOpen}
+        message={snackbarMessage}
+        onClose={() => setSnackbarOpen(false)}
+      />
     </PageContainer>
   );
 }

@@ -1,7 +1,7 @@
 import React, {type SetStateAction, useCallback, useEffect, useState} from "react";
 import useReadDairyCream from "../service/useReadDairyCream.tsx";
 import useReadDairyCreamList from "../service/useReadDairyCreamList.tsx";
-import {showErrorAlert} from "../../../common/utils/AlertUtils.ts";
+import CommonErrorSnackbar from "../../../common/component/snackbar/CommonErrorSnackbar";
 import LoadingOverlay from "../../../common/component/loading/LoadingOverlay.tsx";
 import {
   Box,
@@ -41,6 +41,8 @@ const DairyCreamListPage: React.FC = () => {
   const [ searchKeyword, setSearchKeyword ] = useState<string>("");
   const [ searchDebounceTimer, setSearchDebounceTimer ] = useState<number | null>(null);
   const [ isSearching, setIsSearching ] = useState<boolean>(false);
+  const [ snackbarOpen, setSnackbarOpen ] = useState<boolean>(false);
+  const [ snackbarMessage, setSnackbarMessage ] = useState<string>("");
 
   const { dairyCream, dairyCreamLoading, fetchReadDairyCream } = useReadDairyCream();
   const { dairyCreamList, dairyCreamListLoading, dairyCreamListLoadingMore, dairyCreamListHasMore, fetchReadDairyCreamList } = useReadDairyCreamList();
@@ -158,13 +160,15 @@ const DairyCreamListPage: React.FC = () => {
   * */
   useEffect(() => {
     if (dairyCreamList && dairyCreamList.code !== 'OK') {
-      showErrorAlert('유제품/크림 리스트 로드 실패', dairyCreamList.message).then();
+      setSnackbarMessage(dairyCreamList.message);
+      setSnackbarOpen(true);
     }
   }, [dairyCreamList]);
 
   useEffect(() => {
     if (dairyCream && dairyCream.code !== 'OK') {
-      showErrorAlert('유제품/크림 로드 실패', dairyCream.message).then();
+      setSnackbarMessage(dairyCream.message);
+      setSnackbarOpen(true);
     }
   }, [dairyCream]);
 
@@ -271,6 +275,12 @@ const DairyCreamListPage: React.FC = () => {
                 data={dairyCream.data}
             />
         )}
+
+        <CommonErrorSnackbar
+          open={snackbarOpen}
+          message={snackbarMessage}
+          onClose={() => setSnackbarOpen(false)}
+        />
       </PageContainer>
   );
 }

@@ -7,7 +7,7 @@ import useReadDairyCream from "../../dairy_cream/service/useReadDairyCream.tsx";
 import useReadGarnishes from "../../garnishes/service/useReadGarnishes.tsx";
 import useReadSyrup from "../../syrup/service/useReadSyrup.tsx";
 import useReadOtherIngredients from "../../other_ingredients/service/useReadOtherIngredients.tsx";
-import {showErrorAlert} from "../../../common/utils/AlertUtils.ts";
+import CommonErrorSnackbar from "../../../common/component/snackbar/CommonErrorSnackbar";
 import LoadingOverlay from "../../../common/component/loading/LoadingOverlay.tsx";
 import {
   Box,
@@ -55,6 +55,8 @@ const IngredientListPage: React.FC = () => {
   const [ searchKeyword, setSearchKeyword ] = useState<string>("");
   const [ searchDebounceTimer, setSearchDebounceTimer ] = useState<number | null>(null);
   const [ isSearching, setIsSearching ] = useState<boolean>(false);
+  const [ snackbarOpen, setSnackbarOpen ] = useState<boolean>(false);
+  const [ snackbarMessage, setSnackbarMessage ] = useState<string>("");
 
   // 통합 재료 리스트 hook
   const { ingredientList, ingredientListLoading, ingredientListLoadingMore, ingredientListHasMore, fetchReadIngredientList } = useReadIngredientList();
@@ -207,35 +209,35 @@ const IngredientListPage: React.FC = () => {
   * Axios Error 제어
   * */
   useEffect(() => {
-    if (ingredientList && ingredientList.code !== 'OK') showErrorAlert('재료 리스트 로드 실패', ingredientList.message).then();
+    if (ingredientList && ingredientList.code !== 'OK') { setSnackbarMessage(ingredientList.message); setSnackbarOpen(true); }
   }, [ingredientList]);
 
   useEffect(() => {
-    if (juice && juice.code !== 'OK') showErrorAlert('주스 로드 실패', juice.message).then();
+    if (juice && juice.code !== 'OK') { setSnackbarMessage(juice.message); setSnackbarOpen(true); }
   }, [juice]);
 
   useEffect(() => {
-    if (bitters && bitters.code !== 'OK') showErrorAlert('비터스 로드 실패', bitters.message).then();
+    if (bitters && bitters.code !== 'OK') { setSnackbarMessage(bitters.message); setSnackbarOpen(true); }
   }, [bitters]);
 
   useEffect(() => {
-    if (carbonated && carbonated.code !== 'OK') showErrorAlert('탄산류 로드 실패', carbonated.message).then();
+    if (carbonated && carbonated.code !== 'OK') { setSnackbarMessage(carbonated.message); setSnackbarOpen(true); }
   }, [carbonated]);
 
   useEffect(() => {
-    if (dairyCream && dairyCream.code !== 'OK') showErrorAlert('유제품 로드 실패', dairyCream.message).then();
+    if (dairyCream && dairyCream.code !== 'OK') { setSnackbarMessage(dairyCream.message); setSnackbarOpen(true); }
   }, [dairyCream]);
 
   useEffect(() => {
-    if (garnishes && garnishes.code !== 'OK') showErrorAlert('가니쉬 로드 실패', garnishes.message).then();
+    if (garnishes && garnishes.code !== 'OK') { setSnackbarMessage(garnishes.message); setSnackbarOpen(true); }
   }, [garnishes]);
 
   useEffect(() => {
-    if (syrup && syrup.code !== 'OK') showErrorAlert('시럽 로드 실패', syrup.message).then();
+    if (syrup && syrup.code !== 'OK') { setSnackbarMessage(syrup.message); setSnackbarOpen(true); }
   }, [syrup]);
 
   useEffect(() => {
-    if (otherIngredients && otherIngredients.code !== 'OK') showErrorAlert('기타 첨가물 로드 실패', otherIngredients.message).then();
+    if (otherIngredients && otherIngredients.code !== 'OK') { setSnackbarMessage(otherIngredients.message); setSnackbarOpen(true); }
   }, [otherIngredients]);
 
   return (
@@ -383,6 +385,12 @@ const IngredientListPage: React.FC = () => {
                 data={otherIngredients.data}
             />
         )}
+
+        <CommonErrorSnackbar
+          open={snackbarOpen}
+          message={snackbarMessage}
+          onClose={() => setSnackbarOpen(false)}
+        />
       </PageContainer>
   );
 }

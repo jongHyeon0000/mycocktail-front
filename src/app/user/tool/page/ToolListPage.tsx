@@ -11,7 +11,7 @@ import ToolListComponent from "../component/ToolListComponent.tsx";
 import ToolDetailModal from "../component/ToolDetailModal.tsx";
 import useReadToolList from "../service/useReadToolList.tsx";
 import useReadTool from "../service/useReadTool.tsx";
-import {showErrorAlert} from "../../common/utils/AlertUtils.ts";
+import CommonErrorSnackbar from "../../common/component/snackbar/CommonErrorSnackbar";
 import LoadingOverlay from "../../common/component/loading/LoadingOverlay.tsx";
 import type {TOOL_CATEGORY_MAP_KEY} from "../common/ToolUtils.ts";
 import SearchLoadingOverlay from "../../common/component/loading/SearchLoadingOverlay.tsx";
@@ -42,6 +42,8 @@ const ToolListPage: React.FC = () => {
   const [ searchKeyword, setSearchKeyword ] = useState<string>("");
   const [ searchDebounceTimer, setSearchDebounceTimer ] = useState<number | null>(null);
   const [ isSearching, setIsSearching ] = useState<boolean>(false);
+  const [ snackbarOpen, setSnackbarOpen ] = useState<boolean>(false);
+  const [ snackbarMessage, setSnackbarMessage ] = useState<string>("");
 
   const { toolList, toolListLoading, toolListHasMore, toolListLoadingMore, fetchReadToolList } = useReadToolList();
   const { tool, toolLoading, fetchReadTool } = useReadTool();
@@ -163,13 +165,15 @@ const ToolListPage: React.FC = () => {
   * */
   useEffect(() => {
     if (toolList && toolList.code !== 'OK') {
-      showErrorAlert('세부 도구 리스트 로드 실패', toolList.message).then();
+      setSnackbarMessage(toolList.message);
+      setSnackbarOpen(true);
     }
   }, [toolList]);
 
   useEffect(() => {
     if (tool && tool.code !== 'OK') {
-      showErrorAlert('세부 도구 로드 실패', tool.message).then();
+      setSnackbarMessage(tool.message);
+      setSnackbarOpen(true);
     }
   }, [tool]);
 
@@ -292,6 +296,12 @@ const ToolListPage: React.FC = () => {
           data={tool.data}
         />
       )}
+
+      <CommonErrorSnackbar
+        open={snackbarOpen}
+        message={snackbarMessage}
+        onClose={() => setSnackbarOpen(false)}
+      />
     </PageContainer>
   );
 };

@@ -1,5 +1,5 @@
 import React, {type SetStateAction, useCallback, useEffect, useState} from "react";
-import {showErrorAlert} from "../../../common/utils/AlertUtils.ts";
+import CommonErrorSnackbar from "../../../common/component/snackbar/CommonErrorSnackbar";
 import useReadBittersList from "../service/useReadBittersList.tsx";
 import useReadBitters from "../service/useReadBitters.tsx";
 import LoadingOverlay from "../../../common/component/loading/LoadingOverlay.tsx";
@@ -41,6 +41,8 @@ const BittersListPage: React.FC = () => {
   const [ searchKeyword, setSearchKeyword ] = useState<string>("");
   const [ searchDebounceTimer, setSearchDebounceTimer ] = useState<number | null>(null);
   const [ isSearching, setIsSearching ] = useState<boolean>(false);
+  const [ snackbarOpen, setSnackbarOpen ] = useState<boolean>(false);
+  const [ snackbarMessage, setSnackbarMessage ] = useState<string>("");
 
   const { bitters, bittersLoading, fetchReadBitters } = useReadBitters();
   const { bittersListLoading, bittersListLoadingMore, bittersListHasMore, bittersList, fetchReadBittersList } = useReadBittersList();
@@ -158,13 +160,15 @@ const BittersListPage: React.FC = () => {
   * */
   useEffect(() => {
     if (bittersList && bittersList.code !== 'OK') {
-      showErrorAlert('비터스 리스트 로드 실패', bittersList.message).then();
+      setSnackbarMessage(bittersList.message);
+      setSnackbarOpen(true);
     }
   }, [bittersList]);
 
   useEffect(() => {
     if (bitters && bitters.code !== 'OK') {
-      showErrorAlert('비터스 로드 실패', bitters.message).then();
+      setSnackbarMessage(bitters.message);
+      setSnackbarOpen(true);
     }
   }, [bitters]);
 
@@ -271,6 +275,12 @@ const BittersListPage: React.FC = () => {
                 data={bitters.data}
             />
         )}
+
+        <CommonErrorSnackbar
+          open={snackbarOpen}
+          message={snackbarMessage}
+          onClose={() => setSnackbarOpen(false)}
+        />
       </PageContainer>
   );
 }

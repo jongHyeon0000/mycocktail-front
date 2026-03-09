@@ -1,7 +1,7 @@
 import React, {type SetStateAction, useCallback, useEffect, useState} from "react";
 import useReadJuice from "../service/useReadJuice.tsx";
 import useReadJuiceList from "../service/useReadJuiceList.tsx";
-import {showErrorAlert} from "../../../common/utils/AlertUtils.ts";
+import CommonErrorSnackbar from "../../../common/component/snackbar/CommonErrorSnackbar";
 import LoadingOverlay from "../../../common/component/loading/LoadingOverlay.tsx";
 import {
   Box,
@@ -41,6 +41,8 @@ const JuiceListPage: React.FC = () => {
   const [ searchKeyword, setSearchKeyword ] = useState<string>("");
   const [ searchDebounceTimer, setSearchDebounceTimer ] = useState<number | null>(null);
   const [ isSearching, setIsSearching ] = useState<boolean>(false);
+  const [ snackbarOpen, setSnackbarOpen ] = useState<boolean>(false);
+  const [ snackbarMessage, setSnackbarMessage ] = useState<string>("");
 
   const { juice, juiceLoading, fetchReadJuice } = useReadJuice();
   const { juiceList, juiceListLoading, juiceListLoadingMore, juiceListHasMore, fetchReadJuiceList } = useReadJuiceList();
@@ -158,13 +160,15 @@ const JuiceListPage: React.FC = () => {
   * */
   useEffect(() => {
     if (juiceList && juiceList.code !== 'OK') {
-      showErrorAlert('주스 리스트 로드 실패', juiceList.message).then();
+      setSnackbarMessage(juiceList.message);
+      setSnackbarOpen(true);
     }
   }, [juiceList]);
 
   useEffect(() => {
     if (juice && juice.code !== 'OK') {
-      showErrorAlert('주스 로드 실패', juice.message).then();
+      setSnackbarMessage(juice.message);
+      setSnackbarOpen(true);
     }
   }, [juice]);
 
@@ -271,6 +275,12 @@ const JuiceListPage: React.FC = () => {
                 data={juice.data}
             />
         )}
+
+        <CommonErrorSnackbar
+          open={snackbarOpen}
+          message={snackbarMessage}
+          onClose={() => setSnackbarOpen(false)}
+        />
       </PageContainer>
   );
 }

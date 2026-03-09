@@ -1,7 +1,7 @@
 import React, {type SetStateAction, useCallback, useEffect, useState} from "react";
 import useReadSyrupList from "../service/useReadSyrupList.tsx";
 import useReadSyrup from "../service/useReadSyrup.tsx";
-import {showErrorAlert} from "../../../common/utils/AlertUtils.ts";
+import CommonErrorSnackbar from "../../../common/component/snackbar/CommonErrorSnackbar";
 import LoadingOverlay from "../../../common/component/loading/LoadingOverlay.tsx";
 import {
   Box,
@@ -41,6 +41,8 @@ const SyrupListPage: React.FC = () => {
   const [ searchKeyword, setSearchKeyword ] = useState<string>("");
   const [ searchDebounceTimer, setSearchDebounceTimer ] = useState<number | null>(null);
   const [ isSearching, setIsSearching ] = useState<boolean>(false);
+  const [ snackbarOpen, setSnackbarOpen ] = useState<boolean>(false);
+  const [ snackbarMessage, setSnackbarMessage ] = useState<string>("");
 
   const { syrup, syrupLoading, fetchReadSyrup } = useReadSyrup();
   const { syrupListHasMore, syrupListLoading, syrupListLoadingMore, syrupList, fetchReadSyrupList } = useReadSyrupList();
@@ -158,13 +160,15 @@ const SyrupListPage: React.FC = () => {
   * */
   useEffect(() => {
     if (syrupList && syrupList.code !== 'OK') {
-      showErrorAlert('시럽 리스트 로드 실패', syrupList.message).then();
+      setSnackbarMessage(syrupList.message);
+      setSnackbarOpen(true);
     }
   }, [syrupList]);
 
   useEffect(() => {
     if (syrup && syrup.code !== 'OK') {
-      showErrorAlert('시럽 로드 실패', syrup.message).then();
+      setSnackbarMessage(syrup.message);
+      setSnackbarOpen(true);
     }
   }, [syrup]);
 
@@ -271,6 +275,12 @@ const SyrupListPage: React.FC = () => {
                 data={syrup.data}
             />
         )}
+
+        <CommonErrorSnackbar
+          open={snackbarOpen}
+          message={snackbarMessage}
+          onClose={() => setSnackbarOpen(false)}
+        />
       </PageContainer>
   );
 }

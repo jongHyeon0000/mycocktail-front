@@ -1,7 +1,7 @@
 import React, {type SetStateAction, useCallback, useEffect, useState} from "react";
 import useReadGarnishes from "../service/useReadGarnishes.tsx";
 import useReadGarnishesList from "../service/useReadGarnishesList.tsx";
-import {showErrorAlert} from "../../../common/utils/AlertUtils.ts";
+import CommonErrorSnackbar from "../../../common/component/snackbar/CommonErrorSnackbar";
 import LoadingOverlay from "../../../common/component/loading/LoadingOverlay.tsx";
 import {
   Box,
@@ -41,6 +41,8 @@ const GarnishesListPage: React.FC = () => {
   const [ searchKeyword, setSearchKeyword ] = useState<string>("");
   const [ searchDebounceTimer, setSearchDebounceTimer ] = useState<number | null>(null);
   const [ isSearching, setIsSearching ] = useState<boolean>(false);
+  const [ snackbarOpen, setSnackbarOpen ] = useState<boolean>(false);
+  const [ snackbarMessage, setSnackbarMessage ] = useState<string>("");
 
   const { garnishes, garnishesLoading, fetchReadGarnishes } = useReadGarnishes();
   const { garnishesList, garnishesListLoading, garnishesListLoadingMore, garnishesListHasMore, fetchReadGarnishesList } = useReadGarnishesList();
@@ -158,13 +160,15 @@ const GarnishesListPage: React.FC = () => {
   * */
   useEffect(() => {
     if (garnishesList && garnishesList.code !== 'OK') {
-      showErrorAlert('가니쉬 리스트 로드 실패', garnishesList.message).then();
+      setSnackbarMessage(garnishesList.message);
+      setSnackbarOpen(true);
     }
   }, [garnishesList]);
 
   useEffect(() => {
     if (garnishes && garnishes.code !== 'OK') {
-      showErrorAlert('가니쉬 로드 실패', garnishes.message).then();
+      setSnackbarMessage(garnishes.message);
+      setSnackbarOpen(true);
     }
   }, [garnishes]);
 
@@ -271,6 +275,12 @@ const GarnishesListPage: React.FC = () => {
                 data={garnishes.data}
             />
         )}
+
+        <CommonErrorSnackbar
+          open={snackbarOpen}
+          message={snackbarMessage}
+          onClose={() => setSnackbarOpen(false)}
+        />
       </PageContainer>
   );
 }

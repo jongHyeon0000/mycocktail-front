@@ -1,7 +1,7 @@
 import React, {type SetStateAction, useCallback, useEffect, useState} from "react";
 import useReadCarbonated from "../service/useReadCarbonated.tsx";
 import useReadCarbonatedList from "../service/useReadCarbonatedList.tsx";
-import {showErrorAlert} from "../../../common/utils/AlertUtils.ts";
+import CommonErrorSnackbar from "../../../common/component/snackbar/CommonErrorSnackbar";
 import LoadingOverlay from "../../../common/component/loading/LoadingOverlay.tsx";
 import {
   Box,
@@ -41,6 +41,8 @@ const CarbonatedListPage: React.FC = () => {
   const [ searchKeyword, setSearchKeyword ] = useState<string>("");
   const [ searchDebounceTimer, setSearchDebounceTimer ] = useState<number | null>(null);
   const [ isSearching, setIsSearching ] = useState<boolean>(false);
+  const [ snackbarOpen, setSnackbarOpen ] = useState<boolean>(false);
+  const [ snackbarMessage, setSnackbarMessage ] = useState<string>("");
 
   const { carbonated, carbonatedLoading, fetchReadCarbonated } = useReadCarbonated()
   const { fetchReadCarbonatedList, carbonatedList, carbonatedListLoading, carbonatedListLoadingMore, carbonatedListHasMore } = useReadCarbonatedList();
@@ -158,13 +160,15 @@ const CarbonatedListPage: React.FC = () => {
   * */
   useEffect(() => {
     if (carbonatedList && carbonatedList.code !== 'OK') {
-      showErrorAlert('탄산 리스트 로드 실패', carbonatedList.message).then();
+      setSnackbarMessage(carbonatedList.message);
+      setSnackbarOpen(true);
     }
   }, [carbonatedList]);
 
   useEffect(() => {
     if (carbonated && carbonated.code !== 'OK') {
-      showErrorAlert('탄산 로드 실패', carbonated.message).then();
+      setSnackbarMessage(carbonated.message);
+      setSnackbarOpen(true);
     }
   }, [carbonated]);
 
@@ -271,6 +275,12 @@ const CarbonatedListPage: React.FC = () => {
                 data={carbonated.data}
             />
         )}
+
+        <CommonErrorSnackbar
+          open={snackbarOpen}
+          message={snackbarMessage}
+          onClose={() => setSnackbarOpen(false)}
+        />
       </PageContainer>
   );
 }
