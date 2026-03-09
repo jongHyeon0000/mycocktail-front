@@ -296,7 +296,7 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                 )}
 
                 {/* 해시태그 섹션 */}
-                {data.hashtags && (
+                {data.hashtags && data.hashtags.length > 0 && (
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -305,7 +305,13 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                     <SectionTitle>태그</SectionTitle>
                     <HashtagSection>
                       <HashtagContainer>
-                        <HashtagChip label={`#${data.hashtags.cocktailHashtag}`} size="small" />
+                        {data.hashtags.map((tag) => (
+                          <HashtagChip
+                            key={tag.cocktailHashtagId}
+                            label={`#${tag.cocktailHashtag}`}
+                            size="small"
+                          />
+                        ))}
                       </HashtagContainer>
                     </HashtagSection>
                   </motion.div>

@@ -103,10 +103,10 @@ export interface CocktailDetail {
   personalReview?: string;
 
   /** 해시태그 */
-  hashtags: {
-    cocktailHashtagId: number,
-    cocktailHashtag: string
-  };
+  hashtags: Array<{
+    cocktailHashtagId: number;
+    cocktailHashtag: string;
+  }>;
 
   /** 조회수 */
   viewCount: number;
