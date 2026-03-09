@@ -1,7 +1,7 @@
 import React, {type SetStateAction, useCallback, useEffect, useState} from "react";
 import useReadJuice from "../service/useReadJuice.tsx";
 import useReadJuiceList from "../service/useReadJuiceList.tsx";
-import {showErrorAlert} from "../../../common/utils/AlertUtils.ts";
+import CommonErrorSnackbar from "../../../common/component/snackbar/CommonErrorSnackbar";
 import LoadingOverlay from "../../../common/component/loading/LoadingOverlay.tsx";
 import {
   Box,
@@ -10,12 +10,17 @@ import {
   FormControl,
   InputAdornment,
   MenuItem,
-  Select,
-  TextField,
   Typography
 } from "@mui/material";
 import SearchLoadingOverlay from "../../../common/component/loading/SearchLoadingOverlay.tsx";
-import styled from "styled-components";
+import {
+  ControlsContainer,
+  ItemList,
+  PageContainer,
+  SearchField,
+  SortContainer,
+  SortSelect,
+} from "../../../common/style/CommonListPage.style.tsx";
 import JuiceListComponent from "../component/JuiceListComponent.tsx";
 import JuiceDetailModal from "../component/JuiceDetailModal.tsx";
 
@@ -36,9 +41,11 @@ const JuiceListPage: React.FC = () => {
   const [ searchKeyword, setSearchKeyword ] = useState<string>("");
   const [ searchDebounceTimer, setSearchDebounceTimer ] = useState<number | null>(null);
   const [ isSearching, setIsSearching ] = useState<boolean>(false);
+  const [ snackbarOpen, setSnackbarOpen ] = useState<boolean>(false);
+  const [ snackbarMessage, setSnackbarMessage ] = useState<string>("");
 
-  const { juice, juiceError, juiceLoading, fetchReadJuice } = useReadJuice();
-  const { juiceList, juiceListError, juiceListLoading, juiceListLoadingMore, juiceListHasMore, fetchReadJuiceList } = useReadJuiceList();
+  const { juice, juiceLoading, fetchReadJuice } = useReadJuice();
+  const { juiceList, juiceListLoading, juiceListLoadingMore, juiceListHasMore, fetchReadJuiceList } = useReadJuiceList();
 
   /*
   * 초기 데이터 로드 및 정렬 변경 시 로드
@@ -143,7 +150,7 @@ const JuiceListPage: React.FC = () => {
   * Modal State 제어
   * */
   useEffect(() => {
-    if (juice) {
+    if (juice?.data) {
       setModalOpen(true);
     }
   }, [juice]);
@@ -152,20 +159,18 @@ const JuiceListPage: React.FC = () => {
   * Axios Error 제어
   * */
   useEffect(() => {
-    if (juiceListError) {
-      showErrorAlert(
-          '주스 리스트 로드 실패',
-          juiceListError
-      ).then();
+    if (juiceList && juiceList.code !== 'OK') {
+      setSnackbarMessage(juiceList.message);
+      setSnackbarOpen(true);
     }
+  }, [juiceList]);
 
-    if (juiceError) {
-      showErrorAlert(
-          '주스 로드 실패',
-          juiceError
-      ).then();
+  useEffect(() => {
+    if (juice && juice.code !== 'OK') {
+      setSnackbarMessage(juice.message);
+      setSnackbarOpen(true);
     }
-  }, [juiceListError, juiceError]);
+  }, [juice]);
 
   return (
       <PageContainer>
@@ -227,14 +232,14 @@ const JuiceListPage: React.FC = () => {
           </ControlsContainer>
 
           {/* 주스 리스트 */}
-          <JuiceList>
+          <ItemList>
             {isSearching ? (
                 <SearchLoadingOverlay
                     open={isSearching}
                     message="검색 중..."
                 />
             ) : (
-                juiceList && juiceList.map((juice, index) => (
+                juiceList?.data && juiceList.data.map((juice, index) => (
                     <JuiceListComponent
                         key={`${juice.juiceId}-${index}`}
                         data={juice}
@@ -243,7 +248,7 @@ const JuiceListPage: React.FC = () => {
                     />
                 ))
             )}
-          </JuiceList>
+          </ItemList>
 
           {/* 추가 로딩 중 (무한 스크롤) */}
           {juiceListLoadingMore && (
@@ -263,97 +268,22 @@ const JuiceListPage: React.FC = () => {
         </Container>
 
         {/* 기법 상세 모달 */}
-        {juice && (
+        {juice?.data && (
             <JuiceDetailModal
                 open={modalOpen}
                 onClose={() => setModalOpen(false)}
-                data={juice}
+                data={juice.data}
             />
         )}
+
+        <CommonErrorSnackbar
+          open={snackbarOpen}
+          message={snackbarMessage}
+          onClose={() => setSnackbarOpen(false)}
+        />
       </PageContainer>
   );
 }
 
 export default JuiceListPage;
 
-const PageContainer = styled(Box)`
-    && {
-        min-height: 100vh;
-        background-color: #f5f5f5;
-        padding-top: 96px;
-    }
-`;
-
-const ControlsContainer = styled(Box)`
-  && {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 32px;
-    gap: 16px;
-    
-    @media (max-width: 600px) {
-      flex-wrap: wrap;
-    }
-  }
-`;
-
-const SortContainer = styled(Box)`
-  && {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-  }
-`;
-
-const SortSelect = styled(Select)`
-  && {
-    background-color: #fff;
-    border-radius: 16px;
-    min-width: 150px;
-    
-    .MuiOutlinedInput-notchedOutline {
-      border-color: #eee;
-    }
-    
-    &:hover .MuiOutlinedInput-notchedOutline {
-      border-color: #ddd;
-    }
-  }
-`;
-
-const SearchField = styled(TextField)`
-  && {
-    width: 300px;
-    background-color: #fff;
-    
-    .MuiOutlinedInput-root {
-      border-radius: 16px;
-      
-      &:hover fieldset {
-        border-color: #ddd;
-      }
-      
-      &.Mui-focused fieldset {
-        border-color: #888;
-      }
-    }
-    
-    & fieldset {
-      border-color: #eee;
-    }
-    
-    @media (max-width: 600px) {
-      width: 100%;
-    }
-  }
-`;
-
-const JuiceList = styled(Box)`
-  && {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-  }
-`;

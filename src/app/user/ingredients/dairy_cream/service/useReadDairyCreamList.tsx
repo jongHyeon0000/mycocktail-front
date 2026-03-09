@@ -1,6 +1,8 @@
 import {useState} from "react";
 import {api} from "../../../../../config/axios/AxiosConfig.ts";
 import type {DairyCreamDetail} from "../interface/DairyCreamDetail.ts";
+import type {ApiResponse} from "../../../../../config/axios/interface/ApiResponse.ts";
+import {toApiResponse} from "../../../../../config/axios/utils/toApiResponse.ts";
 
 interface FetchProps {
   /*
@@ -23,46 +25,31 @@ interface FetchProps {
 }
 
 const useReadDairyCreamList = () => {
-  const [data, setData] = useState<DairyCreamDetail[] | undefined>(undefined);
+  const [response, setResponse] = useState<ApiResponse<DairyCreamDetail[] | null> | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingMore, setLoadingMore] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState<boolean>(true);
 
   const fetchReadDairyCreamList = async (params?: FetchProps, appendData = false) => {
-    // 첫 페이지 요청이거나 appendData가 false인 경우 데이터 리셋
     if (appendData) {
       setLoadingMore(true);
     } else {
-      setData(undefined);
+      setResponse(undefined);
       setHasMore(true);
       setLoading(true);
     }
 
-    setError(null);
-
-    try{
-      const response = await api.get<{data: DairyCreamDetail[]}>(`/api/dairy-cream`, { params });
-
-      if (response.status === 200) {
-        const newData = response.data.data;
-        const limit = params?.limit || 6;
-
-        // 받은 데이터가 limit보다 적으면 더 이상 없음
-        setHasMore(newData.length >= limit);
-
-        if (appendData && params?.page !== 1 && data) {
-          setData([...data, ...newData]);
-        } else {
-          setData(newData);
-        }
-      } else {
-        console.error('Unexpected response status:', response.status);
-      }
-
+    try {
+      const res = await api.get<ApiResponse<DairyCreamDetail[]>>(`/api/dairy-cream`, { params });
+      const newApiResponse = res.data;
+      const limit = params?.limit || 6;
+      setHasMore((newApiResponse.data?.length ?? 0) >= limit);
+      setResponse(prev => ({
+        ...newApiResponse,
+        data: appendData && prev?.data && newApiResponse.data ? [...prev.data, ...newApiResponse.data] : newApiResponse.data,
+      }));
     } catch (err) {
-      setError('Error fetching data');
-      console.error(err);
+      setResponse(toApiResponse(err));
     } finally {
       setLoading(false);
       setLoadingMore(false);
@@ -70,10 +57,9 @@ const useReadDairyCreamList = () => {
   }
 
   return {
-    dairyCreamList: data,
+    dairyCreamList: response,
     dairyCreamListLoading: loading,
     dairyCreamListLoadingMore: loadingMore,
-    dairyCreamListError: error,
     dairyCreamListHasMore: hasMore,
     fetchReadDairyCreamList
   };
