@@ -137,13 +137,10 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
     techniques: useRef<HTMLDivElement>(null),
   };
 
-  const handleSelectIngredient = (key: IngredientKey) => (item: CommonSlideElement) => {
+  const handleSelectIngredient = (key: IngredientKey, items: CommonSlideElement[]) => {
     setSelectedIngredients((prev) => {
-      if (prev[key].some((i) => i.id === item.id)) {
-        return prev
-      }
-
-      return { ...prev, [key]: [...prev[key], item] };
+      const newItems = items.filter(i => !prev[key].some(e => e.id === i.id));
+      return { ...prev, [key]: [...prev[key], ...newItems] };
     });
     setOpenModal(null);
   };
@@ -151,6 +148,7 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
   const handleSelectSpirits = (items: CommonSlideElement[]) => {
     setSelectedIngredients((prev) => {
       const newItems = items.filter(i => !prev.spirits.some(e => e.id === i.id));
+
       return { ...prev, spirits: [...prev.spirits, ...newItems] };
     });
     setOpenModal(null);
@@ -160,13 +158,10 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
     setSelectedIngredients((prev) => ({ ...prev, [key]: prev[key].filter((i) => i.id !== id) }));
   };
 
-  const handleSelectTechnique = (key: TechniqueKey) => (item: CommonSlideElement) => {
+  const handleSelectTechnique = (key: TechniqueKey, items: CommonSlideElement[]) => {
     setSelectedTechniques((prev) => {
-      if (prev[key].some((i) => i.id === item.id)) {
-        return prev
-      }
-
-      return { ...prev, [key]: [...prev[key], item] };
+      const newItems = items.filter(i => !prev[key].some(e => e.id === i.id));
+      return { ...prev, [key]: [...prev[key], ...newItems] };
     });
     setOpenModal(null);
   };
@@ -625,20 +620,22 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
 
     </AnimatePresence>
 
-      {/* 재료 sub-modals */}
+      {/* 기주 sub-modals */}
       <UserSpiritInsertModal open={openModal === "spirits"} onClose={() => setOpenModal(null)} onSelect={handleSelectSpirits} />
-      <UserJuiceInsertModal open={openModal === "juices"} onClose={() => setOpenModal(null)} onSelect={handleSelectIngredient("juices")} />
-      <UserBittersInsertModal open={openModal === "bitters"} onClose={() => setOpenModal(null)} onSelect={handleSelectIngredient("bitters")} />
-      <UserSyrupInsertModal open={openModal === "syrups"} onClose={() => setOpenModal(null)} onSelect={handleSelectIngredient("syrups")} />
-      <UserCarbonatedInsertModal open={openModal === "carbonated"} onClose={() => setOpenModal(null)} onSelect={handleSelectIngredient("carbonated")} />
-      <UserDairyCreamInsertModal open={openModal === "dairy"} onClose={() => setOpenModal(null)} onSelect={handleSelectIngredient("dairy")} />
-      <UserGarnishesInsertModal open={openModal === "garnishes"} onClose={() => setOpenModal(null)} onSelect={handleSelectIngredient("garnishes")} />
-      <UserOtherIngredientsInsertModal open={openModal === "others"} onClose={() => setOpenModal(null)} onSelect={handleSelectIngredient("others")} />
+
+      {/* 재료 sub-modals */}
+      <UserJuiceInsertModal open={openModal === "juices"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectIngredient("juices", items)} />
+      <UserBittersInsertModal open={openModal === "bitters"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectIngredient("bitters", items)} />
+      <UserSyrupInsertModal open={openModal === "syrups"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectIngredient("syrups", items)} />
+      <UserCarbonatedInsertModal open={openModal === "carbonated"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectIngredient("carbonated", items)} />
+      <UserDairyCreamInsertModal open={openModal === "dairy"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectIngredient("dairy", items)} />
+      <UserGarnishesInsertModal open={openModal === "garnishes"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectIngredient("garnishes", items)} />
+      <UserOtherIngredientsInsertModal open={openModal === "others"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectIngredient("others", items)} />
 
       {/* 제조 기법 sub-modals */}
-      <UserToolInsertModal open={openModal === "tools"} onClose={() => setOpenModal(null)} onSelect={handleSelectTechnique("tools")} />
-      <UserGlasswareInsertModal open={openModal === "glassware"} onClose={() => setOpenModal(null)} onSelect={handleSelectTechnique("glassware")} />
-      <UserTechniqueInsertModal open={openModal === "techniques"} onClose={() => setOpenModal(null)} onSelect={handleSelectTechnique("techniques")} />
+      <UserToolInsertModal open={openModal === "tools"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectTechnique("tools", items)} />
+      <UserGlasswareInsertModal open={openModal === "glassware"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectTechnique("glassware", items)} />
+      <UserTechniqueInsertModal open={openModal === "techniques"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectTechnique("techniques", items)} />
     </>
   );
 };
