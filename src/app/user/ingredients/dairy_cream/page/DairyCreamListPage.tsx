@@ -1,7 +1,7 @@
 import React, {type SetStateAction, useCallback, useEffect, useState} from "react";
 import useReadDairyCream from "../service/useReadDairyCream.tsx";
 import useReadDairyCreamList from "../service/useReadDairyCreamList.tsx";
-import {showErrorAlert} from "../../../common/utils/AlertUtils.ts";
+import CommonErrorSnackbar from "../../../common/component/snackbar/CommonErrorSnackbar";
 import LoadingOverlay from "../../../common/component/loading/LoadingOverlay.tsx";
 import {
   Box,
@@ -10,12 +10,17 @@ import {
   FormControl,
   InputAdornment,
   MenuItem,
-  Select,
-  TextField,
   Typography
 } from "@mui/material";
 import SearchLoadingOverlay from "../../../common/component/loading/SearchLoadingOverlay.tsx";
-import styled from "styled-components";
+import {
+  ControlsContainer,
+  ItemList,
+  PageContainer,
+  SearchField,
+  SortContainer,
+  SortSelect,
+} from "../../../common/style/CommonListPage.style.tsx";
 import DairyCreamListComponent from "../component/DairyCreamListComponent.tsx";
 import DairyCreamDetailModal from "../component/DairyCreamDetailModal.tsx";
 
@@ -36,9 +41,11 @@ const DairyCreamListPage: React.FC = () => {
   const [ searchKeyword, setSearchKeyword ] = useState<string>("");
   const [ searchDebounceTimer, setSearchDebounceTimer ] = useState<number | null>(null);
   const [ isSearching, setIsSearching ] = useState<boolean>(false);
+  const [ snackbarOpen, setSnackbarOpen ] = useState<boolean>(false);
+  const [ snackbarMessage, setSnackbarMessage ] = useState<string>("");
 
-  const { dairyCream, dairyCreamError, dairyCreamLoading, fetchReadDairyCream } = useReadDairyCream();
-  const { dairyCreamList, dairyCreamListError, dairyCreamListLoading, dairyCreamListLoadingMore, dairyCreamListHasMore, fetchReadDairyCreamList } = useReadDairyCreamList();
+  const { dairyCream, dairyCreamLoading, fetchReadDairyCream } = useReadDairyCream();
+  const { dairyCreamList, dairyCreamListLoading, dairyCreamListLoadingMore, dairyCreamListHasMore, fetchReadDairyCreamList } = useReadDairyCreamList();
 
   /*
   * 초기 데이터 로드 및 정렬 변경 시 로드
@@ -143,7 +150,7 @@ const DairyCreamListPage: React.FC = () => {
   * Modal State 제어
   * */
   useEffect(() => {
-    if (dairyCream) {
+    if (dairyCream?.data) {
       setModalOpen(true);
     }
   }, [dairyCream]);
@@ -152,20 +159,18 @@ const DairyCreamListPage: React.FC = () => {
   * Axios Error 제어
   * */
   useEffect(() => {
-    if (dairyCreamListError) {
-      showErrorAlert(
-          '유제품/크림 리스트 로드 실패',
-          dairyCreamListError
-      ).then();
+    if (dairyCreamList && dairyCreamList.code !== 'OK') {
+      setSnackbarMessage(dairyCreamList.message);
+      setSnackbarOpen(true);
     }
+  }, [dairyCreamList]);
 
-    if (dairyCreamError) {
-      showErrorAlert(
-          '유제품/크림 로드 실패',
-          dairyCreamError
-      ).then();
+  useEffect(() => {
+    if (dairyCream && dairyCream.code !== 'OK') {
+      setSnackbarMessage(dairyCream.message);
+      setSnackbarOpen(true);
     }
-  }, [dairyCreamListError, dairyCreamError]);
+  }, [dairyCream]);
 
   return (
       <PageContainer>
@@ -227,14 +232,14 @@ const DairyCreamListPage: React.FC = () => {
           </ControlsContainer>
 
           {/* 유제품/크림 리스트 */}
-          <DairyCreamList>
+          <ItemList>
             {isSearching ? (
                 <SearchLoadingOverlay
                     open={isSearching}
                     message="검색 중..."
                 />
             ) : (
-                dairyCreamList && dairyCreamList.map((dairyCream, index) => (
+                dairyCreamList?.data && dairyCreamList.data.map((dairyCream, index) => (
                     <DairyCreamListComponent
                         key={`${dairyCream.dairyCreamId}-${index}`}
                         data={dairyCream}
@@ -243,7 +248,7 @@ const DairyCreamListPage: React.FC = () => {
                     />
                 ))
             )}
-          </DairyCreamList>
+          </ItemList>
 
           {/* 추가 로딩 중 (무한 스크롤) */}
           {dairyCreamListLoadingMore && (
@@ -263,97 +268,22 @@ const DairyCreamListPage: React.FC = () => {
         </Container>
 
         {/* 유제품/크림 상세 모달 */}
-        {dairyCream && (
+        {dairyCream?.data && (
             <DairyCreamDetailModal
                 open={modalOpen}
                 onClose={() => setModalOpen(false)}
-                data={dairyCream}
+                data={dairyCream.data}
             />
         )}
+
+        <CommonErrorSnackbar
+          open={snackbarOpen}
+          message={snackbarMessage}
+          onClose={() => setSnackbarOpen(false)}
+        />
       </PageContainer>
   );
 }
 
 export default DairyCreamListPage;
 
-const PageContainer = styled(Box)`
-    && {
-        min-height: 100vh;
-        background-color: #f5f5f5;
-        padding-top: 96px;
-    }
-`;
-
-const ControlsContainer = styled(Box)`
-  && {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 32px;
-    gap: 16px;
-
-    @media (max-width: 600px) {
-      flex-wrap: wrap;
-    }
-  }
-`;
-
-const SortContainer = styled(Box)`
-  && {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-  }
-`;
-
-const SortSelect = styled(Select)`
-  && {
-    background-color: #fff;
-    border-radius: 16px;
-    min-width: 150px;
-
-    .MuiOutlinedInput-notchedOutline {
-      border-color: #eee;
-    }
-
-    &:hover .MuiOutlinedInput-notchedOutline {
-      border-color: #ddd;
-    }
-  }
-`;
-
-const SearchField = styled(TextField)`
-  && {
-    width: 300px;
-    background-color: #fff;
-
-    .MuiOutlinedInput-root {
-      border-radius: 16px;
-
-      &:hover fieldset {
-        border-color: #ddd;
-      }
-
-      &.Mui-focused fieldset {
-        border-color: #888;
-      }
-    }
-
-    & fieldset {
-      border-color: #eee;
-    }
-
-    @media (max-width: 600px) {
-      width: 100%;
-    }
-  }
-`;
-
-const DairyCreamList = styled(Box)`
-  && {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-  }
-`;

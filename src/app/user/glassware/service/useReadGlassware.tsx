@@ -1,37 +1,28 @@
 import {useState} from "react";
 import {api} from "../../../../config/axios/AxiosConfig.ts";
 import type {GlasswareDetail} from "../interface/GlasswareDetail.ts";
+import type {ApiResponse} from "../../../../config/axios/interface/ApiResponse.ts";
+import {toApiResponse} from "../../../../config/axios/utils/toApiResponse.ts";
 
 const useReadGlassware = () => {
-  const [data, setData] = useState<GlasswareDetail | undefined>(undefined);
+  const [response, setResponse] = useState<ApiResponse<GlasswareDetail | null> | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
 
   const fetchReadGlassware = async (id: number) => {
     setLoading(true);
-    setError(null);
-
-    try{
-      const response = await api.get<{data: GlasswareDetail}>(`/api/glassware/${id}`);
-
-      if (response.status === 200) {
-        setData(response.data.data);
-      } else {
-        console.error('Unexpected response status:', response.status);
-      }
-
+    try {
+      const res = await api.get<ApiResponse<GlasswareDetail>>(`/api/glassware/${id}`);
+      setResponse(res.data);
     } catch (err) {
-      setError('Error fetching data');
-      console.error(err);
+      setResponse(toApiResponse(err));
     } finally {
       setLoading(false);
     }
   }
 
   return {
-    glassware: data,
+    glassware: response,
     glasswareLoading: loading,
-    glasswareError: error,
     fetchReadGlassware
   };
 }

@@ -145,7 +145,7 @@ export const techniqueHandlers = [
     const startIndex = (page - 1) * limit
     const paginatedData = sortedData.slice(startIndex, startIndex + limit)
 
-    return HttpResponse.json({ data: paginatedData })
+    return HttpResponse.json({ code: 'OK', message: '성공', data: paginatedData })
   }),
 
   /*
@@ -157,9 +157,9 @@ export const techniqueHandlers = [
     const techniqueData = techniqueFullData.find(t => t.techniqueId === techniqueId)
 
     if (!techniqueData) {
-      return HttpResponse.json({ error: 'Technique not found' }, { status: 404 })
+      return HttpResponse.json({ code: 'NOT_FOUND', message: '제조 기법을 찾을 수 없습니다.', data: null }, { status: 404 })
     }
 
-    return HttpResponse.json({ data: techniqueData })
+    return HttpResponse.json({ code: 'OK', message: '성공', data: techniqueData })
   }),
 ]

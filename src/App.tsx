@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { APP_ROUTES } from "./config/route/RoutesConfig.tsx";
 import { Box } from "@mui/material";
 import GNB from "./app/user/common/component/GNB.tsx";
-import RequireAuth from "./app/user/common/component/RequireAuth.tsx";
+import RequireAuth from "./app/user/auth/RequireAuth.tsx";
 import useInitAuth from "./app/user/auth/service/useInitAuth.ts";
 import { useAuthStore } from "./store/authStore.ts";
 
