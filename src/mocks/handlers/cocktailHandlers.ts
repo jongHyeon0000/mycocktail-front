@@ -423,8 +423,17 @@ export const cocktailHandlers = [
     const limit = parseInt(url.searchParams.get('limit') ?? '6')
     const sort = url.searchParams.get('sort') ?? 'recent'
     const search = url.searchParams.get('search') ?? ''
+    const userIdParam = url.searchParams.get('userId')
 
-    let sortedData = [...cocktailFullData]
+    const uuidToUserId: Record<string, number> = {
+      'a1b2c3d4-e5f6-7890-abcd-ef1234567890': 1,
+      'b2c3d4e5-f6a7-8901-bcde-f01234567891': 2,
+      'c3d4e5f6-a7b8-9012-cdef-012345678902': 3,
+    }
+
+    let sortedData = userIdParam
+      ? cocktailFullData.filter(c => uuidToUserId[c.author.userUuid] === parseInt(userIdParam))
+      : [...cocktailFullData]
 
     if (sort === 'popular') {
       sortedData.sort((a, b) => b.likeCount - a.likeCount)
