@@ -71,7 +71,7 @@ const cocktailFullData = [
         },
         cocktailId: 1,
         parentCommentId: undefined,
-        content: '민트를 너무 세게 으깼다가 망했어;; 살살 눌러줘야대',
+        content: '방송에서 모히토 만들다가 민트를 너무 세게 으깼거든ㅋㅋㅋ',
         depth: 0,
         isChildComment: false,
         sortOrder: 0,
@@ -185,7 +185,26 @@ const cocktailFullData = [
     viewCount: 381,
     likeCount: 89,
     shareCount: 32,
-    comments: [],
+    comments: [
+      {
+        commentId: 10,
+        author: {
+          userId: 1,
+          userUuid: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+          username: '아야츠노 유니',
+          thumbnailImage: 'https://yt3.googleusercontent.com/e3_TBkHSBwuzKRSkG1Uv5uGLiHmLUBMVogjWD35MJL7Fi_iccr8DonU6q_1XSmO4djEY9Cunabo=s900-c-k-c0x00ffffff-no-rj'
+        },
+        cocktailId: 2,
+        parentCommentId: undefined,
+        content: '소금림징짜게에바',
+        depth: 0,
+        isChildComment: false,
+        sortOrder: 0,
+        replies: [],
+        createdAt: '2024-11-20T10:00:00',
+        updatedAt: '2024-11-20T10:00:00'
+      }
+    ],
     createdAt: '2024-10-28',
     updatedAt: '2024-10-28'
   },
@@ -238,7 +257,62 @@ const cocktailFullData = [
     viewCount: 897,
     likeCount: 203,
     shareCount: 67,
-    comments: [],
+    comments: [
+      {
+        commentId: 11,
+        author: {
+          userId: 1,
+          userUuid: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+          username: '아야츠노 유니',
+          thumbnailImage: 'https://yt3.googleusercontent.com/e3_TBkHSBwuzKRSkG1Uv5uGLiHmLUBMVogjWD35MJL7Fi_iccr8DonU6q_1XSmO4djEY9Cunabo=s900-c-k-c0x00ffffff-no-rj'
+        },
+        cocktailId: 3,
+        parentCommentId: undefined,
+        content: '올드 패션드는 너무 독해ㅡㅡ',
+        depth: 0,
+        isChildComment: false,
+        sortOrder: 0,
+        replies: [],
+        createdAt: '2024-11-18T15:30:00',
+        updatedAt: '2024-11-18T15:30:00'
+      },
+      {
+        commentId: 12,
+        author: {
+          userId: 2,
+          userUuid: 'b2c3d4e5-f6a7-8901-bcde-f01234567891',
+          username: '아라하시 타비',
+          thumbnailImage: 'https://image.genie.co.kr/Y/IMAGE/IMG_ARTIST/082/459/727/82459727_1714360862118_1_600x600.JPG'
+        },
+        cocktailId: 3,
+        parentCommentId: undefined,
+        content: '버번말고 라이로 하지 왜',
+        depth: 0,
+        isChildComment: false,
+        sortOrder: 0,
+        replies: [
+          {
+            commentId: 13,
+            author: {
+              userId: 1,
+              userUuid: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+              username: '아야츠노 유니',
+              thumbnailImage: 'https://yt3.googleusercontent.com/e3_TBkHSBwuzKRSkG1Uv5uGLiHmLUBMVogjWD35MJL7Fi_iccr8DonU6q_1XSmO4djEY9Cunabo=s900-c-k-c0x00ffffff-no-rj'
+            },
+            cocktailId: 3,
+            parentCommentId: 12,
+            content: '켁븜 다음에해볼개;;',
+            depth: 1,
+            isChildComment: true,
+            sortOrder: 1,
+            createdAt: '2024-11-19T09:15:00',
+            updatedAt: '2024-11-19T09:15:00'
+          }
+        ],
+        createdAt: '2024-11-18T20:00:00',
+        updatedAt: '2024-11-18T20:00:00'
+      }
+    ],
     createdAt: '2024-10-12',
     updatedAt: '2024-10-12'
   },
@@ -297,7 +371,26 @@ const cocktailFullData = [
     viewCount: 834,
     likeCount: 201,
     shareCount: 87,
-    comments: [],
+    comments: [
+      {
+        commentId: 14,
+        author: {
+          userId: 1,
+          userUuid: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+          username: '아야츠노 유니',
+          thumbnailImage: 'https://yt3.googleusercontent.com/e3_TBkHSBwuzKRSkG1Uv5uGLiHmLUBMVogjWD35MJL7Fi_iccr8DonU6q_1XSmO4djEY9Cunabo=s900-c-k-c0x00ffffff-no-rj'
+        },
+        cocktailId: 4,
+        parentCommentId: undefined,
+        content: '이게 그거임ㅋㅋㅋㅋㅋㅋㅋ',
+        depth: 0,
+        isChildComment: false,
+        sortOrder: 0,
+        replies: [],
+        createdAt: '2024-11-10T22:00:00',
+        updatedAt: '2024-11-10T22:00:00'
+      }
+    ],
     createdAt: '2024-09-30',
     updatedAt: '2024-09-30'
   },
@@ -350,7 +443,26 @@ const cocktailFullData = [
     viewCount: 298,
     likeCount: 74,
     shareCount: 28,
-    comments: [],
+    comments: [
+      {
+        commentId: 15,
+        author: {
+          userId: 1,
+          userUuid: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+          username: '아야츠노 유니',
+          thumbnailImage: 'https://yt3.googleusercontent.com/e3_TBkHSBwuzKRSkG1Uv5uGLiHmLUBMVogjWD35MJL7Fi_iccr8DonU6q_1XSmO4djEY9Cunabo=s900-c-k-c0x00ffffff-no-rj'
+        },
+        cocktailId: 5,
+        parentCommentId: undefined,
+        content: '달걀흰자 절대 손으로젓지마ㅅ',
+        depth: 0,
+        isChildComment: false,
+        sortOrder: 0,
+        replies: [],
+        createdAt: '2024-11-05T13:00:00',
+        updatedAt: '2024-11-05T13:00:00'
+      }
+    ],
     createdAt: '2024-09-15',
     updatedAt: '2024-09-15'
   },
@@ -403,7 +515,26 @@ const cocktailFullData = [
     viewCount: 412,
     likeCount: 92,
     shareCount: 35,
-    comments: [],
+    comments: [
+      {
+        commentId: 16,
+        author: {
+          userId: 1,
+          userUuid: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+          username: '아야츠노 유니',
+          thumbnailImage: 'https://yt3.googleusercontent.com/e3_TBkHSBwuzKRSkG1Uv5uGLiHmLUBMVogjWD35MJL7Fi_iccr8DonU6q_1XSmO4djEY9Cunabo=s900-c-k-c0x00ffffff-no-rj'
+        },
+        cocktailId: 6,
+        parentCommentId: undefined,
+        content: '#시라유키히나',
+        depth: 0,
+        isChildComment: false,
+        sortOrder: 0,
+        replies: [],
+        createdAt: '2024-10-30T19:00:00',
+        updatedAt: '2024-10-30T19:00:00'
+      }
+    ],
     createdAt: '2024-08-20',
     updatedAt: '2024-08-20'
   },
@@ -488,6 +619,92 @@ export const cocktailHandlers = [
     cocktail.likeCount += 1
 
     return HttpResponse.json({ code: 'OK', message: '성공', data: { likeCount: cocktail.likeCount } })
+  }),
+
+  /*
+   * 유저가 작성한 댓글 목록
+   */
+  http.get('/api/user/:userId/comments', async ({ request, params }) => {
+    await delay(800)
+    const url = new URL(request.url)
+    const page = parseInt(url.searchParams.get('page') ?? '1')
+    const limit = parseInt(url.searchParams.get('limit') ?? '15')
+    const search = url.searchParams.get('search') ?? ''
+    const userId = parseInt(params.userId as string)
+
+    type CommentEntry = {
+      commentId: number;
+      cocktailId: number;
+      cocktailName: string;
+      cocktailNameKr: string;
+      cocktailImage?: string;
+      content: string;
+      isChildComment: boolean;
+      parentCommentId?: number;
+      createdAt: string;
+      updatedAt: string;
+    }
+
+    const allUserComments: CommentEntry[] = []
+
+    for (const cocktail of cocktailFullData) {
+      if (search) {
+        const searchLower = search.toLowerCase()
+        if (
+          !cocktail.cocktailName.toLowerCase().includes(searchLower) &&
+          !cocktail.cocktailNameKr.includes(search)
+        ) continue
+      }
+
+      for (const comment of cocktail.comments) {
+        if (comment.author.userId === userId) {
+          allUserComments.push({
+            commentId: comment.commentId,
+            cocktailId: cocktail.cocktailId,
+            cocktailName: cocktail.cocktailName,
+            cocktailNameKr: cocktail.cocktailNameKr,
+            cocktailImage: cocktail.image,
+            content: comment.content,
+            isChildComment: comment.isChildComment,
+            parentCommentId: comment.parentCommentId,
+            createdAt: comment.createdAt,
+            updatedAt: comment.updatedAt,
+          })
+        }
+        if (comment.replies) {
+          for (const reply of comment.replies) {
+            if (reply.author.userId === userId) {
+              allUserComments.push({
+                commentId: reply.commentId,
+                cocktailId: cocktail.cocktailId,
+                cocktailName: cocktail.cocktailName,
+                cocktailNameKr: cocktail.cocktailNameKr,
+                cocktailImage: cocktail.image,
+                content: reply.content,
+                isChildComment: reply.isChildComment,
+                parentCommentId: reply.parentCommentId,
+                createdAt: reply.createdAt,
+                updatedAt: reply.updatedAt,
+              })
+            }
+          }
+        }
+      }
+    }
+
+    allUserComments.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+
+    const startIndex = (page - 1) * limit
+    const paginatedData = allUserComments.slice(startIndex, startIndex + limit)
+    const hasMore = startIndex + limit < allUserComments.length
+
+    return HttpResponse.json({
+      code: 'OK',
+      message: '성공',
+      data: paginatedData,
+      totalCount: allUserComments.length,
+      hasMore,
+    })
   }),
 
   /*
