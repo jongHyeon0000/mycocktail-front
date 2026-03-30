@@ -853,6 +853,11 @@ export const cocktailHandlers = [
       content: string;
       isChildComment: boolean;
       parentCommentId?: number;
+      commentedBy: {
+        userId: number;
+        username: string;
+        thumbnailImage?: string;
+      };
       createdAt: string;
       updatedAt: string;
     }
@@ -881,6 +886,11 @@ export const cocktailHandlers = [
             content: comment.content,
             isChildComment: comment.isChildComment,
             parentCommentId: comment.parentCommentId,
+            commentedBy: {
+              userId: comment.author.userId,
+              username: comment.author.username,
+              thumbnailImage: comment.author.thumbnailImage,
+            },
             createdAt: comment.createdAt,
             updatedAt: comment.updatedAt,
           })
@@ -897,6 +907,11 @@ export const cocktailHandlers = [
                 content: reply.content,
                 isChildComment: reply.isChildComment,
                 parentCommentId: reply.parentCommentId,
+                commentedBy: {
+                  userId: reply.author.userId,
+                  username: reply.author.username,
+                  thumbnailImage: reply.author.thumbnailImage,
+                },
                 createdAt: reply.createdAt,
                 updatedAt: reply.updatedAt,
               })

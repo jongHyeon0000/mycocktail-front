@@ -3,6 +3,13 @@ export interface UserComment {
   /** 댓글 ID */
   commentId: number;
 
+  /** 댓글 작성자 (받은 댓글 목록에서 사용) */
+  commentedBy?: {
+    userId: number;
+    username: string;
+    thumbnailImage?: string;
+  };
+
   /** 칵테일 ID */
   cocktailId: number;
 
