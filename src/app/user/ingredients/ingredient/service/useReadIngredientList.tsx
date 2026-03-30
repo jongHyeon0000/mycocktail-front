@@ -1,6 +1,8 @@
 import {useState} from "react";
 import type {UnifiedIngredient} from "../interface/UnifiedIngredient.ts";
 import {api} from "../../../../../config/axios/AxiosConfig.ts";
+import type {ApiResponse} from "../../../../../config/axios/interface/ApiResponse.ts";
+import {toApiResponse} from "../../../../../config/axios/utils/toApiResponse.ts";
 
 interface FetchProps {
   /*
@@ -28,44 +30,31 @@ interface FetchProps {
 }
 
 const useReadIngredientList = () => {
-  const [data, setData] = useState<UnifiedIngredient[] | undefined>(undefined);
+  const [response, setResponse] = useState<ApiResponse<UnifiedIngredient[] | null> | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingMore, setLoadingMore] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState<boolean>(true);
 
   const fetchReadIngredientList = async (params?: FetchProps, appendData = false) => {
     if (appendData) {
       setLoadingMore(true);
     } else {
-      setData(undefined);
+      setResponse(undefined);
       setHasMore(true);
       setLoading(true);
     }
 
-    setError(null);
-
-    try{
-      const response = await api.get<{data: UnifiedIngredient[]}>(`/api/ingredients`, { params });
-
-      if (response.status === 200) {
-        const newData = response.data.data;
-        const limit = params?.limit || 6;
-
-        setHasMore(newData.length >= limit);
-
-        if (appendData && params?.page !== 0 && data) {
-          setData([...data, ...newData]);
-        } else {
-          setData(newData);
-        }
-      } else {
-        console.error('Unexpected response status:', response.status);
-      }
-
+    try {
+      const res = await api.get<ApiResponse<UnifiedIngredient[]>>(`/api/ingredients`, { params });
+      const newApiResponse = res.data;
+      const limit = params?.limit || 6;
+      setHasMore((newApiResponse.data?.length ?? 0) >= limit);
+      setResponse(prev => ({
+        ...newApiResponse,
+        data: appendData && prev?.data && newApiResponse.data ? [...prev.data, ...newApiResponse.data] : newApiResponse.data,
+      }));
     } catch (err) {
-      setError('Error fetching data');
-      console.error(err);
+      setResponse(toApiResponse(err));
     } finally {
       setLoading(false);
       setLoadingMore(false);
@@ -73,10 +62,9 @@ const useReadIngredientList = () => {
   }
 
   return {
-    ingredientList: data,
+    ingredientList: response,
     ingredientListLoading: loading,
     ingredientListLoadingMore: loadingMore,
-    ingredientListError: error,
     ingredientListHasMore: hasMore,
     fetchReadIngredientList
   };

@@ -2,6 +2,7 @@ import { http, HttpResponse, delay } from 'msw'
 
 const userDataMap: { [key: number]: any } = {
   1: {
+    userUuid: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
     userId: 1,
     email: "AyatsunoUni@stellive.com",
     password: "1111",
@@ -18,6 +19,7 @@ const userDataMap: { [key: number]: any } = {
     thumbnailImage: "https://yt3.googleusercontent.com/e3_TBkHSBwuzKRSkG1Uv5uGLiHmLUBMVogjWD35MJL7Fi_iccr8DonU6q_1XSmO4djEY9Cunabo=s900-c-k-c0x00ffffff-no-rj"
   },
   2: {
+    userUuid: 'b2c3d4e5-f6a7-8901-bcde-f01234567891',
     userId: 2,
     email: "tabidayo@stellive.com",
     password: "1111",
@@ -34,10 +36,11 @@ const userDataMap: { [key: number]: any } = {
     thumbnailImage: "https://image.genie.co.kr/Y/IMAGE/IMG_ARTIST/082/459/727/82459727_1714360862118_1_600x600.JPG"
   },
   3: {
+    userUuid: 'c3d4e5f6-a7b8-9012-cdef-012345678902',
     userId: 3,
     email: "aokumoRin@stellive.com",
     password: "1111",
-    isActive: false,
+    isActive: true,
     isDeleted: false,
     createdAt: "2024-02-10T08:00:00Z",
     updatedAt: "2024-11-05T16:30:00Z",
@@ -111,18 +114,38 @@ export const authHandlers = [
   }),
 
   /*
-   * 유저 정보 (개별 조회)
+   * 유저 정보 수정
    */
-  http.get('/api/userInfo/:id', async ({ params }) => {
-    await delay(1000)
-    const userId = parseInt(params.id as string)
+  http.post('/api/userInfo', async ({ request }) => {
+    await delay(800)
+    const token = request.headers.get('Authorization')?.replace('Bearer ', '')
+    const userId = parseInt(token?.split('.')[3] ?? '')
     const userData = userDataMap[userId]
 
-    if (userData) {
-      const { password: _pw, ...userWithoutPassword } = userData
-      return HttpResponse.json({ data: userWithoutPassword })
-    } else {
-      return HttpResponse.json({ message: 'User not found' }, { status: 404 })
+    if (!userData) {
+      return HttpResponse.json(
+        { code: 'UNAUTHORIZED', message: '유효하지 않은 토큰입니다.', data: null },
+        { status: 401 }
+      )
     }
+
+    const body = await request.json() as Record<string, unknown>
+
+    userDataMap[userId] = {
+      ...userData,
+      ...body,
+      userUuid: userData.userUuid,
+      userId: userData.userId,
+      email: userData.email,
+      isActive: userData.isActive,
+      isDeleted: userData.isDeleted,
+      createdAt: userData.createdAt,
+      deactivatedAt: userData.deactivatedAt,
+      deletedAt: userData.deletedAt,
+      updatedAt: new Date().toISOString(),
+    }
+
+    const { password: _pw, ...userWithoutPassword } = userDataMap[userId]
+    return HttpResponse.json({ code: 'OK', message: '회원정보가 수정되었습니다.', data: userWithoutPassword })
   }),
 ]

@@ -1,37 +1,28 @@
 import {useState} from "react";
 import {api} from "../../../../../config/axios/AxiosConfig.ts";
 import type {DairyCreamDetail} from "../interface/DairyCreamDetail.ts";
+import type {ApiResponse} from "../../../../../config/axios/interface/ApiResponse.ts";
+import {toApiResponse} from "../../../../../config/axios/utils/toApiResponse.ts";
 
 const useReadDairyCream = () => {
-  const [data, setData] = useState<DairyCreamDetail | undefined>(undefined);
+  const [response, setResponse] = useState<ApiResponse<DairyCreamDetail | null> | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
 
   const fetchReadDairyCream = async (id: number) => {
     setLoading(true);
-    setError(null);
-
-    try{
-      const response = await api.get<{data: DairyCreamDetail}>(`/api/dairy-cream/${id}`);
-
-      if (response.status === 200) {
-        setData(response.data.data);
-      } else {
-        console.error('Unexpected response status:', response.status);
-      }
-
+    try {
+      const res = await api.get<ApiResponse<DairyCreamDetail>>(`/api/dairy-cream/${id}`);
+      setResponse(res.data);
     } catch (err) {
-      setError('Error fetching data');
-      console.error(err);
+      setResponse(toApiResponse(err));
     } finally {
       setLoading(false);
     }
   }
 
   return {
-    dairyCream: data,
+    dairyCream: response,
     dairyCreamLoading: loading,
-    dairyCreamError: error,
     fetchReadDairyCream
   };
 }

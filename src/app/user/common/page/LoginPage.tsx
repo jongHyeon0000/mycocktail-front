@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Alert, Box, Button, Snackbar, TextField, Typography } from "@mui/material";
+import React, { useRef, useState } from "react";
+import { Box, Button, TextField, Typography } from "@mui/material";
+import CommonErrorSnackbar from "../component/snackbar/CommonErrorSnackbar.tsx";
 import { motion } from "framer-motion";
 import styled from "styled-components";
 import { Navigate, useNavigate } from "react-router-dom";
@@ -17,25 +18,7 @@ const LoginPage: React.FC = () => {
   const passwordRef = useRef<HTMLInputElement>(null);
 
   const navigate = useNavigate();
-  const { login, isLoginLoading, errorResponse, isAuthenticated } = useAuth();
-
-  // API 에러 발생 시 Snackbar + 해당 필드 focus
-  useEffect(() => {
-    if (!errorResponse) {
-      return;
-    }
-
-    setSnackbarMessage(errorResponse.message);
-    setSnackbarOpen(true);
-
-    if (errorResponse.code === "USER_NOT_FOUND") {
-      setEmailError("존재하는 이메일이 없습니다.");
-      setTimeout(() => emailRef.current?.focus(), 0);
-    } else if (errorResponse.code === "UNAUTHORIZED") {
-      setPasswordError("패스워드가 일치하지 않습니다.");
-      setTimeout(() => passwordRef.current?.focus(), 0);
-    }
-  }, [errorResponse]);
+  const { login, isLoginLoading, isAuthenticated } = useAuth();
 
   const handleLogin = async () => {
     let hasError = false;
@@ -63,8 +46,19 @@ const LoginPage: React.FC = () => {
 
     const result = await login({ email, password });
 
-    if (result) {
+    if (result.code === 'OK') {
       navigate("/");
+    } else {
+      setSnackbarMessage(result.message);
+      setSnackbarOpen(true);
+
+      if (result.code === "USER_NOT_FOUND") {
+        setEmailError("존재하는 이메일이 없습니다.");
+        setTimeout(() => emailRef.current?.focus(), 0);
+      } else if (result.code === "UNAUTHORIZED") {
+        setPasswordError("패스워드가 일치하지 않습니다.");
+        setTimeout(() => passwordRef.current?.focus(), 0);
+      }
     }
   };
 
@@ -162,21 +156,11 @@ const LoginPage: React.FC = () => {
       </LoginContainer>
 
       {/* 에러 Snackbar */}
-      <Snackbar
+      <CommonErrorSnackbar
         open={snackbarOpen}
-        autoHideDuration={3000}
+        message={snackbarMessage}
         onClose={() => setSnackbarOpen(false)}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      >
-        <Alert
-          onClose={() => setSnackbarOpen(false)}
-          severity="error"
-          variant="filled"
-          sx={{ width: "100%" }}
-        >
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
+      />
     </PageContainer>
   );
 };

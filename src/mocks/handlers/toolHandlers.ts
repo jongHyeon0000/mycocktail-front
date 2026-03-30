@@ -137,7 +137,7 @@ export const toolHandlers = [
     const startIndex = (page - 1) * limit
     const paginatedData = sortedData.slice(startIndex, startIndex + limit)
 
-    return HttpResponse.json({ data: paginatedData })
+    return HttpResponse.json({ code: 'OK', message: '성공', data: paginatedData })
   }),
 
   /*
@@ -149,9 +149,9 @@ export const toolHandlers = [
     const toolData = toolFullData.find(t => t.toolId === toolId)
 
     if (!toolData) {
-      return HttpResponse.json({ error: 'Tool not found' }, { status: 404 })
+      return HttpResponse.json({ code: 'NOT_FOUND', message: '바 도구를 찾을 수 없습니다.', data: null }, { status: 404 })
     }
 
-    return HttpResponse.json({ data: toolData })
+    return HttpResponse.json({ code: 'OK', message: '성공', data: toolData })
   }),
 ]

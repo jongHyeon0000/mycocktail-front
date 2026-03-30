@@ -1,9 +1,15 @@
 import React from "react";
 import {motion} from "framer-motion";
-import {Box, Card, CardContent, CardMedia, Typography} from "@mui/material";
-import styled from "styled-components";
+import {Box, Card, CardMedia} from "@mui/material";
 import {stripHtmlTags} from "../../../common/utils/CommonUtils.ts";
 import type {CarbonatedDetail} from "../interface/CarbonatedDetail.ts";
+import {
+  CardContentArea,
+  ContentSection,
+  ImageSection,
+  ItemDescription,
+  ItemTitle,
+} from "../../../common/style/CommonListComponent.style.tsx";
 
 interface CarbonatedListComponentProps {
   data: CarbonatedDetail;
@@ -35,12 +41,7 @@ const CarbonatedListComponent: React.FC<CarbonatedListComponentProps> = ({ data,
       >
         <CardContentArea>
           {/* 이미지 섹션 */}
-          <Box sx={{
-            flex: "0 0 200px",
-            "@media (max-width: 600px)": {
-              flex: "0 0 120px"
-            }
-          }}>
+          <ImageSection>
             <CardMedia
                 component="img"
                 height="200"
@@ -52,18 +53,18 @@ const CarbonatedListComponent: React.FC<CarbonatedListComponentProps> = ({ data,
                   height: "100%"
                 }}
             />
-          </Box>
+          </ImageSection>
 
           {/* 콘텐츠 섹션 */}
           <ContentSection>
             <Box>
-              <TechniqueTitle variant="h6">
+              <ItemTitle variant="h6">
                 {data.carbonatedNameKr} ({data.carbonatedName})
-              </TechniqueTitle>
+              </ItemTitle>
 
-              <TechniqueDescription variant="body2">
+              <ItemDescription variant="body2">
                 {stripHtmlTags(data.notes)}
-              </TechniqueDescription>
+              </ItemDescription>
             </Box>
           </ContentSection>
         </CardContentArea>
@@ -72,55 +73,3 @@ const CarbonatedListComponent: React.FC<CarbonatedListComponentProps> = ({ data,
 }
 
 export default CarbonatedListComponent;
-
-const CardContentArea = styled(CardContent)`
-  && {
-    padding: 0;
-    display: flex;
-    height: 200px;
-    
-    &:last-child {
-      padding-bottom: 0;
-    }
-    
-    @media (max-width: 600px) {
-      height: 180px;
-    }
-  }
-`;
-
-const ContentSection = styled(Box)`
-  && {
-    flex: 1;
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    
-    @media (max-width: 600px) {
-      padding: 16px;
-    }
-  }
-`;
-
-const TechniqueTitle = styled(Typography)`
-  && {
-    font-weight: 600;
-    font-size: 1.5rem;
-    color: #333;
-    margin-bottom: 8px;
-    
-    @media (max-width: 600px) {
-      font-size: 1.25rem;
-    }
-  }
-`;
-
-const TechniqueDescription = styled(Typography)`
-  && {
-    color: #666;
-    font-size: 0.95rem;
-    line-height: 1.5;
-    margin-bottom: 16px;
-  }
-`;

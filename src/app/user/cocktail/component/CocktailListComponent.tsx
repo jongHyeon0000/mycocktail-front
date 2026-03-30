@@ -1,8 +1,16 @@
 import React from "react";
 import type {CocktailDetail} from "../interface/CocktailDetail.ts";
 import {motion} from "framer-motion";
-import {Box, Card, CardContent, CardMedia, Chip, Typography} from "@mui/material";
+import {Box, Card, CardMedia, Chip, Typography} from "@mui/material";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import styled from "styled-components";
+import {
+  CardContentArea,
+  ContentSection,
+  ImageSection,
+  ItemDescription,
+  ItemTitle,
+} from "../../common/style/CommonListComponent.style.tsx";
 
 interface CocktailListComponentProps {
   cocktail: CocktailDetail;
@@ -32,11 +40,6 @@ const CocktailListComponent: React.FC<CocktailListComponentProps> = ({ cocktail,
             }
           }}
       >
-        {/* NEW 태그 */}
-        {cocktail.isNew && (
-            <NewChip label="NEW" size="small" />
-        )}
-
         <CardContentArea>
           {/* 이미지 섹션 */}
           <ImageSection>
@@ -56,22 +59,26 @@ const CocktailListComponent: React.FC<CocktailListComponentProps> = ({ cocktail,
           {/* 콘텐츠 섹션 */}
           <ContentSection>
             <Box>
-              <CocktailTitle variant="h6">
+              <ItemTitle variant="h6">
                 {cocktail.cocktailNameKr} ({cocktail.cocktailName})
-              </CocktailTitle>
+              </ItemTitle>
 
-              <CocktailDescription variant="body2">
+              <ItemDescription variant="body2">
                 {cocktail.profileNote}
-              </CocktailDescription>
+              </ItemDescription>
             </Box>
 
             <BottomInfo>
-              <CocktailAlcohol variant="body2">
-                abz {cocktail.absPercentage}%
-              </CocktailAlcohol>
-              <LikeText variant="caption">
-                ❤️ {cocktail.likeCount}
-              </LikeText>
+              <AbvBadge>ABV {cocktail.absPercentage}%</AbvBadge>
+              <RightBadgeGroup>
+                {cocktail.isNew && (
+                    <NewChip label="NEW" size="small" />
+                )}
+                <LikeBox>
+                  <FavoriteIcon sx={{ fontSize: 14, color: "#ff4757" }} />
+                  <LikeText variant="caption">{cocktail.likeCount}</LikeText>
+                </LikeBox>
+              </RightBadgeGroup>
             </BottomInfo>
           </ContentSection>
         </CardContentArea>
@@ -81,76 +88,6 @@ const CocktailListComponent: React.FC<CocktailListComponentProps> = ({ cocktail,
 
 export default CocktailListComponent;
 
-const CardContentArea = styled(CardContent)`
-  && {
-    padding: 0;
-    display: flex;
-    height: 200px;
-    
-    &:last-child {
-      padding-bottom: 0;
-    }
-    
-    @media (max-width: 600px) {
-      height: 180px;
-    }
-  }
-`;
-
-const ImageSection = styled(Box)`
-  && {
-    flex: 0 0 200px;
-    
-    @media (max-width: 600px) {
-      flex: 0 0 120px;
-    }
-  }
-`;
-
-const ContentSection = styled(Box)`
-  && {
-    flex: 1;
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    
-    @media (max-width: 600px) {
-      padding: 16px;
-    }
-  }
-`;
-
-const CocktailTitle = styled(Typography)`
-  && {
-    font-weight: 600;
-    font-size: 1.5rem;
-    color: #333;
-    margin-bottom: 8px;
-    
-    @media (max-width: 600px) {
-      font-size: 1.25rem;
-    }
-  }
-`;
-
-const CocktailDescription = styled(Typography)`
-  && {
-    color: #666;
-    font-size: 0.95rem;
-    line-height: 1.5;
-    margin-bottom: 16px;
-  }
-`;
-
-const CocktailAlcohol = styled(Typography)`
-  && {
-    color: #ff6b6b;
-    font-weight: 600;
-    font-size: 0.9rem;
-    margin-bottom: 12px;
-  }
-`;
 
 const BottomInfo = styled(Box)`
   && {
@@ -160,22 +97,58 @@ const BottomInfo = styled(Box)`
   }
 `;
 
+const AbvBadge = styled(Box)`
+  && {
+    display: inline-flex;
+    align-items: center;
+    background-color: #fff3f3;
+    color: #e63950;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 1px solid #ffd6d9;
+  }
+` as typeof Box;
+
+const LikeBox = styled(Box)`
+  && {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background-color: #fff3f3;
+    border: 1px solid #ffd6d9;
+    border-radius: 20px;
+    padding: 3px 10px;
+  }
+` as typeof Box;
+
 const LikeText = styled(Typography)`
   && {
-    color: #ff4757;
-    font-size: 0.875rem;
-    font-weight: 500;
+    color: #e63950;
+    font-size: 0.78rem;
+    font-weight: 700;
+    line-height: 1;
   }
 `;
 
+const RightBadgeGroup = styled(Box)`
+  && {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+` as typeof Box;
+
 const NewChip = styled(Chip)`
   && {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    background-color: #ff4757;
-    color: white;
-    font-weight: 600;
+    background-color: #fff3f3;
+    color: #e63950;
+    border: 1px solid #ffd6d9;
+    font-weight: 700;
     font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    height: 24px;
   }
 `;

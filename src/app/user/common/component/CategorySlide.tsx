@@ -12,6 +12,7 @@ interface CategorySlideProps {
   items: CommonSlideElement[];
   slideRef: RefObject<HTMLDivElement | null>;
   onItemClick?: (item: CommonSlideElement) => void;
+  onItemRemove?: (item: CommonSlideElement) => void;
   className?: string;
 }
 
@@ -20,6 +21,7 @@ export const CategorySlide = ({
       items,
       slideRef,
       onItemClick,
+      onItemRemove,
       className,
     }: CategorySlideProps) => {
   const controls = useAnimation();
@@ -87,6 +89,16 @@ export const CategorySlide = ({
                         onClick={() => onItemClick?.(item)}
                         style={{ cursor: onItemClick ? 'pointer' : 'default' }}
                     >
+                      {onItemRemove && (
+                        <RemoveButton
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onItemRemove(item);
+                          }}
+                        >
+                          ×
+                        </RemoveButton>
+                      )}
                       <SlideItemImage>
                         {item?.image ? (
                             <img src={item?.image} alt={item.name} />
@@ -118,18 +130,16 @@ const CategorySection = styled(Box)`
       content: '';
       position: absolute;
       bottom: -16px;
-      left: 24px; /* 카테고리 제목 위치에 맞춰 시작 */
-      right: 10%;
-      height: 2px;
-      background: linear-gradient(90deg, rgba(76, 175, 80, 1) 0%, rgba(76, 175, 80, 0.8) 50%, rgba(76, 175, 80, 0.3) 100%);
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: rgba(0, 0, 0, 0.07);
       border-radius: 1px;
-      box-shadow: 0 1px 3px rgba(76, 175, 80, 0.3);
     }
-    
+
     /* 기법 섹션용 구분선 */
     &.technique:not(:last-child)::after {
-      background: linear-gradient(90deg, rgba(33, 150, 243, 1) 0%, rgba(33, 150, 243, 0.8) 50%, rgba(33, 150, 243, 0.3) 100%);
-      box-shadow: 0 1px 3px rgba(33, 150, 243, 0.3);
+      background: rgba(0, 0, 0, 0.07);
     }
   }
 `;
@@ -139,16 +149,32 @@ const SlideCategoryTitle = styled(Typography)`
     font-size: 1rem;
     font-weight: 700;
     color: #2e7d32;
-    margin-bottom: 8px; /* 기존 16px에서 8px로 축소 */
-    padding: 8px 16px;
-    background: rgba(255, 255, 255, 0.8);
-    border-radius: 20px;
-    display: inline-block;
-    border: 1px solid rgba(76, 175, 80, 0.3);
-    
+    margin-bottom: 12px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background: none;
+    border: none;
+    border-radius: 0;
+
+    &::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #4caf50;
+      flex-shrink: 0;
+    }
+
     &.technique {
       color: #1565c0;
-      border-color: rgba(33, 150, 243, 0.3);
+    }
+
+    &.technique::before {
+      background: #42a5f5;
     }
   }
 `;
@@ -190,39 +216,65 @@ const SlideTrack = styled(Box)`
 
 const SlideItem = styled(Box)`
   && {
-    min-width: 140px;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 12px;
-    padding: 16px;
+    min-width: 130px;
+    position: relative;
+    background: #f2f4f6;
+    border-radius: 16px;
+    padding: 16px 12px;
     text-align: center;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
-    
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    transition: all 0.2s ease;
+
     &:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      background: #e8ecf0;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.09);
     }
-    
+
     @media (max-width: 600px) {
-      min-width: 120px;
-      padding: 12px;
+      min-width: 110px;
+      padding: 12px 10px;
     }
+  }
+`;
+
+const RemoveButton = styled.button`
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.35);
+  color: #fff;
+  font-size: 0.85rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.15s;
+  z-index: 1;
+
+  &:hover {
+    background: #e74c3c;
   }
 `;
 
 const SlideItemImage = styled(Box)`
   && {
-    width: 80px;
-    height: 80px;
-    border-radius: 12px;
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    width: 72px;
+    height: 72px;
+    border-radius: 14px;
+    background: #efefef;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 12px;
+    margin: 0 auto 10px;
     overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: none;
     
     img {
       width: 100%;

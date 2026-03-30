@@ -1,7 +1,7 @@
 import React, {type SetStateAction, useCallback, useEffect, useState} from "react";
 import useReadCarbonated from "../service/useReadCarbonated.tsx";
 import useReadCarbonatedList from "../service/useReadCarbonatedList.tsx";
-import {showErrorAlert} from "../../../common/utils/AlertUtils.ts";
+import CommonErrorSnackbar from "../../../common/component/snackbar/CommonErrorSnackbar";
 import LoadingOverlay from "../../../common/component/loading/LoadingOverlay.tsx";
 import {
   Box,
@@ -10,12 +10,17 @@ import {
   FormControl,
   InputAdornment,
   MenuItem,
-  Select,
-  TextField,
   Typography
 } from "@mui/material";
 import SearchLoadingOverlay from "../../../common/component/loading/SearchLoadingOverlay.tsx";
-import styled from "styled-components";
+import {
+  ControlsContainer,
+  ItemList,
+  PageContainer,
+  SearchField,
+  SortContainer,
+  SortSelect,
+} from "../../../common/style/CommonListPage.style.tsx";
 import CarbonatedDetailModal from "../component/CarbonatedDetailModal.tsx";
 import CarbonatedListComponent from "../component/CarbonatedListComponent.tsx";
 
@@ -36,9 +41,11 @@ const CarbonatedListPage: React.FC = () => {
   const [ searchKeyword, setSearchKeyword ] = useState<string>("");
   const [ searchDebounceTimer, setSearchDebounceTimer ] = useState<number | null>(null);
   const [ isSearching, setIsSearching ] = useState<boolean>(false);
+  const [ snackbarOpen, setSnackbarOpen ] = useState<boolean>(false);
+  const [ snackbarMessage, setSnackbarMessage ] = useState<string>("");
 
-  const { carbonated, carbonatedLoading, carbonatedError, fetchReadCarbonated } = useReadCarbonated()
-  const { fetchReadCarbonatedList, carbonatedListError, carbonatedList, carbonatedListLoading, carbonatedListLoadingMore, carbonatedListHasMore } = useReadCarbonatedList();
+  const { carbonated, carbonatedLoading, fetchReadCarbonated } = useReadCarbonated()
+  const { fetchReadCarbonatedList, carbonatedList, carbonatedListLoading, carbonatedListLoadingMore, carbonatedListHasMore } = useReadCarbonatedList();
 
   /*
   * 초기 데이터 로드 및 정렬 변경 시 로드
@@ -143,7 +150,7 @@ const CarbonatedListPage: React.FC = () => {
   * Modal State 제어
   * */
   useEffect(() => {
-    if (carbonated) {
+    if (carbonated?.data) {
       setModalOpen(true);
     }
   }, [carbonated]);
@@ -152,20 +159,18 @@ const CarbonatedListPage: React.FC = () => {
   * Axios Error 제어
   * */
   useEffect(() => {
-    if (carbonatedListError) {
-      showErrorAlert(
-          '비터스 리스트 로드 실패',
-          carbonatedListError
-      ).then();
+    if (carbonatedList && carbonatedList.code !== 'OK') {
+      setSnackbarMessage(carbonatedList.message);
+      setSnackbarOpen(true);
     }
+  }, [carbonatedList]);
 
-    if (carbonatedError) {
-      showErrorAlert(
-          '비터스 로드 실패',
-          carbonatedError
-      ).then();
+  useEffect(() => {
+    if (carbonated && carbonated.code !== 'OK') {
+      setSnackbarMessage(carbonated.message);
+      setSnackbarOpen(true);
     }
-  }, [carbonatedListError, carbonatedError]);
+  }, [carbonated]);
 
   return (
       <PageContainer>
@@ -227,14 +232,14 @@ const CarbonatedListPage: React.FC = () => {
           </ControlsContainer>
 
           {/* 탄산 리스트 */}
-          <CarbonatedList>
+          <ItemList>
             {isSearching ? (
                 <SearchLoadingOverlay
                     open={isSearching}
                     message="검색 중..."
                 />
             ) : (
-                carbonatedList && carbonatedList.map((carbonated, index) => (
+                carbonatedList?.data && carbonatedList.data.map((carbonated, index) => (
                     <CarbonatedListComponent
                         key={`${carbonated.carbonatedId}-${index}`}
                         data={carbonated}
@@ -243,7 +248,7 @@ const CarbonatedListPage: React.FC = () => {
                     />
                 ))
             )}
-          </CarbonatedList>
+          </ItemList>
 
           {/* 추가 로딩 중 (무한 스크롤) */}
           {carbonatedListLoadingMore && (
@@ -263,97 +268,22 @@ const CarbonatedListPage: React.FC = () => {
         </Container>
 
         {/* 탄산 상세 모달 */}
-        {carbonated && (
+        {carbonated?.data && (
             <CarbonatedDetailModal
                 open={modalOpen}
                 onClose={() => setModalOpen(false)}
-                data={carbonated}
+                data={carbonated.data}
             />
         )}
+
+        <CommonErrorSnackbar
+          open={snackbarOpen}
+          message={snackbarMessage}
+          onClose={() => setSnackbarOpen(false)}
+        />
       </PageContainer>
   );
 }
 
 export default CarbonatedListPage;
 
-const PageContainer = styled(Box)`
-    && {
-        min-height: 100vh;
-        background-color: #f5f5f5;
-        padding-top: 96px;
-    }
-`;
-
-const ControlsContainer = styled(Box)`
-  && {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 32px;
-    gap: 16px;
-    
-    @media (max-width: 600px) {
-      flex-wrap: wrap;
-    }
-  }
-`;
-
-const SortContainer = styled(Box)`
-  && {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-  }
-`;
-
-const SortSelect = styled(Select)`
-  && {
-    background-color: #fff;
-    border-radius: 16px;
-    min-width: 150px;
-    
-    .MuiOutlinedInput-notchedOutline {
-      border-color: #eee;
-    }
-    
-    &:hover .MuiOutlinedInput-notchedOutline {
-      border-color: #ddd;
-    }
-  }
-`;
-
-const SearchField = styled(TextField)`
-  && {
-    width: 300px;
-    background-color: #fff;
-    
-    .MuiOutlinedInput-root {
-      border-radius: 16px;
-      
-      &:hover fieldset {
-        border-color: #ddd;
-      }
-      
-      &.Mui-focused fieldset {
-        border-color: #888;
-      }
-    }
-    
-    & fieldset {
-      border-color: #eee;
-    }
-    
-    @media (max-width: 600px) {
-      width: 100%;
-    }
-  }
-`;
-
-const CarbonatedList = styled(Box)`
-  && {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-  }
-`;
