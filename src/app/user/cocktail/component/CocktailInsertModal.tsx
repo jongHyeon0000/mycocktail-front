@@ -137,14 +137,6 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
     techniques: useRef<HTMLDivElement>(null),
   };
 
-  const handleSelectIngredient = (key: IngredientKey, items: CommonSlideElement[]) => {
-    setSelectedIngredients((prev) => {
-      const newItems = items.filter(i => !prev[key].some(e => e.id === i.id));
-      return { ...prev, [key]: [...prev[key], ...newItems] };
-    });
-    setOpenModal(null);
-  };
-
   const handleSelectSpirits = (items: CommonSlideElement[]) => {
     setSelectedIngredients((prev) => {
       const newItems = items.filter(i => !prev.spirits.some(e => e.id === i.id));
@@ -154,16 +146,26 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
     setOpenModal(null);
   };
 
-  const handleRemoveIngredient = (key: IngredientKey, id: number) => {
-    setSelectedIngredients((prev) => ({ ...prev, [key]: prev[key].filter((i) => i.id !== id) }));
+  const handleSelectIngredient = (key: IngredientKey, items: CommonSlideElement[]) => {
+    setSelectedIngredients((prev) => {
+      const newItems = items.filter(i => !prev[key].some(e => e.id === i.id));
+
+      return { ...prev, [key]: [...prev[key], ...newItems] };
+    });
+    setOpenModal(null);
   };
 
   const handleSelectTechnique = (key: TechniqueKey, items: CommonSlideElement[]) => {
     setSelectedTechniques((prev) => {
       const newItems = items.filter(i => !prev[key].some(e => e.id === i.id));
+
       return { ...prev, [key]: [...prev[key], ...newItems] };
     });
     setOpenModal(null);
+  };
+
+  const handleRemoveIngredient = (key: IngredientKey, id: number) => {
+    setSelectedIngredients((prev) => ({ ...prev, [key]: prev[key].filter((i) => i.id !== id) }));
   };
 
   const handleRemoveTechnique = (key: TechniqueKey, id: number) => {
@@ -217,9 +219,11 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
     setValidationError(newErrors);
 
     if (Object.keys(newErrors).length > 0) {
-      const firstFocusable = (["cocktailName", "cocktailNameKr", "absPercentage", "servingSizeMl"] as FocusableField[])
-        .find((key) => newErrors[key]);
-      if (firstFocusable) FORM_REFS[firstFocusable].current?.focus();
+      const firstFocusable = (["cocktailName", "cocktailNameKr", "absPercentage", "servingSizeMl"] as FocusableField[]).find((key) => newErrors[key]);
+
+      if (firstFocusable) {
+        FORM_REFS[firstFocusable].current?.focus();
+      }
       return;
     }
 
