@@ -37,6 +37,9 @@ const ReceivedCommentsPage: React.FC = () => {
   const { receivedCommentList, receivedCommentListLoading, receivedCommentListLoadingMore, receivedCommentListHasMore, fetchReadReceivedComments } = useReadReceivedComments();
   const { cocktail, cocktailLoading, fetchReadCocktail } = useReadCocktail();
 
+  /*
+  * 초기 데이터 로드
+  * */
   useEffect(() => {
     if (user?.userId) {
       fetchReadReceivedComments({
@@ -48,13 +51,20 @@ const ReceivedCommentsPage: React.FC = () => {
     }
   }, []);
 
+  /*
+  * 검색어 입력 핸들러 (디바운스 적용)
+  * */
   const handleSearchChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const keyword = event.target.value;
     setSearchKeyword(keyword);
 
+    // 이전 타이머 취소
     if (searchDebounceTimer) clearTimeout(searchDebounceTimer);
+
+    // 검색 중 상태 활성화
     setIsSearching(true);
 
+    // 새로운 타이머 설정 (250ms 후 검색 실행)
     const newTimer = setTimeout(() => {
       setCurrentPage(1);
       fetchReadReceivedComments({
@@ -68,6 +78,9 @@ const ReceivedCommentsPage: React.FC = () => {
     setSearchDebounceTimer(newTimer);
   }, [searchDebounceTimer, user?.userId]);
 
+  /*
+  * 검색어 초기화 핸들러
+  * */
   const handleSearchClear = useCallback(() => {
     setSearchKeyword("");
     setCurrentPage(1);
@@ -80,7 +93,11 @@ const ReceivedCommentsPage: React.FC = () => {
     }).finally(() => setIsSearching(false));
   }, [user?.userId]);
 
+  /*
+  * 무한 스크롤 이벤트 핸들러 - 추가 데이터 로드
+  * */
   const handleScroll = useCallback(async () => {
+    // 현재 스크롤 위치 + 뷰포트 높이가 전체 문서 높이에서 100px 이내에 도달하면 로드
     if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 100) {
       if (receivedCommentListHasMore && !receivedCommentListLoading && !receivedCommentListLoadingMore) {
         await fetchReadReceivedComments({
@@ -94,6 +111,9 @@ const ReceivedCommentsPage: React.FC = () => {
     }
   }, [currentPage, searchKeyword, receivedCommentListHasMore, receivedCommentListLoading, receivedCommentListLoadingMore, user?.userId]);
 
+  /*
+  * 스크롤 이벤트 리스너 등록/해제
+  * */
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
     return () => {
@@ -102,10 +122,16 @@ const ReceivedCommentsPage: React.FC = () => {
     };
   }, [handleScroll, searchDebounceTimer]);
 
+  /*
+  * Modal State 제어
+  * */
   useEffect(() => {
     if (cocktail?.data) setModalOpen(true);
   }, [cocktail]);
 
+  /*
+  * Axios Error 제어
+  * */
   useEffect(() => {
     if (receivedCommentList && receivedCommentList.code !== 'OK') {
       setSnackbarMessage(receivedCommentList.message);

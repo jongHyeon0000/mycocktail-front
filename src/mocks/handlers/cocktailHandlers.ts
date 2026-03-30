@@ -543,6 +543,50 @@ const cocktailFullData = [
 // 좋아요 상태 in-memory 저장: key = `${userId}-${cocktailId}`
 const likedSet = new Set<string>()
 
+// 칵테일별 좋아요 누른 유저 mock 데이터: key = cocktailId
+const cocktailLikedByData: Record<number, Array<{
+  likeId: number;
+  userId: number;
+  username: string;
+  thumbnailImage?: string;
+  createdAt: string;
+}>> = {
+  // cocktailId 1 (Mojito) — userId=1 (아야츠노 유니) 작성
+  1: [
+    {
+      likeId: 1,
+      userId: 2,
+      username: '아라하시 타비',
+      thumbnailImage: 'https://image.genie.co.kr/Y/IMAGE/IMG_ARTIST/082/459/727/82459727_1714360862118_1_600x600.JPG',
+      createdAt: '2024-11-20T11:00:00',
+    },
+    {
+      likeId: 2,
+      userId: 3,
+      username: '아오쿠모 린',
+      thumbnailImage: 'https://i.namu.wiki/i/2q4XJfx3uT9A-CxXVEkXjT4YwhXVAWIwYnFUmB3fmjkAZTEo78qOgRZldT-KAjwFW-30KDl4kdXLEGmmcCmBjg.webp',
+      createdAt: '2024-11-21T09:30:00',
+    },
+  ],
+  // cocktailId 4 (Long Island Iced Tea) — userId=1 (아야츠노 유니) 작성
+  4: [
+    {
+      likeId: 3,
+      userId: 2,
+      username: '아라하시 타비',
+      thumbnailImage: 'https://image.genie.co.kr/Y/IMAGE/IMG_ARTIST/082/459/727/82459727_1714360862118_1_600x600.JPG',
+      createdAt: '2024-11-15T18:00:00',
+    },
+    {
+      likeId: 4,
+      userId: 3,
+      username: '아오쿠모 린',
+      thumbnailImage: 'https://i.namu.wiki/i/2q4XJfx3uT9A-CxXVEkXjT4YwhXVAWIwYnFUmB3fmjkAZTEo78qOgRZldT-KAjwFW-30KDl4kdXLEGmmcCmBjg.webp',
+      createdAt: '2024-11-16T14:45:00',
+    },
+  ],
+}
+
 export const cocktailHandlers = [
   /*
    * 칵테일 List
@@ -703,6 +747,82 @@ export const cocktailHandlers = [
       message: '성공',
       data: paginatedData,
       totalCount: allUserComments.length,
+      hasMore,
+    })
+  }),
+
+  /*
+   * 유저가 작성한 칵테일에 달린 좋아요 목록 (받은 좋아요)
+   */
+  http.get('/api/user/:userId/received-likes', async ({ request, params }) => {
+    await delay(800)
+    const url = new URL(request.url)
+    const page = parseInt(url.searchParams.get('page') ?? '1')
+    const limit = parseInt(url.searchParams.get('limit') ?? '15')
+    const search = url.searchParams.get('search') ?? ''
+    const userId = parseInt(params.userId as string)
+
+    const uuidToUserId: Record<string, number> = {
+      'a1b2c3d4-e5f6-7890-abcd-ef1234567890': 1,
+      'b2c3d4e5-f6a7-8901-bcde-f01234567891': 2,
+      'c3d4e5f6-a7b8-9012-cdef-012345678902': 3,
+    }
+
+    type LikeEntry = {
+      likeId: number;
+      cocktailId: number;
+      cocktailName: string;
+      cocktailNameKr: string;
+      cocktailImage?: string;
+      likedBy: {
+        userId: number;
+        username: string;
+        thumbnailImage?: string;
+      };
+      createdAt: string;
+    }
+
+    const receivedLikes: LikeEntry[] = []
+
+    for (const cocktail of cocktailFullData) {
+      if (uuidToUserId[cocktail.author.userUuid] !== userId) continue
+
+      if (search) {
+        const searchLower = search.toLowerCase()
+        if (
+          !cocktail.cocktailName.toLowerCase().includes(searchLower) &&
+          !cocktail.cocktailNameKr.includes(search)
+        ) continue
+      }
+
+      const likes = cocktailLikedByData[cocktail.cocktailId] ?? []
+      for (const like of likes) {
+        receivedLikes.push({
+          likeId: like.likeId,
+          cocktailId: cocktail.cocktailId,
+          cocktailName: cocktail.cocktailName,
+          cocktailNameKr: cocktail.cocktailNameKr,
+          cocktailImage: cocktail.image,
+          likedBy: {
+            userId: like.userId,
+            username: like.username,
+            thumbnailImage: like.thumbnailImage,
+          },
+          createdAt: like.createdAt,
+        })
+      }
+    }
+
+    receivedLikes.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+
+    const startIndex = (page - 1) * limit
+    const paginatedData = receivedLikes.slice(startIndex, startIndex + limit)
+    const hasMore = startIndex + limit < receivedLikes.length
+
+    return HttpResponse.json({
+      code: 'OK',
+      message: '성공',
+      data: paginatedData,
       hasMore,
     })
   }),
