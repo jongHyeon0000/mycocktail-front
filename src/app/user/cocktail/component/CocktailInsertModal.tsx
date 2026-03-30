@@ -31,8 +31,7 @@ interface CocktailInsertModalProps {
 
 type IngredientKey = "spirits" | "juices" | "bitters" | "syrups" | "carbonated" | "dairy" | "garnishes" | "others";
 type TechniqueKey = "tools" | "glassware" | "techniques";
-type ModalKey = IngredientKey | TechniqueKey;
-type FocusableField = "cocktailName" | "cocktailNameKr" | "absPercentage" | "servingSizeMl";
+type FocusableFieldKey = "cocktailName" | "cocktailNameKr" | "absPercentage" | "servingSizeMl";
 
 const INGREDIENT_LABELS: Record<IngredientKey, string> = {
   spirits: "기주",
@@ -63,7 +62,7 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
   /*
   * Modal State 제어
   * */
-  const [openModal, setOpenModal] = useState<ModalKey | null>(null);
+  const [openModal, setOpenModal] = useState<IngredientKey | TechniqueKey | null>(null);
 
   /*
   * validation 에러 state 제어
@@ -80,16 +79,6 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
   const [servingSizeMl, setServingSizeMl] = useState("");
   const [difficulty, setDifficulty] = useState<number | "">("");
   const [source, setSource] = useState<"official" | "community" | "">("");
-
-  /*
-  * 포커스 제어 refs
-  * */
-  const FORM_REFS: Record<FocusableField, React.RefObject<HTMLInputElement | null>> = {
-    cocktailName: useRef<HTMLInputElement>(null),
-    cocktailNameKr: useRef<HTMLInputElement>(null),
-    absPercentage: useRef<HTMLInputElement>(null),
-    servingSizeMl: useRef<HTMLInputElement>(null),
-  };
 
   /*
   * 재료 선택 state
@@ -137,6 +126,16 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
     techniques: useRef<HTMLDivElement>(null),
   };
 
+  /*
+  * 포커스 제어 refs
+  * */
+  const FORM_REFS: Record<FocusableFieldKey, React.RefObject<HTMLInputElement | null>> = {
+    cocktailName: useRef<HTMLInputElement>(null),
+    cocktailNameKr: useRef<HTMLInputElement>(null),
+    absPercentage: useRef<HTMLInputElement>(null),
+    servingSizeMl: useRef<HTMLInputElement>(null),
+  };
+
   const handleSelectSpirits = (items: CommonSlideElement[]) => {
     setSelectedIngredients((prev) => {
       const newItems = items.filter(i => !prev.spirits.some(e => e.id === i.id));
@@ -181,15 +180,15 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
     setTagInput("");
   };
 
+  const handleRemoveTag = (tag: string) => {
+    setTags(tags.filter((t) => t !== tag));
+  };
+
   const handleTagKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
       e.preventDefault();
       handleAddTag();
     }
-  };
-
-  const handleRemoveTag = (tag: string) => {
-    setTags(tags.filter((t) => t !== tag));
   };
 
   const clearError = (field: string) => {
@@ -219,7 +218,7 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
     setValidationError(newErrors);
 
     if (Object.keys(newErrors).length > 0) {
-      const firstFocusable = (["cocktailName", "cocktailNameKr", "absPercentage", "servingSizeMl"] as FocusableField[]).find((key) => newErrors[key]);
+      const firstFocusable = (["cocktailName", "cocktailNameKr", "absPercentage", "servingSizeMl"] as FocusableFieldKey[]).find((key) => newErrors[key]);
 
       if (firstFocusable) {
         FORM_REFS[firstFocusable].current?.focus();
