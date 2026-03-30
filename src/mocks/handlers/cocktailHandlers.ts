@@ -268,7 +268,7 @@ const cocktailFullData = [
         },
         cocktailId: 3,
         parentCommentId: undefined,
-        content: '올드 패션드는 너무 독해ㅡㅡ',
+        content: '아니이거독해ㅡㅡ',
         depth: 0,
         isChildComment: false,
         sortOrder: 0,
@@ -301,7 +301,7 @@ const cocktailFullData = [
             },
             cocktailId: 3,
             parentCommentId: 12,
-            content: '켁븜 다음에해볼개;;',
+            content: '그래도 아르냥줄듯.;;',
             depth: 1,
             isChildComment: true,
             sortOrder: 1,
@@ -382,7 +382,7 @@ const cocktailFullData = [
         },
         cocktailId: 4,
         parentCommentId: undefined,
-        content: '이게 그거임ㅋㅋㅋㅋㅋㅋㅋ',
+        content: '이게 그거임ㅋㅋㅋㅋㅋㅋㅋ #네네코_마시로',
         depth: 0,
         isChildComment: false,
         sortOrder: 0,
@@ -703,6 +703,100 @@ export const cocktailHandlers = [
       message: '성공',
       data: paginatedData,
       totalCount: allUserComments.length,
+      hasMore,
+    })
+  }),
+
+  /*
+   * 유저가 작성한 칵테일에 달린 댓글 목록 (받은 댓글)
+   */
+  http.get('/api/user/:userId/received-comments', async ({ request, params }) => {
+    await delay(800)
+    const url = new URL(request.url)
+    const page = parseInt(url.searchParams.get('page') ?? '1')
+    const limit = parseInt(url.searchParams.get('limit') ?? '15')
+    const search = url.searchParams.get('search') ?? ''
+    const userId = parseInt(params.userId as string)
+
+    const uuidToUserId: Record<string, number> = {
+      'a1b2c3d4-e5f6-7890-abcd-ef1234567890': 1,
+      'b2c3d4e5-f6a7-8901-bcde-f01234567891': 2,
+      'c3d4e5f6-a7b8-9012-cdef-012345678902': 3,
+    }
+
+    type CommentEntry = {
+      commentId: number;
+      cocktailId: number;
+      cocktailName: string;
+      cocktailNameKr: string;
+      cocktailImage?: string;
+      content: string;
+      isChildComment: boolean;
+      parentCommentId?: number;
+      createdAt: string;
+      updatedAt: string;
+    }
+
+    const receivedComments: CommentEntry[] = []
+
+    for (const cocktail of cocktailFullData) {
+      if (uuidToUserId[cocktail.author.userUuid] !== userId) continue
+
+      if (search) {
+        const searchLower = search.toLowerCase()
+        if (
+          !cocktail.cocktailName.toLowerCase().includes(searchLower) &&
+          !cocktail.cocktailNameKr.includes(search)
+        ) continue
+      }
+
+      for (const comment of cocktail.comments) {
+        if (comment.author.userId !== userId) {
+          receivedComments.push({
+            commentId: comment.commentId,
+            cocktailId: cocktail.cocktailId,
+            cocktailName: cocktail.cocktailName,
+            cocktailNameKr: cocktail.cocktailNameKr,
+            cocktailImage: cocktail.image,
+            content: comment.content,
+            isChildComment: comment.isChildComment,
+            parentCommentId: comment.parentCommentId,
+            createdAt: comment.createdAt,
+            updatedAt: comment.updatedAt,
+          })
+        }
+        if (comment.replies) {
+          for (const reply of comment.replies) {
+            if (reply.author.userId !== userId) {
+              receivedComments.push({
+                commentId: reply.commentId,
+                cocktailId: cocktail.cocktailId,
+                cocktailName: cocktail.cocktailName,
+                cocktailNameKr: cocktail.cocktailNameKr,
+                cocktailImage: cocktail.image,
+                content: reply.content,
+                isChildComment: reply.isChildComment,
+                parentCommentId: reply.parentCommentId,
+                createdAt: reply.createdAt,
+                updatedAt: reply.updatedAt,
+              })
+            }
+          }
+        }
+      }
+    }
+
+    receivedComments.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+
+    const startIndex = (page - 1) * limit
+    const paginatedData = receivedComments.slice(startIndex, startIndex + limit)
+    const hasMore = startIndex + limit < receivedComments.length
+
+    return HttpResponse.json({
+      code: 'OK',
+      message: '성공',
+      data: paginatedData,
+      totalCount: receivedComments.length,
       hasMore,
     })
   }),
