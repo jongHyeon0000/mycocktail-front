@@ -77,7 +77,7 @@ const ProfileViewPage: React.FC = () => {
       <InfoGrid>
         <InfoCard>
           <InfoIconWrapper>
-            <WcOutlined sx={{ fontSize: 20, color: "#888" }} />
+            <WcOutlined sx={{ fontSize: 20, color: "#637aff" }} />
           </InfoIconWrapper>
           <InfoContent>
             <InfoLabel>성별</InfoLabel>
@@ -87,7 +87,7 @@ const ProfileViewPage: React.FC = () => {
 
         <InfoCard>
           <InfoIconWrapper>
-            <CakeOutlined sx={{ fontSize: 20, color: "#888" }} />
+            <CakeOutlined sx={{ fontSize: 20, color: "#637aff" }} />
           </InfoIconWrapper>
           <InfoContent>
             <InfoLabel>생일</InfoLabel>
@@ -99,7 +99,7 @@ const ProfileViewPage: React.FC = () => {
       {/* 자기 소개 */}
       <BioCard>
         <BioHeader>
-          <NotesOutlined sx={{ fontSize: 20, color: "#888" }} />
+          <NotesOutlined sx={{ fontSize: 20, color: "#637aff" }} />
           <InfoLabel>자기 소개</InfoLabel>
         </BioHeader>
         <BioText>
@@ -111,20 +111,17 @@ const ProfileViewPage: React.FC = () => {
 
       {/* 계정 정보 섹션 */}
       <SectionTitle>계정 정보</SectionTitle>
-      <InfoGrid>
+      <AccountGrid>
         <InfoCard>
           <InfoIconWrapper>
-            <CalendarTodayOutlined sx={{ fontSize: 20, color: "#888" }} />
+            <CalendarTodayOutlined sx={{ fontSize: 20, color: "#637aff" }} />
           </InfoIconWrapper>
           <InfoContent>
             <InfoLabel>가입일</InfoLabel>
             <InfoValue>{formatDateTime(user.createdAt)}</InfoValue>
           </InfoContent>
         </InfoCard>
-      </InfoGrid>
 
-      {/* 상태 정보 */}
-      <StatusGrid>
         <StatusCard>
           <StatusRow>
             <StatusMeta>
@@ -158,7 +155,7 @@ const ProfileViewPage: React.FC = () => {
             업데이트: {formatDateTime(user.deletedAt)}
           </StatusDate>
         </StatusCard>
-      </StatusGrid>
+      </AccountGrid>
     </motion.div>
   );
 };
@@ -244,7 +241,7 @@ const SectionTitle = styled(Typography)`
 const InfoGrid = styled(Box)`
   && {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    grid-template-columns: 1fr 1fr;
     gap: 12px;
     margin-bottom: 16px;
   }
@@ -255,10 +252,11 @@ const InfoCard = styled(Box)`
     display: flex;
     align-items: center;
     gap: 14px;
-    background-color: #fafafa;
-    border: 1px solid #f0f0f0;
+    background: linear-gradient(145deg, #f0f4ff 0%, #fafbff 100%);
+    border: 1px solid #dde6ff;
     border-radius: 14px;
     padding: 16px 18px;
+    box-shadow: 0 1px 4px rgba(99, 122, 255, 0.08);
   }
 `;
 
@@ -266,7 +264,7 @@ const InfoIconWrapper = styled(Box)`
   && {
     width: 36px;
     height: 36px;
-    background-color: #f0f0f0;
+    background-color: #dde6ff;
     border-radius: 10px;
     display: flex;
     align-items: center;
@@ -301,11 +299,12 @@ const InfoValue = styled(Typography)`
 
 const BioCard = styled(Box)`
   && {
-    background-color: #fafafa;
-    border: 1px solid #f0f0f0;
+    background: linear-gradient(145deg, #f0f4ff 0%, #fafbff 100%);
+    border: 1px solid #dde6ff;
     border-radius: 14px;
     padding: 18px 20px;
     margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(99, 122, 255, 0.08);
   }
 `;
 
@@ -326,23 +325,24 @@ const BioText = styled(Typography)`
   }
 `;
 
-const StatusGrid = styled(Box)`
+const AccountGrid = styled(Box)`
   && {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 12px;
   }
 `;
 
 const StatusCard = styled(Box)`
   && {
-    background-color: #fafafa;
-    border: 1px solid #f0f0f0;
+    background: linear-gradient(145deg, #f0f4ff 0%, #fafbff 100%);
+    border: 1px solid #dde6ff;
     border-radius: 14px;
     padding: 16px 18px;
     display: flex;
     flex-direction: column;
     gap: 8px;
+    box-shadow: 0 1px 4px rgba(99, 122, 255, 0.08);
   }
 `;
 

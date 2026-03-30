@@ -119,7 +119,7 @@ const ProfileEditPage: React.FC = () => {
         {/* 유저명 */}
         <FieldRow>
           <FieldIconWrapper>
-            <PersonOutlined sx={{ fontSize: 20, color: "#888" }} />
+            <PersonOutlined sx={{ fontSize: 20, color: "#637aff" }} />
           </FieldIconWrapper>
           <StyledTextField
             fullWidth
@@ -130,10 +130,46 @@ const ProfileEditPage: React.FC = () => {
           />
         </FieldRow>
 
+        {/* 성별 + 생일 (한 줄) */}
+        <TwoColumnRow>
+          <FieldRow>
+            <FieldIconWrapper>
+              <WcOutlined sx={{ fontSize: 20, color: "#637aff" }} />
+            </FieldIconWrapper>
+            <StyledFormControl fullWidth>
+              <InputLabel>성별</InputLabel>
+              <Select
+                label="성별"
+                value={gender}
+                onChange={(e) => setGender(e.target.value)}
+              >
+                <MenuItem value="">선택 안함</MenuItem>
+                <MenuItem value="M">남성</MenuItem>
+                <MenuItem value="F">여성</MenuItem>
+              </Select>
+            </StyledFormControl>
+          </FieldRow>
+
+          <FieldRow>
+            <FieldIconWrapper>
+              <CakeOutlined sx={{ fontSize: 20, color: "#637aff" }} />
+            </FieldIconWrapper>
+            <DateFieldWrapper>
+              <DateLabel>생일</DateLabel>
+              <DateInput
+                type="date"
+                value={birthDate}
+                onChange={(e) => setBirthDate(e.target.value)}
+                max={new Date().toISOString().split("T")[0]}
+              />
+            </DateFieldWrapper>
+          </FieldRow>
+        </TwoColumnRow>
+
         {/* 이메일 (수정 불가) */}
         <FieldRow>
           <FieldIconWrapper>
-            <EmailOutlined sx={{ fontSize: 20, color: "#bbb" }} />
+            <EmailOutlined sx={{ fontSize: 20, color: "#637aff" }} />
           </FieldIconWrapper>
           <StyledTextField
             fullWidth
@@ -144,45 +180,10 @@ const ProfileEditPage: React.FC = () => {
           />
         </FieldRow>
 
-        {/* 성별 */}
-        <FieldRow>
-          <FieldIconWrapper>
-            <WcOutlined sx={{ fontSize: 20, color: "#888" }} />
-          </FieldIconWrapper>
-          <StyledFormControl fullWidth>
-            <InputLabel>성별</InputLabel>
-            <Select
-              label="성별"
-              value={gender}
-              onChange={(e) => setGender(e.target.value)}
-            >
-              <MenuItem value="">선택 안함</MenuItem>
-              <MenuItem value="M">남성</MenuItem>
-              <MenuItem value="F">여성</MenuItem>
-            </Select>
-          </StyledFormControl>
-        </FieldRow>
-
-        {/* 생일 */}
-        <FieldRow>
-          <FieldIconWrapper>
-            <CakeOutlined sx={{ fontSize: 20, color: "#888" }} />
-          </FieldIconWrapper>
-          <DateFieldWrapper>
-            <DateLabel>생일</DateLabel>
-            <DateInput
-              type="date"
-              value={birthDate}
-              onChange={(e) => setBirthDate(e.target.value)}
-              max={new Date().toISOString().split("T")[0]}
-            />
-          </DateFieldWrapper>
-        </FieldRow>
-
         {/* 자기 소개 */}
         <FieldRow sx={{ alignItems: "flex-start" }}>
           <FieldIconWrapper sx={{ mt: "14px" }}>
-            <NotesOutlined sx={{ fontSize: 20, color: "#888" }} />
+            <NotesOutlined sx={{ fontSize: 20, color: "#637aff" }} />
           </FieldIconWrapper>
           <StyledTextField
             fullWidth
@@ -327,7 +328,7 @@ const FieldIconWrapper = styled(Box)`
   && {
     width: 36px;
     height: 36px;
-    background-color: #f0f0f0;
+    background-color: #dde6ff;
     border-radius: 10px;
     display: flex;
     align-items: center;
@@ -336,31 +337,39 @@ const FieldIconWrapper = styled(Box)`
   }
 `;
 
+const TwoColumnRow = styled(Box)`
+  && {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+`;
+
 const StyledTextField = styled(TextField)`
   && {
     .MuiOutlinedInput-root {
       border-radius: 12px;
-      background-color: #fafafa;
+      background: linear-gradient(145deg, #f0f4ff 0%, #fafbff 100%);
 
       &:hover fieldset {
-        border-color: #ddd;
+        border-color: #b8c8ff;
       }
 
       &.Mui-focused fieldset {
-        border-color: #888;
+        border-color: #637aff;
       }
 
       &.Mui-disabled {
-        background-color: #f5f5f5;
+        background: #f5f5f5;
       }
     }
 
     & fieldset {
-      border-color: #eee;
+      border-color: #dde6ff;
     }
 
     .MuiInputLabel-root.Mui-focused {
-      color: #666;
+      color: #637aff;
     }
 
     .MuiFormHelperText-root {
@@ -375,23 +384,23 @@ const StyledFormControl = styled(FormControl)`
   && {
     .MuiOutlinedInput-root {
       border-radius: 12px;
-      background-color: #fafafa;
+      background: linear-gradient(145deg, #f0f4ff 0%, #fafbff 100%);
 
       &:hover fieldset {
-        border-color: #ddd;
+        border-color: #b8c8ff;
       }
 
       &.Mui-focused fieldset {
-        border-color: #888;
+        border-color: #637aff;
       }
     }
 
     & fieldset {
-      border-color: #eee;
+      border-color: #dde6ff;
     }
 
     .MuiInputLabel-root.Mui-focused {
-      color: #666;
+      color: #637aff;
     }
   }
 `;
@@ -403,14 +412,14 @@ const DateFieldWrapper = styled(Box)`
     display: flex;
     flex-direction: column;
     gap: 4px;
-    background-color: #fafafa;
-    border: 1px solid #eee;
+    background: linear-gradient(145deg, #f0f4ff 0%, #fafbff 100%);
+    border: 1px solid #dde6ff;
     border-radius: 12px;
     padding: 10px 14px;
     transition: border-color 0.2s ease;
 
     &:focus-within {
-      border-color: #888;
+      border-color: #637aff;
     }
   }
 `;
