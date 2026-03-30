@@ -458,7 +458,25 @@ const cocktailFullData = [
         depth: 0,
         isChildComment: false,
         sortOrder: 0,
-        replies: [],
+        replies: [
+          {
+            commentId: 17,
+            author: {
+              userId: 1,
+              userUuid: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+              username: '아야츠노 유니',
+              thumbnailImage: 'https://yt3.googleusercontent.com/e3_TBkHSBwuzKRSkG1Uv5uGLiHmLUBMVogjWD35MJL7Fi_iccr8DonU6q_1XSmO4djEY9Cunabo=s900-c-k-c0x00ffffff-no-rj'
+            },
+            cocktailId: 5,
+            parentCommentId: 15,
+            content: 'ㅂ',
+            depth: 1,
+            isChildComment: true,
+            sortOrder: 1,
+            createdAt: '2024-11-05T13:05:00',
+            updatedAt: '2024-11-05T13:05:00'
+          }
+        ],
         createdAt: '2024-11-05T13:00:00',
         updatedAt: '2024-11-05T13:00:00'
       }
