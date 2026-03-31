@@ -15,8 +15,6 @@ import { motion } from "framer-motion";
 import styled from "styled-components";
 import useReadCocktailList from "../../cocktail/service/useReadCocktailList.tsx";
 import useReadCocktail from "../../cocktail/service/useReadCocktail.tsx";
-import useReadCocktailRandom from "../../cocktail/service/useReadCocktailRandom.tsx";
-import useReadCocktailToday from "../../cocktail/service/useReadCocktailToday.tsx";
 import CocktailDetailModal from "../../cocktail/component/CocktailDetailModal.tsx";
 import LoadingOverlay from "../../common/component/loading/LoadingOverlay.tsx";
 
@@ -27,20 +25,12 @@ const MainPage: React.FC = () => {
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const { cocktailList, cocktailListLoading, fetchReadCocktailList } = useReadCocktailList();
   const { cocktail, cocktailLoading, fetchReadCocktail } = useReadCocktail();
-  const { randomCocktail, randomCocktailLoading, fetchReadCocktailRandom } = useReadCocktailRandom();
-  const { todayCocktail, todayCocktailLoading, fetchReadCocktailToday } = useReadCocktailToday();
 
   useEffect(() => {
-    if (cocktail?.data) setModalOpen(true);
+    if (cocktail?.data) {
+      setModalOpen(true);
+    }
   }, [cocktail]);
-
-  useEffect(() => {
-    if (randomCocktail?.data) setModalOpen(true);
-  }, [randomCocktail]);
-
-  useEffect(() => {
-    if (todayCocktail?.data) setModalOpen(true);
-  }, [todayCocktail]);
 
   useEffect(() => {
     if (debounceTimer.current) {
@@ -215,9 +205,9 @@ const MainPage: React.FC = () => {
               }}
             >
               {[
-                { emoji: "🍸", label: "오늘의 픽", onClick: fetchReadCocktailToday },
-                { emoji: "🎲", label: "랜덤 칵테일", onClick: fetchReadCocktailRandom },
-                { emoji: "🥃", label: "추천 칵테일", onClick: undefined },
+                { emoji: "🍸", label: "오늘의 픽" },
+                { emoji: "🎲", label: "추천 칵테일" },
+                { emoji: "🥃", label: "모든 칵테일" },
               ].map((item, index) => (
                 <Box
                   key={index}
@@ -228,11 +218,10 @@ const MainPage: React.FC = () => {
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
-                    cursor: item.onClick ? "pointer" : "default",
+                    cursor: "pointer",
                   }}
-                  onClick={item.onClick}
                 >
-                  <NavIconButton disabled={!item.onClick}>
+                  <NavIconButton>
                     {item.emoji}
                   </NavIconButton>
                   <NavLabel variant="caption">
@@ -245,15 +234,15 @@ const MainPage: React.FC = () => {
         </Container>
       </BottomNavigation>
       {/* 칵테일 상세 모달 */}
-      {(cocktail?.data || randomCocktail?.data || todayCocktail?.data) && (
+      {cocktail?.data && (
         <CocktailDetailModal
           open={modalOpen}
           onClose={() => setModalOpen(false)}
-          data={(cocktail?.data ?? randomCocktail?.data ?? todayCocktail?.data)!}
+          data={cocktail.data}
         />
       )}
 
-      <LoadingOverlay open={cocktailLoading || randomCocktailLoading || todayCocktailLoading} message="칵테일 정보를 불러오는 중..." />
+      <LoadingOverlay open={cocktailLoading} message="칵테일 정보를 불러오는 중..." />
     </MainContainer>
   );
 };
