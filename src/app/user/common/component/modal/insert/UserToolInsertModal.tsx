@@ -7,9 +7,10 @@ interface UserToolInsertModalProps {
   open: boolean;
   onClose: () => void;
   onSelect: (items: CommonSlideElement[]) => void;
+  initialSelected?: CommonSlideElement[];
 }
 
-const UserToolInsertModal: React.FC<UserToolInsertModalProps> = ({ open, onClose, onSelect }) => {
+const UserToolInsertModal: React.FC<UserToolInsertModalProps> = ({ open, onClose, onSelect, initialSelected }) => {
   const { toolList, toolListLoading, toolListHasMore, fetchReadToolList } = useReadToolList();
 
   const items: CommonSlideElement[] = (toolList?.data ?? []).map((tool) => ({
@@ -30,6 +31,7 @@ const UserToolInsertModal: React.FC<UserToolInsertModalProps> = ({ open, onClose
       loading={toolListLoading}
       hasMore={toolListHasMore}
       onFetch={(params) => fetchReadToolList(params)}
+      initialSelected={initialSelected}
     />
   );
 };

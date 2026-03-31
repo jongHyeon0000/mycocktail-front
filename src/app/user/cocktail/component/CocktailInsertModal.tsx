@@ -668,21 +668,21 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
     </AnimatePresence>
 
       {/* 기주 sub-modals */}
-      <UserSpiritInsertModal open={openModal === "spirits"} onClose={() => setOpenModal(null)} onSelect={handleSelectSpirits} />
+      <UserSpiritInsertModal open={openModal === "spirits"} onClose={() => setOpenModal(null)} onSelect={handleSelectSpirits} initialSelected={selectedIngredients.spirits} />
 
       {/* 재료 sub-modals */}
-      <UserJuiceInsertModal open={openModal === "juices"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectIngredient("juices", items)} />
-      <UserBittersInsertModal open={openModal === "bitters"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectIngredient("bitters", items)} />
-      <UserSyrupInsertModal open={openModal === "syrups"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectIngredient("syrups", items)} />
-      <UserCarbonatedInsertModal open={openModal === "carbonated"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectIngredient("carbonated", items)} />
-      <UserDairyCreamInsertModal open={openModal === "dairy"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectIngredient("dairy", items)} />
-      <UserGarnishesInsertModal open={openModal === "garnishes"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectIngredient("garnishes", items)} />
-      <UserOtherIngredientsInsertModal open={openModal === "others"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectIngredient("others", items)} />
+      <UserJuiceInsertModal open={openModal === "juices"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectIngredient("juices", items)} initialSelected={selectedIngredients.juices} />
+      <UserBittersInsertModal open={openModal === "bitters"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectIngredient("bitters", items)} initialSelected={selectedIngredients.bitters} />
+      <UserSyrupInsertModal open={openModal === "syrups"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectIngredient("syrups", items)} initialSelected={selectedIngredients.syrups} />
+      <UserCarbonatedInsertModal open={openModal === "carbonated"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectIngredient("carbonated", items)} initialSelected={selectedIngredients.carbonated} />
+      <UserDairyCreamInsertModal open={openModal === "dairy"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectIngredient("dairy", items)} initialSelected={selectedIngredients.dairy} />
+      <UserGarnishesInsertModal open={openModal === "garnishes"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectIngredient("garnishes", items)} initialSelected={selectedIngredients.garnishes} />
+      <UserOtherIngredientsInsertModal open={openModal === "others"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectIngredient("others", items)} initialSelected={selectedIngredients.others} />
 
       {/* 제조 기법 sub-modals */}
-      <UserToolInsertModal open={openModal === "tools"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectTechnique("tools", items)} />
-      <UserGlasswareInsertModal open={openModal === "glassware"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectTechnique("glassware", items)} />
-      <UserTechniqueInsertModal open={openModal === "techniques"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectTechnique("techniques", items)} />
+      <UserToolInsertModal open={openModal === "tools"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectTechnique("tools", items)} initialSelected={selectedTechniques.tools} />
+      <UserGlasswareInsertModal open={openModal === "glassware"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectTechnique("glassware", items)} initialSelected={selectedTechniques.glassware} />
+      <UserTechniqueInsertModal open={openModal === "techniques"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectTechnique("techniques", items)} initialSelected={selectedTechniques.techniques} />
     </>
   );
 };

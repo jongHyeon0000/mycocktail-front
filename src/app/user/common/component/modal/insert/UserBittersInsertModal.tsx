@@ -7,9 +7,10 @@ interface UserBittersInsertModalProps {
   open: boolean;
   onClose: () => void;
   onSelect: (items: CommonSlideElement[]) => void;
+  initialSelected?: CommonSlideElement[];
 }
 
-const UserBittersInsertModal: React.FC<UserBittersInsertModalProps> = ({ open, onClose, onSelect }) => {
+const UserBittersInsertModal: React.FC<UserBittersInsertModalProps> = ({ open, onClose, onSelect, initialSelected }) => {
   const { bittersList, bittersListLoading, bittersListHasMore, fetchReadBittersList } = useReadBittersList();
 
   const items: CommonSlideElement[] = (bittersList?.data ?? []).map((bitters) => ({
@@ -30,6 +31,7 @@ const UserBittersInsertModal: React.FC<UserBittersInsertModalProps> = ({ open, o
       loading={bittersListLoading}
       hasMore={bittersListHasMore}
       onFetch={(params) => fetchReadBittersList(params)}
+      initialSelected={initialSelected}
     />
   );
 };

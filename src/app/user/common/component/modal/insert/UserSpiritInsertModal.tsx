@@ -24,11 +24,12 @@ interface UserSpiritInsertModalProps {
   open: boolean;
   onClose: () => void;
   onSelect: (items: CommonSlideElement[]) => void;
+  initialSelected?: CommonSlideElement[];
 }
 
 const PAGE_SIZE = 9;
 
-const UserSpiritInsertModal: React.FC<UserSpiritInsertModalProps> = ({ open, onClose, onSelect }) => {
+const UserSpiritInsertModal: React.FC<UserSpiritInsertModalProps> = ({ open, onClose, onSelect, initialSelected = [] }) => {
   const {
     spiritProductList,
     spiritProductListLoading,
@@ -46,7 +47,7 @@ const UserSpiritInsertModal: React.FC<UserSpiritInsertModalProps> = ({ open, onC
       setPage(1);
       setSearch("");
       setCategoryFilter("");
-      setSelectedItems([]);
+      setSelectedItems(initialSelected);
       fetchReadSpiritProductList({ page: 1, limit: PAGE_SIZE });
     }
   }, [open]);
@@ -69,10 +70,33 @@ const UserSpiritInsertModal: React.FC<UserSpiritInsertModalProps> = ({ open, onC
   };
 
   const handleToggleItem = (item: CommonSlideElement) => {
+    const spiritData = spiritProductList?.data?.find(s => s.spiritProductId === item.id);
+
     setSelectedItems(prev => {
+      // 이미 선택된 항목 → 토글 해제
       if (prev.some(i => i.id === item.id)) {
         return prev.filter(i => i.id !== item.id);
       }
+
+      // "모든 술" 선택 → 같은 카테고리의 다른 선택 전부 해제 후 선택
+      if (spiritData?.isGeneric) {
+        const sameCategoryIds = new Set(
+          (spiritProductList?.data ?? [])
+            .filter(s => s.spiritCategory === spiritData.spiritCategory)
+            .map(s => s.spiritProductId)
+        );
+        return [...prev.filter(i => !sameCategoryIds.has(i.id)), item];
+      }
+
+      // 세부 기주 선택 → 해당 카테고리의 "모든 술" 이 이미 선택돼 있으면 선택 불가
+      if (spiritData) {
+        const genericAlreadySelected = prev.some(i => {
+          const d = spiritProductList?.data?.find(s => s.spiritProductId === i.id);
+          return d?.isGeneric && d.spiritCategory === spiritData.spiritCategory;
+        });
+        if (genericAlreadySelected) return prev;
+      }
+
       return [...prev, item];
     });
   };
@@ -82,12 +106,15 @@ const UserSpiritInsertModal: React.FC<UserSpiritInsertModalProps> = ({ open, onC
     onClose();
   };
 
-  const slideItems: CommonSlideElement[] = (spiritProductList?.data ?? []).map((spirit) => ({
-    id: spirit.spiritProductId,
-    name: spirit.spiritName,
-    nameKr: spirit.spiritNameKr,
-    image: spirit.image,
-  }));
+  const slideItems: CommonSlideElement[] = [...(spiritProductList?.data ?? [])]
+      // "모든 술" 이 항상 최상단에 노출되도록 정렬
+    .sort((a, b) => (b.isGeneric ? 1 : 0) - (a.isGeneric ? 1 : 0))
+    .map(spirit => ({
+      id: spirit.spiritProductId,
+      name: spirit.spiritName,
+      nameKr: spirit.spiritNameKr,
+      image: spirit.image,
+    }));
 
   return (
     <AnimatePresence>

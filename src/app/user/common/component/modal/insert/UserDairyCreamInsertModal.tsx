@@ -7,9 +7,10 @@ interface UserDairyCreamInsertModalProps {
   open: boolean;
   onClose: () => void;
   onSelect: (items: CommonSlideElement[]) => void;
+  initialSelected?: CommonSlideElement[];
 }
 
-const UserDairyCreamInsertModal: React.FC<UserDairyCreamInsertModalProps> = ({ open, onClose, onSelect }) => {
+const UserDairyCreamInsertModal: React.FC<UserDairyCreamInsertModalProps> = ({ open, onClose, onSelect, initialSelected }) => {
   const { dairyCreamList, dairyCreamListLoading, dairyCreamListHasMore, fetchReadDairyCreamList } = useReadDairyCreamList();
 
   const items: CommonSlideElement[] = (dairyCreamList?.data ?? []).map((dairyCream) => ({
@@ -30,6 +31,7 @@ const UserDairyCreamInsertModal: React.FC<UserDairyCreamInsertModalProps> = ({ o
       loading={dairyCreamListLoading}
       hasMore={dairyCreamListHasMore}
       onFetch={(params) => fetchReadDairyCreamList(params)}
+      initialSelected={initialSelected}
     />
   );
 };

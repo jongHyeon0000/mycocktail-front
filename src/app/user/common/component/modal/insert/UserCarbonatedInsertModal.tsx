@@ -7,9 +7,10 @@ interface UserCarbonatedInsertModalProps {
   open: boolean;
   onClose: () => void;
   onSelect: (items: CommonSlideElement[]) => void;
+  initialSelected?: CommonSlideElement[];
 }
 
-const UserCarbonatedInsertModal: React.FC<UserCarbonatedInsertModalProps> = ({ open, onClose, onSelect }) => {
+const UserCarbonatedInsertModal: React.FC<UserCarbonatedInsertModalProps> = ({ open, onClose, onSelect, initialSelected }) => {
   const { carbonatedList, carbonatedListLoading, carbonatedListHasMore, fetchReadCarbonatedList } = useReadCarbonatedList();
 
   const items: CommonSlideElement[] = (carbonatedList?.data ?? []).map((carbonated) => ({
@@ -30,6 +31,7 @@ const UserCarbonatedInsertModal: React.FC<UserCarbonatedInsertModalProps> = ({ o
       loading={carbonatedListLoading}
       hasMore={carbonatedListHasMore}
       onFetch={(params) => fetchReadCarbonatedList(params)}
+      initialSelected={initialSelected}
     />
   );
 };
