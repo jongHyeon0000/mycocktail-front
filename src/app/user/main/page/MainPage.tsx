@@ -82,6 +82,8 @@ const MainPage: React.FC = () => {
               p: 2,
               backgroundColor: "#f8f8f8",
               borderRadius: 4,
+              maxWidth: 400,
+              mx: "auto",
             }}
           >
             <Box
@@ -92,9 +94,8 @@ const MainPage: React.FC = () => {
               }}
             >
               {[
-                { emoji: "🍸", label: "오늘의 인기있는 칵테일" },
-                { emoji: "🎲", label: "추천 칵테일 찾기" },
-                { emoji: "🍹", label: "나의 칵테일" },
+                { emoji: "🍸", label: "오늘의 픽" },
+                { emoji: "🎲", label: "추천 칵테일" },
                 { emoji: "🥃", label: "모든 칵테일" },
               ].map((item, index) => (
                 <Box

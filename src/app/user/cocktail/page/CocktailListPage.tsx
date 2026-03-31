@@ -287,6 +287,7 @@ const CocktailListPage: React.FC = () => {
       {/* 칵테일 등록 모달 */}
       <CocktailInsertModal
           open={insertModalOpen}
+          mode={"insert"}
           onClose={() => setInsertModalOpen(false)}
       />
 
