@@ -989,6 +989,26 @@ export const cocktailHandlers = [
   /*
    * 칵테일 Detail (개별 조회)
    */
+  /*
+   * 오늘의 픽 (날짜 시드 기반 고정 칵테일)
+   */
+  http.get('/api/cocktail/today', async () => {
+    await delay(500)
+    const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '')
+    const seed = dateStr.split('').reduce((acc, ch) => acc + ch.charCodeAt(0), 0)
+    const index = seed % cocktailFullData.length
+    return HttpResponse.json({ code: 'OK', message: '성공', data: cocktailFullData[index] })
+  }),
+
+  /*
+   * 랜덤 칵테일 1개
+   */
+  http.get('/api/cocktail/random', async () => {
+    await delay(500)
+    const randomIndex = Math.floor(Math.random() * cocktailFullData.length)
+    return HttpResponse.json({ code: 'OK', message: '성공', data: cocktailFullData[randomIndex] })
+  }),
+
   http.get('/api/cocktail/:id', async ({ params }) => {
     await delay(1000)
     const cocktailId = parseInt(params.id as string)
