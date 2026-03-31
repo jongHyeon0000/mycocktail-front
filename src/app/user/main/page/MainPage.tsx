@@ -1,9 +1,63 @@
-import React from "react";
-import {Box, Container, InputAdornment, Typography, Paper, TextField, IconButton} from "@mui/material";
+import React, {useCallback, useEffect, useRef, useState} from "react";
+import {
+  Box,
+  CircularProgress,
+  Container,
+  InputAdornment,
+  IconButton,
+  List,
+  ListItemButton,
+  Paper,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { motion } from "framer-motion";
 import styled from "styled-components";
+import useReadCocktailList from "../../cocktail/service/useReadCocktailList.tsx";
+import useReadCocktail from "../../cocktail/service/useReadCocktail.tsx";
+import CocktailDetailModal from "../../cocktail/component/CocktailDetailModal.tsx";
+import LoadingOverlay from "../../common/component/loading/LoadingOverlay.tsx";
 
 const MainPage: React.FC = () => {
+  const [query, setQuery] = useState<string>("");
+  const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const { cocktailList, cocktailListLoading, fetchReadCocktailList } = useReadCocktailList();
+  const { cocktail, cocktailLoading, fetchReadCocktail } = useReadCocktail();
+
+  useEffect(() => {
+    if (cocktail?.data) {
+      setModalOpen(true);
+    }
+  }, [cocktail]);
+
+  useEffect(() => {
+    if (debounceTimer.current) {
+      clearTimeout(debounceTimer.current)
+    }
+
+    if (!query.trim()) {
+      setDropdownOpen(false);
+      return;
+    }
+
+    debounceTimer.current = setTimeout(() => {
+      fetchReadCocktailList({ search: query.trim(), limit: 5, page: 1 });
+      setDropdownOpen(true);
+    }, 250);
+
+    return () => {
+      if (debounceTimer.current) {
+        clearTimeout(debounceTimer.current)
+      }
+    };
+  }, [query]);
+
+  const handleBlur = useCallback(() => {
+    setTimeout(() => setDropdownOpen(false), 150);
+  }, []);
+
   return (
     <MainContainer>
       <ContentContainer maxWidth="sm">
@@ -52,20 +106,77 @@ const MainPage: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.6 }}
-          sx={{ width: "100%", maxWidth: 400 }}
+          sx={{ width: "100%", maxWidth: 400, position: "relative" }}
         >
           <SearchTextField
             fullWidth
             placeholder="칵테일 이름으로 검색해 보세요"
             variant="outlined"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onBlur={handleBlur}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
                   <span style={{ fontSize: "20px" }}>🔍</span>
                 </InputAdornment>
               ),
+              endAdornment: cocktailListLoading && query ? (
+                <InputAdornment position="end">
+                  <CircularProgress size={16} sx={{ color: "#aaa" }} />
+                </InputAdornment>
+              ) : null,
             }}
           />
+
+          {/* 자동검색 드롭다운 */}
+          {dropdownOpen && (
+            <SearchDropdown elevation={3}>
+              {cocktailListLoading ? (
+                <Box sx={{ display: "flex", justifyContent: "center", py: 2 }}>
+                  <CircularProgress size={20} sx={{ color: "#aaa" }} />
+                </Box>
+              ) : cocktailList?.data && cocktailList.data.length > 0 ? (
+                <List disablePadding>
+                  {cocktailList.data.map((cocktail) => (
+                    <ListItemButton
+                      key={cocktail.cocktailId}
+                      sx={{ px: 2, py: 1.2, gap: 1.5 }}
+                      onClick={() => {
+                        setDropdownOpen(false);
+                        fetchReadCocktail(cocktail.cocktailId);
+                      }}
+                    >
+                      {cocktail.image && (
+                        <Box
+                          component="img"
+                          src={cocktail.image}
+                          alt={cocktail.cocktailName}
+                          sx={{ width: 36, height: 36, borderRadius: 1, objectFit: "cover", flexShrink: 0 }}
+                        />
+                      )}
+                      <Box>
+                        <Typography variant="body2" sx={{ fontWeight: 500, color: "#222", lineHeight: 1.3 }}>
+                          {cocktail.cocktailName}
+                        </Typography>
+                        {cocktail.cocktailNameKr && (
+                          <Typography variant="caption" sx={{ color: "#999" }}>
+                            {cocktail.cocktailNameKr}
+                          </Typography>
+                        )}
+                      </Box>
+                    </ListItemButton>
+                  ))}
+                </List>
+              ) : (
+                <Box sx={{ px: 2, py: 2, textAlign: "center" }}>
+                  <Typography variant="body2" sx={{ color: "#aaa" }}>
+                    검색 결과가 없습니다
+                  </Typography>
+                </Box>
+              )}
+            </SearchDropdown>
+          )}
         </Box>
       </ContentContainer>
 
@@ -122,6 +233,16 @@ const MainPage: React.FC = () => {
           </Paper>
         </Container>
       </BottomNavigation>
+      {/* 칵테일 상세 모달 */}
+      {cocktail?.data && (
+        <CocktailDetailModal
+          open={modalOpen}
+          onClose={() => setModalOpen(false)}
+          data={cocktail.data}
+        />
+      )}
+
+      <LoadingOverlay open={cocktailLoading} message="칵테일 정보를 불러오는 중..." />
     </MainContainer>
   );
 };
@@ -222,5 +343,18 @@ const NavLabel = styled(Typography)`
     color: #666;
     text-align: center;
     max-width: 70px;
+  }
+`;
+
+const SearchDropdown = styled(Paper)`
+  && {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    z-index: 100;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #fff;
   }
 `;

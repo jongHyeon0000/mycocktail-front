@@ -635,10 +635,17 @@ export const cocktailHandlers = [
     }
 
     if (search) {
-      sortedData = sortedData.filter(cocktail =>
-        cocktail.cocktailName.toLowerCase().includes(search.toLowerCase()) ||
-        cocktail.cocktailNameKr.includes(search)
-      )
+      const s = search.toLowerCase()
+      sortedData = sortedData
+        .filter(c =>
+          c.cocktailName.toLowerCase().includes(s) ||
+          c.cocktailNameKr.includes(search)
+        )
+        .sort((a, b) => {
+          const aStarts = a.cocktailName.toLowerCase().startsWith(s) || a.cocktailNameKr.startsWith(search)
+          const bStarts = b.cocktailName.toLowerCase().startsWith(s) || b.cocktailNameKr.startsWith(search)
+          return (bStarts ? 1 : 0) - (aStarts ? 1 : 0)
+        })
     }
 
     const startIndex = (page - 1) * limit
