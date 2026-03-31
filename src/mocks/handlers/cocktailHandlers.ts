@@ -1,4 +1,21 @@
 import { http, HttpResponse, delay } from 'msw'
+import type { SpiritCategoryKey } from '../../app/user/cocktail/constant/spiritCategories.ts'
+
+// spirit product → category 역조회 (spiritHandlers와 동기화 유지)
+const SPIRIT_PRODUCT_CATEGORY: Record<number, SpiritCategoryKey> = {
+  1: 'brandy', 2: 'whiskey', 3: 'vodka', 4: 'tequila', 5: 'gin', 6: 'rum',
+  // generic
+  1001: 'gin',    1002: 'vodka',        1003: 'rum',   1004: 'tequila',
+  1005: 'mezcal', 1006: 'whiskey',      1007: 'brandy', 1008: 'liqueur',
+  1009: 'vermouth', 1010: 'sake',       1011: 'non_alcoholic', 1012: 'other',
+}
+
+// category → generic spirit ID
+const SPIRIT_GENERIC_ID: Partial<Record<SpiritCategoryKey, number>> = {
+  gin: 1001, vodka: 1002, rum: 1003, tequila: 1004, mezcal: 1005,
+  whiskey: 1006, brandy: 1007, liqueur: 1008, vermouth: 1009,
+  sake: 1010, non_alcoholic: 1011, other: 1012,
+}
 
 const cocktailFullData = [
   {
@@ -26,13 +43,7 @@ const cocktailFullData = [
     tipNote: "<p><strong>완벽한 모히토를 위한 팁:</strong></p><ul><li>민트 잎을 너무 세게 머들링하지 마세요</li></ul>",
     ingredients: {
       spirits: [
-        { id: 1, image: "https://images.unsplash.com/photo-1572441711009-31e2e5f64ba5?w=100&h=100&fit=crop", name: "White Rum", nameKr: "화이트 럼" },
-        { id: 2, image: "https://images.unsplash.com/photo-1572441711009-31e2e5f64ba5?w=100&h=100&fit=crop", name: "White Rum", nameKr: "화이트 럼" },
-        { id: 3, image: "https://images.unsplash.com/photo-1572441711009-31e2e5f64ba5?w=100&h=100&fit=crop", name: "White Rum", nameKr: "화이트 럼" },
-        { id: 4, image: "https://images.unsplash.com/photo-1572441711009-31e2e5f64ba5?w=100&h=100&fit=crop", name: "White Rum", nameKr: "화이트 럼" },
-        { id: 5, image: "https://images.unsplash.com/photo-1572441711009-31e2e5f64ba5?w=100&h=100&fit=crop", name: "White Rum", nameKr: "화이트 럼" },
-        { id: 6, image: "https://images.unsplash.com/photo-1572441711009-31e2e5f64ba5?w=100&h=100&fit=crop", name: "White Rum", nameKr: "화이트 럼" },
-        { id: 7, image: "https://images.unsplash.com/photo-1572441711009-31e2e5f64ba5?w=100&h=100&fit=crop", name: "White Rum", nameKr: "화이트 럼" },
+        { id: 1003, name: "Any Rum", nameKr: "모든 럼" },
       ],
       juices: [{ id: 1, image: "https://images.unsplash.com/photo-1557401279-8e8de6c4659b?w=100&h=100&fit=crop", name: "Lime Juice", nameKr: "라임 주스" }],
       bitters: [],
@@ -160,7 +171,7 @@ const cocktailFullData = [
     note: "<p><strong>재료:</strong></p><ul><li>데킬라 60ml</li><li>라임 주스 30ml</li><li>트리플 섹 15ml</li><li>소금</li></ul>",
     tipNote: "<p><strong>완벽한 마가리타를 위한 팁:</strong></p><ul><li>글라스 림에 소금을 묻히는 것이 포인트입니다</li></ul>",
     ingredients: {
-      spirits: [{ id: 1, name: "Tequila", nameKr: "데킬라" }],
+      spirits: [{ id: 1004, name: "Any Tequila", nameKr: "모든 데킬라" }],
       juices: [{ id: 1, name: "Lime Juice", nameKr: "라임 주스" }],
       bitters: [],
       syrups: [],
@@ -196,7 +207,7 @@ const cocktailFullData = [
         },
         cocktailId: 2,
         parentCommentId: undefined,
-        content: '소금림징짜게에바',
+        content: '소금징짜게에바',
         depth: 0,
         isChildComment: false,
         sortOrder: 0,
@@ -232,7 +243,7 @@ const cocktailFullData = [
     note: "<p><strong>재료:</strong></p><ul><li>버번 위스키 60ml</li><li>설탕 1티스푼</li><li>앙고스투라 비터스 2대시</li><li>오렌지 필</li></ul>",
     tipNote: "<p><strong>완벽한 올드 패션드를 위한 팁:</strong></p><ul><li>설탕을 완전히 녹이는 것이 중요합니다</li></ul>",
     ingredients: {
-      spirits: [{ id: 1, name: "Bourbon Whiskey", nameKr: "버번 위스키" }],
+      spirits: [{ id: 2, name: "Macallan 18 Years", nameKr: "맥캘란 18년", image: "https://via.placeholder.com/200x200/D2691E/FFFFFF?text=Macallan+18" }],
       juices: [],
       bitters: [{ id: 1, bitterName: "Angostura Bitters", bitterNameKr: "앙고스투라 비터스" }],
       syrups: [],
@@ -286,7 +297,7 @@ const cocktailFullData = [
         },
         cocktailId: 3,
         parentCommentId: undefined,
-        content: '버번말고 라이로 하지 왜',
+        content: '버번말고 저번에 내가 준걸로하지 왜',
         depth: 0,
         isChildComment: false,
         sortOrder: 0,
@@ -341,11 +352,10 @@ const cocktailFullData = [
     tipNote: "<p><strong>완벽한 롱아일랜드 아이스티를 위한 팁:</strong></p><ul><li>콜라는 마지막에 살짝만 넣어 색을 맞추는 것이 포인트입니다</li><li>증류주를 먼저 셰이킹한 뒤 콜라를 마지막에 넣으세요</li><li>얼음을 충분히 넣어 차갑게 마셔야 제맛입니다</li></ul>",
     ingredients: {
       spirits: [
-        { id: 1, name: "Vodka", nameKr: "보드카" },
-        { id: 2, name: "Gin", nameKr: "진" },
-        { id: 3, name: "White Rum", nameKr: "화이트 럼" },
-        { id: 4, name: "Tequila", nameKr: "데킬라" },
-        { id: 5, name: "Triple Sec", nameKr: "트리플 섹" },
+        { id: 1002, name: "Any Vodka", nameKr: "모든 보드카" },
+        { id: 1001, name: "Any Gin", nameKr: "모든 진" },
+        { id: 1003, name: "Any Rum", nameKr: "모든 럼" },
+        { id: 1004, name: "Any Tequila", nameKr: "모든 데킬라" },
       ],
       juices: [{ id: 1, name: "Lemon Juice", nameKr: "레몬 주스" }],
       bitters: [],
@@ -353,7 +363,7 @@ const cocktailFullData = [
       carbonated: [{ id: 1, name: "Cola", nameKr: "콜라" }],
       dairy: [],
       garnishes: [{ id: 1, name: "Lemon Wedge", nameKr: "레몬 웨지" }],
-      others: []
+      others: [{ id: 1, name: "Triple Sec", nameKr: "트리플 섹" }]
     },
     tools: [{ id: 1, name: "Shaker", nameKr: "셰이커" }],
     glassware: [{ id: 1, name: "Highball Glass", nameKr: "하이볼 글라스" }],
@@ -418,7 +428,7 @@ const cocktailFullData = [
     note: "<p><strong>재료:</strong></p><ul><li>위스키 60ml</li><li>레몬 주스 30ml</li><li>심플 시럽 15ml</li><li>달걀 흰자 (선택)</li></ul>",
     tipNote: "<p><strong>완벽한 위스키 사워를 위한 팁:</strong></p><ul><li>달걀 흰자를 넣으면 부드러운 폼이 생깁니다</li></ul>",
     ingredients: {
-      spirits: [{ id: 1, name: "Whiskey", nameKr: "위스키" }],
+      spirits: [{ id: 1006, name: "Any Whiskey", nameKr: "모든 위스키" }],
       juices: [{ id: 1, name: "Lemon Juice", nameKr: "레몬 주스" }],
       bitters: [],
       syrups: [{ id: 1, name: "Simple Syrup", nameKr: "심플 시럽" }],
@@ -458,7 +468,25 @@ const cocktailFullData = [
         depth: 0,
         isChildComment: false,
         sortOrder: 0,
-        replies: [],
+        replies: [
+          {
+            commentId: 17,
+            author: {
+              userId: 1,
+              userUuid: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+              username: '아야츠노 유니',
+              thumbnailImage: 'https://yt3.googleusercontent.com/e3_TBkHSBwuzKRSkG1Uv5uGLiHmLUBMVogjWD35MJL7Fi_iccr8DonU6q_1XSmO4djEY9Cunabo=s900-c-k-c0x00ffffff-no-rj'
+            },
+            cocktailId: 5,
+            parentCommentId: 15,
+            content: 'ㅂ',
+            depth: 1,
+            isChildComment: true,
+            sortOrder: 1,
+            createdAt: '2024-11-05T13:05:00',
+            updatedAt: '2024-11-05T13:05:00'
+          }
+        ],
         createdAt: '2024-11-05T13:00:00',
         updatedAt: '2024-11-05T13:00:00'
       }
@@ -490,7 +518,7 @@ const cocktailFullData = [
     note: "<p><strong>재료:</strong></p><ul><li>보드카 50ml</li><li>커피 리큐어 20ml</li><li>에스프레소 1샷</li><li>심플 시럽 10ml</li></ul>",
     tipNote: "<p><strong>완벽한 에스프레소 마티니를 위한 팁:</strong></p><ul><li>갓 내린 에스프레소를 사용하는 것이 중요합니다</li></ul>",
     ingredients: {
-      spirits: [{ id: 1, name: "Vodka", nameKr: "보드카" }],
+      spirits: [{ id: 1002, name: "Any Vodka", nameKr: "모든 보드카" }],
       juices: [],
       bitters: [],
       syrups: [{ id: 1, name: "Simple Syrup", nameKr: "심플 시럽" }],
@@ -537,6 +565,60 @@ const cocktailFullData = [
     ],
     createdAt: '2024-08-20',
     updatedAt: '2024-08-20'
+  },
+  {
+    cocktailId: 7,
+    author: {
+      userUuid: 'b2c3d4e5-f6a7-8901-bcde-f01234567891',
+      username: '아라하시 타비',
+      thumbnailImage: 'https://image.genie.co.kr/Y/IMAGE/IMG_ARTIST/082/459/727/82459727_1714360862118_1_600x600.JPG'
+    },
+    isNew: true,
+    isActive: true,
+    image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=500&h=500&fit=crop",
+    cocktailName: "Amaretto Sour",
+    cocktailNameKr: "아마레또 사워",
+    urlSlug: "amaretto-sour",
+    category: "classic",
+    spiritCategories: ["liqueur"],
+    absPercentage: 14,
+    servingSizeMl: 120,
+    difficulty: 2,
+    isVariation: false,
+    profileNote: "아몬드향 리큐어와 레몬의 새콤함이 어우러진 달콤 사워 칵테일",
+    historyNote: "<p>아마레또 사워는 이탈리아산 아마레또 리큐어를 베이스로 한 클래식 사워 칵테일입니다.</p><p>아마레또 특유의 아몬드·살구씨 향과 레몬의 산미가 균형을 이뤄 달콤하면서도 상큼한 맛이 특징입니다.</p>",
+    note: "<p><strong>재료:</strong></p><ul><li>아마레또 리큐어 60ml</li><li>레몬 주스 30ml</li><li>심플 시럽 10ml</li><li>달걀 흰자 1개 (선택)</li><li>얼음</li></ul>",
+    tipNote: "<p><strong>완벽한 아마레또 사워를 위한 팁:</strong></p><ul><li>달걀 흰자를 넣으면 부드러운 폼이 생겨 더욱 풍성한 식감을 즐길 수 있어요</li><li>드라이 셰이크(얼음 없이 먼저 셰이킹) 후 얼음과 함께 다시 셰이킹하면 폼이 더 잘 잡힙니다</li></ul>",
+    ingredients: {
+      spirits: [{ id: 1008, name: "Any Liqueur", nameKr: "모든 리큐어" }],
+      juices: [{ id: 1, name: "Lemon Juice", nameKr: "레몬 주스" }],
+      bitters: [],
+      syrups: [{ id: 1, name: "Simple Syrup", nameKr: "심플 시럽" }],
+      carbonated: [],
+      dairy: [],
+      garnishes: [{ id: 1, name: "Orange Peel", nameKr: "오렌지 필" }, { id: 2, name: "Cherry", nameKr: "체리" }],
+      others: [{ id: 1, name: "Egg White", nameKr: "달걀 흰자" }]
+    },
+    tools: [{ id: 1, name: "Shaker", nameKr: "셰이커" }],
+    glassware: [{ id: 1, name: "Coupe Glass", nameKr: "쿠페 글라스" }],
+    techniques: [{ id: 1, techniqueName: "Dry Shake", techniqueNameKr: "드라이 셰이크" }, { id: 2, techniqueName: "Shaking", techniqueNameKr: "셰이킹" }],
+    personalNotes: "달달하면서 새콤한 게 딱 내 취향이에요. 처음 칵테일 입문할 때 마셨던 기억이 나서 만들어봤어요.",
+    makerTips: "아마레또 브랜드마다 당도가 달라서 심플 시럽 양을 조절하는 게 좋아요.",
+    personalReview: "달달하고 새콤한 게 매력적인 칵테일. 칵테일 입문자에게도 추천해요.",
+    hashtags: [
+      { cocktailHashtagId: 33, cocktailHashtag: "아마레또사워" },
+      { cocktailHashtagId: 34, cocktailHashtag: "아마레또" },
+      { cocktailHashtagId: 35, cocktailHashtag: "사워계열" },
+      { cocktailHashtagId: 36, cocktailHashtag: "달콤한" },
+      { cocktailHashtagId: 37, cocktailHashtag: "입문칵테일" },
+      { cocktailHashtagId: 38, cocktailHashtag: "리큐어베이스" },
+    ],
+    viewCount: 156,
+    likeCount: 41,
+    shareCount: 12,
+    comments: [],
+    createdAt: '2025-01-10',
+    updatedAt: '2025-01-10'
   },
 ]
 
@@ -617,9 +699,29 @@ export const cocktailHandlers = [
     }
 
     if (search) {
+      const s = search.toLowerCase()
+      sortedData = sortedData
+        .filter(c =>
+          c.cocktailName.toLowerCase().includes(s) ||
+          c.cocktailNameKr.includes(search)
+        )
+        .sort((a, b) => {
+          const aStarts = a.cocktailName.toLowerCase().startsWith(s) || a.cocktailNameKr.startsWith(search)
+          const bStarts = b.cocktailName.toLowerCase().startsWith(s) || b.cocktailNameKr.startsWith(search)
+          return (bStarts ? 1 : 0) - (aStarts ? 1 : 0)
+        })
+    }
+
+    const spiritProductIdParam = url.searchParams.get('spiritProductId')
+    if (spiritProductIdParam) {
+      const pid = parseInt(spiritProductIdParam)
+      const category = SPIRIT_PRODUCT_CATEGORY[pid]
+      const genericId = category ? SPIRIT_GENERIC_ID[category] : undefined
+
       sortedData = sortedData.filter(cocktail =>
-        cocktail.cocktailName.toLowerCase().includes(search.toLowerCase()) ||
-        cocktail.cocktailNameKr.includes(search)
+        cocktail.ingredients.spirits.some(s =>
+          s.id === pid || (genericId !== undefined && s.id === genericId)
+        )
       )
     }
 
@@ -853,6 +955,11 @@ export const cocktailHandlers = [
       content: string;
       isChildComment: boolean;
       parentCommentId?: number;
+      commentedBy: {
+        userId: number;
+        username: string;
+        thumbnailImage?: string;
+      };
       createdAt: string;
       updatedAt: string;
     }
@@ -881,6 +988,11 @@ export const cocktailHandlers = [
             content: comment.content,
             isChildComment: comment.isChildComment,
             parentCommentId: comment.parentCommentId,
+            commentedBy: {
+              userId: comment.author.userId,
+              username: comment.author.username,
+              thumbnailImage: comment.author.thumbnailImage,
+            },
             createdAt: comment.createdAt,
             updatedAt: comment.updatedAt,
           })
@@ -897,6 +1009,11 @@ export const cocktailHandlers = [
                 content: reply.content,
                 isChildComment: reply.isChildComment,
                 parentCommentId: reply.parentCommentId,
+                commentedBy: {
+                  userId: reply.author.userId,
+                  username: reply.author.username,
+                  thumbnailImage: reply.author.thumbnailImage,
+                },
                 createdAt: reply.createdAt,
                 updatedAt: reply.updatedAt,
               })
@@ -922,8 +1039,53 @@ export const cocktailHandlers = [
   }),
 
   /*
+   * 칵테일 수정
+   */
+  http.put('/api/cocktail/:id', async ({ request, params }) => {
+    await delay(500)
+
+    const authHeader = request.headers.get('Authorization')
+    if (!authHeader?.startsWith('Bearer ')) {
+      return HttpResponse.json({ code: 'UNAUTHORIZED', message: '로그인이 필요합니다.', data: null }, { status: 401 })
+    }
+
+    const cocktailId = parseInt(params.id as string)
+    const cocktailIndex = cocktailFullData.findIndex(c => c.cocktailId === cocktailId)
+    if (cocktailIndex === -1) {
+      return HttpResponse.json({ code: 'NOT_FOUND', message: '칵테일을 찾을 수 없습니다.', data: null }, { status: 404 })
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const body = await request.json() as Record<string, any>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    cocktailFullData[cocktailIndex] = { ...cocktailFullData[cocktailIndex], ...body } as any
+
+    return HttpResponse.json({ code: 'OK', message: '수정되었습니다.', data: cocktailFullData[cocktailIndex] })
+  }),
+
+  /*
    * 칵테일 Detail (개별 조회)
    */
+  /*
+   * 오늘의 픽 (날짜 시드 기반 고정 칵테일)
+   */
+  http.get('/api/cocktail/today', async () => {
+    await delay(500)
+    const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '')
+    const seed = dateStr.split('').reduce((acc, ch) => acc + ch.charCodeAt(0), 0)
+    const index = seed % cocktailFullData.length
+    return HttpResponse.json({ code: 'OK', message: '성공', data: cocktailFullData[index] })
+  }),
+
+  /*
+   * 랜덤 칵테일 1개
+   */
+  http.get('/api/cocktail/random', async () => {
+    await delay(500)
+    const randomIndex = Math.floor(Math.random() * cocktailFullData.length)
+    return HttpResponse.json({ code: 'OK', message: '성공', data: cocktailFullData[randomIndex] })
+  }),
+
   http.get('/api/cocktail/:id', async ({ params }) => {
     await delay(1000)
     const cocktailId = parseInt(params.id as string)

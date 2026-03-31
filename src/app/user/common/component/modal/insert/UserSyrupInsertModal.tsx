@@ -7,9 +7,10 @@ interface UserSyrupInsertModalProps {
   open: boolean;
   onClose: () => void;
   onSelect: (items: CommonSlideElement[]) => void;
+  initialSelected?: CommonSlideElement[];
 }
 
-const UserSyrupInsertModal: React.FC<UserSyrupInsertModalProps> = ({ open, onClose, onSelect }) => {
+const UserSyrupInsertModal: React.FC<UserSyrupInsertModalProps> = ({ open, onClose, onSelect, initialSelected }) => {
   const { syrupList, syrupListLoading, syrupListHasMore, fetchReadSyrupList } = useReadSyrupList();
 
   const items: CommonSlideElement[] = (syrupList?.data ?? []).map((syrup) => ({
@@ -30,6 +31,7 @@ const UserSyrupInsertModal: React.FC<UserSyrupInsertModalProps> = ({ open, onClo
       loading={syrupListLoading}
       hasMore={syrupListHasMore}
       onFetch={(params) => fetchReadSyrupList(params)}
+      initialSelected={initialSelected}
     />
   );
 };

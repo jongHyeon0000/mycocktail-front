@@ -26,12 +26,13 @@ interface UserCommonItemSelectModalProps {
   loading: boolean;
   hasMore: boolean;
   onFetch: (params: { page: number; limit: number; search?: string }) => void;
+  initialSelected?: CommonSlideElement[];
 }
 
 const PAGE_SIZE = 9;
 
 const UserCommonItemSelectModal: React.FC<UserCommonItemSelectModalProps> = ({
-  open, onClose, onSelect, title, placeholder, items, loading, hasMore, onFetch,
+  open, onClose, onSelect, title, placeholder, items, loading, hasMore, onFetch, initialSelected = [],
 }) => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
@@ -41,7 +42,7 @@ const UserCommonItemSelectModal: React.FC<UserCommonItemSelectModalProps> = ({
     if (open) {
       setPage(1);
       setSearch("");
-      setSelectedItems([]);
+      setSelectedItems(initialSelected);
       onFetch({ page: 1, limit: PAGE_SIZE });
     }
   }, [open]);

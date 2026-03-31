@@ -14,6 +14,8 @@ import useIncrementLike from "../service/useIncrementLike.tsx";
 import CommonSuccessSnackbar from "../../common/component/snackbar/CommonSuccessSnackbar.tsx";
 import CommonErrorSnackbar from "../../common/component/snackbar/CommonErrorSnackbar.tsx";
 import type {CocktailDetail} from "../interface/CocktailDetail.ts";
+import CocktailInsertModal from "./CocktailInsertModal.tsx";
+import {EditOutlined} from "@mui/icons-material";
 import styled from "styled-components";
 import {Box, Chip, IconButton, Typography} from "@mui/material";
 import CocktailIngredientsSection from "./CocktailIngredientsSection.tsx";
@@ -45,6 +47,8 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
   const [snackbarMessage, setSnackbarMessage] = useState<string>("");
   const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success");
+  const [editOpen, setEditOpen] = useState<boolean>(false);
+  const isOwner = isAuthenticated && user?.userUuid === data.author.userUuid;
 
   useEffect(() => {
     if (open) {
@@ -93,6 +97,12 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
                     <PlaceholderIcon>
                       <LocalBarOutlined fontSize="inherit" />
                     </PlaceholderIcon>
+                  )}
+                  {isOwner && (
+                    <EditButton onClick={() => setEditOpen(true)}>
+                      <EditOutlined sx={{ fontSize: 16 }} />
+                      수정하기
+                    </EditButton>
                   )}
                   {data.author && (
                     <AuthorSection>
@@ -463,6 +473,12 @@ const CocktailDetailModal: React.FC<CocktailDetailModalProps> = ({
             </ModalContainerWide>
         </StyledModal>
       )}
+      <CocktailInsertModal
+        open={editOpen}
+        onClose={() => setEditOpen(false)}
+        mode="edit"
+        initialData={data}
+      />
       {snackbarSeverity === "success" ? (
         <CommonSuccessSnackbar
           open={snackbarOpen}
@@ -506,6 +522,33 @@ const CocktailImage = styled(Box)`
       width: 220px;
       height: 220px;
       margin-bottom: 20px;
+    }
+  }
+`;
+
+const EditButton = styled(Box)`
+  && {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px 6px 10px;
+    background: rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 40px;
+    color: #ffffff;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+    z-index: 1;
+    transition: background 0.2s ease;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.45);
     }
   }
 `;

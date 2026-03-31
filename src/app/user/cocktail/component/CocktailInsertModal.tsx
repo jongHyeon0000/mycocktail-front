@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { LocalBarOutlined, AddOutlined, CloseOutlined } from "@mui/icons-material";
 import { COMMON_MODAL_STYLE } from "../../common/style/CommonModal.style.ts";
@@ -11,7 +11,7 @@ import {
 import { CategorySlide } from "../../common/component/CategorySlide.tsx";
 import TipTapEditor from "../../common/component/editor/TipTapEditor.tsx";
 import type { CommonSlideElement } from "../../common/interface/CommonSlideElement.ts";
-import type { CocktailCategory } from "../interface/CocktailDetail.ts";
+import type { CocktailCategory, CocktailDetail } from "../interface/CocktailDetail.ts";
 import UserSpiritInsertModal from "../../common/component/modal/insert/UserSpiritInsertModal.tsx";
 import UserJuiceInsertModal from "../../common/component/modal/insert/UserJuiceInsertModal.tsx";
 import UserBittersInsertModal from "../../common/component/modal/insert/UserBittersInsertModal.tsx";
@@ -27,6 +27,8 @@ import UserTechniqueInsertModal from "../../common/component/modal/insert/UserTe
 interface CocktailInsertModalProps {
   open: boolean;
   onClose: () => void;
+  mode: 'insert' | 'edit';
+  initialData?: CocktailDetail;
 }
 
 type IngredientKey = "spirits" | "juices" | "bitters" | "syrups" | "carbonated" | "dairy" | "garnishes" | "others";
@@ -50,8 +52,9 @@ const TECHNIQUE_LABELS: Record<TechniqueKey, string> = {
   techniques: "제조 기법",
 };
 
-const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose }) => {
+const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose, mode = 'insert', initialData }) => {
   const { user } = useAuth();
+  const isEdit = mode === 'edit';
 
   /*
   * 태그 state 제어
@@ -79,6 +82,10 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
   const [servingSizeMl, setServingSizeMl] = useState("");
   const [difficulty, setDifficulty] = useState<number | "">("");
   const [source, setSource] = useState<"official" | "community" | "">("");
+  const [profileNote, setProfileNote] = useState("");
+  const [personalNotes, setPersonalNotes] = useState("");
+  const [makerTips, setMakerTips] = useState("");
+  const [personalReview, setPersonalReview] = useState("");
 
   /*
   * 재료 선택 state
@@ -204,6 +211,30 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
     });
   };
 
+  useEffect(() => {
+    if (initialData) {
+      setCocktailName(initialData.cocktailName);
+      setCocktailNameKr(initialData.cocktailNameKr);
+      setCategory(initialData.category);
+      setAbsPercentage(String(initialData.absPercentage));
+      setServingSizeMl(String(initialData.servingSizeMl));
+      setDifficulty(initialData.difficulty);
+      setSource(initialData.isVariation ? "community" : "official");
+      setSelectedIngredients(initialData.ingredients);
+      setSelectedTechniques({
+        tools: initialData.tools,
+        glassware: initialData.glassware,
+        techniques: initialData.techniques,
+      });
+      setTags(initialData.hashtags.map((h) => h.cocktailHashtag));
+      setProfileNote(initialData.profileNote ?? "");
+      setPersonalNotes(initialData.personalNotes ?? "");
+      setMakerTips(initialData.makerTips ?? "");
+      setPersonalReview(initialData.personalReview ?? "");
+      setValidationError({});
+    }
+  }, [initialData]);
+
   const handleSubmit = () => {
     const newErrors: Record<string, string> = {};
 
@@ -226,8 +257,13 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
       return;
     }
 
-    // TODO: API 호출
-    console.log("submit");
+    if (isEdit) {
+      // TODO: PUT /api/cocktail/:id 호출
+      console.log("edit submit", initialData?.cocktailId);
+    } else {
+      // TODO: POST /api/cocktail 호출
+      console.log("insert submit");
+    }
   };
 
   return (
@@ -378,6 +414,8 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
                   fullWidth
                   multiline
                   rows={2}
+                  value={profileNote}
+                  onChange={(e) => setProfileNote(e.target.value)}
                 />
               </TitleInfoGroup>
             </HeaderSection>
@@ -391,7 +429,7 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
                 transition={{ delay: 0.2 }}
               >
                 <SectionTitle>역사</SectionTitle>
-                <TipTapEditor placeholder="칵테일의 역사를 입력하세요..." />
+                <TipTapEditor placeholder="칵테일의 역사를 입력하세요..." initialContent={initialData?.historyNote} />
               </motion.div>
 
               <SectionDivider />
@@ -476,7 +514,7 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
                 transition={{ delay: 0.3 }}
               >
                 <SectionTitle>제조법</SectionTitle>
-                <TipTapEditor placeholder="제조법을 입력하세요..." />
+                <TipTapEditor placeholder="제조법을 입력하세요..." initialContent={initialData?.note} />
               </motion.div>
 
               <motion.div
@@ -485,7 +523,7 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
                 transition={{ delay: 0.6 }}
               >
                 <SectionTitle>제조 팁</SectionTitle>
-                <TipTapEditor placeholder="제조 팁을 입력하세요..." />
+                <TipTapEditor placeholder="제조 팁을 입력하세요..." initialContent={initialData?.tipNote} />
               </motion.div>
 
               <SectionDivider />
@@ -504,6 +542,8 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
                     fullWidth
                     multiline
                     rows={3}
+                    value={personalNotes}
+                    onChange={(e) => setPersonalNotes(e.target.value)}
                   />
                 </PersonalSection>
               </motion.div>
@@ -522,6 +562,8 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
                     fullWidth
                     multiline
                     rows={3}
+                    value={makerTips}
+                    onChange={(e) => setMakerTips(e.target.value)}
                   />
                 </PersonalSection>
               </motion.div>
@@ -540,6 +582,8 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
                     fullWidth
                     multiline
                     rows={3}
+                    value={personalReview}
+                    onChange={(e) => setPersonalReview(e.target.value)}
                   />
                 </PersonalSection>
               </motion.div>
@@ -613,7 +657,7 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
                   disableElevation
                   onClick={handleSubmit}
                 >
-                  등록
+                  {isEdit ? '수정' : '등록'}
                 </SubmitButton>
               </ActionButtons>
             </BottomSection>
@@ -624,21 +668,21 @@ const CocktailInsertModal: React.FC<CocktailInsertModalProps> = ({ open, onClose
     </AnimatePresence>
 
       {/* 기주 sub-modals */}
-      <UserSpiritInsertModal open={openModal === "spirits"} onClose={() => setOpenModal(null)} onSelect={handleSelectSpirits} />
+      <UserSpiritInsertModal open={openModal === "spirits"} onClose={() => setOpenModal(null)} onSelect={handleSelectSpirits} initialSelected={selectedIngredients.spirits} />
 
       {/* 재료 sub-modals */}
-      <UserJuiceInsertModal open={openModal === "juices"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectIngredient("juices", items)} />
-      <UserBittersInsertModal open={openModal === "bitters"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectIngredient("bitters", items)} />
-      <UserSyrupInsertModal open={openModal === "syrups"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectIngredient("syrups", items)} />
-      <UserCarbonatedInsertModal open={openModal === "carbonated"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectIngredient("carbonated", items)} />
-      <UserDairyCreamInsertModal open={openModal === "dairy"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectIngredient("dairy", items)} />
-      <UserGarnishesInsertModal open={openModal === "garnishes"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectIngredient("garnishes", items)} />
-      <UserOtherIngredientsInsertModal open={openModal === "others"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectIngredient("others", items)} />
+      <UserJuiceInsertModal open={openModal === "juices"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectIngredient("juices", items)} initialSelected={selectedIngredients.juices} />
+      <UserBittersInsertModal open={openModal === "bitters"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectIngredient("bitters", items)} initialSelected={selectedIngredients.bitters} />
+      <UserSyrupInsertModal open={openModal === "syrups"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectIngredient("syrups", items)} initialSelected={selectedIngredients.syrups} />
+      <UserCarbonatedInsertModal open={openModal === "carbonated"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectIngredient("carbonated", items)} initialSelected={selectedIngredients.carbonated} />
+      <UserDairyCreamInsertModal open={openModal === "dairy"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectIngredient("dairy", items)} initialSelected={selectedIngredients.dairy} />
+      <UserGarnishesInsertModal open={openModal === "garnishes"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectIngredient("garnishes", items)} initialSelected={selectedIngredients.garnishes} />
+      <UserOtherIngredientsInsertModal open={openModal === "others"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectIngredient("others", items)} initialSelected={selectedIngredients.others} />
 
       {/* 제조 기법 sub-modals */}
-      <UserToolInsertModal open={openModal === "tools"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectTechnique("tools", items)} />
-      <UserGlasswareInsertModal open={openModal === "glassware"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectTechnique("glassware", items)} />
-      <UserTechniqueInsertModal open={openModal === "techniques"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectTechnique("techniques", items)} />
+      <UserToolInsertModal open={openModal === "tools"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectTechnique("tools", items)} initialSelected={selectedTechniques.tools} />
+      <UserGlasswareInsertModal open={openModal === "glassware"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectTechnique("glassware", items)} initialSelected={selectedTechniques.glassware} />
+      <UserTechniqueInsertModal open={openModal === "techniques"} onClose={() => setOpenModal(null)} onSelect={(items) => handleSelectTechnique("techniques", items)} initialSelected={selectedTechniques.techniques} />
     </>
   );
 };

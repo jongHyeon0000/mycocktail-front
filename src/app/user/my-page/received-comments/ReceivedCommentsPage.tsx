@@ -13,7 +13,7 @@ import useReadCocktail from "../../cocktail/service/useReadCocktail.tsx";
 import LoadingOverlay from "../../common/component/loading/LoadingOverlay.tsx";
 import CommonErrorSnackbar from "../../common/component/snackbar/CommonErrorSnackbar";
 import useReadReceivedComments from "./service/useReadReceivedComments.tsx";
-import MyCommentItem from "../my-comments/component/MyCommentItem.tsx";
+import ReceivedCommentItem from "./component/ReceivedCommentItem.tsx";
 import {
   ControlsContainer,
   PageContainer,
@@ -200,7 +200,7 @@ const ReceivedCommentsPage: React.FC = () => {
             </EmptyState>
           ) : (
             receivedCommentList?.data?.map((comment, index) => (
-              <MyCommentItem
+              <ReceivedCommentItem
                 key={comment.commentId}
                 comment={comment}
                 index={index}

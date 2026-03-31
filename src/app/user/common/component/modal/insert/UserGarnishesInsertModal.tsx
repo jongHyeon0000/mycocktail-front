@@ -7,9 +7,10 @@ interface UserGarnishesInsertModalProps {
   open: boolean;
   onClose: () => void;
   onSelect: (items: CommonSlideElement[]) => void;
+  initialSelected?: CommonSlideElement[];
 }
 
-const UserGarnishesInsertModal: React.FC<UserGarnishesInsertModalProps> = ({ open, onClose, onSelect }) => {
+const UserGarnishesInsertModal: React.FC<UserGarnishesInsertModalProps> = ({ open, onClose, onSelect, initialSelected }) => {
   const { garnishesList, garnishesListLoading, garnishesListHasMore, fetchReadGarnishesList } = useReadGarnishesList();
 
   const items: CommonSlideElement[] = (garnishesList?.data ?? []).map((garnish) => ({
@@ -30,6 +31,7 @@ const UserGarnishesInsertModal: React.FC<UserGarnishesInsertModalProps> = ({ ope
       loading={garnishesListLoading}
       hasMore={garnishesListHasMore}
       onFetch={(params) => fetchReadGarnishesList(params)}
+      initialSelected={initialSelected}
     />
   );
 };

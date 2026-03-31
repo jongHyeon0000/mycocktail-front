@@ -7,9 +7,10 @@ interface UserOtherIngredientsInsertModalProps {
   open: boolean;
   onClose: () => void;
   onSelect: (items: CommonSlideElement[]) => void;
+  initialSelected?: CommonSlideElement[];
 }
 
-const UserOtherIngredientsInsertModal: React.FC<UserOtherIngredientsInsertModalProps> = ({ open, onClose, onSelect }) => {
+const UserOtherIngredientsInsertModal: React.FC<UserOtherIngredientsInsertModalProps> = ({ open, onClose, onSelect, initialSelected }) => {
   const { otherIngredientsList, otherIngredientsListLoading, otherIngredientsListHasMore, fetchReadOtherIngredientsList } = useReadOtherIngredientsList();
 
   const items: CommonSlideElement[] = (otherIngredientsList?.data ?? []).map((other) => ({
@@ -30,6 +31,7 @@ const UserOtherIngredientsInsertModal: React.FC<UserOtherIngredientsInsertModalP
       loading={otherIngredientsListLoading}
       hasMore={otherIngredientsListHasMore}
       onFetch={(params) => fetchReadOtherIngredientsList(params)}
+      initialSelected={initialSelected}
     />
   );
 };

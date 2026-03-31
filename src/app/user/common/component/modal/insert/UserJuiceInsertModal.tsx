@@ -7,9 +7,10 @@ interface UserJuiceInsertModalProps {
   open: boolean;
   onClose: () => void;
   onSelect: (items: CommonSlideElement[]) => void;
+  initialSelected?: CommonSlideElement[];
 }
 
-const UserJuiceInsertModal: React.FC<UserJuiceInsertModalProps> = ({ open, onClose, onSelect }) => {
+const UserJuiceInsertModal: React.FC<UserJuiceInsertModalProps> = ({ open, onClose, onSelect, initialSelected }) => {
   const { juiceList, juiceListLoading, juiceListHasMore, fetchReadJuiceList } = useReadJuiceList();
 
   const items: CommonSlideElement[] = (juiceList?.data ?? []).map((juice) => ({
@@ -30,6 +31,7 @@ const UserJuiceInsertModal: React.FC<UserJuiceInsertModalProps> = ({ open, onClo
       loading={juiceListLoading}
       hasMore={juiceListHasMore}
       onFetch={(params) => fetchReadJuiceList(params)}
+      initialSelected={initialSelected}
     />
   );
 };

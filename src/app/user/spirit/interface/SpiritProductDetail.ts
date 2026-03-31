@@ -24,6 +24,9 @@ export interface SpiritProductDetail {
   /** 단종 여부 */
   isDiscontinued: boolean;
 
+  /** 범용 기주 여부 (모든 진, 모든 럼 등 — is_generic DB 컬럼 대응) */
+  isGeneric: boolean;
+
   /** 가격 */
   price: number;
 

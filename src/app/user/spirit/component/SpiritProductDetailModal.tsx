@@ -11,9 +11,9 @@ import {
   StyledModal, ModalContainerWide, HeaderSection, PlaceholderIcon,
   TitleSection, EnglishTitle, KoreanTitle, InfoGrid, InfoCard, InfoLabel, InfoValue,
   ProfileDescription, ContentSection, SectionTitle, TextContent,
-  PersonalSection, PersonalTitle, PersonalContent,
   AvailableCocktailsSection, BottomSection, DateInfo, DateText,
-  FlavorMeterContainer, FlavorMeterBar, FlavorMeterFill, FlavorMeterLabel,
+  FlavorMeterContainer, FlavorMeterBar, FlavorMeterFill, FlavorMeterLabel, PersonalSection, PersonalTitle,
+  PersonalContent,
 } from "../../common/style/CommonDetailModal.style.tsx";
 
 interface SpiritDetailModalProps {
@@ -120,15 +120,14 @@ const SpiritProductDetailModal: React.FC<SpiritDetailModalProps> = ({
                 <TextContent dangerouslySetInnerHTML={{ __html: data.note || '' }} />
               </motion.div>
 
-              {/* 제거 예정 (기획 의도 상 기주는 사용자가 등록하지 않음 */}
-              {/*{data.personalReview && (*/}
-              {/*  <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>*/}
-              {/*    <PersonalSection>*/}
-              {/*      <PersonalTitle>개인적인 설명</PersonalTitle>*/}
-              {/*      <PersonalContent>{data.personalReview}</PersonalContent>*/}
-              {/*    </PersonalSection>*/}
-              {/*  </motion.div>*/}
-              {/*)}*/}
+              {data.personalReview && (
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
+                  <PersonalSection>
+                    <PersonalTitle>개인적인 설명</PersonalTitle>
+                    <PersonalContent>{data.personalReview}</PersonalContent>
+                  </PersonalSection>
+                </motion.div>
+              )}
 
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
                 <SectionTitle>사용 가능 칵테일</SectionTitle>

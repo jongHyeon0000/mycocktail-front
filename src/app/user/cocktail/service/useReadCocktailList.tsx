@@ -22,6 +22,7 @@ interface FetchProps {
   * */
   search?: string;      // 검색어
   userId?: number;      // 유저id (해당하는 유저의 글만 검색)
+  spiritProductId?: number;  // 보유 기주 ID로 만들 수 있는 칵테일 필터링
 }
 
 const useReadCocktailList = () => {

@@ -15,16 +15,17 @@ import {
 
 interface TipTapEditorProps {
   placeholder?: string;
+  initialContent?: string;
   onChange?: (html: string) => void;
 }
 
-const TipTapEditor: React.FC<TipTapEditorProps> = ({ placeholder, onChange }) => {
+const TipTapEditor: React.FC<TipTapEditorProps> = ({ placeholder, initialContent, onChange }) => {
   const editor = useEditor({
     extensions: [
       StarterKit,
       Placeholder.configure({ placeholder: placeholder ?? "" }),
     ],
-    content: "",
+    content: initialContent ?? "",
     editorProps: {
       attributes: {
         class: "tiptap-content",

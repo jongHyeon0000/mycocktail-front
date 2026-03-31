@@ -7,9 +7,10 @@ interface UserTechniqueInsertModalProps {
   open: boolean;
   onClose: () => void;
   onSelect: (items: CommonSlideElement[]) => void;
+  initialSelected?: CommonSlideElement[];
 }
 
-const UserTechniqueInsertModal: React.FC<UserTechniqueInsertModalProps> = ({ open, onClose, onSelect }) => {
+const UserTechniqueInsertModal: React.FC<UserTechniqueInsertModalProps> = ({ open, onClose, onSelect, initialSelected }) => {
   const { techniqueList, techniqueListLoading, techniqueListHasMore, fetchReadTechniqueList } = useReadTechniqueList();
 
   const items: CommonSlideElement[] = (techniqueList?.data ?? []).map((technique) => ({
@@ -30,6 +31,7 @@ const UserTechniqueInsertModal: React.FC<UserTechniqueInsertModalProps> = ({ ope
       loading={techniqueListLoading}
       hasMore={techniqueListHasMore}
       onFetch={(params) => fetchReadTechniqueList(params)}
+      initialSelected={initialSelected}
     />
   );
 };

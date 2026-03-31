@@ -7,9 +7,10 @@ interface UserGlasswareInsertModalProps {
   open: boolean;
   onClose: () => void;
   onSelect: (items: CommonSlideElement[]) => void;
+  initialSelected?: CommonSlideElement[];
 }
 
-const UserGlasswareInsertModal: React.FC<UserGlasswareInsertModalProps> = ({ open, onClose, onSelect }) => {
+const UserGlasswareInsertModal: React.FC<UserGlasswareInsertModalProps> = ({ open, onClose, onSelect, initialSelected }) => {
   const { glasswareList, glasswareListLoading, glasswareListHasMore, fetchReadGlasswareList } = useReadGlasswareList();
 
   const items: CommonSlideElement[] = (glasswareList?.data ?? []).map((glass) => ({
@@ -30,6 +31,7 @@ const UserGlasswareInsertModal: React.FC<UserGlasswareInsertModalProps> = ({ ope
       loading={glasswareListLoading}
       hasMore={glasswareListHasMore}
       onFetch={(params) => fetchReadGlasswareList(params)}
+      initialSelected={initialSelected}
     />
   );
 };
