@@ -196,7 +196,7 @@ const cocktailFullData = [
         },
         cocktailId: 2,
         parentCommentId: undefined,
-        content: '소금림징짜게에바',
+        content: '소금징짜게에바',
         depth: 0,
         isChildComment: false,
         sortOrder: 0,
@@ -286,7 +286,7 @@ const cocktailFullData = [
         },
         cocktailId: 3,
         parentCommentId: undefined,
-        content: '버번말고 라이로 하지 왜',
+        content: '버번말고 저번에 내가 준걸로하지 왜',
         depth: 0,
         isChildComment: false,
         sortOrder: 0,
@@ -952,6 +952,31 @@ export const cocktailHandlers = [
       totalCount: receivedComments.length,
       hasMore,
     })
+  }),
+
+  /*
+   * 칵테일 수정
+   */
+  http.put('/api/cocktail/:id', async ({ request, params }) => {
+    await delay(500)
+
+    const authHeader = request.headers.get('Authorization')
+    if (!authHeader?.startsWith('Bearer ')) {
+      return HttpResponse.json({ code: 'UNAUTHORIZED', message: '로그인이 필요합니다.', data: null }, { status: 401 })
+    }
+
+    const cocktailId = parseInt(params.id as string)
+    const cocktailIndex = cocktailFullData.findIndex(c => c.cocktailId === cocktailId)
+    if (cocktailIndex === -1) {
+      return HttpResponse.json({ code: 'NOT_FOUND', message: '칵테일을 찾을 수 없습니다.', data: null }, { status: 404 })
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const body = await request.json() as Record<string, any>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    cocktailFullData[cocktailIndex] = { ...cocktailFullData[cocktailIndex], ...body } as any
+
+    return HttpResponse.json({ code: 'OK', message: '수정되었습니다.', data: cocktailFullData[cocktailIndex] })
   }),
 
   /*
