@@ -19,11 +19,12 @@ import useReadCocktailRandom from "../../cocktail/service/useReadCocktailRandom.
 import useReadCocktailToday from "../../cocktail/service/useReadCocktailToday.tsx";
 import CocktailDetailModal from "../../cocktail/component/CocktailDetailModal.tsx";
 import LoadingOverlay from "../../common/component/loading/LoadingOverlay.tsx";
+import type {CocktailDetail} from "../../cocktail/interface/CocktailDetail.ts";
 
 const MainPage: React.FC = () => {
   const [query, setQuery] = useState<string>("");
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
-  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [activeData, setActiveData] = useState<CocktailDetail | null>(null);
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const { cocktailList, cocktailListLoading, fetchReadCocktailList } = useReadCocktailList();
   const { cocktail, cocktailLoading, fetchReadCocktail } = useReadCocktail();
@@ -31,15 +32,15 @@ const MainPage: React.FC = () => {
   const { todayCocktail, todayCocktailLoading, fetchReadCocktailToday } = useReadCocktailToday();
 
   useEffect(() => {
-    if (cocktail?.data) setModalOpen(true);
+    if (cocktail?.data) setActiveData(cocktail.data);
   }, [cocktail]);
 
   useEffect(() => {
-    if (randomCocktail?.data) setModalOpen(true);
+    if (randomCocktail?.data) setActiveData(randomCocktail.data);
   }, [randomCocktail]);
 
   useEffect(() => {
-    if (todayCocktail?.data) setModalOpen(true);
+    if (todayCocktail?.data) setActiveData(todayCocktail.data);
   }, [todayCocktail]);
 
   useEffect(() => {
@@ -245,11 +246,11 @@ const MainPage: React.FC = () => {
         </Container>
       </BottomNavigation>
       {/* 칵테일 상세 모달 */}
-      {(cocktail?.data || randomCocktail?.data || todayCocktail?.data) && (
+      {activeData && (
         <CocktailDetailModal
-          open={modalOpen}
-          onClose={() => setModalOpen(false)}
-          data={(cocktail?.data ?? randomCocktail?.data ?? todayCocktail?.data)!}
+          open={true}
+          onClose={() => setActiveData(null)}
+          data={activeData}
         />
       )}
 
